@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedSysProject.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedSysProject.Controllers
 {
@@ -6,6 +7,7 @@ namespace MedSysProject.Controllers
     {
         public IActionResult Service()
         {
+            
             return View();
         }
 
