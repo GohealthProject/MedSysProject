@@ -17,5 +17,10 @@ namespace MedSysProject.Controllers
             return View(datas);
 
         }
+        public IActionResult Blog() 
+        {
+            return View();
+        }
+
     }
 }
