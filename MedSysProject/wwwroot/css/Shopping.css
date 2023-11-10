@@ -1,0 +1,30 @@
+﻿
+  .headimg{
+    width: 20%;
+    height: 79px;
+    float: left;
+}
+  .headimg img{
+      height:79px;
+  }
+.headsearch {
+    height:79px;
+    width: 80%;
+    float: right;
+}
+.headsearch div {
+    margin:0px;
+}
+
+.top {
+    height:50%;
+}
+
+.bot {
+    height: 50%;
+}
+.mainShopping{
+    width:80%;
+    margin:auto;
+    height:1000px;
+}
