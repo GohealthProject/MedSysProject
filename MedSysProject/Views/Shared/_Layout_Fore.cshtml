@@ -32,6 +32,8 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
+
+    
 </head>
 
 <body>
@@ -67,13 +69,14 @@
           </li>
           <li><a class="nav-link scrollto" href="#portfolio">部落格</a></li>
           <li><a class="nav-link scrollto" href="#team">購物車</a></li>
-          <li><a class="nav-link scrollto" href="#contact">會員登入</a></li>
+          <li>@Html.ActionLink("會員登入","Login","Accout","",new{Class="nav-link scrollto" })</li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
     </div>
   </header><!-- End #header -->
+  <main id="main">
     @RenderBody()
     <!-- ======= Footer ======= -->
     <footer id="footer">
@@ -90,7 +93,7 @@
       </div>
     </div>
   </footer><!-- End #footer -->
-
+    </main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->

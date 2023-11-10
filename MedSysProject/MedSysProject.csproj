@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Htmlæª”æ¡ˆæ”¾é€™é‚Š\å¾Œç«¯ä»‹é¢\js\" />
-    <Folder Include="Htmlæª”æ¡ˆæ”¾é€™é‚Š\å¾Œç«¯ä»‹é¢\styles\" />
+    <Folder Include="HtmlÀÉ®×©ñ³oÃä\«áºÝ¤¶­±\js\" />
+    <Folder Include="HtmlÀÉ®×©ñ³oÃä\«áºÝ¤¶­±\styles\" />
   </ItemGroup>
 
   <ItemGroup>
