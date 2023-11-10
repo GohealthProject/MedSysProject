@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Html�ɮש�o��\��ݤ���\js\" />
     <Folder Include="Html�ɮש�o��\��ݤ���\styles\" />
-    <Folder Include="DataBase\" />
     <Folder Include="PowerBI\" />
   </ItemGroup>
 
