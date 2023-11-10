@@ -29,4 +29,10 @@
     <PackageReference Include="Wahid-SweetAlert2" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Home\Index.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
