@@ -1,30 +1,21 @@
-﻿
-  .headimg{
-    width: 20%;
-    height: 79px;
-    float: left;
+﻿.Shopping {
+    height: 50px;
+    background-color: #2D6760;
 }
-  .headimg img{
-      height:79px;
-  }
-.headsearch {
-    height:79px;
-    width: 80%;
-    float: right;
+.ShoppingNav{
+background-color: #2D6760;
+margin:auto
 }
-.headsearch div {
-    margin:0px;
+.ShoppingNavList {
+    background-color: #2D6760;
+    margin-left:273px
 }
-
-.top {
-    height:50%;
+.navbar li {
+    list-style-position: inside;
 }
-
-.bot {
-    height: 50%;
+body li{
+    padding-left:0px;
 }
-.mainShopping{
-    width:80%;
-    margin:auto;
-    height:1000px;
+.Shul{
+    padding-left:0px;
 }

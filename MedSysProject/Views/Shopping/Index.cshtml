@@ -1,55 +1,9 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
 }
 
-<head>
-    <link rel="stylesheet" href="~/css/Shopping.css" />
-</head>
+<div style="height:1000px; background-color:blue;" class="container d-flex align-items-center">
 
-
-<div class="mainShopping">
-    
-    <div style="background-color:blue" class="headimg">
-        <img src="~/img/Logo.jpg" />
-    </div>
-    <div class="headsearch">
-        <div class="top" >
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"></span>
-                <input type="text" class="form-control" placeholder="搜尋關鍵字" aria-label="搜尋關鍵字" aria-describedby="basic-addon1">
-                <input type="button" value="搜尋" class="btn btn-light" />
-            </div>
-        </div>
-        <div class="bot">
-            <nav id="navbar" class="navbar">
-                <ul>
-                    <li><a class="nav-link scrollto active" href="#hero">主頁</a></li>
-                    <li class="dropdown">
-                        <a href="#"><span>關於GO健康</span> <i class="bi bi-chevron-down"></i></a>
-                        <ul>
-                            <li><a href="#">Drop Down 1</a></li>
-                            <li><a href="#">Drop Down 2</a></li>
-                            <li><a href="#">Drop Down 3</a></li>
-                            <li><a href="#">Drop Down 4</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#"><span>線上預約</span> <i class="bi bi-chevron-down"></i></a>
-                        <ul>
-                            <li><a href="#">Drop Down 1</a></li>
-                            <li><a href="#">Drop Down 2</a></li>
-                            <li><a href="#">Drop Down 3</a></li>
-                            <li><a href="#">Drop Down 4</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="nav-link scrollto" href="#portfolio">部落格</a></li>
-                    <li>@Html.ActionLink("購物車","Index","Shopping","",new{Class="nav-link scrollto" })</li>
-                    <li>@Html.ActionLink("會員登入","Login","Accout","",new{Class="nav-link scrollto" })</li>
-                </ul>
-                <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav>
-        </div>
-    </div>
 </div>
