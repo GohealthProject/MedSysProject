@@ -571,12 +571,12 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Call To Action
+# Go健康的好是為你著想
 --------------------------------------------------------------*/
 .call-to-action {
-  background: linear-gradient(rgba(1, 41, 42, 0.5), rgba(7, 56, 57, 0.5)), url("../img/call-to-action-bg.jpg") fixed center center;
-  background-size: cover;
-  padding: 60px 0;
+    background: linear-gradient(rgba(1, 41, 42, 0.5), rgba(7, 56, 57, 0.5)), url("../img/pic/family.jpg") fixed center center;
+    background-size: cover;
+    padding: 60px 0;
 }
 
 .call-to-action h3 {
