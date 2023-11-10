@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Html檔案放這邊\後端介面\js\" />
-    <Folder Include="Html檔案放這邊\後端介面\styles\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\js\AdminJavaScript.js" />
     <None Include="wwwroot\js\site.js" />
   </ItemGroup>

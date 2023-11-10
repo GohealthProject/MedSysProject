@@ -1,0 +1,91 @@
+﻿@model MedSysProject.Models.MemberWarp
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+<style>
+    .RegisterDiv{
+        width:60%;
+        margin:auto;
+        padding:30px;
+    }
+    .from{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-group {
+        margin-top:10px
+    }
+</style>
+
+<div class="RegisterDiv">
+
+
+<div class="row from" >
+    <div class="col-md-4">
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MemberName" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberName" class="form-control" />
+                <span asp-validation-for="MemberName" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <label asp-for="MemberGender" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <select name="MemberGender">
+                    <option value="男">男生</option>
+                    <option value="女">女生</option>
+                </select>
+                <span asp-validation-for="MemberGender" class="text-danger"></span>
+            </div>
+                <hr />
+            <div class="form-group">
+                <label asp-for="MemberBirthdate" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberBirthdate" class="form-control" />
+                <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
+            </div>
+                <hr />
+            <div class="form-group">
+                <label asp-for="MemberPhone" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberPhone" class="form-control" />
+                <span asp-validation-for="MemberPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberEmail" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberEmail" class="form-control" />
+                <span asp-validation-for="MemberEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberAddress" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberAddress" class="form-control" />
+                <span asp-validation-for="MemberAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberPassword" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="MemberPassword" class="form-control" />
+                <span asp-validation-for="MemberPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxId" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                <input asp-for="TaxId" class="form-control" />
+                <span asp-validation-for="TaxId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
