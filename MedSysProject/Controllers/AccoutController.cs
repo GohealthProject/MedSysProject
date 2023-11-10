@@ -50,5 +50,6 @@ namespace MedSysProject.Controllers
             ViewBag.Sussess = true;
             return RedirectToAction("Login");
         }
+
     }
 }
