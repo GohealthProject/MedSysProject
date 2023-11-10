@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\AdminJavaScript.js" />
+    <None Include="wwwroot\js-admin\AdminJavaScript.js" />
     <None Include="wwwroot\js\site.js" />
   </ItemGroup>
 
