@@ -415,12 +415,14 @@ section {
 # Hero Section
 --------------------------------------------------------------*/
 #hero {
-  width: 100%;
-  height: 75vh;
-  background: url("../img/hero-background.jpg") top center;
-  background-size: cover;
-  position: relative;
-  margin-bottom: -80px;
+    width: 100%;
+    height: 75vh;
+    /*background: url("../img/hero-background.jpg") top center;*/
+    background: url("../img/pic/main.jpg") top center;
+    background-size:cover;
+    background-repeat:no-repeat;
+    position:relative;
+    margin-bottom: -80px;
 }
 
 #hero:before {
