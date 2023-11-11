@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Html檔案放這邊\Test\" />
     <Folder Include="Html檔案放這邊\後端介面\js\" />
     <Folder Include="Html檔案放這邊\後端介面\styles\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="compilerconfig.json" />
     <None Include="wwwroot\assets\css\main.css" />
     <None Include="wwwroot\assets\css\variables.css" />
     <None Include="wwwroot\assets\img\apple-touch-icon.png" />
@@ -123,6 +128,9 @@
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js.map" />
     <None Include="wwwroot\js\AdminJavaScript.js" />
     <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\_MyCustomStyle.css" />
+    <None Include="wwwroot\_MyCustomStyle.min.css" />
+    <None Include="wwwroot\_MyCustomStyle.scss" />
   </ItemGroup>
 
   <ItemGroup>
