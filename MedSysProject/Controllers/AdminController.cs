@@ -36,6 +36,8 @@ namespace MedSysProject.Controllers
 
             if (emp != null && emp.EmployeePassWord.Equals(vm.txtPassWord))
             {
+
+                ViewBag.User = emp.EmployeeName;
                 string json = JsonSerializer.Serialize(emp);
                 HttpContext.Session.SetString(classDictionary.SK_LOINGED_USER, json);
                 return RedirectToAction("Index");
