@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace MedSysProject.Controllers
 {
@@ -9,14 +10,17 @@ namespace MedSysProject.Controllers
 
         public IActionResult Service()
         {
-            
+
             return View();
         }
 
 
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.Session.Keys.Contains(classDictionary.SK_LOINGED_USER))
+                return View();
+
+            return RedirectToAction("Login");
         }
 
         public IActionResult Login()
@@ -26,23 +30,19 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult Login(CLoginViewModel vm)
         {
-            Employee emp = new Employee();
 
-            // 假設 EmployeeClass 具有一個名為 Employees 的屬性，它是 IQueryable<Employee> 的類型
+            Employee emp = (new MedSysContext()).Employees.FirstOrDefault(
+                t => t.EmployeeEmail.Equals(vm.txtEmail) && t.EmployeePassWord.Equals(vm.txtPassWord));
 
-            //var user = from i in emp.EmployeeEmail
-            //           select i;
-
-            //if (user != null)
-            //{
-            //    if (vm.txtPassWord == user)
-            //    {
-            //        return RedirectToAction("Index");
-            //    }
+            if (emp != null && emp.EmployeePassWord.Equals(vm.txtPassWord))
+            {
+                string json = JsonSerializer.Serialize(emp);
+                HttpContext.Session.SetString(classDictionary.SK_LOINGED_USER, json);
                 return RedirectToAction("Index");
-            //}
-            //return View();
+            }
+            return View();
         }
+    
 
     }
 }
