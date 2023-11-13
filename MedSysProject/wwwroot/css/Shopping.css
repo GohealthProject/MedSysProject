@@ -19,3 +19,6 @@ body li{
 .Shul{
     padding-left:0px;
 }
+.navbar ul li {
+    margin:auto;
+}
