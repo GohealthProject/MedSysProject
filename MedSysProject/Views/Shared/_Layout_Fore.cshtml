@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json;
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -94,7 +96,21 @@
                     <li><a class="nav-link scrollto" href="#portfolio">健康部落格</a></li>
                     <li><a class="nav-link scrollto" href="#team">GO健康團隊</a></li>
                     <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
-                    <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                    <li>@if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        {
+                            @Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})
+                        }else{
+                            string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                            Member m = new Member();
+                            m = JsonSerializer.Deserialize<Member>(json);
+                            @Html.ActionLink(m.MemberName,"","",null,new{Class="nav-link scrollto"})
+                        }
+                        
+                            
+                        </li>
+                      
+
+                        @Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

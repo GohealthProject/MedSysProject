@@ -44,8 +44,7 @@
 
       <div class="logo me-auto">
         <h1><a href="index.html">GO健康</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
       </div>
 
       <nav id="navbar" class="navbar">
@@ -54,21 +53,31 @@
                 <!-- =======最上方欄位 ======= -->
 
         <ul>
-                    <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+            <li>
+                        <div class="input-group mb-3" style="padding-top:16px">
+                            <input type="text" class="form-control" placeholder="請輸入關鍵字" aria-label="請輸入關鍵字" aria-describedby="button-addon2">
+                            <input type="submit" class="btn btn-outline-secondary btn-light" value="搜尋" id="button-addon2" />
+                        </div>
+            </li>
+                    <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    <li>@Html.ActionLink("註冊","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    <li>@Html.ActionLink("會員中心","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    <li>@Html.ActionLink("查訂單","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
     </div>
   </header><!-- End #header -->
-    <main id="main" style="background-color:#F2F9F8">
+    <main id="main" style="background-color:#F2F9F8" >
+        <div>
         <link rel="stylesheet" href="~/css/Shopping.css" />
         <div class="ShoppingNav">
-            <div class="Shopping container d-flex align-items-center">
+            @*<div class="Shopping container d-flex align-items-center">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="請輸入關鍵字" aria-label="請輸入關鍵字" aria-describedby="button-addon2">
                     <input type="submit" class="btn btn-outline-secondary btn-light" value="搜尋" id="button-addon2" />
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="ShoppingNav">

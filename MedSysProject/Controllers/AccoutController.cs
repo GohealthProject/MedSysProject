@@ -1,6 +1,8 @@
 ﻿using MedSysProject.Models;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
 
 namespace MedSysProject.Controllers
 {
@@ -22,6 +24,8 @@ namespace MedSysProject.Controllers
             {
                 if (q.MemberPassword == c.txtPassWord)
                 {
+                    string json = JsonSerializer.Serialize(q);
+                    HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
                     return RedirectToAction("Index", "Home");
                 }
             }
