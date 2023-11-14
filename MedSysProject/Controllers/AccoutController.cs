@@ -31,6 +31,27 @@ namespace MedSysProject.Controllers
             }
             return View();
         }
+        public IActionResult UpdataMember()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+            return View(m);
+        }
+        [HttpPost]
+        public IActionResult UpdataMember(MemberWarp m)
+        {
+            MedSysContext db = new MedSysContext();
+            Member Upm = db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
+            Upm.MemberEmail= m.MemberEmail;
+            Upm.MemberPassword= m.MemberPassword;
+            Upm.MemberName= m.MemberName;
+            Upm.MemberGender = m.MemberGender;
+            Upm.MemberBirthdate = m.MemberBirthdate;
+            Upm.MemberAddress= m.MemberAddress;
+            Upm.MemberNickname = m.MemberNickname;
+            db.SaveChanges();
+            return View();
+        }
         public IActionResult Register()
         {
             return View();
@@ -40,20 +61,30 @@ namespace MedSysProject.Controllers
         {
             if (vm == null)
                 return View();
+            
             MedSysContext db = new MedSysContext();
-            Member newMenber = new Member();
-            newMenber.MemberGender = vm.MemberGender;
-            newMenber.MemberAddress = vm.MemberAddress;
-            newMenber.MemberBirthdate = vm.MemberBirthdate;
-            newMenber.MemberEmail = vm.MemberEmail;
-            newMenber.MemberName = vm.MemberName;
-            newMenber.MemberPhone = vm.MemberPhone;
-            newMenber.MemberPassword = vm.MemberPassword;
-            db.Members.Add(newMenber);
-            db.SaveChanges();
-            ViewBag.Sussess = true;
+            if (db.Members.FirstOrDefault(n => n.MemberEmail == vm.MemberEmail) == null)
+            {
+                db.Members.Add(vm.member);
+                db.SaveChanges();
+                ViewBag.Sussess = true;
+                MemberWarp nowm  = new MemberWarp();
+                nowm.member = db.Members.OrderBy(n => n.MemberId).LastOrDefault();
+                string json = JsonSerializer.Serialize(nowm);
+                HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                return RedirectToAction("Verifyemail");
+            }
+            return RedirectToAction("Register");
+        }
+        public IActionResult Verifyemail()
+        {
+            if(HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            return View();
             return RedirectToAction("Login");
         }
-
+        public IActionResult test()
+        {
+            return View();
+        }
     }
 }
