@@ -179,6 +179,12 @@ section {
             visibility: visible;
             opacity: 1;
         }
+
+        .position-relative {
+            i .bi.bi-list.mobile-nav-toggle{
+                color:rgb(230,230,230);
+            }
+        }
     }
 }
 
@@ -186,4 +192,6 @@ section {
 section {
     scroll-margin-top: 70px;
 }
-
+/*--------------------------------------------------------------
+# Desktop Navigation 
+--------------------------------------------------------------*/
