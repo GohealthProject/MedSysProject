@@ -33,6 +33,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult UpdataMember()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Login");
             string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
             return View(m);
@@ -50,7 +52,7 @@ namespace MedSysProject.Controllers
             Upm.MemberAddress= m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
             db.SaveChanges();
-            return View();
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Register()
         {

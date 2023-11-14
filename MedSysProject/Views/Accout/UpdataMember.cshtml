@@ -4,18 +4,13 @@
     ViewData["Title"] = "UpdataMember";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-<style>
-    .UPdiv{
-        width:70%;
-        margin:auto;
-    }
-    .fromP{
-        padding-top: 50px;
-        padding-bottom:50px;
-    }
-</style>
+@section LinkStyle{
+    <link rel="stylesheet" href="~/css/UpdataMember.css" />
+}
+
 <div class="UPdiv"style="width:70%">
 <form class="row g-3 fromP" method="post">
+        <input type="hidden" name="MemberId" value=@Model.MemberId />
     <div class="col-md-6">
             <label for="inputEmail4" class="form-label" name="MemberEmail">Email</label>
             <input type="email" class="form-control" id="inputEmail4" name="MemberEmail">
@@ -30,11 +25,11 @@
     </div>
         <div class="col-md-6">
             <label for="inputPassword4" class="form-label" name="MemberNickname">暱稱</label>
-            <input type="password" class="form-control" id="inputPassword4" name="MemberNickname">
+            <input type="text" class="form-control" id="inputPassword4" name="MemberNickname">
         </div>
         <div class="col-md-6">
             <label for="inputPassword4" class="form-label" name="MemberName">會員姓名</label>
-            <input type="password" class="form-control" id="inputPassword4" name="MemberName">
+            <input type="text" class="form-control" id="inputPassword4" name="MemberName">
         </div>
         <div class="col-12">
             <label for="inputAddress2" class="form-label">性別</label>
@@ -54,7 +49,7 @@
     
     
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary">儲存並修改</button>
     </div>
 </form>
 
