@@ -8,7 +8,7 @@
 
 
 @section LinkStyle {
-    <link rel="stylesheet" href="~/css/Verifyemail.css" />
+    <link rel="stylesheet" href="~/css/AccoutVerifyemail.css" />
 }
 
 @{
@@ -22,7 +22,6 @@
     <div class="card-body" >
         <h5 class="card-title">這是你註冊時用的Email</h5>
         <p class="card-text">@m.MemberEmail</p>
-        @Html.ActionLink("點擊這裡到電子郵件取信","UpdataMember","Accout",new{id =m.MemberId},null)
-        <a href="~/Home/Index" class="btn btn-primary">點擊這裡到電子郵件收信</a>
+        @Html.ActionLink("點擊這裡到電子郵件取信","UpdataMember","Accout",new{id =m.MemberId},new{Class="btn btn-primary"})
     </div>
 </div>
