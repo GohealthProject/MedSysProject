@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json;
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -356,7 +357,25 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span asp-for="" class="mr-2 d-none d-lg-inline text-gray-600 small">sdadasdas姓名</span>
+                                <span id="EmpName" asp-for="" class="mr-2 d-none d-lg-inline text-gray-600 small">
+
+                                    @{
+                                        if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                                        {
+                                            string json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+                                            Employee emp = JsonSerializer.Deserialize<Employee>(json);
+                                            @emp.EmployeeName
+                                        }
+                                        else
+                                        {
+                                            <a></a>
+                                        }
+                                    }
+
+                                    @* todo 這邊還沒好 *@
+
+
+                                </span>
                                 <img class="img-profile rounded-circle"
                                      src="~/img-admin/undraw_profile.svg">
                             </a>
@@ -378,7 +397,8 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+
+                                    系統登出
                                 </a>
                             </div>
                         </li>
@@ -419,15 +439,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">提示</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">確定要登出嗎?</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                    <a asp-action="Logout" class="btn btn-primary">登出</a>
                 </div>
             </div>
         </div>

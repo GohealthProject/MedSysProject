@@ -17,7 +17,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.Keys.Contains(classDictionary.SK_LOINGED_USER))
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return View();
 
             return RedirectToAction("Login");
@@ -36,15 +36,17 @@ namespace MedSysProject.Controllers
 
             if (emp != null && emp.EmployeePassWord.Equals(vm.txtPassWord))
             {
-
-                ViewBag.User = emp.EmployeeName;
                 string json = JsonSerializer.Serialize(emp);
-                HttpContext.Session.SetString(classDictionary.SK_LOINGED_USER, json);
+                HttpContext.Session.SetString(CDictionary.SK_EMPLOYEE_LOGIN, json);
                 return RedirectToAction("Index");
             }
             return View();
         }
     
-
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
     }
 }
