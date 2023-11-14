@@ -4,29 +4,10 @@
     ViewData["Title"] = "Login";
     Layout = "_Layout_Fore";
 }
-<style>
-
-    .LoginDiv {
-        height: 1000px;
-        background-color: #F2F9F8;
-        width: 80%;
-        margin: auto;
-    }
-
-    .sideDivLeft {
-        float: left;
-        width: 70%;
-        height: 100%;
-    }
-
-    .sideDivRight {
-        float: right;
-        padding: 40px;
-        
-        width: 30%;
-        height: 100%;
-    }
-</style>
+@section LinkStyle{
+    <link href="~/css/AccoutLogin.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+}
 <div class="LoginDiv">
     <div class="sideDivLeft">
         <div>
@@ -41,11 +22,11 @@
             <h1 class="h3 mb-3 fw-normal">登入</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" placeholder="name@example.com" name="txtEmail">
+                <input type="text" class="form-control" placeholder="name@example.com" name="txtEmail" id="txtAccout">
                 <label for="floatingInput">請輸入帳號</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" placeholder="Password" name="txtPassWord">
+                <input type="password" class="form-control" placeholder="Password" name="txtPassWord" id="txtPassWord">
                 <label for="floatingPassword">Password</label>
             </div>
 
@@ -57,11 +38,19 @@
                 @Html.ActionLink("註冊會員","Register","Accout",new{},new{style="margin-left:160px"})
             </div>
             <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+            <button type="button" class="btn btn-primary w-100 py-2" id="testButton">測試</button>
+            <label id="testLabel"> 123456789</label>
             <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
         </form>
     </div>
 </div>
 <div style="clear:both"></div>
 
-
+<script>
+    $('#testLabel').css("font-size", "15px");
+    $('#testButton').on('click',()=>{
+        $('#txtAccout').val('night90810@gmail.com');
+        $('#txtPassWord').val('Test');
+    });
+</script>
 

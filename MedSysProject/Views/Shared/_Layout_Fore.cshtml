@@ -34,7 +34,7 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
-
+    @await RenderSectionAsync("LinkStyle", required: false)
     
 </head>
 
@@ -96,21 +96,23 @@
                     <li><a class="nav-link scrollto" href="#portfolio">健康部落格</a></li>
                     <li><a class="nav-link scrollto" href="#team">GO健康團隊</a></li>
                     <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
-                    <li>@if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
-                            @Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})
+                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
                         }else{
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                             Member m = new Member();
                             m = JsonSerializer.Deserialize<Member>(json);
-                            @Html.ActionLink(m.MemberName,"","",null,new{Class="nav-link scrollto"})
-                        }
-                        
-                            
-                        </li>
-                      
-
-                        @Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                                <li class="dropdown">
+                                    <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                                    <ul>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                    </ul>
+                                </li>
+                            }
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

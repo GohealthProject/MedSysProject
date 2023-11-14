@@ -1,0 +1,19 @@
+﻿.LoginDiv {
+    height: 1000px;
+    background-color: #F2F9F8;
+    width: 80%;
+    margin: auto;
+}
+
+.sideDivLeft {
+    float: left;
+    width: 70%;
+    height: 100%;
+}
+
+.sideDivRight {
+    float: right;
+    padding: 40px;
+    width: 30%;
+    height: 100%;
+}
