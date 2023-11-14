@@ -1,0 +1,11 @@
+﻿.mainVerify {
+    text-align: center; /* 將文本置中 */
+    display: flex; /* 使用 flexbox 佈局 */
+    justify-content: center; /* 在水平方向上置中 */
+    align-items: center; /* 在垂直方向上置中 */
+    width: 60%;
+    margin: auto;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    background-color: #F2F9F8;
+}
