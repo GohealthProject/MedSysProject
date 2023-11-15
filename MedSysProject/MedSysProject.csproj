@@ -128,9 +128,6 @@
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js.map" />
     <None Include="wwwroot\js\AdminJavaScript.js" />
     <None Include="wwwroot\js\site.js" />
-    <None Include="wwwroot\_MyCustomStyle.css" />
-    <None Include="wwwroot\_MyCustomStyle.min.css" />
-    <None Include="wwwroot\_MyCustomStyle.scss" />
   </ItemGroup>
 
   <ItemGroup>
