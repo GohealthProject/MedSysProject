@@ -4,6 +4,47 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 
-<h1>MemberCenter</h1>
+<style>
+    .color {
+        background-color:antiquewhite;
+    }
+</style>
 
-<div class="container" style="background-color:blue; height:1000px;"></div>
+<div class="container mb-5" style="background-color:#F2F9F8; height:1000px;">
+    <div style="height:200px; background-color:antiquewhite;"></div>
+    <div style="background-color:azure;height:200px">
+        <div class="row mx-0" style="height:200px;">
+            <div class="col" style="background-color:blue">
+                <div class="card mt-2" style="width: 18rem; margin:auto">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col" style="background-color:green">
+                <div class="card mt-2" style="width: 18rem; margin:auto">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col" style="background-color:REd">
+                <div class="card mt-2" style="width: 18rem; margin:auto">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">@Html.ActionLink("修改會員資料","UpdataMember")</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    
+
+
+</div>

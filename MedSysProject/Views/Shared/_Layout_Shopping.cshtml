@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json;
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -43,7 +44,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">GO健康</a></h1>
+        <h1><a href="index.html">GO健康購物中心</a></h1>
 
       </div>
 
@@ -59,8 +60,19 @@
                             <input type="submit" class="btn btn-outline-secondary btn-light" value="搜尋" id="button-addon2" />
                         </div>
             </li>
-                    <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
-                    <li>@Html.ActionLink("註冊","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    @{
+                        if (Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        {
+                            string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                            Member m = JsonSerializer.Deserialize<Member>(json);
+                            <li>@Html.ActionLink(m.MemberName,"MemberCenter","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                            <li>@Html.ActionLink("註冊","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                        }
+                    }
                     <li>@Html.ActionLink("會員中心","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
                     <li>@Html.ActionLink("查訂單","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
         </ul>
