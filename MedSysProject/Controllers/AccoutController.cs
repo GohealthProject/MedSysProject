@@ -8,6 +8,10 @@ namespace MedSysProject.Controllers
 {
     public class AccoutController : Controller
     {
+        public IActionResult MemberCenter()
+        {
+            return View();
+        }
         public IActionResult Login()
         {
             return View();
@@ -26,7 +30,7 @@ namespace MedSysProject.Controllers
                 {
                     string json = JsonSerializer.Serialize(q);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MemberCenter", "Accout");
                 }
             }
             return View();
