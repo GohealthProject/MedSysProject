@@ -4,21 +4,10 @@
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-<style>
-    .RegisterDiv{
-        width:60%;
-        margin:auto;
-        padding:30px;
-    }
-    .from{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .form-group {
-        margin-top:10px
-    }
-</style>
+
+@section LinkStyle{
+    <link href="~/css/AccoutRegister.css" rel="stylesheet"/>
+}
 
 <div class="RegisterDiv">
 
@@ -29,8 +18,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="MemberName" class="control-label"></label>
+                    <label id="checkName" class="control-label"></label>
                     <hr class="border border-danger border-2 opacity-50">
-                    <input asp-for="MemberName" class="form-control" />
+                    <input asp-for="MemberName" class="form-control" id="inputName" />
                     <span asp-validation-for="MemberName" class="text-danger"></span>
                 </div>
             <div class="form-group">
@@ -59,3 +49,25 @@
 </div>
 </div>
 
+ @section Scripts{
+     <script>
+        const checkName = document.querySelector('#checkName');
+        const inputName = document.querySelector('#inputName');
+
+        inputName.addEventListener('blur',()=>{
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `@Url.Content("~/AccoutApi/checkName")?inName=${inputName.value}`);
+            xhr.send();
+
+            xhr.addEventListener('load',()=>{
+                const datas = xhr.responseText;
+                checkName.innerHTML=datas;
+                if(datas == "無"){
+                    console.log("沒人用")
+                }else{
+                    console.log("有人用")
+                }
+            })
+        })
+     </script>
+ }
