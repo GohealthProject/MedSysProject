@@ -55,5 +55,10 @@ namespace MedSysProject.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+        public IActionResult EmpManager()
+        {
+            return View();
+        }
     }
 }
