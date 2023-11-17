@@ -7,6 +7,11 @@ namespace MedSysProject.Controllers
 {
     public class AdminController : Controller
     {
+        private MedSysContext _db;
+        public AdminController(MedSysContext db)
+        {
+            _db = db;
+        }
 
         public IActionResult Service()
         {
