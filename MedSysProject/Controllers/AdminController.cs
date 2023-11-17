@@ -7,6 +7,13 @@ namespace MedSysProject.Controllers
 {
     public class AdminController : Controller
     {
+        private MedSysContext _db;
+
+        
+        public AdminController(MedSysContext db)
+        {
+            _db = db;
+        }
 
         public IActionResult Service()
         {
@@ -31,7 +38,7 @@ namespace MedSysProject.Controllers
         public IActionResult Login(CLoginViewModel vm)
         {
 
-            Employee emp = (new MedSysContext()).Employees.FirstOrDefault(
+            Employee emp = _db.Employees.FirstOrDefault(
                 t => t.EmployeeEmail.Equals(vm.txtEmail) && t.EmployeePassWord.Equals(vm.txtPassWord));
 
             if (emp != null && emp.EmployeePassWord.Equals(vm.txtPassWord))
@@ -47,6 +54,11 @@ namespace MedSysProject.Controllers
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
+        }
+
+        public IActionResult EmpManager()
+        {
+            return View();
         }
     }
 }

@@ -8,6 +8,10 @@ namespace MedSysProject.Controllers
 {
     public class AccoutController : Controller
     {
+        private MedSysContext _db = null;
+        public AccoutController(MedSysContext db) { 
+        _db= db;
+        }
         public IActionResult MemberCenter()
         {
             return View();
@@ -22,8 +26,8 @@ namespace MedSysProject.Controllers
             if (c == null)
                 return View("Login");
 
-            MedSysContext db = new MedSysContext();
-            var q = db.Members.FirstOrDefault(n => n.MemberEmail == c.txtEmail);
+            
+            var q = _db.Members.FirstOrDefault(n => n.MemberEmail == c.txtEmail);
             if (q != null)
             {
                 if (q.MemberPassword == c.txtPassWord)
@@ -46,8 +50,8 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m)
         {
-            MedSysContext db = new MedSysContext();
-            Member Upm = db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
+            
+            Member Upm = _db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
             Upm.MemberEmail= m.MemberEmail;
             Upm.MemberPassword= m.MemberPassword;
             Upm.MemberName= m.MemberName;
@@ -55,7 +59,7 @@ namespace MedSysProject.Controllers
             Upm.MemberBirthdate = m.MemberBirthdate;
             Upm.MemberAddress= m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
-            db.SaveChanges();
+            _db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Register()
@@ -68,14 +72,13 @@ namespace MedSysProject.Controllers
             if (vm == null)
                 return View();
             
-            MedSysContext db = new MedSysContext();
-            if (db.Members.FirstOrDefault(n => n.MemberEmail == vm.MemberEmail) == null)
+            if (_db.Members.FirstOrDefault(n => n.MemberEmail == vm.MemberEmail) == null)
             {
-                db.Members.Add(vm.member);
-                db.SaveChanges();
+                _db.Members.Add(vm.member);
+                _db.SaveChanges();
                 ViewBag.Sussess = true;
                 MemberWarp nowm  = new MemberWarp();
-                nowm.member = db.Members.OrderBy(n => n.MemberId).LastOrDefault();
+                nowm.member = _db.Members.OrderBy(n => n.MemberId).LastOrDefault();
                 string json = JsonSerializer.Serialize(nowm);
                 HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
                 return RedirectToAction("Verifyemail");

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MedSysProject.Models.Employee>
+
+@{
+    ViewData["Title"] = "EmpManager";
+    Layout = "_Layout_Admin2";
+}
+
+<h1>EmpManager</h1>
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeClassId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeBirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeePhoneNum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeePassWord)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeePhoto)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeClassId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeBirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeePassWord)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeePhoto)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+ *@

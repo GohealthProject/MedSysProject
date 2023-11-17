@@ -1,8 +1,14 @@
+using MedSysProject.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddDbContext<MedSysContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MedSysConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
