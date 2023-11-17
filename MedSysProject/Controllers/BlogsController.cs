@@ -18,6 +18,9 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-
+        public IActionResult Test() 
+        {
+            return View();
+        }
     }
 }
