@@ -24,7 +24,9 @@
         <!-- Template Main CSS Files -->
         <link href="~/assets/css/variables.css" rel="stylesheet">
         <!--//todo暫時用他給的，有空附上我自己的樣式表...-->
-        <link href="~/assets/css/main.css" rel="stylesheet">
+        @await RenderSectionAsync("IndexCss",false)
+       @*  <link href="~/assets/css/main.css" rel="stylesheet"> *@
+        
 </head>
     <body>
         <header id="header" class="header d-flex align-items-center fixed-top">
@@ -212,7 +214,7 @@
 
         <div class="footer-legal"></div>
     </footer>
-        @RenderSection("Scripts",required:false)
+        @await RenderSectionAsync("Scripts",false);
     <!-- Vendor JS Files -->
         <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="~/assets/vendor/swiper/swiper-bundle.min.js"></script>
