@@ -8,7 +8,7 @@ namespace MedSysProject.Controllers
         /// 主畫面
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index()
+        public IActionResult Index() 
         {
             return View();
         }
@@ -17,7 +17,32 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 可能需要接收類別參數??
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ViewCategory() 
+        {
+            return View();
+        }
 
+        public IActionResult AboutUs() 
+        {
+            return View();
+        }
+        public IActionResult ContactUs() 
+        {
+            return View();
+        }
+
+        public IActionResult Test() 
+        {
+            return View();
+        }
+        public IActionResult Create() 
+        {
+            return View();
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MedSysProject.Models
+﻿namespace MedSysProject.ViewModels
 {
     public class CRegisterViewModel
     {
