@@ -18,7 +18,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="MemberName" class="control-label"></label>
-                    <label id="checkName" class="control-label"></label>
+                    <div style="display:inline" id="alertName"></div>
                     <hr class="border border-danger border-2 opacity-50">
                     <input asp-for="MemberName" class="form-control" id="inputName" />
                     <span asp-validation-for="MemberName" class="text-danger"></span>
@@ -51,23 +51,28 @@
 
  @section Scripts{
      <script>
-        const checkName = document.querySelector('#checkName');
+        const alertName = document.querySelector('#alertName');
         const inputName = document.querySelector('#inputName');
 
         inputName.addEventListener('blur',()=>{
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `@Url.Content("~/AccoutApi/checkName")?inName=${inputName.value}`);
-            xhr.send();
-
-            xhr.addEventListener('load',()=>{
-                const datas = xhr.responseText;
-                checkName.innerHTML=datas;
-                if(datas == "無"){
-                    console.log("沒人用")
-                }else{
-                    console.log("有人用")
-                }
-            })
+            checkName();
         })
+
+        async function checkName(){
+            const response = await fetch(`@Url.Content("~/AccoutApi/checkName")?inName=${inputName.value}`)
+            const data = await response.text();
+            console.log(data);
+            let s = "";
+            if(data == '有'){
+                s = "<label calss='control-HTMLLabelElement text-danger'>此帳號已經有人使用</label><img src='@Url.Content("~/img/icon/X.png")'/>";
+                console.log(s);
+                document.querySelector('#alertName').innerHTML = "<label calss='control-HTMLLabelElement text-danger'>此帳號已經有人使用</label><img src='@Url.Content("~/img/icon/X.png")'/>";
+            }else if
+            (data=="無"){
+                
+            //    document.querySelector('#alertName').innerHTML = "<label  class="control-label text-danger" > 此帳號目前無人使用 < /label> <img src='@Url.Content("~/img/icon/check.png")' / >";
+            }
+        }
+
      </script>
  }
