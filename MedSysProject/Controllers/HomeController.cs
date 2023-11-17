@@ -14,7 +14,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult Index()
-        {
+        {//版面待修改調整
             return View();
         }
 
@@ -29,12 +29,25 @@ namespace MedSysProject.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         public IActionResult xxx()
-        {
+        {//plan選擇，個人版，男女區別，待更改CONTROLL名稱
             return View();
         }
         public IActionResult testplan()
-        { 
+        { //plan 企業版，待更改CONTROLL名稱
             return View();
         }
+        public IActionResult live()
+        { //現場檢查狀況
+            return View();
+        }
+        public IActionResult Reserve()
+        { //預約總攬
+            return View();
+        }
+        public IActionResult Member()
+        { //會員專項
+            return View();
+        }
+
     }
 }
