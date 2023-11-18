@@ -26,7 +26,6 @@ namespace MedSysProject.Controllers
             if (c == null)
                 return View("Login");
 
-            
             var q = _db.Members.FirstOrDefault(n => n.MemberEmail == c.txtEmail);
             if (q != null)
             {
@@ -43,15 +42,15 @@ namespace MedSysProject.Controllers
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                 return RedirectToAction("Login");
-            string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             return View(m);
         }
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m)
         {
             
-            Member Upm = _db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
+            Member? Upm = _db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
             Upm.MemberEmail= m.MemberEmail;
             Upm.MemberPassword= m.MemberPassword;
             Upm.MemberName= m.MemberName;
