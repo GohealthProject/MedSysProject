@@ -60,5 +60,35 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+
+        public IActionResult EmpClass()
+        {
+            return View();
+        }
+
+        public IActionResult Blog()
+        {
+            return View();
+        }
+
+        public IActionResult Product()
+        {
+            return View();
+        }
+
+        public IActionResult Order()
+        {
+            return View();
+        }
+
+        public IActionResult Data()
+        {
+            return View();
+        }
+
+        public IActionResult Report()
+        {
+            return View();
+        }
     }
 }

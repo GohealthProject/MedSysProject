@@ -1,53 +1,56 @@
-﻿@model IEnumerable<MedSysProject.Models.Employee>
+﻿@model IEnumerable<MedSysProject.Models.Product>
 
 @{
-    ViewData["Title"] = "EmpManager";
+    ViewData["Title"] = "產品管理";
     Layout = "_Layout_Admin2";
 }
 
 @* 這邊是確保左側邊欄的目前區域標亮 *@
 @* ---------------------------------------------- *@
 <script>
-    const EmpManager = document.getElementById("li-EmpManager");
+    const Product = document.getElementById("li-Product");
     const Index = document.getElementById("li-index");
-    EmpManager.className = "nav-item active";
+    Product.className = "nav-item active";
     Index.className = "nav-item";
 </script>
 @* ------------------------------------- *@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">員工管理</h1>
+    <h1 class="h3 mb-0 text-gray-800">產品管理</h1>
 </div>
 
-@* <p>
+<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeId)
+                @Html.DisplayNameFor(model => model.ProductId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeName)
+                @Html.DisplayNameFor(model => model.ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeClassId)
+                @Html.DisplayNameFor(model => model.UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeBirthDate)
+                @Html.DisplayNameFor(model => model.License)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePhoneNum)
+                @Html.DisplayNameFor(model => model.Ingredient)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeEmail)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePassWord)
+                @Html.DisplayNameFor(model => model.Photo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePhoto)
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discontinued)
             </th>
             <th></th>
         </tr>
@@ -56,28 +59,31 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeId)
+                @Html.DisplayFor(modelItem => item.ProductId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeName)
+                @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeClassId)
+                @Html.DisplayFor(modelItem => item.UnitPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeBirthDate)
+                @Html.DisplayFor(modelItem => item.License)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
+                @Html.DisplayFor(modelItem => item.Ingredient)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeEmail)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePassWord)
+                @Html.DisplayFor(modelItem => item.Photo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePhoto)
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discontinued)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
@@ -88,4 +94,3 @@
 }
     </tbody>
 </table>
- *@
