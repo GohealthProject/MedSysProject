@@ -41,6 +41,7 @@
                     <li>@Html.ActionLink("部落格首頁","Index","Blogs",null,null)</li>
                     <li>@Html.ActionLink("單篇貼文","SinglePost","Blogs",null,null)</li>
                     <li class="dropdown">
+                        <!--文章類別選單箭頭-->
                         <a href="#"><span>文章類別</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
                         <ul>
                             <li><a href="#">活動快訊</a></li>
@@ -63,9 +64,9 @@
                 <i class="bi bi-list mobile-nav-toggle"></i>
                 <!--搜尋-->
                 <div class="search-form-wrap js-search-form-wrap">
-                    <form action="#" class="search-form">
+                    <form class="search-form" action="#">
                         <!--放大鏡按鍵-->
-                        <@* span class="icon bi-search"></span> *@
+                        <span class="icon bi-search"></span>
                         <input class="form-control" type="text" placeholder="Search">
                         <button class="btn js-search-close"><span class="bi-x"></span></button>
                     </form>
