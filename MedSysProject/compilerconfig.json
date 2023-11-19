@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/_MyCustomStyle.css",
     "inputFile": "wwwroot/_MyCustomStyle.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/BlogStyle.css",
+    "inputFile": "wwwroot/css/BlogStyle.scss"
   }
 ]

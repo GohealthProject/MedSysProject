@@ -1,13 +1,14 @@
 ﻿
 @{
-    ViewData["Title"] = "SinglePost";
+    ViewData["Title"] = "IndexOld";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
 
-<main id="main">
+<h1>IndexOld</h1>
+<main id="main" style="z-index:100;">
     <!-- ======= Hero Slider Section ======= -->
     <section id="hero-slider" class="hero-slider">
-        <div class="container-md" data-aos="fade-in" style="z-index=5;">
+        <div class="container-md" data-aos="fade-in">
             <div class="row">
                 <div class="col-12">
                     <div class="swiper sliderFeaturedPosts">
@@ -127,7 +128,8 @@
                         </a>
                         <div class="post-meta">
                             <span class="date">Culture</span>
-                            <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            <span class="mx-1">&bullet;</span>
+                            <span>Jul 5th '22</span>
                         </div>
                         <h2>
                             <a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a>
@@ -973,7 +975,3 @@
     </section>
     <!-- End Lifestyle Category Section -->
 </main>
-
-@section Scripts{
-    console.log('This script is from the _Layout_')
-}
