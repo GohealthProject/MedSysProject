@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/BlogStyle.css",
     "inputFile": "wwwroot/css/BlogStyle.scss"
+  },
+  {
+    "outputFile": "wwwroot/Mine.css",
+    "inputFile": "wwwroot/Mine.scss"
   }
 ]
