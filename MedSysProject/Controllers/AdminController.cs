@@ -58,7 +58,18 @@ namespace MedSysProject.Controllers
 
         public IActionResult EmpManager()
         {
-            return View();
+            string keyword = "";
+            IEnumerable<Employee> datas = null;
+            MedSysContext db = new MedSysContext();
+
+            if (string.IsNullOrEmpty(keyword))
+                datas = from t in db.Employees
+                        select t;
+            else
+                datas = db.Employees.Where(p => p.EmployeeName.Contains(keyword) ||
+                p.EmployeePhoneNum.Contains(keyword)||
+                p.EmployeeEmail.Contains(keyword));
+            return View(datas);
         }
 
         public IActionResult EmpClass()
