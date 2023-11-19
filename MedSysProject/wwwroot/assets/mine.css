@@ -1,0 +1,69 @@
+﻿:root {
+    scroll-behavior:smooth;
+}
+body {
+    color:rgba(88,88,88,1);
+}
+a {
+    color:var(--color-links);
+    text-decoration:none;
+}
+a:hover {
+    color:red;/*先用一個奇葩顏色，到時候改*/
+    text-decoration:none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-primary);
+    color:green;/*確認樣式有修改到，到時可以刪掉*/
+}
+
+/*--------------------------------------------------------------
+# 回到最上面按鈕(封印)
+--------------------------------------------------------------*/
+/*.scroll-top {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.scroll-top i {
+  font-size: 24px;
+  color: #fff;
+  line-height: 0;
+}
+
+.scroll-top:hover {
+  background: rgba(var(--color-primary-rgb), 0.8);
+  color: #fff;
+}
+
+.scroll-top.active {
+  visibility: visible;
+  opacity: 1;
+}*/
+
+/*Header*/
+.header {
+    height: 90px;
+    transition: all 0.5s;
+    z-index: 997;
+    background: #f2f2f2;
+}
+
+.sticked {
+    height:70px;
+}
