@@ -67,3 +67,31 @@ h6 {
 .sticked {
     height:70px;
 }
+
+/*搜尋表單*/
+.search-form-wrap {
+    /*所以，當你使用 position: absolute; 來定位一個元素時，為了使它的位置參考準確，
+        一般情況下建議將其直接父元素設置為 position: relative; 或其他已定位屬性（
+        例如 position: absolute;、position: fixed; 或 position: sticky;）。*/
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 9;
+    transition: all 0.3s ease;
+    visibility:visible;
+    opacity: 1;
+}
+
+    .search-form-wrap .search-form {
+        position:relative;
+
+    }
+
+        .search-form-wrap .search-form .form-control {
+            /*按下放大鏡按鈕按下要出現*/
+            width: 300px;
+            border: none;
+            box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb), 0.1);
+            padding-left:40px;
+            padding-right:40px;
+        }

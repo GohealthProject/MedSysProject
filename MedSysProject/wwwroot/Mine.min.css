@@ -1,0 +1,1 @@
+﻿@charset "UTF-8";:root{scroll-behavior:smooth;}a{color:#f00;color:var(--color-links);text-decoration:none;}a:hover{color:var(--color-links);text-decoration:none;}h1,h2,h3,h4,h5,h6{font-family:var(--font-primary);}#main{margin-top:90px;}.header{height:90px;transition:all .5s;z-index:997;background:#f2f2f2;}.header.sticked{height:70px;}
