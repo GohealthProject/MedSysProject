@@ -1,53 +1,53 @@
-﻿@model IEnumerable<MedSysProject.Models.Employee>
+﻿@model IEnumerable<MedSysProject.Models.Order>
 
 @{
-    ViewData["Title"] = "EmpManager";
+    ViewData["Title"] = "訂單管理";
     Layout = "_Layout_Admin2";
 }
 
 @* 這邊是確保左側邊欄的目前區域標亮 *@
 @* ---------------------------------------------- *@
 <script>
-    const EmpManager = document.getElementById("li-EmpManager");
+    const Order = document.getElementById("li-Order");
     const Index = document.getElementById("li-index");
-    EmpManager.className = "nav-item active";
+    Order.className = "nav-item active";
     Index.className = "nav-item";
 </script>
 @* ------------------------------------- *@
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">員工管理</h1>
+    <h1 class="h3 mb-0 text-gray-800">訂單管理</h1>
 </div>
 
-@* <p>
+<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeId)
+                @Html.DisplayNameFor(model => model.OrderId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeName)
+                @Html.DisplayNameFor(model => model.OrderDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeClassId)
+                @Html.DisplayNameFor(model => model.MemberId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeBirthDate)
+                @Html.DisplayNameFor(model => model.ShipId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePhoneNum)
+                @Html.DisplayNameFor(model => model.PayId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeEmail)
+                @Html.DisplayNameFor(model => model.StateId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePassWord)
+                @Html.DisplayNameFor(model => model.ShipDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeePhoto)
+                @Html.DisplayNameFor(model => model.DeliveryDate)
             </th>
             <th></th>
         </tr>
@@ -56,28 +56,28 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeId)
+                @Html.DisplayFor(modelItem => item.OrderId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeName)
+                @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeClassId)
+                @Html.DisplayFor(modelItem => item.MemberId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeBirthDate)
+                @Html.DisplayFor(modelItem => item.ShipId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
+                @Html.DisplayFor(modelItem => item.PayId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeeEmail)
+                @Html.DisplayFor(modelItem => item.StateId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePassWord)
+                @Html.DisplayFor(modelItem => item.ShipDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmployeePhoto)
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
@@ -88,4 +88,3 @@
 }
     </tbody>
 </table>
- *@
