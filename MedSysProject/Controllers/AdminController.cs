@@ -314,7 +314,17 @@ namespace MedSysProject.Controllers
 
         }
 
+        public IActionResult GetImageByte(int? id)
+        {
+           Employee emp = _db.Employees.Find(id);
+            byte[]? img = emp?.EmployeePhoto;
 
+            if (img != null)
+            {
+                return File(img, "image/jpeg");
+            }
+            return NotFound();
+        }
 
     }
 }
