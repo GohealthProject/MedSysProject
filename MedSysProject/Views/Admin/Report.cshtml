@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Report";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Report = document.getElementById("li-Report");
+    const Index = document.getElementById("li-index");
+    Report.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">結果報告</h1>
+</div>

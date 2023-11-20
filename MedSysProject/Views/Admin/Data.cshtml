@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "數據分析";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Data = document.getElementById("li-Data");
+    const Index = document.getElementById("li-index");
+    Data.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">數據分析</h1>
+</div>

@@ -1,0 +1,30 @@
+﻿.{
+    box-sizing:border-box;
+}
+body {
+}
+
+.author {
+    .authorPhoto {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .authorName{
+        background-color:orange;
+        h3{
+            font-size:18px;
+
+        }
+    }
+}
+section{
+    padding:40px 0;
+    overflow:hidden;
+}
+h1{
+    color:red;
+}
+

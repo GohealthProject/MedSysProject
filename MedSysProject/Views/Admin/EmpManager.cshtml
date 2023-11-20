@@ -1,0 +1,111 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@model IEnumerable<MedSysProject.Models.Employee>
+
+@{
+    ViewData["Title"] = "EmpManager";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const EmpManager = document.getElementById("li-EmpManager");
+    const Index = document.getElementById("li-index");
+    EmpManager.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">員工管理</h6>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-success" asp-action="Create">
+                <i class="fas fa-user-plus"></i>
+            </a>
+        </p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        姓名
+                    </th>
+                    <th>
+                        類別
+                    </th>
+                    <th>
+                        生日
+                    </th>
+                    <th>
+                        電話
+                    </th>
+                    <th>
+                        信箱
+                    </th>
+                    <th>
+                        密碼
+                    </th>
+                    <th>執行動作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                            </td>
+                            <td>
+                                @* 這邊要改成類型名稱 使用GetEmployeeClassNameById方法，待修正 *@
+                                @Html.DisplayFor(modelItem => item.EmployeeClassId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeBirthDate, "{0:yyyy/MM/dd}")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeePassWord)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", new { id = item.EmployeeId })" class="btn btn-primary">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
+                                <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                                <a href="@Url.Action("Delete", new { id = item.EmployeeId })" class="btn btn-danger">
+                                    <i class="fas fa-user-times"></i>
+                                </a>
+
+                                @*
+                                @Html.ActionLink("", "Edit", new { id = item.EmployeeId }, new {@class="btn btn-primary"}) 
+                                @Html.ActionLink("", "Details", new { id = item.EmployeeId }, new {@class="btn btn-info"}) 
+                                @Html.ActionLink("", "Delete", new { id = item.EmployeeId }, new {@class= "btn btn-danger"})
+                                *@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

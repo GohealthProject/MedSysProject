@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Blog";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Blog = document.getElementById("li-Blog");
+    const Index = document.getElementById("li-index");
+    Blog.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">部落格管理</h1>
+</div>
+

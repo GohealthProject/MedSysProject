@@ -1,0 +1,164 @@
+﻿@charset "UTF-8";
+:root {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: red;
+  /*能否取用全域變數?可以，所以不需要在上面引用*/
+  color: var(--color-links);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-links);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+}
+
+#main {
+  margin-top: 90px;
+}
+
+section {
+  /*這個屬性特別有用的情況是，當頁面有固定標頭時，
+
+      滾動到指定元素位置時，該元素的頂部部分不會被標頭遮擋住，提供更好的用戶體驗。*/
+  scroll-margin-top: 70px;
+}
+
+/*Header*/
+.header {
+  height: 90px;
+  transition: all 0.5s;
+  z-index: 997;
+  background: #f2f2f2;
+}
+.header.sticked {
+  height: 70px;
+}
+.header .search-form-wrap {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9;
+  transition: 0.3s all ease;
+  visibility: visible;
+  opacity: 1;
+}
+.header .search-form-wrap .search-form {
+  position: relative;
+}
+.header .search-form-wrap .search-form .form-control {
+  width: 300px;
+  border: none;
+  box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb), 0.5);
+  padding: 0 40px; /*上下 左右*/
+}
+.header .search-form-wrap .search-form .form-control:active, .header .search-form-wrap .search-form .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+.header .search-form-wrap .search-form .icon {
+  position: absolute;
+  left: 0;
+  top: 0px;
+  opacity: 0.5;
+  left: 10px;
+}
+.header .search-form-wrap .search-form .btn {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  font-size: 25px;
+  opacity: 0.5;
+}
+.header .search-form-wrap .search-form .btn:active, .header .search-form-wrap .search-form .btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/*RWD電腦*/
+@media (min-width: 1280px) {
+  .navbar {
+    padding: 0;
+  }
+  .navbar ul { /*上層ul*/
+    margin: 0;
+    padding: 0;
+    display: flex; /*parent element變flex box，內部元素水平排*/
+    list-style: none;
+    align-items: center;
+  }
+  .navbar ul li {
+    position: relative;
+  }
+  .navbar ul li:hover > a {
+    color: var(--color-default);
+  }
+  .navbar ul.active:hover {
+    color: var(--color-primary);
+  }
+  .navbar ul .dropdown ul { /*下層*/
+    display: block;
+    position: absolute;
+    left: 14px;
+    top: calc(100% + 30px); /*css內建方法，記得要有空格，如果沒有編譯到，打錯或格式檢查一下*/
+    margin: 0;
+    padding: 10px 0;
+    z-index: 99;
+    opacity: 1;
+    visibility: visible;
+    background-color: var(--color-white);
+    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    transition: 0.3s;
+    border-radius: 4px;
+    /*會繼承樓上list-style:none*/
+  }
+  .navbar ul .dropdown ul.active:hover {
+    color: var(--color-primary);
+  }
+  .navbar ul .dropdown ul li {
+    min-width: 200px;
+  }
+  .navbar ul .dropdown ul li:hover > a {
+    color: var(--color-primary);
+  }
+  .navbar ul .dropdown ul li a {
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: none;
+    font-weight: 400;
+  }
+  .navbar ul .dropdown ul li a:hover {
+    color: var(--color-primary);
+  }
+  .navbar.active, .navbar.active:focus {
+    color: var(--color-default);
+  }
+  .navbar a:hover {
+    color: var(--color-default);
+  }
+  .navbar a, .navbar a:focus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 10px 30px;
+    font-family: var(--font-default);
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(var(--color-default-rgb), 1);
+    white-space: nowrap;
+    transition: 0.3s;
+  }
+  .navbar a i, .navbar a:focus i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+  }
+}
