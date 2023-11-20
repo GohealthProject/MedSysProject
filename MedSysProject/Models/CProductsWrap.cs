@@ -56,7 +56,7 @@ namespace MedSysProject.Models
             get { return _product.Description; }
             set { Product.Description = value; }
         }
-        
+
         public string ImagePath { get; set; }
 
         [DisplayName("圖片")]

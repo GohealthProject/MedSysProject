@@ -57,6 +57,19 @@
         <body>
             <div class="container mt-5">
                 <h1>產品管理一覽表</h1>
+                @using (Html.BeginForm())
+                {
+                    @:產品關鍵字(包含產品名稱、有效成分或產品描述) @Html.TextBox("txtKeyword")
+                    <input type="submit" value="查詢" />
+                }
+                <br/>
+                @using (Html.BeginForm())
+                {
+                    @: 價格區間
+                    @: 最小價格 @Html.TextBox("txtMinPrice", null, new { type = "number" })
+                    @: 最大價格 @Html.TextBox("txtMaxPrice", null, new { type = "number" })
+                    <input type="submit" value="查詢" />
+                }
 
                 <p>
                     <a asp-action="Create" class="btn btn-outline-success">新增產品</a>
