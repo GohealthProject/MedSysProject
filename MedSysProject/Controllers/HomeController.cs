@@ -7,10 +7,11 @@ namespace MedSysProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly MedSysContext _context;
+       public HomeController(ILogger<HomeController> logger, MedSysContext medSysContext)
         {
             _logger = logger;
+            _context = medSysContext;
         }
 
         public IActionResult Index()
@@ -49,9 +50,13 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult report()
+        public IActionResult report(Member id)
         { 
-            return View();
+            var m = from s in _context.HealthReports
+                    where s.MemberId== id.MemberId
+                    select s.ReportDetails;
+
+            return View(m);
         }
 
     }
