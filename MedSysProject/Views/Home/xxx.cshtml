@@ -286,16 +286,18 @@ h5{
     </div>
     @section Scripts{
     <script>
-        async function malePlanConfirm() {
-           
-            document.querySelector("#malePlanConfirm").addEventListener('click',()=>{
-         const response = await fetch('@Url.Content("~/WorkPlace/malePlanConfirm")');
+      
+                    
+ document.querySelector("#malePlanConfirm").addEventListener('click',()=>{
+          async function malePlanConfirm() {
+            const response = await fetch('@Url.Content("~/WorkPlace/malePlanConfirm")');
             const data = await (response.text());
+          };
+            malePlanConfirm();
 
             });
 
-        }
-        malePlanConfirm();
+        //malePlanConfirm();
 
     </script>
     
