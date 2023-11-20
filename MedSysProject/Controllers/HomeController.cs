@@ -33,10 +33,10 @@ namespace MedSysProject.Controllers
         public IActionResult xxx(int? id)
         {//plan選擇，個人版，男女區別，待更改CONTROLL名稱
             //MedSysContext context = new MedSysContext();
-            //var description = from d in context.Plans.Where(d=>d.PlanId==id)
-            //                select d.PlanDescription;
-            //context.Add(description);
-           //var description= context.Plans.FirstOrDefault(d => d.PlanId == id).PlanDescription;
+            //var description = from d in _context.Plans.Where(d => d.PlanId == id)
+            //                  select d.PlanDescription;
+            //_context.Add(description);
+            //var description = _context.Plans.FirstOrDefault(d => d.PlanId == id).PlanDescription;
 
             return View();
         }
