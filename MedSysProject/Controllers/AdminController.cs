@@ -105,6 +105,22 @@ namespace MedSysProject.Controllers
             return View(blogs);
         }
 
+        public IActionResult BlogList() 
+        {
+            var blogs = from blog in _db.Blogs
+                        select new CBlogModel { BlogID=blog.BlogId, 
+                                                Title=blog.Title,
+                                                ArticleClassID=blog.ArticleClassId,
+                                                Category=blog.ArticleClass.BlogCategory1,
+                                                Views=blog.Views,
+                                                CreatedAt=blog.CreatedAt,
+                                                Content=blog.Content,
+                                                BlogImage=blog.BlogImage,
+                                                AuthorID=blog.EmployeeId,
+                                                AuthorName=blog.Employee.EmployeeName};
+            return View(blogs);
+        }
+
         public IActionResult Product(CKeywordViewModel vm)
         {
             var datas = _db.Products.AsQueryable();
