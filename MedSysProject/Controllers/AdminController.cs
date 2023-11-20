@@ -3,6 +3,8 @@ using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Linq;
+using System.IO;
 
 namespace MedSysProject.Controllers
 {
@@ -102,10 +104,24 @@ namespace MedSysProject.Controllers
 
             if (!string.IsNullOrEmpty(vm.txtKeyword))
             {
-                datas = datas.Where(p => p.ProductName.Contains(vm.txtKeyword));
+                var keyword = vm.txtKeyword.Trim();
+                datas = datas.Where(p =>
+                    p.ProductName.Contains(keyword) ||
+                    p.Ingredient.Contains(keyword) ||
+                    p.Description.Contains(keyword));
             }
 
-            var defaultImagePath = "/img-product/default-image.jpg"; // 設定預設圖片路徑
+            var defaultImagePath = "/img-product/default-image.jpg";
+
+            if (vm.txtMinPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
+            }
+
+            if (vm.txtMaxPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
+            }
 
             var viewModel = datas.Select(product => new CProductsWrap
             {
@@ -115,9 +131,10 @@ namespace MedSysProject.Controllers
                     : defaultImagePath
             }).ToList();
 
-
             return View(viewModel);
         }
+
+
 
         public IActionResult Order()
         {
@@ -268,13 +285,22 @@ namespace MedSysProject.Controllers
         public IActionResult Delete(int? id)
         {
 
+
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
+                // 刪除相關聯的 ProductsClassification 記錄
+                var relatedClassification = _db.ProductsClassifications.FirstOrDefault(pc => pc.ProductId == id);
+                if (relatedClassification != null)
+                {
+                    _db.ProductsClassifications.Remove(relatedClassification);
+                }
+
                 _db.Products.Remove(x);
                 _db.SaveChanges();
             }
             return RedirectToAction("Product");
+
         }
 
 
