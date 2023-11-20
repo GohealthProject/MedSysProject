@@ -29,8 +29,14 @@ namespace MedSysProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult xxx()
+        public IActionResult xxx(int? id)
         {//plan選擇，個人版，男女區別，待更改CONTROLL名稱
+            //MedSysContext context = new MedSysContext();
+            //var description = from d in context.Plans.Where(d=>d.PlanId==id)
+            //                select d.PlanDescription;
+            //context.Add(description);
+           //var description= context.Plans.FirstOrDefault(d => d.PlanId == id).PlanDescription;
+
             return View();
         }
         public IActionResult testplan()
@@ -51,9 +57,12 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult report(Member id)
-        { 
-            var m = from s in _context.HealthReports
-                    where s.MemberId== id.MemberId
+        {
+            var m = _context.Reserves.Where(s => s.MemberId == id.MemberId);
+                   
+
+            var j = from s in _context.HealthReports
+                    where s.MemberId == id.MemberId
                     select s.ReportDetails;
 
             return View(m);

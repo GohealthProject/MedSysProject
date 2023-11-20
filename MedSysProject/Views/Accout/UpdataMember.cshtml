@@ -9,7 +9,7 @@
 }
 
 <div class="UPdiv"style="width:70%">
-<form class="row g-3 fromP" method="post">
+<form class="row g-3 fromP" method="post" enctype="multipart/form-data">
         <input type="hidden" name="MemberId" value=@Model.MemberId />
     <div class="col-12">
             <label for="inputEmail4" class="form-label" name="MemberEmail">電子郵件</label>
@@ -36,7 +36,11 @@
                 <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
             </div>
         </div>
-    
+    <div class="col-12">
+        <span >瀏覽圖片</span>
+            <input type="file" name="fileN" />
+            <input type="button" id="btnImg" />
+    </div>
     
     <div class="col-12">
         <button type="submit" class="btn btn-primary">儲存並修改</button>
@@ -44,4 +48,10 @@
 </form>
 
 </div>
+@section Scripts{
+    <script>
+        const btnImg =document.querySelector('#btnImg');
 
+
+    </script>
+}
