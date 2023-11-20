@@ -1,0 +1,343 @@
+﻿@{
+    ViewData["Title"] = "Reserve";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+<style>
+   
+    .A {
+        /*position: fixed;*/
+        /* top: 50%; */
+        /*z-index: 999;*/
+        width: 20%; /*270px;*/
+        height: 75%;
+        margin-left:2%;
+        margin-bottom: 35%;
+       
+       /* left: 20px;*/
+        overflow: visible;
+      /*  transform: translateX(-270px);*/
+        background-color: #f2f9f8;
+        border:solid 3px;
+       /* word-wrap:;*/
+        float:right;
+    }
+
+   /* div {
+        word-wrap: break-word;
+        border:solid 3px;
+    }*/
+    /*.open .main {
+        transform: translateX(270px);
+         // 點了 .header 會讓 .menu 往右推 270 px 以容納滑出來的選單
+    }
+
+    .open .aside {
+        transform: translateX(0px);
+          // 點了 .header 會讓選單滑入視窗中
+    }*/
+
+    #1 {
+        padding-top: 100px;
+    }
+
+ /*   .offcanvas-body{
+        height:8%;
+    }*/
+
+    table,
+    td {
+        border: 1px solid #333;
+        
+    }
+
+
+    thead,
+    tfoot {
+        background-color: #333;
+        color: #fff;
+    }
+    #1{
+        background-color: #f2f9f8;
+    }
+
+    .accordion-item{
+        background-color: #f2f9f8;
+    }
+    .but{
+        text-align: center;
+    }
+    h5{
+      /* margin-left:8%;*/
+      text-align:match-parent;
+        
+     
+    }
+
+    .form{
+        margin-top:20%;
+    }
+
+    td,th {
+        text-align:center;
+    }
+   
+</style>
+
+<h1 class="container">Reserve</h1>
+<!doctype html>
+<html lang="zh-hant">
+
+<body>
+
+
+   
+   
+   
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-1"></div>
+            <h5 id="h5" class="col-1">目前選擇項目</h5>
+            <div class="col-10"></div>
+            <div class="overflow-auto col-2 A">
+                
+                <div class="row">
+                    <table border="1">
+                        <thead class="col-6">
+                            <tr>
+                            <th>
+                                編號
+                            </th>
+                                <th>
+                                    項目
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A</td>
+                                <td>B</td>
+                            </tr>
+                        </tbody>
+                     
+                    </table>
+             
+                 </div>
+             </div>
+               
+        
+        <div class="container-fluid col-9">
+
+        <div class="accordion row" id="accordionExample">
+            <div class="accordion-item col-4 mr-5">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        方案
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                    <div class="accordion-body">
+                                <div class="list-group">
+                                    <label class="list-group-item">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        樂活銀髮方案
+                                    </label>
+                                    <label class="list-group-item">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        活力青年方案
+                                    </label>
+                                    <label class="list-group-item">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        婦女安心方案
+                                    </label>
+                                    <label class="list-group-item">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        男性保健方案
+                                    </label>
+                                    <label class="list-group-item">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        自選套餐
+                                    </label>
+                                </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item col-4 mr-3">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        類別
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                    <div class="accordion-body">
+                                <div class="list-group list-group-horizontal">
+                                    <label class="list-group-item col-6 ">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        一般生理檢查
+                                    </label>
+                                    <label class="list-group-item col-6 ">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        一般生理檢查
+                                    </label>
+                                </div>
+                                <div class="list-group list-group-horizontal">
+                                    <label class="list-group-item col-6 ">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        尿液一般檢查
+                                    </label>
+                                    <label class="list-group-item col-6 ">
+                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                        血液常規檢查
+                                    </label>
+                                </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item col-4 ">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        項目
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+                    <div class="accordion-body">
+                               
+                                    <div class="list-group list-group-horizontal">
+                                        <label class="list-group-item col-6 ">
+                                            <input class="form-check-input me-2" type="checkbox" value="">
+                                        身高
+                                        </label>
+                                        <label class="list-group-item col-6 ">
+                                            <input class="form-check-input me-2" type="checkbox" value="">
+                                        體重
+                                        </label>
+                                    </div>
+                                    <div class="list-group list-group-horizontal">
+                                        <label class="list-group-item col-6 ">
+                                            <input class="form-check-input me-2" type="checkbox" value="">
+                                        血壓-收縮壓
+                                        </label>
+                                        <label class="list-group-item col-6 ">
+                                            <input class="form-check-input me-2" type="checkbox" value="">
+                                        理學檢查
+                                        </label>
+                                   
+                                </div>
+                            </div>
+                </div>
+             
+            </div>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                            <form class="form">
+                                <label class="mb-2 mt-2">
+                                    預約日期:
+                                    <input type="date"
+                                           name="party"
+                                           min=new date()
+                                           max="2023/11/21"
+                                           required />
+                                    <span class="validity"></span>
+                                </label>
+
+                                @*<p>
+                                    <button>Submit</button>
+                                </p>*@
+                                <select class="form-select col-12 mb-2" aria-label="Default select example">
+                                    <option selected>付款方式</option>
+                                    <option value="1">付現</option>
+                                    <option value="2">刷卡</option>
+
+                                </select>
+                        
+                      
+                        <div class="form-floating mb-2 col-12">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <label for="floatingInput">帳號</label>
+                        </div>
+                       
+                        
+                        <div class="form-floating col-12 mb-2">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <label for="floatingPassword">密碼</label>
+                                </div>
+                            </form>
+                      
+                        </div>
+                      </div>
+                    </div>
+        </div>
+
+
+    </div>
+    </div>
+    
+ 
+    <div class="modal fade" id="reserve" aria-hidden="true" aria-labelledby="reservelbl" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reservelbl">確定要預約嗎?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    預約日期:2023/12/01 付費方式:現場付款
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal">確定</button>
+                    <button class="btn btn-danger" data-bs-target="#cancel" data-bs-toggle="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="confirm" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel3">預約已完成</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    預約日期:2023/12/01 付費方式:現場付款
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal" >確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cancel" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel2">預約未完成</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="moda2-body">
+                    預約未完成
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal">返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5"></div>
+        <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#reserve" role="button">馬上預約</a>
+        <div class="col-5"></div>
+    </div>
+
+
+
+  
+   
+
+    <script src="bootstrap5/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<script>
+
+</script>
+

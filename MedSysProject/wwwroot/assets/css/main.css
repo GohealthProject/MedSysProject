@@ -12,14 +12,15 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+/*(v)*/
 :root {
   scroll-behavior: smooth;
 }
-
+/*(v)*/
 body {
   color: rgba(var(--color-primary-rgb), 1);
 }
-
+/*(V)*/
 a {
   color: var(--color-links);
   text-decoration: none;
@@ -44,9 +45,9 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Sections & Section Header
+# Sections & Section Header(V)
 --------------------------------------------------------------*/
-section {
+/*section {
   padding: 40px 0;
   overflow: hidden;
 }
@@ -62,12 +63,12 @@ section {
 
 .section-header p {
   margin-bottom: 0;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Scroll top button
 --------------------------------------------------------------*/
-.scroll-top {
+/*.scroll-top {
   position: fixed;
   visibility: hidden;
   opacity: 0;
@@ -95,18 +96,18 @@ section {
 .scroll-top.active {
   visibility: visible;
   opacity: 1;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Page title
 --------------------------------------------------------------*/
-.page-title {
+/*.page-title {
   font-size: 70px;
   color: var(--color-black);
-}
+}*/
 
 /* Form Input Fieldds */
-.form-control:active,
+/*.form-control:active,
 .form-control:focus {
   outline: none;
   box-shadow: none;
@@ -122,27 +123,27 @@ section {
   background-color: var(--color-black);
   color: var(--color-white);
   border-color: var(--color-black);
-}
+}*/
 
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
-.header {
+/*.header {
   height: 90px;
   transition: all 0.5s;
   z-index: 997;
-  background: #2d6760;
+  background: #f2f2f2;
 }
 
 .header.sticked {
   height: 70px;
 }
-
+    沒用到
 .header .logo img {
   max-height: 40px;
   margin-right: 6px;
 }
-
+    垃圾
 .header .logo h1 {
   font-size: 30px;
   font-weight: 700;
@@ -206,15 +207,15 @@ section {
   visibility: visible;
   opacity: 1;
 }
-
+(V)
 section {
   scroll-margin-top: 70px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Desktop Navigation 
 --------------------------------------------------------------*/
-@media (min-width: 1280px) {
+/*@media (min-width: 1280px) {
   .navbar {
     padding: 0;
   }
@@ -289,7 +290,7 @@ section {
     transition: 0.3s;
     border-radius: 4px;
   }
-
+   (V)
   .navbar .dropdown ul li {
     min-width: 200px;
   }
@@ -304,7 +305,7 @@ section {
   .navbar .dropdown ul a i {
     font-size: 12px;
   }
-
+    (V)
   .navbar .dropdown ul a:hover,
   .navbar .dropdown ul .active:hover,
   .navbar .dropdown ul li:hover>a {
@@ -316,7 +317,7 @@ section {
     top: 100%;
     visibility: visible;
   }
-
+    下層dropdown我沒用到
   .navbar .dropdown .dropdown ul {
     top: 0;
     left: calc(100% - 30px);
@@ -330,7 +331,7 @@ section {
     visibility: visible;
   }
 }
-
+都跟小ul有關我沒用到
 @media (min-width: 1280px) and (max-width: 1366px) {
   .navbar .dropdown .dropdown ul {
     left: -90%;
@@ -343,12 +344,12 @@ section {
 
 .mobile-nav-toggle {
   display: none;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Mobile Navigation
 --------------------------------------------------------------*/
-@media (max-width: 1279px) {
+/*@media (max-width: 1279px) {
   .navbar {
     padding: 0;
     z-index: 9997;
@@ -409,7 +410,7 @@ section {
 
   .navbar .dropdown>.dropdown-active,
   .navbar .dropdown .dropdown>.dropdown-active {
-    display: block;
+    display: block;(V)
   }
 
   .mobile-nav-toggle {
@@ -435,7 +436,7 @@ section {
     right: 15px;
     z-index: 9999;
     color: var(--color-white);
-  }
+  }(V)
 
   .mobile-nav-active .navbar {
     position: fixed;
@@ -443,17 +444,17 @@ section {
     inset: 0;
     background: rgba(var(--color-black-rgb), 0.6);
     transition: 0.3s;
-  }
+  }(v)
 
   .mobile-nav-active .navbar>ul {
     display: block;
-  }
-}
+  }(V)
+}*/
 
 /*--------------------------------------------------------------
 # Posts
 --------------------------------------------------------------*/
-.post-entry-1 {
+/*.post-entry-1 {
   margin-bottom: 30px;
 }
 
@@ -838,10 +839,10 @@ section {
 .custom-pagination a.prev:hover,
 .custom-pagination a.next:hover {
   background: rgba(var(--color-black-rgb), 0.1);
-}
+}*/
 
 /* custom tab nav on sidebar */
-.aside-block {
+/*.aside-block {
   margin-bottom: 30px;
 }
 
@@ -920,14 +921,14 @@ section {
 .aside-tags li a:focus {
   color: rgba(var(--color-black-rgb), 1);
   border: 1px solid rgba(var(--color-black-rgb), 0.5);
-}
+}*/
 
 /*--------------------------------------------------------------
 # Comments
 --------------------------------------------------------------*/
-.comment {
+/*.comment {*/
   /* Font not working in <textarea> for this version of bs */
-}
+/*}
 
 .comment .avatar {
   position: relative;
@@ -1058,12 +1059,12 @@ section {
 .comment .reply-meta .text-muted {
   font-family: var(--font-secondary);
   font-size: 12px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
-.contact .info-item {
+/*.contact .info-item {
   text-align: center;
 }
 
@@ -1190,27 +1191,27 @@ section {
   100% {
     transform: rotate(360deg);
   }
-}
+}*/
 
 /*--------------------------------------------------------------
-# Footer
+# Footer(V)
 --------------------------------------------------------------*/
-.footer {
+/*.footer {
   overflow: hidden;
   background: rgba(var(--color-black-rgb), 0.9);
   font-size: 16px;
   color: rgba(var(--color-white-rgb), 0.7);
-}
+}(V)
 
 .footer .footer-content {
   padding: 60px 0;
-}
+}(v)
 
 .footer a.footer-link-more {
   color: rgba(var(--color-white-rgb), 0.7);
   display: inline-block;
   position: relative;
-}
+}(V)
 
 .footer a.footer-link-more:before {
   content: "";
@@ -1220,23 +1221,23 @@ section {
   right: 0;
   height: 1px;
   background: var(--color-white);
-}
+}(V)
 
 .footer a.footer-link-more:hover {
   color: rgba(var(--color-white-rgb), 1);
-}
+}(V)
 
 .footer .footer-heading {
   color: var(--color-white);
   margin-bottom: 20px;
   padding-bottom: 10px;
   font-size: 18px;
-}
+}(V)
 
 .footer .footer-blog-entry li {
   margin-bottom: 20px;
   display: block;
-}
+}(V)
 
 .footer .footer-blog-entry li a .post-meta {
   font-size: 10px;
@@ -1251,25 +1252,25 @@ section {
 .footer .footer-blog-entry li a img {
   flex: 0 0 50px;
   width: 50px;
-}
+}(V)
 
 .footer .footer-links li {
   margin-bottom: 10px;
-}
+}(V)
 
 .footer .footer-links li a {
   color: rgba(var(--color-white-rgb), 0.7);
-}
+}(V)
 
 .footer .footer-links li a:hover,
 .footer .footer-links li a:focus {
   color: rgba(var(--color-white-rgb), 1);
-}
+}(V)
 
 .footer .footer-legal {
   background: var(--color-black);
   padding: 40px 0;
-}
+}(V)
 
 .footer .footer-legal .social-links a {
   text-align: center;
@@ -1280,21 +1281,21 @@ section {
   border-radius: 50%;
   color: var(--color-white);
   line-height: 40px;
-}
+}(V)
 
 .footer .footer-legal .social-links a:hover {
   background-color: rgba(var(--color-white-rgb), 0.2);
-}
+}(V)
 
 .footer .copyright strong {
   font-weight: 400;
-}
+}(V)
 
 .footer .credits {
   padding-top: 6px;
   font-size: 13px;
-}
+}(V)
 
 .footer .credits a {
   color: var(--color-white);
-}
+}(v)*/

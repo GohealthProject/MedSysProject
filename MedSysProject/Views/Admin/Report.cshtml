@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MedSysProject.Models.ReportDetail>
+
+@{
+    ViewData["Title"] = "Report";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Report = document.getElementById("li-Report");
+    const Index = document.getElementById("li-index");
+    Report.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">結果報告</h6>
+    </div>
+    <div class="card-body">
+
+
+        @* 內容從這裡開始 *@
+
+
+    </div>
+</div>
+<h1>Report</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportId) 
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Result)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemId)
+                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Result)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+
+

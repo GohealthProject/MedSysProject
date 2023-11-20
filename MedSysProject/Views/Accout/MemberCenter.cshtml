@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "MemberCenter";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+
+<style>
+    .color {
+        background-color:antiquewhite;
+    }
+</style>
+
+<div class="container mb-5" style="background-color:#F2F9F8; height:1200px">
+    <div style="height:350px; background-color:antiquewhite;"><img src="@Url.Content("~/img/Member.jpg")" class="img-fluid" alt="..." style="width:1296px; height:350px"></div>
+    <div style="background-color:azure;height:200px" class="my-4">
+        <div class="row mx-0" style="height:200px;">
+            <div class="card col border-secondary mx-1" style="width: 18rem;">
+                <div class="card-header">
+                    訂單問題
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="OrderList">查看訂單</a></li>
+                    <li class="list-group-item"><a asp-action="refund">退款/退訂查詢</a></li>
+                    <li class="list-group-item"><a asp-action="refund">換貨查詢</a></li>
+                    <li class="list-group-item"><a asp-action="refund">買過的產品清單</a></li>
+                </ul>
+            </div>
+            <div class="card col border-secondary mx-1" style="width: 18rem;">
+                <div class="card-header">
+                    查看健檢報告
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="HPList" asp-controller="Home">查看健檢報告</a></li>
+                    <li class="list-group-item"><a asp-action="HPList">比較歷史健檢報告</a></li>
+                    <li class="list-group-item"><a asp-action="HPList">線上預約</a></li>
+                </ul>
+            </div>
+            <div class="card col border-secondary" style="width: 18rem;">
+                <div class="card-header">
+                    會員資料
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="MemberState">會員詳細資料</a></li>
+                    <li class="list-group-item"><a asp-action="VerifyemailPassword">修改會員密碼</a></li>
+                    <li class="list-group-item"><a asp-action="UpdataMember">修改會員資料</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="background-color:azure;height:200px">
+        <div class="row mx-0" style="height:200px;">
+            <div class="card col mx-1 border-secondary" style="width: 18rem;">
+                <div class="card-header">
+                    常見問題
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="OrderList">新手上路</a></li>
+                    <li class="list-group-item"><a asp-action="refund">購物流程</a></li>
+                    <li class="list-group-item"><a asp-action="refund">常見問題Q&A</a></li>
+                    <li class="list-group-item"><a asp-action="refund">行銷</a></li>
+                </ul>
+            </div>
+            <div class="card col mx-1 border-secondary" style="width: 18rem;">
+                <div class="card-header">
+                    查看優惠券
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="HPList">查看目前優惠券</a></li>
+                    <li class="list-group-item"><a asp-action="HPList">目前可以領取的優惠券</a></li>
+                    <li class="list-group-item"><a asp-action="HPList">使用優惠券的歷史紀錄</a></li>
+                </ul>
+            </div>
+            <div class="card col border-secondary" style="width: 18rem;">
+                <div class="card-header">
+                    會員資料
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a asp-action="MemberState">會員詳細資料</a></li>
+                    <li class="list-group-item"><a asp-action="MemberState">修改會員密碼</a></li>
+                    <li class="list-group-item"><a asp-action="UpdataMember">修改會員資料</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5" style="background-color:azure;height:200px">
+        <div class="col border-info">
+            <div class="card">
+                <div class="card-header">
+                    最新消息一覽
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">最新消息:</h5>
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">查看更多最新消息</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col border-info">
+            <div class="card">
+                <div class="card-header">
+                    最新活動
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">最新活動:</h5>
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">查看更多活動</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

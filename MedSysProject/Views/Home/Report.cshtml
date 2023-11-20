@@ -1,0 +1,381 @@
+﻿@model IQueryable<DateTime?>
+
+@{
+    ViewData["Title"] = "Member";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+<script src="~/forevendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<style>
+    .left {
+       /* position: fixed;*/
+        
+        /*z-index: 999;*/
+        width: 10%; /*270px;*/
+        height: 75%;
+        
+         margin-left:3%;
+        margin-bottom:30%;
+        margin-top:3%;
+        /*left: 5%;*/
+         /*top: 20%;*/ 
+        overflow: visible;
+        /*  transform: translateX(-270px);*/
+       /* background-color: mediumseagreen;*/
+       /* border: solid 3px;*/
+        /* word-wrap:;*/
+        float: right;
+       
+    }
+    .title{
+        text-align: center;
+        justify-content:center;
+        margin-top:5px;
+        margin-bottom: 5px;
+        font-size:16px;
+    }
+    
+
+    table,
+    td {
+        background-color: #f2f9f8;
+        border: solid 3px;
+    }
+
+    thead,
+    tfoot {
+        background-color: #333;
+        color: #fff;
+    }
+
+    td, th {
+        text-align: center;
+        
+    }
+    #co{
+        text-align: center;
+        justify-content: center;
+        
+    }
+  /*  div {
+        border: 1px solid #333;
+    }*/
+</style>
+
+<h1>會員中心</h1>
+@*@Html.DisplayNameFor(model => model)*@
+<div class="container-fluid ">
+    <div class="row">
+        <!-- List group -->
+        <div class="list-group left col-4">
+           @* <a class="list-group-item list-group-item-action active m-1 shadow p-3 rounded" data-bs-toggle="list" href="#tab1">訊息</a>*@
+            <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-toggle="list"  href="#tab2" >健檢報告</a>
+          @*  <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-toggle="list" href="#tab2">行事曆</a>*@
+            <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-dismiss="list" data-bs-toggle="list" href="#tab4">聯絡我們</a>
+        </div>
+        <div class="container-fluid col-10 tab-content position-relative">
+            <div class="tab-pane fade show active" id="tab2">
+                <div class="row">
+                    <div class="col-6 title">
+                        <select class="form-select" aria-label="Default select example" id="chose1">
+                            <option selected>選擇健檢報告</option>
+
+                            @{
+                                int count = 0;
+                                foreach (var item in Model)
+                                {
+                                    count++;
+                                    <option value="1">@item</option>
+                                    
+                                }
+                            }
+                            
+                            
+                        </select>
+                    </div>
+                    <div class="col-6 title">
+                        <select class="form-select" aria-label="Default select example" id="chose2">
+                            <option selected>選擇健檢報告</option>
+                            <option value="1">2023/09/30</option>
+                            <option value="2">2023/11/11</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <table border="1" class="col-12">
+                            <thead>
+                                <tr>
+                                    <th class="col-4">
+                                        項目
+                                    </th>
+                                    <th class="col-4">
+                                        檢驗結果
+                                    </th>
+                                    <th class="col-4">
+                                        標準值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id ="reportshow1" class="d-none">
+                                <tr>
+                                    <td class="col-4">
+                                        白血球總數
+                                    </td>
+                                    <td class="col-4">3.3</td>
+                                    <td class="col-4">
+                                        3.25~9.16 (10^3/uL)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-嗜中性球
+
+                                    </td>
+                                    <td class="col-4 color-red">80</td>
+                                    <td class="col-4">
+                                        39-74
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr >
+                                   
+                                   
+                                    <td class="col-4">
+                                        白血球分類-淋巴球
+
+                                    </td>
+                                    <td class="col-4">30</td>
+                                    <td class="col-4">
+                                        19-48
+                                        (%)
+
+                                    </td>
+                                
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-單核球
+
+
+                                    </td>
+                                    <td class="col-4">
+                                        8
+                                    </td>
+                                    <td class="col-4">
+                                        2.0-10.0
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-嗜酸性球
+
+
+                                    </td>
+                                    <td class="col-4 color-red">9</td>
+                                    <td class="col-4">
+                                        0-7
+
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                   
+                                    
+                                    <td class="col-4">
+                                        白血球分類-嗜鹼性球
+
+                                    </td>
+                                    <td class="col-4">
+                                        1
+                                    </td>
+                                    <td class="col-4">
+                                        0-1.5
+
+
+                                        (%)
+
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table border="1" class="col-12">
+                            <thead>
+                                <tr>
+                                    <th class="col-4">
+                                        項目
+                                    </th>
+                                    <th class="col-4">
+                                        檢驗結果
+                                    </th>
+                                    <th class="col-4">
+                                        標準值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportshow2" class="d-none">
+                                <tr>
+                                    <td class="col-4">
+                                        身高
+                                    </td>
+                                    <td class="col-4">180</td>
+                                    <td class="col-4">無</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        體重
+                                    </td>
+                                    <td class="col-4">100</td>
+                                    <td class="col-4">無</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td class="col-4"> 
+                                        體溫
+                                    </td>
+                                     
+                                    <td class="col-4">37.5</td>
+                                    <td class="col-4"><38度</td>
+
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab4">
+                <!-- Tab panes -->
+
+                <ul class="nav nav-tabs mb-2" id="myTab">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#home">詢問</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#profile">回覆</a>
+                    </li>
+                   @* <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact</a>
+                    </li>*@
+                </ul>
+                <!--content zone-->
+                <div class="tab-content ">
+                    <div class="tab-pane fade show active" id="home">
+                        <form>
+                            <div class="mb-3">
+                                
+                            <label for="exampleFormControlInput1" class="form-label">電子信箱</label>
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">訊息內容</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea>
+                        </div>
+                        <div>
+                                <a class="btn btn-primary but col-2 position-absolute bottom-0 end-50 col-2" data-bs-toggle="modal" href="#reserve" role="button">送出</a>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="profile">
+                        <div class="col-12">
+                            <table border="1" class="col-12">
+                                <thead>
+                                    <tr>
+                                        <th class="col-2">
+                                            回覆時間
+                                        </th>
+                                        <th class="col-9">
+                                            內容
+                                        </th>
+                                        <th class="col-2">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td >A</td>
+                                        <td >B</td>
+                                        <td ><i class="bi bi-trash"></i></td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div>
+                            <div class="col-3"></div>
+                                <div class="row position-absolute bottom-0 end-50 col-2" id="co">
+                                <div aria-label="...">
+                                    <ul class="pagination">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item " aria-current="page">
+                                            <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    @*<div class="tab-pane fade" id="contact">Contact Text</div>
+                </div>*@
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+<script>
+  
+    //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
+    //    console.log(datas);
+    //    const docFrag = $(document.createDocumentFragment());
+    //    $.each(datas, (index, city) => {
+    //        //console.log(city);
+    //        // <li class="list-group-item" > An item < /li>
+    //        const li = $('<li></li>').text(city).addClass('list-group-item');
+    //        docFrag.append(li);
+    //    })
+    //    $('.list-group').html(docFrag);
+    //})
+    //$("#chose1").click(function(){
+    //    $.getJSON("@Url.Content("~/Home/qureyReportDetailAll")", {}, data => {
+    //        const docFrag = $(document.createDocumentFragment());
+    //        $.each(data,(index,report)=>{
+    //            const show = $("<td></td>").text(report).addClass("col - 4");
+    //            docFrag.append(show);
+
+
+    //        })
+    //        $("#reportshow1").html(docFrag);
+    //        })
+    //})
+    $("#chose1").click(function () {
+        $("#reportshow1").removeClass("d-none")
+        
+    
+    })
+    $("#chose2").click(function () {
+        $("#reportshow2").removeClass("d-none")
+
+
+    })
+   
+</script>
+   

@@ -1,0 +1,145 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "MedSysContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "MedSysProject",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[BlogCategory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlogManagement]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Blogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Comments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Corporation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmployeeClass]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[HealthReport]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Item]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Members]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Order]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderPay]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderShip]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderState]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Plan]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PlanRef]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductsCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductsClassification]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Project]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReportDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReportTest]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Reserve]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReservedSub]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[subProjectBridges]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "jie-testsrv.MedSys.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

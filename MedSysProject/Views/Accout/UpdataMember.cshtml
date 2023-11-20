@@ -9,36 +9,26 @@
 }
 
 <div class="UPdiv"style="width:70%">
-<form class="row g-3 fromP" method="post">
+<form class="row g-3 fromP" method="post" enctype="multipart/form-data">
         <input type="hidden" name="MemberId" value=@Model.MemberId />
-    <div class="col-md-6">
-            <label for="inputEmail4" class="form-label" name="MemberEmail">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" name="MemberEmail">
-    </div>
-    <div class="col-md-6">
-            <label for="inputPassword4" class="form-label" name="MemberPassword">Password</label>
-            <input type="password" class="form-control" id="inputPassword4" name="MemberPassword">
-    </div>
     <div class="col-12">
-         <label for="inputAddress" class="form-label" name="MemberAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="MemberAddress">
+            <label for="inputEmail4" class="form-label" name="MemberEmail">電子郵件</label>
+            <input type="email" class="form-control" id="inputEmail4" name="MemberEmail" value="@Model.MemberEmail">
+    </div>
+    
+    <div class="col-12">
+         <label for="inputAddress" class="form-label" name="MemberAddress">地址</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="MemberAddress" value="@Model.MemberAddress">
     </div>
         <div class="col-md-6">
-            <label for="inputPassword4" class="form-label" name="MemberNickname">暱稱</label>
-            <input type="text" class="form-control" id="inputPassword4" name="MemberNickname">
+            <label  class="form-label" name="MemberNickname">暱稱</label>
+            <input type="text" class="form-control" id="MemberNickname" name="MemberNickname" value="@Model.MemberNickname">
         </div>
         <div class="col-md-6">
-            <label for="inputPassword4" class="form-label" name="MemberName">會員姓名</label>
-            <input type="text" class="form-control" id="inputPassword4" name="MemberName">
+            <label  class="form-label" name="MemberName">會員姓名</label>
+            <input type="text" class="form-control" id="MemberName" name="MemberName" value="@Model.MemberName">
         </div>
-        <div class="col-12">
-            <label for="inputAddress2" class="form-label">性別</label>
-            <select class="form-select" aria-label="Default select example" name="MemberGender">
-                <option selected >請選擇性別</option>
-                <option value="男">男</option>
-                <option value="女">女</option>
-            </select>
-        </div>
+        
         <div class="col-12">
             <div class="form-group">
                 <label asp-for="MemberBirthdate" class="control-label"></label>
@@ -46,7 +36,11 @@
                 <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
             </div>
         </div>
-    
+    <div class="col-12">
+        <span >瀏覽圖片</span>
+            <input type="file" name="fileN" />
+            <input type="button" id="btnImg" />
+    </div>
     
     <div class="col-12">
         <button type="submit" class="btn btn-primary">儲存並修改</button>
@@ -54,4 +48,10 @@
 </form>
 
 </div>
+@section Scripts{
+    <script>
+        const btnImg =document.querySelector('#btnImg');
 
+
+    </script>
+}

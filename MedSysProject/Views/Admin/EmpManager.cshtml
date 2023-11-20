@@ -1,0 +1,316 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Employee
+@model IEnumerable<MedSysProject.Models.Employee>
+
+@{
+    ViewData["Title"] = "EmpManager";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const EmpManager = document.getElementById("li-EmpManager");
+    const Index = document.getElementById("li-index");
+    EmpManager.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">員工管理</h6>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
+                <i class="fas fa-user-plus"></i>
+            </a>
+        </p>
+
+        @* ---新增彈窗開始--- *@
+        <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">新增員工</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <form asp-action="EmpCreate">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label  class="control-label">姓名</label>
+                                        <input  class="form-control" />
+                                        <span  class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">類別</label>
+                                        <input  class="form-control" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="control-label">生日</label>
+                                        <input  class="form-control" />
+                                        <span  class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="control-label">電話</label>
+                                        <input  class="form-control" />
+                                        <span  class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">信箱</label>
+                                        <input  class="form-control" />
+                                        <span  class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="control-label">密碼</label>
+                                        <input  class="form-control" />
+                                        <span  class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="formFile" class="form-label">圖片</label>
+                                            <input type="file" class="form-control" id="formFile" name="formFile" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+@* 
+                        @section Scripts {
+                            @{
+                                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                            }
+                        } *@
+
+
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                            <button class="btn btn-success">確定新增</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        @* ---新增彈窗結束--- *@
+
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        選取
+                    </th>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        照片
+                    </th>
+                    <th>
+                        姓名
+                    </th>
+                    <th>
+                        類別
+                    </th>
+                    <th>
+                        生日
+                    </th>
+                    <th>
+                        電話
+                    </th>
+                    <th>
+                        信箱
+                    </th>
+                    <th>
+                        密碼
+                    </th>
+                    <th>執行動作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                            <tr>
+                                <td>
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                </td>
+                                <td>
+                                    @count
+                                </td>
+                                <td>
+                                <img src="/Admin/GetImageByte/@item.EmployeeId" width="100">
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                                </td>
+                                <td>
+                                    @{
+                                    if(item.EmployeeClassId==1)
+                                    {
+                                                <p>醫生</p>
+                                                                            }
+                                    else if (item.EmployeeClassId==2)
+                                    {
+                                                <p>護理師</p>
+                                                                            }
+                                    else if (item.EmployeeClassId==3)
+                                    {
+                                                <p>行政人員</p>
+                                                        }
+                                    else
+                                    {
+                                                <p>一般員工</p>
+                                    }
+                                    
+                                    }
+
+                                    
+                                    @* 這邊要改成類型名稱 使用GetEmployeeClassNameById方法，待修正 *@
+                                    @*@Html.DisplayFor(modelItem => GetEmployeeClassNameById(item.EmployeeClassId))*@
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmployeeBirthDate, "{0:yyyy/MM/dd}")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmployeeEmail)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EmployeePassWord)
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Edit", new { id = item.EmployeeId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                        <i class="fas fa-user-edit"></i>
+                                    </a>
+                                    @*
+                                    <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>*@
+                                <a class="btn btn-danger" id="btnDel">
+                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                        <i class="fas fa-user-times"></i>
+                                    </a>
+
+                                    @*
+                                @Html.ActionLink("", "Edit", new { id = item.EmployeeId }, new {@class="btn btn-primary"}) 
+                                @Html.ActionLink("", "Details", new { id = item.EmployeeId }, new {@class="btn btn-info"}) 
+                                @Html.ActionLink("", "Delete", new { id = item.EmployeeId }, new {@class= "btn btn-danger"})
+                                *@
+                                </td>
+                            </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+
+        @* ---修改彈窗開始--- *@
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">修改員工</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <form asp-action="EmpCreate">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label class="control-label">姓名</label>
+                                        <input class="form-control" value="James" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">類別</label>
+                                        <input class="form-control" value="醫生" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">生日</label>
+                                        <input class="form-control" value="1997/10/13" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">電話</label>
+                                        <input class="form-control" value="789446" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">信箱</label>
+                                        <input class="form-control" value="James555@gmail.com" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">密碼</label>
+                                        <input class="form-control" value="James555" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="formFile" class="form-label">圖片</label>
+                                        <input type="file" class="form-control" id="formFile" name="formFile" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @*
+                        @section Scripts {
+                        @{
+                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                        }
+                        } *@
+
+
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                            <button class="btn btn-success">確定修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* ---修改彈窗結束--- *@
+
+    </div>
+</div>
+
+<script>
+    const delbtn = document.getElementById("btnDel");
+
+    delbtn.addEventListener("click", () => {
+        Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        })
+    });
+</script>

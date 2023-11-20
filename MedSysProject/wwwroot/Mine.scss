@@ -1,0 +1,391 @@
+﻿body {
+}
+:root{scroll-behavior:smooth;}
+
+a{
+    color:red;
+  /*能否取用全域變數?可以，所以不需要在上面引用*/
+  color:var(--color-links);
+  text-decoration:none;
+  &:hover{
+      color:var(--color-links);
+      text-decoration:none;
+  }
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-family:var(--font-primary);
+}
+
+#main{
+    margin-top:90px;
+}
+/*section*/
+section {
+    /*這個屬性特別有用的情況是，當頁面有固定標頭時，
+        
+        滾動到指定元素位置時，該元素的頂部部分不會被標頭遮擋住，提供更好的用戶體驗。*/
+    scroll-margin-top: 70px;
+    padding:40px 0;
+    overflow:hidden;
+    .section-header{
+        border-bottom:2px solid var(--color-black);
+        h2{
+            font-size:50px;
+            color:var(--color-black);
+        }
+        p{
+            margin-bottom:0;
+        }
+    }
+}
+
+/*Header*/
+.header{
+    height:90px;
+    transition:all 0.5s;
+    z-index:997;
+    background:#f2f2f2;
+    &.sticked{
+        //當滑鼠滾動超過100px，加上
+        height:70px;
+    }
+
+    .search-form-wrap{
+        position:absolute;
+        right:0;
+        top:0;
+        z-index:9;
+        transition:0.3s all ease;
+        visibility:hidden;
+        opacity:0;
+
+        .search-form{
+            position:relative;
+            .form-control{
+                width:300px;
+                border:none;
+                box-shadow:0 15px 20px -10px rgba(var(--color-black-rgb),0.5);
+                padding:0 40px;/*上下 左右*/
+                &:active,&:focus{
+                    outline:none;
+                    box-shadow:none;
+                }
+            }
+            .icon{
+                position:absolute;
+                left:0;//貼左邊
+                top:0px;
+                opacity:0.5;
+                left:10px;
+            }
+            .btn{
+                position:absolute;
+                top:0px;
+                right:4px;
+                padding:0;
+                margin:0;
+                line-height:1;
+                font-size:25px;
+                opacity:0.5;
+                &:active,&:focus{
+                    outline:none;
+                    box-shadow:none;
+                }
+            }
+        }
+    }
+}
+/*大多跟navbar有關*/
+/*RWD電腦*/
+@media(min-width:1280px){
+    .navbar {
+        padding: 0;
+
+        ul { /*上層ul*/
+            margin: 0;
+            padding: 0;
+            display: flex; /*parent element變flex box，內部元素水平排*/
+            list-style: none;
+            align-items: center;
+
+            li {
+                position: relative;
+
+                &:hover > a {
+                    color: var(--color-default);
+                }
+            }
+
+            &.active:hover {
+                color: var(--color-primary);
+            }
+
+            .dropdown {
+                &:hover>ul{
+                    opacity:1;
+                    top:100%;/*選到時往上移的效果*/
+                    visibility:visible;
+                }
+                ul { /*下層*/
+                    display: block;
+                    position: absolute;
+                    left: 14px;
+                    top: calc(100% + 30px); /*css內建方法，記得要有空格，如果沒有編譯到，打錯或格式檢查一下*/
+                    margin: 0;
+                    padding: 10px 0;
+                    z-index: 99;
+                    opacity: 0;
+                    visibility: hidden;
+                    background-color: var(--color-white);
+                    box-shadow: 0px 0px 30px rgba(127,137,161,0.25);
+                    transition: 0.3s;
+                    border-radius: 4px;
+                    &.active:hover {
+                        color: var(--color-primary);
+                    }
+                    /*會繼承樓上list-style:none*/
+                    li {
+                        min-width: 200px;
+                        &:hover > a {
+                            color: var(--color-primary);
+                        }
+                        a {
+                            padding: 10px 20px;
+                            font-size: 15px;
+                            text-transform: none;
+                            font-weight: 400;
+
+                            &:hover {
+                                color: var(--color-primary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.active, &.active:focus {
+            color: var(--color-default);
+        }
+
+        a:hover {
+            color: var(--color-default);
+        }
+
+        a, a:focus {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0 10px 30px;
+            font-family: var(--font-default);
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(var(--color-default-rgb),1);
+            white-space: nowrap;
+            transition: 0.3s;
+
+            i {
+                font-size: 12px;
+                line-height: 0;
+                margin-left: 5px;
+            }
+        }
+    }
+}
+@media(min-width:1280px) and (max-width:1366px){
+    .mobile.nav-toggle{
+        display:none;/*大畫面類別選單消失*/
+    }
+}
+/*RWD行動裝置*/
+@media(max-width:1279px){
+    body.mobile-nav-active{
+        overflow:hidden;
+        .mobile-nav-toggle{
+            position:fixed;
+            top:15px;
+            right:15px;
+            z-index:9999;
+            color:var(--color-white);
+        }
+        .navbar{
+            position:fixed;
+            overflow:hidden;
+            inset:0;
+            background:rgba(var(--color-black-rgb),0.6);
+            transition:0.3s;
+        }
+        .navbar>ul{
+            display:block;
+        }
+    }
+    .navbar {
+        padding: 0;
+        z-index: 9997;
+
+        ul {
+            display: none; /*畫面縮小*/
+            position: absolute;
+            inset: 55px 15px 15px 15px;
+            padding: 10px 0;
+            margin: 0;
+            border-radius: 10px;
+            background-color: var(--color-white);
+            overflow-y: auto; /* 垂直方向內容溢出時顯示滾動條 ??*/
+            transition: 0.3s;
+            z-index: 9998;
+            .dropdown{
+                >.dropdown-active{
+                    display:block;
+                }
+                ul{
+                    position:static;
+                    display:none;
+                    z-index:99;
+                    padding:10px 0;
+                    margin:10px 20px;
+                    background:var(--color-white);
+                    transition:all 0.5s ease-in-out;
+                    box-shadow:0px 0px 30px rgba(var(--color-black-rgb),0.1);
+                }
+            }
+            li:hover>a{
+                color:var(--color-primary);
+            }
+            a, a:focus {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 20px;
+                font-family: var(--font-primary);
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--color-primary);
+                white-space: nowrap;
+                transition: 0.3s;
+
+                i {
+                    font-size: 12px;
+                    line-height: 0;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        &.active,&.active:focus {
+            color: var(--color-primary);
+        }
+
+        a:hover {
+            color: var(--color-primary);
+        }
+  
+    }
+    .mobile-nav-toggle{
+        display:inline-block;
+        color:var(--color-secondary);
+        font-size:28px;
+        cursor:pointer;
+        line-height:0;
+        transition:0.5s;
+        &.bi-x{
+            color:red;
+        }
+    }
+
+
+}
+/*Footer*/
+.footer {
+    overflow: hidden;
+    background: rgba(var(--color-black-rgb),0.9);
+    font-size: 16px;
+    color: rgba(var(--color-white-rgb),0.7);
+
+    .footer-content {
+        padding: 60px 0;
+
+        a.footer-link-more {
+            color: rgba(var(--color-white-rgb),0.7);
+            display: inline-block;
+            position: relative;
+
+            &:before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: var(--color-white);
+            }
+
+            &:hover {
+                color: rgba(var(--color-white-rgb),1);
+            }
+        }
+
+        .footer-heading {
+            color: var(--color-white);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .footer-blog-entry li{
+            margin-bottom:20px;
+            display:block;
+            a{
+                .post-meta{
+                    font-size:10px;
+                    letter-spacing:0.07rem;
+                    text-transform:uppercase;
+                    font-weight:400;
+                    font-family:var(--font-secondary);
+                    color:rgba(var(--color-white-rgb),0.4);
+                    margin-bottom:0px;
+                }
+                img{
+                    flex:0 0 50px;
+                    width:50px;
+                }
+            }
+        }
+        .footer-links li{
+            margin-bottom:10px;
+            a{
+                color:rgba(var(--color-white-rgb),0.7);
+                &:hover,&:focus{
+                    color:rgba(var(--color-white-rgb),1);
+                }
+            }
+        }
+    }
+    .footer-legal{
+        background:var(--color-black);
+        padding:40px 0;
+        .copyright strong{
+            font-weight:400;
+        }
+        .credits{
+            padding-top:6px;
+            font-size:13px;
+            a{
+                color:var(--color-white);
+            }
+        }
+        .social-links>a{
+            text-align:center;
+            display:inline-block;
+            width:40px;
+            height:40px;
+            background-color:rgba(var(--color-white-rgb),0.09);
+            border-radius:50%;
+            color:var(--color-white);
+            line-height:40px;
+            &:hover{
+                background-color:rgba(var(--color-white-rgb),0.2);
+            }
+        }
+    }
+}
