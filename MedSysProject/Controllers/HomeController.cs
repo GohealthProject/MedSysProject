@@ -1,5 +1,6 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace MedSysProject.Controllers
@@ -54,6 +55,12 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Reserve()
         { //預約總覽
+            var Plndata = from s in _context.Plans
+                        select s;
+            var Prjdata = from s in _context.Projects
+                       select s;
+            var itemdata = from s in _context.Items
+                           select s;
             return View();
         }
         public IActionResult Member()
@@ -63,14 +70,25 @@ namespace MedSysProject.Controllers
 
         public IActionResult report(Member id)
         {
-            var m = _context.Reserves.Where(s => s.MemberId == id.MemberId);
+            var m = _context.Reserves.Where(s => s.MemberId == 46);
                    
 
-            var j = from s in _context.HealthReports
-                    where s.MemberId == id.MemberId
-                    select s.ReportDetails;
+            var j = (from s in _context.ReportDetails
+                    where s.Report.MemberId == 46
+                    select s.Report.Reserve.ReserveDate).Distinct();
 
-            return View(m);
+            return View(j);
+        }
+
+        public IQueryable<ReportDetail?> qureyReportDetailAll()
+        {
+           
+                var data = from s in _context.ReportDetails
+                           select s;
+                return data;
+
+           
+
         }
 
     }

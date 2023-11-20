@@ -15,27 +15,28 @@
         <div style="height:90%;width:100%">
             <div class="  h-100 " style="float:left ;width:20%">
                 <div class="list-group">
-                    <button type="button" class="list-group-item list-group-item-action border-0">最新消息</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">胃腸道功能改善</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">調節血脂</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">護肝</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">骨質保健</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">免疫調節</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">輔助調整過敏體質</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">不易形成體脂肪</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">調節血糖</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">輔助調節血壓</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">抗疲勞</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">延緩衰老</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0">促進鐵可利用率</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category1">最新消息</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category2">胃腸道功能改善</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category3">調節血脂</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category4">護肝</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category5">骨質保健</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category6">免疫調節</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category7">輔助調整過敏體質</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category8">不易形成體脂肪</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category9">調節血糖</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category10" >輔助調節血壓</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category11">抗疲勞</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category12">延緩衰老</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category13">促進鐵可利用率</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" id="category14">牙齒保健</button>
                 </div>
             </div>
-            <div class="  h-100  border-start border-success" style="display:inline-block ;width:80%; padding:20px">
+            <div class="  h-100  border-start border-success" style="display:inline-block ;width:80%; padding:20px" id="inhere">
                 <div class="row">
                 <div class=" col "  style="height:200px;width:300px">
                     <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px"/>
                     <div>
-                            <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
+                        <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
                         <span class="fs-3 text-danger">$1,300</span>
                     </div>
                 </div>
@@ -98,3 +99,68 @@
         </div>
     </div>
 </div>
+
+ @section Scripts{
+     <script>
+        const inhere = document.querySelector('#inhere');
+         async function getProduct(){
+            const response = await fetch('https://localhost:7078/api/Products/3');
+            const data = await response.json();
+            console.log(data);
+            const view = await data[0].productsClassifications.$values[0].product;
+            console.log(view);
+            const img = await data[0].productsClassifications.$values[0].product.fimagePath;
+            console.log(img);
+            let s = `<div class="row">
+                        <div class=" col "  style="height:200px;width:300px">
+                                            <img src="@Url.Content("~")${img}" style="height:150px; width:300px;padding-top:10px"/>
+                            <div>
+                                <span class="fs-3">${view.productName}</span><br />
+                                                <span class="fs-3 text-danger">${view.unitPrice}</span>
+                            </div>
+                        </div>
+                            <div class=" col " style="height:300px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:20px">
+                            <div class=" col " style="height:300px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                    inhere.innerHTML=s;
+         }
+        
+         document.addEventListener('DOMContentLoaded',getProduct);
+     </script>
+ }

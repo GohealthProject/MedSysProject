@@ -12,8 +12,8 @@ namespace MedSysProject.Controllers
         public IActionResult List()
         {
             IEnumerable<Product> datas = null;
-            MedSysContext db =new MedSysContext();
-            datas = db.Products.Select(n => n);
+            //MedSysContext db =new MedSysContext();
+            //datas = db.Products.Select(n => n);
             return View(datas);
 
         }

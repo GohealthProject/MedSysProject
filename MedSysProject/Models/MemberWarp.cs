@@ -28,5 +28,6 @@ namespace MedSysProject.Models
         public string? MemberNickname { get { return this._member.MemberNickname; } set { this.member.MemberNickname = value; } }
         [DisplayName("會員公司統編")]
         public int? TaxId { get { return this._member.TaxId; } set { this.member.TaxId = value; } }
+        public string MemberImage { get { return this._member.MemberImage; } set { this.member.MemberImage = value; } }
     }
 }
