@@ -74,6 +74,11 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult EmpCreate()
+        {
+            return View();
+        }
+
 
 
             public IActionResult EmpClass()
