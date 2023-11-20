@@ -89,6 +89,21 @@ namespace MedSysProject.Controllers
             return View();
             return RedirectToAction("Login");
         }
+        public IActionResult VerifyemailPassword()
+        {
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp nown = new MemberWarp();
+            nown.member = JsonSerializer.Deserialize<Member>(json);
+            return View(nown);
+        }
+        [HttpPost]
+        public IActionResult VerifyemailPassword(MemberWarp nown)
+        {
+            var Upm = _db.Members.Find(nown.MemberId);
+            Upm.MemberPassword = nown.MemberPassword;
+            _db.SaveChanges();
+            return RedirectToAction("MemberCenter", "Accout");
+        }
         public IActionResult MemberState()
         {
             string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
