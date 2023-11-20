@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MedSysProject.Models.ReportDetail>
+
+@{
     ViewData["Title"] = "Report";
     Layout = "_Layout_Admin2";
 }
@@ -25,3 +27,48 @@
 
     </div>
 </div>
+<h1>Report</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Result)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Result)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+
+
