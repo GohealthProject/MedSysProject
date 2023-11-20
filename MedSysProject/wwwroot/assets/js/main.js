@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Sticky header on scroll
    */
-  const selectHeader = document.querySelector('#header');
+    const selectHeader = document.querySelector('#header');
+  /*這段程式碼的意思是，如果 selectHeader 變數存在且有值（非 undefined、null 或 false），則執行接下來的程式碼。這是一種常見的防禦性編碼方式，以確保在對 selectHeader 做任何操作之前，它不是未定義的或空值，以避免出現錯誤。
+
+在這個特定例子中，如果 selectHeader 變數存在，程式碼會附加一個滾動監聽器 (addEventListener) 到 document 上，當使用者滾動時，會檢查 window.scrollY 的值是否大於 100，如果是，則給 selectHeader 元素新增一個名為 sticked 的 CSS class，否則刪除這個 class。
+
+這樣的條件判斷確保了在執行滾動事件的代碼之前，selectHeader 的存在性和合法性，以避免出現錯誤或未定義的行為。*/
   if (selectHeader) {
     document.addEventListener('scroll', () => {
       window.scrollY > 100 ? selectHeader.classList.add('sticked') : selectHeader.classList.remove('sticked');

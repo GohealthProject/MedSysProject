@@ -12,37 +12,11 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
-
-        public IActionResult SinglePost() 
+        public IActionResult IndexOld() 
         {
             return View();
         }
-        /// <summary>
-        /// 可能需要接收類別參數??
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult ViewCategory() 
-        {
-            return View();
-        }
-
-        public IActionResult AboutUs() 
-        {
-            return View();
-        }
-        public IActionResult ContactUs() 
-        {
-            return View();
-        }
-
-        public IActionResult Test() 
-        {
-            return View();
-        }
-        public IActionResult Create() 
-        {
-            return View();
-        }
+        
 
     }
 }

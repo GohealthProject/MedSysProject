@@ -46,7 +46,7 @@ h6 {
 /*--------------------------------------------------------------
 # Sections & Section Header
 --------------------------------------------------------------*/
-section {
+/*section {
   padding: 40px 0;
   overflow: hidden;
 }
@@ -62,12 +62,12 @@ section {
 
 .section-header p {
   margin-bottom: 0;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Scroll top button
 --------------------------------------------------------------*/
-.scroll-top {
+/*.scroll-top {
   position: fixed;
   visibility: hidden;
   opacity: 0;
@@ -95,18 +95,18 @@ section {
 .scroll-top.active {
   visibility: visible;
   opacity: 1;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Page title
 --------------------------------------------------------------*/
-.page-title {
+/*.page-title {
   font-size: 70px;
   color: var(--color-black);
-}
+}*/
 
 /* Form Input Fieldds */
-.form-control:active,
+/*.form-control:active,
 .form-control:focus {
   outline: none;
   box-shadow: none;
@@ -122,27 +122,27 @@ section {
   background-color: var(--color-black);
   color: var(--color-white);
   border-color: var(--color-black);
-}
+}*/
 
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
-.header {
+/*.header {
   height: 90px;
   transition: all 0.5s;
   z-index: 997;
-  background-color: #f2f2f2;
+  background: #f2f2f2;
 }
 
 .header.sticked {
   height: 70px;
 }
-
+    ¨S¥Î¨ì
 .header .logo img {
   max-height: 40px;
   margin-right: 6px;
 }
-
+    ©U§£
 .header .logo h1 {
   font-size: 30px;
   font-weight: 700;
@@ -206,15 +206,15 @@ section {
   visibility: visible;
   opacity: 1;
 }
-
+(V)
 section {
   scroll-margin-top: 70px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Desktop Navigation 
 --------------------------------------------------------------*/
-@media (min-width: 1280px) {
+/*@media (min-width: 1280px) {
   .navbar {
     padding: 0;
   }
@@ -289,7 +289,7 @@ section {
     transition: 0.3s;
     border-radius: 4px;
   }
-
+   (V)
   .navbar .dropdown ul li {
     min-width: 200px;
   }
@@ -304,7 +304,7 @@ section {
   .navbar .dropdown ul a i {
     font-size: 12px;
   }
-
+    (V)
   .navbar .dropdown ul a:hover,
   .navbar .dropdown ul .active:hover,
   .navbar .dropdown ul li:hover>a {
@@ -343,12 +343,12 @@ section {
 
 .mobile-nav-toggle {
   display: none;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Mobile Navigation
 --------------------------------------------------------------*/
-@media (max-width: 1279px) {
+/*@media (max-width: 1279px) {
   .navbar {
     padding: 0;
     z-index: 9997;
@@ -448,12 +448,12 @@ section {
   .mobile-nav-active .navbar>ul {
     display: block;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Posts
 --------------------------------------------------------------*/
-.post-entry-1 {
+/*.post-entry-1 {
   margin-bottom: 30px;
 }
 
@@ -838,10 +838,10 @@ section {
 .custom-pagination a.prev:hover,
 .custom-pagination a.next:hover {
   background: rgba(var(--color-black-rgb), 0.1);
-}
+}*/
 
 /* custom tab nav on sidebar */
-.aside-block {
+/*.aside-block {
   margin-bottom: 30px;
 }
 
@@ -920,14 +920,14 @@ section {
 .aside-tags li a:focus {
   color: rgba(var(--color-black-rgb), 1);
   border: 1px solid rgba(var(--color-black-rgb), 0.5);
-}
+}*/
 
 /*--------------------------------------------------------------
 # Comments
 --------------------------------------------------------------*/
-.comment {
+/*.comment {*/
   /* Font not working in <textarea> for this version of bs */
-}
+/*}
 
 .comment .avatar {
   position: relative;
@@ -1058,12 +1058,12 @@ section {
 .comment .reply-meta .text-muted {
   font-family: var(--font-secondary);
   font-size: 12px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
-.contact .info-item {
+/*.contact .info-item {
   text-align: center;
 }
 
@@ -1190,12 +1190,12 @@ section {
   100% {
     transform: rotate(360deg);
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-.footer {
+/*.footer {
   overflow: hidden;
   background: rgba(var(--color-black-rgb), 0.9);
   font-size: 16px;
@@ -1297,4 +1297,4 @@ section {
 
 .footer .credits a {
   color: var(--color-white);
-}
+}*/

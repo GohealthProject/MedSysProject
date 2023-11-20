@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewData["Title"] = "Member";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+
+<style>
+    .left {
+       /* position: fixed;*/
+        
+        /*z-index: 999;*/
+        width: 10%; /*270px;*/
+        height: 75%;
+        
+         margin-left:3%;
+        margin-bottom:30%;
+        margin-top:3%;
+        /*left: 5%;*/
+         /*top: 20%;*/ 
+        overflow: visible;
+        /*  transform: translateX(-270px);*/
+       /* background-color: mediumseagreen;*/
+       /* border: solid 3px;*/
+        /* word-wrap:;*/
+        float: right;
+       
+    }
+    .title{
+        text-align: center;
+        justify-content:center;
+        margin-top:5px;
+        margin-bottom: 5px;
+        font-size:16px;
+    }
+
+
+    table,
+    td {
+        background-color: #f2f9f8;
+        border: solid 3px;
+    }
+
+    thead,
+    tfoot {
+        background-color: #333;
+        color: #fff;
+    }
+
+    td, th {
+        text-align: center;
+        
+    }
+    #co{
+        text-align: center;
+        justify-content: center;
+        
+    }
+  /*  div {
+        border: 1px solid #333;
+    }*/
+</style>
+<h1>會員中心</h1>
+
+<div class="container-fluid ">
+    <div class="row">
+        <!-- List group -->
+        <div class="list-group left col-4">
+           @* <a class="list-group-item list-group-item-action active m-1 shadow p-3 rounded" data-bs-toggle="list" href="#tab1">訊息</a>*@
+            <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-toggle="list"  href="#tab2" >健檢報告</a>
+          @*  <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-toggle="list" href="#tab2">行事曆</a>*@
+            <a class="list-group-item list-group-item-action m-1 shadow p-3 rounded" data-bs-dismiss="list" data-bs-toggle="list" href="#tab4">聯絡我們</a>
+        </div>
+        <div class="container-fluid col-10 tab-content position-relative">
+            <div class="tab-pane fade show active" id="tab2">
+                <div class="row">
+                    <div class="col-6 title">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>選擇健檢報告</option>
+                            <option value="1">2023/09/30</option>
+                            <option value="2">2023/11/11</option>
+                            
+                        </select>
+                    </div>
+                    <div class="col-6 title">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>選擇健檢報告</option>
+                            <option value="1">2023/09/30</option>
+                            <option value="2">2023/11/11</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <table border="1" class="col-12">
+                            <thead>
+                                <tr>
+                                    <th class="col-4">
+                                        項目
+                                    </th>
+                                    <th class="col-4">
+                                        檢驗結果
+                                    </th>
+                                    <th class="col-4">
+                                        標準值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-4">A</td>
+                                    <td class="col-4">B</td>
+                                    <td class="col-4">C</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table border="1" class="col-12">
+                            <thead>
+                                <tr>
+                                    <th class="col-4">
+                                        項目
+                                    </th>
+                                    <th class="col-4">
+                                        檢驗結果
+                                    </th>
+                                    <th class="col-4">
+                                        標準值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-4">A</td>
+                                    <td class="col-4">B</td>
+                                    <td class="col-4">C</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab4">
+                <!-- Tab panes -->
+
+                <ul class="nav nav-tabs mb-2" id="myTab">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#home">詢問</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#profile">回覆</a>
+                    </li>
+                   @* <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact</a>
+                    </li>*@
+                </ul>
+                <!--content zone-->
+                <div class="tab-content ">
+                    <div class="tab-pane fade show active" id="home">
+                        <form>
+                            <div class="mb-3">
+                            
+                            <label for="exampleFormControlInput1" class="form-label">電子信箱</label>
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">訊息內容</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="25"></textarea>
+                        </div>
+                        <div>
+                                <a class="btn btn-primary but col-2 position-absolute bottom-15 end-50 col-2" data-bs-toggle="modal" href="#reserve" role="button">送出</a>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="profile">
+                        <div class="col-12">
+                            <table border="1" class="col-12">
+                                <thead>
+                                    <tr>
+                                        <th class="col-2">
+                                            回覆時間
+                                        </th>
+                                        <th class="col-9">
+                                            內容
+                                        </th>
+                                        <th class="col-2">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td >A</td>
+                                        <td >B</td>
+                                        <td ><i class="bi bi-trash"></i></td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div>
+                            <div class="col-3"></div>
+                                <div class="row position-absolute bottom-0 end-50 col-2" id="co">
+                                <div aria-label="...">
+                                    <ul class="pagination">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item " aria-current="page">
+                                            <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    @*<div class="tab-pane fade" id="contact">Contact Text</div>
+                </div>*@
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+
+   
