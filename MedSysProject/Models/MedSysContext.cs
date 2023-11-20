@@ -453,6 +453,7 @@ public partial class MedSysContext : DbContext
         modelBuilder.Entity<Product>(entity =>
         {
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.FimagePath).HasColumnName("FImagePath");
             entity.Property(e => e.Photo).HasColumnType("image");
             entity.Property(e => e.UnitPrice).HasColumnType("money");
         });

@@ -25,6 +25,8 @@ public partial class Product
 
     public bool? Discontinued { get; set; }
 
+    public string FimagePath { get; set; }
+
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<ProductsClassification> ProductsClassifications { get; set; } = new List<ProductsClassification>();
