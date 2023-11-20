@@ -99,7 +99,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult BlogIndex() 
-        {
+        {//測試
             var blogs = from t in _db.Blogs
                         select t;
             return View(blogs);
