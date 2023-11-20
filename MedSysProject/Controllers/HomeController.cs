@@ -51,9 +51,12 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult report(Member id)
-        { 
-            var m = from s in _context.HealthReports
-                    where s.MemberId== id.MemberId
+        {
+            var m = _context.Reserves.Where(s => s.MemberId == id.MemberId);
+                   
+
+            var j = from s in _context.HealthReports
+                    where s.MemberId == id.MemberId
                     select s.ReportDetails;
 
             return View(m);

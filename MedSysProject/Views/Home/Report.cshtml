@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MedSysProject.Models.ReportDetail>
+﻿@model IQueryable<MedSysProject.Models.Reserve>
+
 @{
     ViewData["Title"] = "Member";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -60,7 +61,7 @@
     }*/
 </style>
 <h1>會員中心</h1>
-
+@*@Html.DisplayNameFor(model => model)*@
 <div class="container-fluid ">
     <div class="row">
         <!-- List group -->
@@ -77,6 +78,15 @@
                         <select class="form-select" aria-label="Default select example">
                             <option selected>選擇健檢報告</option>
 
+                            @{
+                                int count = 0;
+                                foreach (var item in Model)
+                                {
+                                    count++;
+                                    <option value="1">@item.Report.Reserve.ReserveId</option>
+                                    
+                                }
+                            }
                             
                             
                         </select>

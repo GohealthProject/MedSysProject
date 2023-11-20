@@ -316,7 +316,7 @@ section {
     top: 100%;
     visibility: visible;
   }
-
+    下層dropdown我沒用到
   .navbar .dropdown .dropdown ul {
     top: 0;
     left: calc(100% - 30px);
@@ -330,7 +330,7 @@ section {
     visibility: visible;
   }
 }
-
+都跟小ul有關我沒用到
 @media (min-width: 1280px) and (max-width: 1366px) {
   .navbar .dropdown .dropdown ul {
     left: -90%;
@@ -409,7 +409,7 @@ section {
 
   .navbar .dropdown>.dropdown-active,
   .navbar .dropdown .dropdown>.dropdown-active {
-    display: block;
+    display: block;(V)
   }
 
   .mobile-nav-toggle {

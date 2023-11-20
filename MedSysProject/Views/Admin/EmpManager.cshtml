@@ -68,8 +68,11 @@
                                 @Html.DisplayFor(modelItem => item.EmployeeName)
                             </td>
                             <td>
+                                if(@item.EmployeeClassId==1){
+                                    醫生
+                                }
                                 @* 這邊要改成類型名稱 使用GetEmployeeClassNameById方法，待修正 *@
-                                @Html.DisplayFor(modelItem => item.EmployeeClassId)
+                                @*@Html.DisplayFor(modelItem => GetEmployeeClassNameById(item.EmployeeClassId))*@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeBirthDate, "{0:yyyy/MM/dd}")
