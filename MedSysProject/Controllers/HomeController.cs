@@ -56,7 +56,7 @@ namespace MedSysProject.Controllers
                        select s;
             var itemdata = from s in _context.Items
                            select s;
-            return View(Plndata,Prjdata,itemdata);
+            return View();
         }
         public IActionResult Member()
         { //會員專項

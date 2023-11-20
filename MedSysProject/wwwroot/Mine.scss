@@ -96,7 +96,7 @@ section {
         }
     }
 }
-
+/*大多跟navbar有關*/
 /*RWD電腦*/
 @media(min-width:1280px){
     .navbar {
@@ -295,4 +295,97 @@ section {
     }
 
 
+}
+/*Footer*/
+.footer {
+    overflow: hidden;
+    background: rgba(var(--color-black-rgb),0.9);
+    font-size: 16px;
+    color: rgba(var(--color-white-rgb),0.7);
+
+    .footer-content {
+        padding: 60px 0;
+
+        a.footer-link-more {
+            color: rgba(var(--color-white-rgb),0.7);
+            display: inline-block;
+            position: relative;
+
+            &:before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: var(--color-white);
+            }
+
+            &:hover {
+                color: rgba(var(--color-white-rgb),1);
+            }
+        }
+
+        .footer-heading {
+            color: var(--color-white);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .footer-blog-entry li{
+            margin-bottom:20px;
+            display:block;
+            a{
+                .post-meta{
+                    font-size:10px;
+                    letter-spacing:0.07rem;
+                    text-transform:uppercase;
+                    font-weight:400;
+                    font-family:var(--font-secondary);
+                    color:rgba(var(--color-white-rgb),0.4);
+                    margin-bottom:0px;
+                }
+                img{
+                    flex:0 0 50px;
+                    width:50px;
+                }
+            }
+        }
+        .footer-links li{
+            margin-bottom:10px;
+            a{
+                color:rgba(var(--color-white-rgb),0.7);
+                &:hover,&:focus{
+                    color:rgba(var(--color-white-rgb),1);
+                }
+            }
+        }
+    }
+    .footer-legal{
+        background:var(--color-black);
+        padding:40px 0;
+        .copyright strong{
+            font-weight:400;
+        }
+        .credits{
+            padding-top:6px;
+            font-size:13px;
+            a{
+                color:var(--color-white);
+            }
+        }
+        .social-links>a{
+            text-align:center;
+            display:inline-block;
+            width:40px;
+            height:40px;
+            background-color:rgba(var(--color-white-rgb),0.09);
+            border-radius:50%;
+            color:var(--color-white);
+            line-height:40px;
+            &:hover{
+                background-color:rgba(var(--color-white-rgb),0.2);
+            }
+        }
+    }
 }
