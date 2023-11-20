@@ -35,7 +35,7 @@
                 <div class=" col "  style="height:200px;width:300px">
                     <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px"/>
                     <div>
-                            <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
+                        <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
                         <span class="fs-3 text-danger">$1,300</span>
                     </div>
                 </div>
@@ -98,3 +98,62 @@
         </div>
     </div>
 </div>
+
+ @section Scripts{
+     <script>
+        const inDiv = `<div class="row">
+                        <div class=" col "  style="height:200px;width:300px">
+                            <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px"/>
+                            <div>
+                                <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
+                                <span class="fs-3 text-danger">$1,300</span>
+                            </div>
+                        </div>
+                            <div class=" col " style="height:300px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:20px">
+                            <div class=" col " style="height:300px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                            <div class=" col " style="height:200px;width:300px">
+                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
+                                <div>
+                                    <span class="fs-3">A產品</span><br />
+                                    <span class="fs-3 text-danger">$1,300</span>
+                                </div>
+                            </div>
+                        </div>`;
+
+         async function getProduct(){
+            const response = await fetch('https://localhost:7078/api/Products/1');
+            const data = await response.json();
+            console.log(data)
+         }
+        
+         document.addEventListener('DOMContentLoaded',getProduct);
+     </script>
+ }
