@@ -109,7 +109,13 @@
             <thead>
                 <tr>
                     <th>
+                        選取
+                    </th>
+                    <th>
                         序
+                    </th>
+                    <th>
+                        照片
                     </th>
                     <th>
                         姓名
@@ -140,7 +146,13 @@
                         count++;
                             <tr>
                                 <td>
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                </td>
+                                <td>
                                     @count
+                                </td>
+                                <td>
+                                <img src="/Admin/GetImageByte/@item.EmployeeId" width="100">
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.EmployeeName)
@@ -186,9 +198,10 @@
                                     <a href="@Url.Action("Edit", new { id = item.EmployeeId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                         <i class="fas fa-user-edit"></i>
                                     </a>
+                                    @*
                                     <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
                                         <i class="fas fa-info-circle"></i>
-                                    </a>
+                                    </a>*@
                                 <a class="btn btn-danger" id="btnDel">
                                     @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
                                         <i class="fas fa-user-times"></i>
@@ -281,81 +294,6 @@
             </div>
         </div>
         @* ---修改彈窗結束--- *@
-
-        @* ---詳細資料彈窗開始--- *@
-        <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!--Header-->
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">員工詳細</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <!--Body-->
-                    <div class="modal-body">
-
-                        <div class="row">
-                            <div class="col-md-10">
-                                <form asp-action="EmpCreate">
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                    <div class="form-group">
-                                        <label class="control-label">姓名</label>
-                                        <input class="form-control" value="James" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">類別</label>
-                                        <input class="form-control" value="醫生" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">生日</label>
-                                        <input class="form-control" value="1997/10/13" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">電話</label>
-                                        <input class="form-control" value="789446" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">信箱</label>
-                                        <input class="form-control" value="James555@gmail.com" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">密碼</label>
-                                        <input class="form-control" value="James555" />
-                                        <span class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="formFile" class="form-label">圖片</label>
-                                        <input type="file" class="form-control" id="formFile" name="formFile" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        @*
-                        @section Scripts {
-                        @{
-                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                        }
-                        } *@
-
-
-                        <!--Footer-->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                            <button class="btn btn-success">確定修改</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @* ---詳細資料彈窗結束--- *@
 
     </div>
 </div>
