@@ -27,11 +27,11 @@
 
     </div>
 </div>
-<h1>Report</h1>
+<h1>健檢報告編輯系統</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -61,9 +61,12 @@
                 @Html.DisplayFor(modelItem => item.Result)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
+               @* <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>*@
+                    @Html.ActionLink("修改", "ReportEdit", "Admin", new { id = item.ReportDetailId }, null) |
+                    @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
+                new { onclick = "return confirm('確定要刪除嗎?')" })
             </td>
         </tr>
 }
