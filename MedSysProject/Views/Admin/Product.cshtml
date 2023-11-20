@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MedSysProject.Models.Product>
+﻿@model IEnumerable<MedSysProject.Models.CProductsWrap>
+@using MedSysProject.Models
 
 @{
     ViewData["Title"] = "產品管理";
@@ -21,7 +22,140 @@
     </div>
     <div class="card-body">
 
-        @*這裡是內容*@
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+            <title>產品管理</title>
+            <style>
+                body {
+                    background-color: #DFFFDF;
+                }
 
-</div>
+                .table img {
+                    background-color: transparent;
+                    object-fit: cover;
+                }
+
+                .table th {
+                    white-space: nowrap; /* 避免文字換行 */
+                    overflow: hidden;
+                    text-overflow: ellipsis; /* 在溢出時顯示省略號 */
+                }
+
+                h1 {
+                    font-size: 3rem; /* 設定字體大小，可根據需要調整 */
+                    font-weight: bold; /* 使用粗體字型 */
+                    color: #333; /* 設定文字顏色，可根據需要調整 */
+                    background: linear-gradient(45deg, #3498db, #2ecc71); /* 使用漸層背景色，可根據需要調整 */
+                    -webkit-background-clip: text; /* 將文字內容限制在漸層範圍內 */
+                    color: transparent; /* 隱藏文字顏色，以顯示漸層效果 */
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container mt-5">
+                <h1>產品管理一覽表</h1>
+
+                <p>
+                    <a asp-action="Create" class="btn btn-outline-success">新增產品</a>
+                </p>
+                <table class="table table-hover" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedProductId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedProductName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedUnitPrice)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedLicense)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedIngredient)
+                            </th>
+                            @*             <th>
+                            @Html.DisplayNameFor(model => model.WrappedDescription)
+                            </th> *@
+                            <th>
+                                @Html.DisplayNameFor(model => model.FimagePath)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedDiscontinued)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = 0;
+                            foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td>
+                                        @count
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WrappedProductName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WrappedUnitPrice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WrappedLicense)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WrappedIngredient)
+                                    </td>
+                                    @* <td>
+                            @Html.DisplayFor(modelItem => item.WrappedDescription)
+                            </td>*@
+                                    <td>
+                                        <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
+                                    </td>
+                                    <td>
+                                        @if (item.WrappedDiscontinued == true)
+                                        {
+                                            <span class="badge badge-success">上架中</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">已下架</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-controller="Admin" asp-route-id="@item.WrappedProductId" class="btn btn-outline-primary" style="white-space: nowrap;">修改</a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="Delete" asp-controller="Admin" asp-route-id="@item.WrappedProductId" class="btn btn-outline-danger" onclick="return confirm('確定要刪除嗎?')" style="white-space: nowrap;">刪除</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 引入相應的JavaScript -->
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </body>
+
+
+
+    </div>
 </div>
