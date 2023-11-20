@@ -98,6 +98,13 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult BlogIndex() 
+        {
+            var blogs = from t in _db.Blogs
+                        select t;
+            return View(blogs);
+        }
+
         public IActionResult Product(CKeywordViewModel vm)
         {
             var datas = _db.Products.AsQueryable();
