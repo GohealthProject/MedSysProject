@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace MedSysProject.Controllers
@@ -119,7 +120,18 @@ namespace MedSysProject.Controllers
 
         public IActionResult Report()
         {
-            return View();
+            var data = from s in _db.ReportDetails
+                       select s;
+            return View(data);
+
+        }
+
+        public IActionResult qureyReportDetailAll()
+        {
+            var data = from s in _db.ReportDetails
+                       select s;
+            return View(data);
+
         }
     }
 }
