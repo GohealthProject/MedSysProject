@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedSysProject.Controllers
 {
@@ -7,6 +8,13 @@ namespace MedSysProject.Controllers
         public IActionResult Index()
         {
             return View();
+
         }
+        public IActionResult malePlanConfirm()
+        {
+            return Content("TEST");
+
+        }
+
     }
 }

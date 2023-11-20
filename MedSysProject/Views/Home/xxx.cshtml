@@ -12,95 +12,17 @@ h5{
 
 <div class="container">
 <div class="row" >
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card">
-            <div class="card-body">
-                    <h5 class="card-title">樂活銀髮方案</h5>
-                    <p class="card-text">身體機能隨著年紀變化，健康狀況越是會亮起紅燈。樂活銀髮方案，可以協助找出自己須注意管理健康狀況，讓不健康遠離自己。</p>
-                <a href="#" class="btn btn-primary">點擊加入</a>
 
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">detail</button>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">project類別</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">一般生理檢查</li>
-                                <li class="list-group-item">尿液一般檢查</li>
-                                <li class="list-group-item">血液常規檢查</li>
-                                <li class="list-group-item">腎功能檢查</li>
-                                <li class="list-group-item">肝功能檢查</li>
-                                <li class="list-group-item">新陳代謝檢查</li>
-                                <li class="list-group-item">腹部超音波</li>
-                                <li class="list-group-item">頸動脈超音波</li>
-                                <li class="list-group-item">心臟超音波</li>
-                                <li class="list-group-item">女性超音波檢查</li>
-                                <li class="list-group-item">男性超音波檢查</li>
-                                <li class="list-group-item">眼部檢查</li>
-                                <li class="list-group-item">胸腔檢查</li>
-                                <li class="list-group-item">消化道大腸檢查</li>
-                            </ul>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                    <h5 class="card-title">活力青年方案</h5>
-                    <p class="card-text">容易熬夜、暴飲暴食、工作壓力大，怎麼辦?活力青年方案，協助找回有活力的自己，管理自己健康狀態。</p>
-                <a href="#" class="btn btn-primary">點擊加入</a>
-
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">detail</button>
-
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">project類別</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">一般生理檢查</li>
-                                <li class="list-group-item">尿液一般檢查</li>
-                                <li class="list-group-item">血液常規檢查</li>
-                                <li class="list-group-item">腎功能檢查</li>
-                                <li class="list-group-item">肝功能檢查</li>
-                                <li class="list-group-item">新陳代謝檢查</li>
-                                <li class="list-group-item">體脂肪檢查</li>
-                                <li class="list-group-item">腹部超音波</li>
-                                <li class="list-group-item">甲狀腺超音波</li>
-                                <li class="list-group-item">女性超音波檢查</li>
-                                <li class="list-group-item">男性超音波檢查</li>
-                                <li class="list-group-item">眼部檢查</li>
-                                <li class="list-group-item">胸腔檢查</li>
-                                <li class="list-group-item">消化道胃部胰臟檢查</li>
-                                <li class="list-group-item">自律神經壓力檢查</li>
-
-                            </ul>
-                    </div>
-
-            </div>
-           
-            </div>
-
-        </div>
-    </div>
         <div class="container">
             <!--Section: Content-->
             <section class="text-center">
                 <h4 class="mb-4"><strong>方案比較</strong></h4>
 
                 <div class="btn-group mb-4" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-primary active">個人版</button>
+                   
                     <button type="button" class="btn btn-primary">
-                        方案 <small>(優惠期限)</small>
+                        方案選擇 <small>(個人版)</small>
                     </button>
                 </div>
 
@@ -255,7 +177,7 @@ h5{
                                 </ul>
                             </div>
                             <div class="card-footer bg-white py-3">
-                                <button type="button" class="btn btn-info btn-sm">確認方案</button>
+                                <button type="button" id="malePlanConfirm" class="btn btn-info btn-sm">確認方案</button>
                             </div>
                         </div>
                         <!-- Card -->
@@ -265,16 +187,28 @@ h5{
             </section>
             <!--Section: Content-->
         </div>
-@*</div>*@
+
 <div class="row">
     <div class="col-sm-6 mb-3 mb-sm-0">
         <div class="card">
             <div class="card-body">
-                    <h5 class="card-title">婦女安心方案</h5>
-                    <p class="card-text">婦女安心方案健康檢查，含現代人好發的疾病，提早預防遺傳、傳染性等疾病，並在生殖、生育功能與遺傳問題上做加強篩檢。</p>
+                    <h5 class="card-title">project</h5>
+                    <p class="card-text">各類別檢查</p>
                 <a href="#" class="btn btn-primary">點擊加入</a>
 
                 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">detail</button>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                            <label class="form-check-label" for="inlineCheckbox1">1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                            <label class="form-check-label" for="inlineCheckbox2">2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled>
+                            <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
+                        </div>
 
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                     <div class="offcanvas-header">
@@ -313,39 +247,24 @@ h5{
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                    <h5 class="card-title">男性保健方案</h5>
-                    <p class="card-text">隨著年齡增長，男性面臨的潛在健康風險增加，如何發現潛在危機，男性保健方案是您最好的健康選擇。</p>
+                    <h5 class="card-title">細項檢查item</h5>
+                    <p class="card-text">97種單項加入</p>
                 <a href="#" class="btn btn-primary">點擊加入</a>
 
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">detail</button>
-
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">project類別</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">一般生理檢查</li>
-                                    <li class="list-group-item">尿液一般檢查</li>
-                                    <li class="list-group-item">血液常規檢查</li>
-                                    <li class="list-group-item">腎功能檢查</li>
-                                    <li class="list-group-item">肝功能檢查</li>
-                                    <li class="list-group-item">新陳代謝檢查</li>
-                                    <li class="list-group-item">男性內分泌檢查</li>
-                                    <li class="list-group-item">男性癌症檢查</li>
-                                    <li class="list-group-item">體脂肪檢查</li>
-                                    <li class="list-group-item">腹部超音波</li>
-                                    <li class="list-group-item">頸動脈超音波</li>
-                                    <li class="list-group-item">男性超音波檢查</li>
-                                    <li class="list-group-item">眼部檢查</li>
-                                    <li class="list-group-item">胸腔檢查</li>
-                                    <li class="list-group-item">自律神經壓力檢查</li>
-
-                                </ul>
-                    </div>
-
-                </div>
+                       
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                            <label class="form-check-label" for="inlineCheckbox1">1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                            <label class="form-check-label" for="inlineCheckbox2">2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled>
+                            <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
+                        </div>
+              
 
             </div>
 
@@ -353,4 +272,32 @@ h5{
     </div>
 </div>
 
-</div>
+    </div>
+    <div >
+        <div id="partialview" style="border:5px double #FA714B">
+        這是partialview，拿來放加入項目
+        @Html.Partial("partialview1")
+            <div class="card">
+                <p>總計</p>
+       </div>
+       
+    </div>
+    </div>
+    </div>
+    @section Scripts{
+    <script>
+        async function malePlanConfirm() {
+           
+            document.querySelector("#malePlanConfirm").addEventListener('click',()=>{
+         const response = await fetch('@Url.Content("~/WorkPlace/malePlanConfirm")');
+            const data = await (response.text());
+
+            });
+
+        }
+        malePlanConfirm();
+
+    </script>
+    
+    
+    }
