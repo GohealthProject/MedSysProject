@@ -35,7 +35,7 @@
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
     @await RenderSectionAsync("LinkStyle", required: false)
-    
+    <script src="@Url.Content("~/js-Account/LayoutFore.js")"></script>
 </head>
 
 <body>
@@ -75,7 +75,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#"><span>好物推薦</span> <i class="bi bi-chevron-down"></i></a>
+                        <a asp-action="Index" asp-controller="Shopping"><span>好物推薦</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li><a href="#">Drop Down 1</a></li>
                             <li class="dropdown">
@@ -106,10 +106,10 @@
                                 <li class="dropdown">
                                     <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                                     <ul>
+                                <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                         <li>@Html.ActionLink("會員中心","","",new{},null)</li>
                                         <li>@Html.ActionLink("會員中心","","",new{},null)</li>
-                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
-                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
                                     </ul>
                                 </li>
                             }
@@ -142,12 +142,9 @@
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
-    @*<script src="~/forevendor/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="~/forevendor/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="~/forevendor/vendor/php-email-form/validate.js"></script>*@
 
     <!-- Template Main JS File -->
-    @*<script src="/js/foremain.js"></script>*@
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

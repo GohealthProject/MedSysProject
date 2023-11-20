@@ -7,10 +7,11 @@ namespace MedSysProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly MedSysContext _context;
+       public HomeController(ILogger<HomeController> logger, MedSysContext medSysContext)
         {
             _logger = logger;
+            _context = medSysContext;
         }
 
         public IActionResult Index()
@@ -41,7 +42,7 @@ namespace MedSysProject.Controllers
             return View();
         }
         public IActionResult Reserve()
-        { //預約總攬
+        { //預約總覽
             return View();
         }
         public IActionResult Member()
@@ -49,9 +50,16 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult report()
-        { 
-            return View();
+        public IActionResult report(Member id)
+        {
+            var m = _context.Reserves.Where(s => s.MemberId == id.MemberId);
+                   
+
+            var j = from s in _context.HealthReports
+                    where s.MemberId == id.MemberId
+                    select s.ReportDetails;
+
+            return View(m);
         }
 
     }

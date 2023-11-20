@@ -1,4 +1,5 @@
-﻿
+﻿@model IQueryable<MedSysProject.Models.Reserve>
+
 @{
     ViewData["Title"] = "Member";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -32,7 +33,7 @@
         margin-bottom: 5px;
         font-size:16px;
     }
-
+    
 
     table,
     td {
@@ -60,7 +61,7 @@
     }*/
 </style>
 <h1>會員中心</h1>
-
+@*@Html.DisplayNameFor(model => model)*@
 <div class="container-fluid ">
     <div class="row">
         <!-- List group -->
@@ -76,8 +77,17 @@
                     <div class="col-6 title">
                         <select class="form-select" aria-label="Default select example">
                             <option selected>選擇健檢報告</option>
-                            <option value="1">2023/09/30</option>
-                            <option value="2">2023/11/11</option>
+
+                            @{
+                                int count = 0;
+                                foreach (var item in Model)
+                                {
+                                    count++;
+                                    <option value="1">@item.Report.Reserve.ReserveId</option>
+                                    
+                                }
+                            }
+                            
                             
                         </select>
                     </div>
@@ -135,7 +145,7 @@
                                     <td class="col-4">C</td>
                                 </tr>
                             </tbody>
-
+                            
                         </table>
                     </div>
 
@@ -160,16 +170,16 @@
                     <div class="tab-pane fade show active" id="home">
                         <form>
                             <div class="mb-3">
-                            
+                                
                             <label for="exampleFormControlInput1" class="form-label">電子信箱</label>
                             <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlTextarea1" class="form-label">訊息內容</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="25"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea>
                         </div>
                         <div>
-                                <a class="btn btn-primary but col-2 position-absolute bottom-15 end-50 col-2" data-bs-toggle="modal" href="#reserve" role="button">送出</a>
+                                <a class="btn btn-primary but col-2 position-absolute bottom-0 end-50 col-2" data-bs-toggle="modal" href="#reserve" role="button">送出</a>
                         </div>
                         </form>
                     </div>

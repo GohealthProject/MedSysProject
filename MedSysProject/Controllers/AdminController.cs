@@ -74,19 +74,7 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
-        public string GetEmployeeClassNameById(int employeeClassId)
-        {
-            // 在此處使用你的資料存取邏輯，從資料庫中取得對應的名稱
-            var employeeClass = _db.EmployeeClasses.FirstOrDefault(e => e.EmployeeClassId == employeeClassId);
 
-            // 確認是否找到相應的 EmployeeClass
-            if (employeeClass != null)
-            {
-                return employeeClass.Class;
-            }
-
-            return "";
-        }
 
             public IActionResult EmpClass()
         {

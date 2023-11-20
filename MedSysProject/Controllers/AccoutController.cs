@@ -15,11 +15,12 @@ namespace MedSysProject.Controllers
         public IActionResult MemberCenter()
         {
             return View();
-        }
+        }//會員中心
+
         public IActionResult Login()
         {
             return View();
-        }
+        } //登入
         [HttpPost]
         public IActionResult Login(CLoginViewModel c)
         {
@@ -37,7 +38,7 @@ namespace MedSysProject.Controllers
                 }
             }
             return View();
-        }
+        } //登入
         public IActionResult UpdataMember()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
@@ -45,21 +46,19 @@ namespace MedSysProject.Controllers
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             return View(m);
-        }
+        } //修改會員
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m)
         {
             
             Member? Upm = _db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
             Upm.MemberEmail= m.MemberEmail;
-            Upm.MemberPassword= m.MemberPassword;
             Upm.MemberName= m.MemberName;
-            Upm.MemberGender = m.MemberGender;
             Upm.MemberBirthdate = m.MemberBirthdate;
             Upm.MemberAddress= m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
             _db.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("MemberCenter", "Accout");
         }
         public IActionResult Register()
         {
@@ -90,9 +89,33 @@ namespace MedSysProject.Controllers
             return View();
             return RedirectToAction("Login");
         }
-        public IActionResult test()
+        public IActionResult VerifyemailPassword()
         {
-            return View();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp nown = new MemberWarp();
+            nown.member = JsonSerializer.Deserialize<Member>(json);
+            return View(nown);
+        }
+        [HttpPost]
+        public IActionResult VerifyemailPassword(MemberWarp nown)
+        {
+            var Upm = _db.Members.Find(nown.MemberId);
+            Upm.MemberPassword = nown.MemberPassword;
+            _db.SaveChanges();
+            return RedirectToAction("MemberCenter", "Accout");
+        }
+        public IActionResult MemberState()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp upm = new MemberWarp();
+            upm.member = JsonSerializer.Deserialize<Member>(json);
+            return View(upm);
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
     }
+
 }
