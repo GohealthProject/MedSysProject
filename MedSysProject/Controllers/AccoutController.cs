@@ -9,8 +9,11 @@ namespace MedSysProject.Controllers
     public class AccoutController : Controller
     {
         private MedSysContext _db = null;
-        public AccoutController(MedSysContext db) { 
-        _db= db;
+        private readonly IWebHostEnvironment _host;
+        public AccoutController(MedSysContext db, IWebHostEnvironment host)
+        {
+            _db = db;
+            _host = host;
         }
         public IActionResult MemberCenter()
         {
@@ -48,10 +51,15 @@ namespace MedSysProject.Controllers
             return View(m);
         } //修改會員
         [HttpPost]
-        public IActionResult UpdataMember(MemberWarp m)
+        public IActionResult UpdataMember(MemberWarp m,IFormFile fileN)
         {
-            
+            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            {
+                fileN.CopyTo(fileStream);
+            }
             Member? Upm = _db.Members.FirstOrDefault(n=>n.MemberId == m.MemberId);
+            Upm.MemberImage = fileN.FileName;
             Upm.MemberEmail= m.MemberEmail;
             Upm.MemberName= m.MemberName;
             Upm.MemberBirthdate = m.MemberBirthdate;
@@ -72,6 +80,7 @@ namespace MedSysProject.Controllers
             
             if (_db.Members.FirstOrDefault(n => n.MemberEmail == vm.MemberEmail) == null)
             {
+                
                 _db.Members.Add(vm.member);
                 _db.SaveChanges();
                 ViewBag.Sussess = true;

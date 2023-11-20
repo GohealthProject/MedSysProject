@@ -25,10 +25,14 @@
             </div>
           </li>
         </ul>
+            <div>
+                <img src="@Url.Content("~/img/MemberImg/"+Model.MemberImage)" />
+            </div>
       </div>
       <div class="col-md-7 col-lg-8">
         <form class="needs-validation" novalidate>
           <div class="row g-3">
+                    
             <div class="col-sm-6">
               <label for="firstName" class="form-label">會員名稱</label>
               <input type="text" class="form-control" id="firstName" placeholder="" value="@Model.MemberName" required disabled>
