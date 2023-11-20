@@ -15,14 +15,18 @@
 </script>
 @* ------------------------------------- *@
 
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">產品管理</h1>
-</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">產品管理</h6>
+    </div>
+    <div class="card-body">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+        <p>
+            <a class="btn btn-success" asp-action="Create">
+                <i class="fas fa-user-plus"></i>
+            </a>
+        </p>
+        <table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -86,11 +90,22 @@
                 @Html.DisplayFor(modelItem => item.Discontinued)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            <a href="@Url.Action("Edit", new { id = item.ProductId })" class="btn btn-primary">
+                                <i class="fas fa-user-edit"></i>
+                            </a>
+                            <a href="@Url.Action("Details", new { id = item.ProductId })" class="btn btn-info">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a href="@Url.Action("Delete", new { id = item.ProductId })" class="btn btn-danger">
+                                <i class="fas fa-user-times"></i>
+                            </a>
+@*                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+</div>
