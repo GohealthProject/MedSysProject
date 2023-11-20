@@ -83,7 +83,7 @@
                             @Html.DisplayNameFor(model => model.WrappedDescription)
                             </th> *@
                             <th>
-                                @Html.DisplayNameFor(model => model.WrappedPhoto)
+                                @Html.DisplayNameFor(model => model.FimagePath)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
@@ -120,7 +120,7 @@
                             @Html.DisplayFor(modelItem => item.WrappedDescription)
                             </td>*@
                                     <td>
-                                        <img src="@Url.Action("GetImage", "Admin", new { id = item.WrappedProductId})" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                        <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
 
                                     </td>
                                     <td>

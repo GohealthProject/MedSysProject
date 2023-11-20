@@ -56,8 +56,12 @@ namespace MedSysProject.Models
             get { return _product.Description; }
             set { Product.Description = value; }
         }
+        
+        public string ImagePath { get; set; }
+
         [DisplayName("圖片")]
-        public IFormFile? WrappedPhoto { get; set; }
+        public string FimagePath { get; set; }
+
 
         [DisplayName("庫存量")]
         public int? WrappedUnitsInStock

@@ -100,11 +100,16 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p => p.ProductName.Contains(vm.txtKeyword));
             }
 
+            var defaultImagePath = "/img-product/default-image.jpg"; // 設定預設圖片路徑
+
             var viewModel = datas.Select(product => new CProductsWrap
             {
-                Product = product
-
+                Product = product,
+                ImagePath = product.FimagePath != null
+                    ? Path.Combine("/img-product", product.FimagePath)
+                    : defaultImagePath
             }).ToList();
+
 
             return View(viewModel);
         }
@@ -132,36 +137,29 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult List(CKeywordViewModel vm)
-        {
-            var datas = _db.Products.AsQueryable();
-
-            if (!string.IsNullOrEmpty(vm.txtKeyword))
-            {
-                datas = datas.Where(p => p.ProductName.Contains(vm.txtKeyword));
-            }
-
-            var viewModel = datas.Select(product => new CProductsWrap
-            {
-                Product = product
-
-            }).ToList();
-
-            return View(viewModel);
-        }
 
 
         public IActionResult GetImage(int id)
         {
             Product product = _db.Products.Find(id);
 
-            if (product != null && product.Photo != null)
+            if (product != null && !string.IsNullOrEmpty(product.FimagePath))
             {
-                return File(product.Photo, "image/jpeg");
+                string imagePath = Path.Combine(_host.WebRootPath, "img-product", product.FimagePath);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    return PhysicalFile(imagePath, "image/jpeg");
+                }
             }
 
             return NotFound();
         }
+
+
+
+
+
 
         public IActionResult Create()
         {
@@ -169,28 +167,38 @@ namespace MedSysProject.Controllers
         }
 
         [HttpPost]
-        
         public IActionResult Create(Product product, IFormFile formFile)
         {
-            //if (ModelState.IsValid)
-            //{
-                if (formFile != null && formFile.Length > 0)
+            // 檢查並創建目錄
+            string imagePath = Path.Combine(_host.WebRootPath, "img-product");
+            if (!Directory.Exists(imagePath))
+            {
+                Directory.CreateDirectory(imagePath);
+            }
+
+            if (formFile != null && formFile.Length > 0)
+            {
+                // 生成唯一的檔案名稱
+                string photoName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+
+                // 構建完整的檔案路徑
+                string filePath = Path.Combine(imagePath, photoName);
+
+                // 寫入檔案
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        formFile.CopyTo(memoryStream);
-                        product.Photo = memoryStream.ToArray();
-                    }
+                    formFile.CopyTo(fileStream);
                 }
 
-                _db.Products.Add(product);
-                _db.SaveChanges();
+                // 更新資料庫中的路徑
+                product.FimagePath = photoName;
+            }
 
-                return RedirectToAction("Product");
-            //}
+            // 儲存到資料庫
+            _db.Products.Add(product);
+            _db.SaveChanges();
 
-            //// 模型狀態無效，返回原始表單頁面
-            //return View("Product");
+            return RedirectToAction("Product");
         }
 
 
@@ -207,17 +215,25 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile)
         {
-            Console.WriteLine($"ProductId from CProductsWrap: {productId.WrappedProductId}");
 
             Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
             if (pDb != null)
             {
                 if (formFile != null)
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    // 生成唯一的檔案名稱
+                    string photoName = Guid.NewGuid().ToString() + ".jpg";
+
+                    // 將圖片存放在 wwwroot/img-product 資料夾中
+                    string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
+
+                    // 將圖片路徑存入資料庫
+                    pDb.FimagePath = "/img-product/" + photoName;
+
+                    // 寫入圖片檔案
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        await formFile.CopyToAsync(memoryStream);
-                        pDb.Photo = memoryStream.ToArray();
+                        await formFile.CopyToAsync(fileStream);
                     }
                 }
 
