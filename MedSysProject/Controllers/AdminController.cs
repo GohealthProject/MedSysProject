@@ -156,7 +156,18 @@ namespace MedSysProject.Controllers
 
         public IActionResult Report()
         {
-            return View();
+            var data = from s in _db.ReportDetails
+                       select s;
+            return View(data);
+
+        }
+
+        public IActionResult qureyReportDetailAll()
+        {
+            var data = from s in _db.ReportDetails
+                       select s;
+            return View(data);
+
         }
 
 
