@@ -45,8 +45,8 @@ section {
         top:0;
         z-index:9;
         transition:0.3s all ease;
-        visibility:visible;
-        opacity:1;
+        visibility:hidden;
+        opacity:0;
 
         .search-form{
             position:relative;
@@ -104,11 +104,17 @@ section {
                     color: var(--color-default);
                 }
             }
+
             &.active:hover {
                 color: var(--color-primary);
             }
 
             .dropdown {
+                &:hover>ul{
+                    opacity:1;
+                    top:100%;/*選到時往上移的效果*/
+                    visibility:visible;
+                }
                 ul { /*下層*/
                     display: block;
                     position: absolute;
@@ -123,17 +129,15 @@ section {
                     box-shadow: 0px 0px 30px rgba(127,137,161,0.25);
                     transition: 0.3s;
                     border-radius: 4px;
-                    &.active:hover{
-                        color:var(--color-primary);
+                    &.active:hover {
+                        color: var(--color-primary);
                     }
                     /*會繼承樓上list-style:none*/
                     li {
+                        min-width: 200px;
                         &:hover > a {
                             color: var(--color-primary);
                         }
-
-                        min-width: 200px;
-
                         a {
                             padding: 10px 20px;
                             font-size: 15px;
@@ -176,4 +180,107 @@ section {
             }
         }
     }
+}
+@media(min-width:1280px) and (max-width:1366px){
+    .mobile.nav-toggle{
+        display:none;/*大畫面類別選單消失*/
+    }
+}
+/*RWD行動裝置*/
+@media(max-width:1279px){
+    body.mobile-nav-active{
+        overflow:hidden;
+        .mobile-nav-toggle{
+            position:fixed;
+            top:15px;
+            right:15px;
+            z-index:9999;
+            color:var(--color-white);
+        }
+        .navbar{
+            position:fixed;
+            overflow:hidden;
+            inset:0;
+            background:rgba(var(--color-black-rgb),0.6);
+            transition:0.3s;
+        }
+        .navbar>ul{
+            display:block;
+        }
+    }
+    .navbar {
+        padding: 0;
+        z-index: 9997;
+
+        ul {
+            display: none; /*畫面縮小*/
+            position: absolute;
+            inset: 55px 15px 15px 15px;
+            padding: 10px 0;
+            margin: 0;
+            border-radius: 10px;
+            background-color: var(--color-white);
+            overflow-y: auto; /* 垂直方向內容溢出時顯示滾動條 ??*/
+            transition: 0.3s;
+            z-index: 9998;
+            .dropdown{
+                >.dropdown-active{
+                    display:block;
+                }
+                ul{
+                    position:static;
+                    display:none;
+                    z-index:99;
+                    padding:10px 0;
+                    margin:10px 20px;
+                    background:var(--color-white);
+                    transition:all 0.5s ease-in-out;
+                    box-shadow:0px 0px 30px rgba(var(--color-black-rgb),0.1);
+                }
+            }
+            li:hover>a{
+                color:var(--color-primary);
+            }
+            a, a:focus {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 20px;
+                font-family: var(--font-primary);
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--color-primary);
+                white-space: nowrap;
+                transition: 0.3s;
+
+                i {
+                    font-size: 12px;
+                    line-height: 0;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        &.active,&.active:focus {
+            color: var(--color-primary);
+        }
+
+        a:hover {
+            color: var(--color-primary);
+        }
+  
+    }
+    .mobile-nav-toggle{
+        display:inline-block;
+        color:var(--color-secondary);
+        font-size:28px;
+        cursor:pointer;
+        line-height:0;
+        transition:0.5s;
+        &.bi-x{
+            color:red;
+        }
+    }
+
+
 }
