@@ -115,6 +115,7 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p =>
                     p.ProductName.Contains(keyword) ||
                     p.Ingredient.Contains(keyword) ||
+                    p.License.Contains(keyword)||
                     p.Description.Contains(keyword));
             }
 
@@ -129,6 +130,7 @@ namespace MedSysProject.Controllers
             {
                 datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
             }
+
 
             var viewModel = datas.Select(product => new CProductsWrap
             {
@@ -241,6 +243,25 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Product");
         }
 
+        //ajax版本待補
+
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+
+
+        //[HttpPost]
+        //public IActionResult Create(Product product)
+        //{
+        //    // 假設你已經在前端將圖片上傳到伺服器的路徑存在 product.FimagePath 中
+        //    _db.Products.Add(product);
+        //    _db.SaveChanges();
+
+        //    return Json(new { productId = product.ProductId });
+        //}
+
+  
 
         public IActionResult Edit(int? id)
         {
