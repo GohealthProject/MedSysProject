@@ -41,7 +41,7 @@ namespace MedSysProject.Controllers
             return View();
         }
         public IActionResult Reserve()
-        { //預約總攬
+        { //預約總覽
             return View();
         }
         public IActionResult Member()
