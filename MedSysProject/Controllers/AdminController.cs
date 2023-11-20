@@ -38,7 +38,7 @@ namespace MedSysProject.Controllers
         public IActionResult Login(CLoginViewModel vm)
         {
 
-            Employee emp = _db.Employees.FirstOrDefault(
+            Employee? emp = _db.Employees.FirstOrDefault(
                 t => t.EmployeeEmail.Equals(vm.txtEmail) && t.EmployeePassWord.Equals(vm.txtPassWord));
 
             if (emp != null && emp.EmployeePassWord.Equals(vm.txtPassWord))
