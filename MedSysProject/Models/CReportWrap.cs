@@ -6,7 +6,7 @@ namespace MedSysProject.Models
     {
         public CReportWrap() 
         { 
-        _c
+        
         }
      
 
