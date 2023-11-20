@@ -1,10 +1,11 @@
-﻿@model IQueryable<MedSysProject.Models.Reserve>
+﻿@model IQueryable<DateTime?>
 
 @{
     ViewData["Title"] = "Member";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-
+<script src="~/forevendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <style>
     .left {
        /* position: fixed;*/
@@ -60,6 +61,7 @@
         border: 1px solid #333;
     }*/
 </style>
+
 <h1>會員中心</h1>
 @*@Html.DisplayNameFor(model => model)*@
 <div class="container-fluid ">
@@ -75,15 +77,15 @@
             <div class="tab-pane fade show active" id="tab2">
                 <div class="row">
                     <div class="col-6 title">
-                        <select class="form-select" aria-label="Default select example">
+                        <select class="form-select" aria-label="Default select example" id="chose1">
                             <option selected>選擇健檢報告</option>
 
                             @{
                                 int count = 0;
                                 foreach (var item in Model)
                                 {
-                                    //count++;
-                                    //<option value="1">@item.Reports.Reserve.ReserveId</option>
+                                    count++;
+                                    <option value="1">@item</option>
                                     
                                 }
                             }
@@ -92,7 +94,7 @@
                         </select>
                     </div>
                     <div class="col-6 title">
-                        <select class="form-select" aria-label="Default select example">
+                        <select class="form-select" aria-label="Default select example" id="chose2">
                             <option selected>選擇健檢報告</option>
                             <option value="1">2023/09/30</option>
                             <option value="2">2023/11/11</option>
@@ -113,11 +115,90 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id ="reportshow1" class="d-none">
                                 <tr>
-                                    <td class="col-4">A</td>
-                                    <td class="col-4">B</td>
-                                    <td class="col-4">C</td>
+                                    <td class="col-4">
+                                        白血球總數
+                                    </td>
+                                    <td class="col-4">3.3</td>
+                                    <td class="col-4">
+                                        3.25~9.16 (10^3/uL)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-嗜中性球
+
+                                    </td>
+                                    <td class="col-4 color-red">80</td>
+                                    <td class="col-4">
+                                        39-74
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr >
+                                   
+                                   
+                                    <td class="col-4">
+                                        白血球分類-淋巴球
+
+                                    </td>
+                                    <td class="col-4">30</td>
+                                    <td class="col-4">
+                                        19-48
+                                        (%)
+
+                                    </td>
+                                
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-單核球
+
+
+                                    </td>
+                                    <td class="col-4">
+                                        8
+                                    </td>
+                                    <td class="col-4">
+                                        2.0-10.0
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        白血球分類-嗜酸性球
+
+
+                                    </td>
+                                    <td class="col-4 color-red">9</td>
+                                    <td class="col-4">
+                                        0-7
+
+                                        (%)
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                   
+                                    
+                                    <td class="col-4">
+                                        白血球分類-嗜鹼性球
+
+                                    </td>
+                                    <td class="col-4">
+                                        1
+                                    </td>
+                                    <td class="col-4">
+                                        0-1.5
+
+
+                                        (%)
+
+                                    </td>
                                 </tr>
                             </tbody>
 
@@ -138,11 +219,30 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="reportshow2" class="d-none">
                                 <tr>
-                                    <td class="col-4">A</td>
-                                    <td class="col-4">B</td>
-                                    <td class="col-4">C</td>
+                                    <td class="col-4">
+                                        身高
+                                    </td>
+                                    <td class="col-4">180</td>
+                                    <td class="col-4">無</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-4">
+                                        體重
+                                    </td>
+                                    <td class="col-4">100</td>
+                                    <td class="col-4">無</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td class="col-4"> 
+                                        體溫
+                                    </td>
+                                     
+                                    <td class="col-4">37.5</td>
+                                    <td class="col-4"><38度</td>
+
                                 </tr>
                             </tbody>
                             
@@ -241,5 +341,41 @@
     </div>
 </div>
 
+<script>
+  
+    //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
+    //    console.log(datas);
+    //    const docFrag = $(document.createDocumentFragment());
+    //    $.each(datas, (index, city) => {
+    //        //console.log(city);
+    //        // <li class="list-group-item" > An item < /li>
+    //        const li = $('<li></li>').text(city).addClass('list-group-item');
+    //        docFrag.append(li);
+    //    })
+    //    $('.list-group').html(docFrag);
+    //})
+    //$("#chose1").click(function(){
+    //    $.getJSON("@Url.Content("~/Home/qureyReportDetailAll")", {}, data => {
+    //        const docFrag = $(document.createDocumentFragment());
+    //        $.each(data,(index,report)=>{
+    //            const show = $("<td></td>").text(report).addClass("col - 4");
+    //            docFrag.append(show);
 
+
+    //        })
+    //        $("#reportshow1").html(docFrag);
+    //        })
+    //})
+    $("#chose1").click(function () {
+        $("#reportshow1").removeClass("d-none")
+        
+    
+    })
+    $("#chose2").click(function () {
+        $("#reportshow2").removeClass("d-none")
+
+
+    })
+   
+</script>
    
