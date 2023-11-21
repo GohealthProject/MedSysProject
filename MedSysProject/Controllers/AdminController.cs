@@ -63,21 +63,21 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult EmpManager()
+        public IActionResult EmpManager(CKeywordViewModel vm)
         {
             string keyword = "";
             IEnumerable<Employee> datas = null;
 
-            if (string.IsNullOrEmpty(keyword))
+            if (string.IsNullOrEmpty(vm.txtKeyword))
             {
                 datas = from t in _db.Employees
                         select t;
             }
 
             else
-                datas = _db.Employees.Where(p => p.EmployeeName.Contains(keyword) ||
-                p.EmployeePhoneNum.Contains(keyword) ||
-                p.EmployeeEmail.Contains(keyword));
+                datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
+                p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
+                p.EmployeeEmail.Contains(vm.txtKeyword));
             return View(datas);
         }
 
