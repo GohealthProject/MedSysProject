@@ -18,8 +18,7 @@
 
 <p>
     @Html.ActionLink("我的貼文","BlogList","Admin",new{id=empID},new{@class="btn btn-primary",style="margin-left:10px"})
-    @Html.ActionLink("全部貼文","BlogList","Admin",null,new{@class="btn btn-primary",style="margin-left:10px"})
-    @*<a asp-action="BlogList" class="btn btn-primary" style="margin-left:10px;">我的貼文</a>*@
+    <a href="@Url.Content("~/Admin/BlogList")" class="btn btn-primary" style="margin-left:10px">全部貼文</a>
 </p>
 <table class="table">
     <thead>
