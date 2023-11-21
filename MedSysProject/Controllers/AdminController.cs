@@ -473,5 +473,16 @@ namespace MedSysProject.Controllers
             return NotFound();
         }
 
+        public string GetMemberName(int? id)
+        {
+            Member member = _db.Members.Find(id);
+
+            if (member != null)
+            {
+                return member.MemberName;
+            }
+
+            return "";
+        }
     }
 }
