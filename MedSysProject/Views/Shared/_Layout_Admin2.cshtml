@@ -65,16 +65,24 @@
                 </a>
             </li>
 
-            <li class="nav-item" id="li-EmpClass">
+@*             <li class="nav-item" id="li-EmpClass">
                 <a class="nav-link" href="~/Admin/EmpClass">
                     <i class="fas fa-fw fa-users"></i>
                     <span>員工類別管理</span>
+                </a>
+            </li> *@
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item" id="li-Report">
+                <a class="nav-link" href="~/Admin/Report">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>結果報告</span>
                 </a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item" id="li-Blog">
-                <a class="nav-link" href="~/Admin/Blog">
+                <a class="nav-link" href="~/Admin/BlogList">
                     <i class="fas fa-fw fa-rss"></i>
                     <span>部落格管理</span>
                 </a>
@@ -101,14 +109,6 @@
                 <a class="nav-link" href="~/Admin/Data">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>數據分析</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item" id="li-Report">
-                <a class="nav-link" href="~/Admin/Report">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>結果報告?</span>
                 </a>
             </li>
 
@@ -143,13 +143,19 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <!-- Topbar Search 搜尋 -->
+@*                     @using (Html.BeginForm())
+                    {
+                        @:關鍵字 @Html.TextBox("txtKeyword")
+                        <input type="submit" value="查詢" />
+                    } *@
+
+                    <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="搜尋..."
+                            <input type="text" name="txtKeyword" class="form-control bg-light border-0 small" placeholder="搜尋..."
                                    aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -160,7 +166,6 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        @* 搜尋按鈕 待製作 *@
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -169,13 +174,13 @@
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                  aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
+                                <form method="post" class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
+                                        <input type="text" name="txtKeyword" class="form-control bg-light border-0 small"
                                                placeholder="搜尋..." aria-label="Search"
                                                aria-describedby="basic-addon2">
                                         <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
+                                            <button class="btn btn-primary" type="submit">
                                                 <i class="fas fa-search fa-sm"></i>
                                             </button>
                                         </div>
@@ -328,8 +333,17 @@
 
 
                                 </span>
-                                <img class="img-profile rounded-circle"
-                                     src="~/img-admin/undraw_profile.svg">
+
+                                @{
+                                    if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                                    {
+                                        string json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+                                        Employee emp = JsonSerializer.Deserialize<Employee>(json);
+                                        <img class="img-profile rounded-circle"
+                                             src="/Admin/GetImageByte/@emp.EmployeeId">
+                                    }
+                                }
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
