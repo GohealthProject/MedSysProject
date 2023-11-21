@@ -134,11 +134,37 @@
             <div class="modal-body">
 
                 @*部落格修改窗口*@
+                
+                @*<hr />*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Edit" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div>
+                                <input type="hidden" name="FId" value="">
+                            </div>
 
-                <!--Footer-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                    <button class="btn btn-success">確定修改</button>
+                            <div class="form-group">
+                                <label>文章標題</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+                                <label>文章類別</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+                                <label>文章內容</label>
+                                <textarea id="myTextarea" name="content"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="file" name="photo" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="修改並送出" class="btn btn-primary" />
+                            </div>
+                        </form>
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -161,4 +187,15 @@
             confirmButtonText: "確定刪除"
         })
     });
+</script>
+<script src="~/lib/tinymce/tinymce.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+        inymce.init({
+            selector: '#myTextarea',
+            plugins: 'advlist autolink lists link image charmap print preview anchor',
+            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            menubar: false
+        });
+    })
 </script>
