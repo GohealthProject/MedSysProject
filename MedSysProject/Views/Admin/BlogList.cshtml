@@ -102,9 +102,14 @@
                 @Html.DisplayFor(modelItem => item.AuthorName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    
+                                    <a href="@Url.Action("Details", new { id = item.BlogID })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                        <i class="fas fa-info-circle"></i>
+                        </a>
+                                    <a class="btn btn-danger" id="btnDel">
+                                        @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                        <i class="fas fa-user-times"></i>
+                                    </a>
             </td>
         </tr>
 }}
@@ -112,3 +117,48 @@
 </table>}
     </div>
 </div>
+
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">修改部落格</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+                @*部落格修改窗口*@
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                    <button class="btn btn-success">確定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+<script>
+    const delbtn = document.getElementById("btnDel");
+
+    delbtn.addEventListener("click", () => {
+        Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        })
+    });
+</script>
