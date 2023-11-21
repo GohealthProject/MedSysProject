@@ -1,0 +1,52 @@
+﻿@model MedSysProject.Models.ReportDetail
+
+@{
+    ViewData["Title"] = "ReportEdit";
+    Layout = "~/Views/Shared/_Layout_Admin2.cshtml";
+}
+<style>
+    .body{
+        margin-left:10px;
+    }
+</style>
+<h1 class="body">健檢報告修改</h1>
+
+@*<h4>ReportDetail</h4>*@
+<hr />
+<div class="row body" >
+    <div class="col-md-4">
+        <form asp-action="ReportEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<input type="hidden" asp-for="ReportDetailId" />*@
+            <input type="hidden" name="ReportDetailId" value="@Model.ReportDetailId" />
+           @* <div class="form-group">
+                <label asp-for="ReportId" class="control-label"></label>
+                <input asp-for="ReportId" class="form-control" asp-items="ViewBag.ReportId"></input>
+                <span asp-validation-for="ReportId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="ItemId" class="control-label"></label>
+                <input asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId">
+                <span asp-validation-for="ItemId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Result" class="control-label"></label>
+                <input asp-for="Result" class="form-control" />
+                <span asp-validation-for="Result" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="儲存並離開" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="body">
+    <a asp-action="Index">返回列表</a>
+</div>
+
+@*@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+*@
+@*@RenderSection("Scripts", required: false)*@

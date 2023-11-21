@@ -98,6 +98,29 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult BlogIndex() 
+        {//測試
+            var blogs = from t in _db.Blogs
+                        select t;
+            return View(blogs);
+        }
+
+        public IActionResult BlogList() 
+        {
+            var blogs = from blog in _db.Blogs
+                        select new CBlogModel { BlogID=blog.BlogId, 
+                                                Title=blog.Title,
+                                                ArticleClassID=blog.ArticleClassId,
+                                                Category=blog.ArticleClass.BlogCategory1,
+                                                Views=blog.Views,
+                                                CreatedAt=blog.CreatedAt,
+                                                Content=blog.Content,
+                                                BlogImage=blog.BlogImage,
+                                                AuthorID=blog.EmployeeId,
+                                                AuthorName=blog.Employee.EmployeeName};
+            return View(blogs);
+        }
+
         public IActionResult Product(CKeywordViewModel vm)
         {
             var datas = _db.Products.AsQueryable();
@@ -156,22 +179,54 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report()
+        public IActionResult Report(CKeywordViewModel vm)
         {
-            var data = from s in _db.ReportDetails
-                       select s;
-            return View(data);
+            IEnumerable<ReportDetail> datas = null;
+
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails
+                        select s;
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+             
+            return View(datas);
 
         }
 
-        public IActionResult qureyReportDetailAll()
+        public IActionResult ReportDelete(int? id)
         {
-            var data = from s in _db.ReportDetails
-                       select s;
-            return View(data);
-
+            ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
+            if (rd != null)
+            {
+                _db.ReportDetails.Remove(rd);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Report");
         }
 
+        public IActionResult ReportEdit(int? id)
+        {
+          
+            ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
+            if (rd == null)
+                return RedirectToAction("Report");
+            return View(rd);
+        }
+
+        [HttpPost]
+        public IActionResult ReportEdit(CReportWrap pIn)
+        {
+            ReportDetail rdDb = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == pIn.ReportDetailId);
+            if (rdDb != null)
+            {
+                rdDb.ReportDetailId = pIn.ReportDetailId;
+                rdDb.ItemId = pIn.ItemId;
+                rdDb.Result = pIn.Result;
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Report");
+        }
 
 
         public IActionResult GetImage(int id)
