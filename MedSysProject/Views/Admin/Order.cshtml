@@ -25,29 +25,29 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderId)
+                訂單編號
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                下訂日期
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MemberId)
+                @* @Html.DisplayNameFor(model => model.MemberId) *@訂購人
             </th>
-            <th>
+@*             <th>
                 @Html.DisplayNameFor(model => model.ShipId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PayId)
-            </th>
+            </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.StateId)
+                @* @Html.DisplayNameFor(model => model.StateId) *@目前狀態
             </th>
-            <th>
+@*             <th>
                 @Html.DisplayNameFor(model => model.ShipDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DeliveryDate)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -63,21 +63,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MemberId)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.ShipId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PayId)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.StateId)
             </td>
-            <td>
+@*             <td>
                 @Html.DisplayFor(modelItem => item.ShipDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeliveryDate)
-            </td>
+            </td> *@
             <td>
                             <a href="@Url.Action("Edit", new { id = item.OrderId })" class="btn btn-primary">
                                 <i class="far fa-edit"></i>
