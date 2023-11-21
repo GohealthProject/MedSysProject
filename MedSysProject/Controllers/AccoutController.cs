@@ -17,7 +17,14 @@ namespace MedSysProject.Controllers
         }
         public IActionResult MemberCenter()
         {
-            return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View();
+            }
         }//會員中心
 
         public IActionResult Login()
