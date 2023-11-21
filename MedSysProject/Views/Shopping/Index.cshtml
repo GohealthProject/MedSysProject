@@ -9,7 +9,7 @@
     <div class="bg-white w-100 rounded-2 " style="height:653px">
         <div style="height:10% ; text-align:justify" class=" w-100 align-items-center p-7  ">
             <span class="fs-1 " style="margin:10px ;">產品類別</span>
-            <span class="fs-1 " style="margin:10px ; "><a asp-action="classView">看更多</a></span>
+            <span class="fs-1 " style="margin:10px ; "><a asp-action="Search" asp-route-id="2">看更多</a></span>
         </div>
         <hr style="margin:0px; padding:0px;"/>
         <div style="height:90%;width:100%">
@@ -36,7 +36,7 @@
                 <div class=" col "  style="height:200px;width:300px">
                     <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px"/>
                     <div>
-                        <span class="fs-3">A產品產品產品產品產品產品產品</span><br />
+                        <a asp-action="selectProduct" asp-route-id="1" class="fs-3">A產品產品產品產品產品產品產品</a><br />
                         <span class="fs-3 text-danger">$1,300</span>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 *@
 @{
 }
-<div id="test"></div>
+<div id="test"></div>@*內置table做購物車*@
 <div class="align-items-start">
 <div class="accordion accordion-flush" id="accordionFlushExample">
     <div class="accordion-item">
@@ -11,9 +11,35 @@
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
               方案選擇
             </button>
-        </h2>
+        </h2>@*@*
+       *內置TABLE*@
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+            <div class="accordion-body"> 
+                        <table id="PlanList" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>序</th>
+                                    <th>方案名稱</th>
+                                    <th>價格</th>
+                                    <th>編輯</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>男性保健方案</td>
+                                    <td>NT$20750</td>
+                                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>婦女安心方案</td>
+                                    <td>NT$25550</td>
+                                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+          </div>
         </div>
     </div>
     <div class="accordion-item">
@@ -23,7 +49,36 @@
             </button>
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+            <div class="accordion-body">
+                    <table id="PlanList" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>序</th>
+                                <th>類別名稱</th>
+                                <th>價格</th>
+                                <th>編輯</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    一般生理檢查
+                                </td>
+                                <td>
+                                    800
+                                </td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>尿液一般檢查</td>
+                                <td>1200</td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+              </div>
         </div>
     </div>
     <div class="accordion-item">
@@ -33,10 +88,43 @@
             </button>
         </h2>
         <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                <div class="accordion-body">
+                    <table id="PlanList" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>序</th>
+                                <th>細項名稱</th>
+                                <th>價格</th>
+                                <th>編輯</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    膽紅素 
+                                </td>
+                                <td>
+                                    NT$100
+                                </td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>尿酸 </td>
+                                <td>NT$150</td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         </div>
     </div>
 </div>
+</div>
+<div class="card">
+    <p>總計</p>
+    <button type="button" class="btn btn-outline-danger">送出</button>
 </div>
 @section Scripts{
     <script></script>
