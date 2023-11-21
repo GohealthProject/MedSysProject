@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Linq;
 using System.IO;
+using NuGet.Protocol;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace MedSysProject.Controllers
 {
@@ -253,15 +255,18 @@ namespace MedSysProject.Controllers
         public IActionResult Report(CKeywordViewModel vm)
         {
             IEnumerable<ReportDetail> datas = null;
-
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
             if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails
-                        select s;
+                datas = from s in _db.ReportDetails.Include(p => p.Item)
+                        orderby s.ReportId
+                         select s;
+             
             else
                 datas = _db.ReportDetails.Where(p =>
                 p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
-             
             return View(datas);
+          
 
         }
 
