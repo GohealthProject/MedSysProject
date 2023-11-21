@@ -61,7 +61,7 @@
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MemberId)
+                @Html.DisplayFor(modelItem => item.Member.MemberName)
             </td>
 @*             <td>
                 @Html.DisplayFor(modelItem => item.ShipId)
@@ -70,7 +70,7 @@
                 @Html.DisplayFor(modelItem => item.PayId)
             </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.StateId)
+                @Html.DisplayFor(modelItem => item.State.StateName)
             </td>
 @*             <td>
                 @Html.DisplayFor(modelItem => item.ShipDate)
