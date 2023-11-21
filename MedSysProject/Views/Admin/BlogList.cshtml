@@ -1,14 +1,25 @@
-﻿@model IEnumerable<MedSysProject.Models.CBlogModel>
+﻿@using System.Text.Json;
+@model IEnumerable<MedSysProject.Models.CBlogModel>
 
 @{
     ViewData["Title"] = "BlogList";
     Layout = "_Layout_Admin2";
 }
-
+@{}
 <h1>BlogList</h1>
+@{
+    int empID = 0;
+    if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+    {
+        string Json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+        Employee emp = JsonSerializer.Deserialize<Employee>(Json);
+        empID = emp.EmployeeId;
+    }
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">我的貼文</a>
+    @Html.ActionLink("我的貼文","BlogList","Admin",new{id=empID},new{@class="btn btn-primary",style="margin-left:10px"})
+    @Html.ActionLink("全部貼文","BlogList","Admin",null,new{@class="btn btn-primary",style="margin-left:10px"})
+    @*<a asp-action="BlogList" class="btn btn-primary" style="margin-left:10px;">我的貼文</a>*@
 </p>
 <table class="table">
     <thead>
@@ -86,4 +97,4 @@
         </tr>
 }}
     </tbody>
-</table>
+</table>}
