@@ -72,6 +72,7 @@ namespace MedSysProject.Controllers
             if (string.IsNullOrEmpty(vm.txtKeyword))
             {
                 datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+                datas = from t in _db.Employees.Include(c => c.EmployeeClass.Class)
                         select t;
             }
 
@@ -240,7 +241,7 @@ namespace MedSysProject.Controllers
             IEnumerable<Order> datas = null;
 
             //if (string.IsNullOrEmpty(keyword))
-            datas = from t in _db.Orders
+            datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
                         select t;
             //else
             //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
