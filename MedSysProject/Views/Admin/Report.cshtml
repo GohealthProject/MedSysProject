@@ -66,9 +66,21 @@
                @* <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>*@
-                    @Html.ActionLink("修改", "ReportEdit", "Admin", new { id = item.ReportDetailId }, null) |
+                          @*<a asp-action="xxx" asp-controller="Home">*@
+                            <a href="@Url.Action("ReportEdit","Admin",new { id = item.ReportDetailId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <a class="btn btn-danger" id="btnDel">
+
+                                <i class="fas fa-trash-alt">
+                                   @* @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
+                                new { onclick = "return confirm('確定要刪除嗎?')" })*@
+                                </i>
+                            </a>
+                   @* @Html.ActionLink("修改", "ReportEdit", "Admin", new { id = item.ReportDetailId }, null) |
                     @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
-                new { onclick = "return confirm('確定要刪除嗎?')" })
+                new { onclick = "return confirm('確定要刪除嗎?')" })*@
             </td>
         </tr>
 }
