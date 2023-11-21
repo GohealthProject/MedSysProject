@@ -65,7 +65,6 @@ namespace MedSysProject.Controllers
 
         public IActionResult EmpManager(CKeywordViewModel vm)
         {
-            string keyword = "";
             IEnumerable<Employee> datas = null;
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
@@ -105,42 +104,90 @@ namespace MedSysProject.Controllers
             return View(blogs);
         }
 
-        public IActionResult BlogList(int? id) 
+        public IActionResult BlogList(int? id,CKeywordViewModel vm) 
         {//
             IEnumerable<CBlogModel> blogs = null;
             if (id == null)
             {
-                blogs = from blog in _db.Blogs
-                        select new CBlogModel
-                        {
-                            BlogID = blog.BlogId,
-                            Title = blog.Title,
-                            ArticleClassID = blog.ArticleClassId,
-                            Category = blog.ArticleClass.BlogCategory1,
-                            Views = blog.Views,
-                            CreatedAt = blog.CreatedAt,
-                            Content = blog.Content,
-                            BlogImage = blog.BlogImage,
-                            AuthorID = blog.EmployeeId,
-                            AuthorName = blog.Employee.EmployeeName
-                        };
+                if (string.IsNullOrEmpty(vm.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs
+                            where blog.Title.Contains(vm.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword)
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                
             }
             else {
-                blogs = from blog in _db.Blogs
-                        where blog.EmployeeId == id
-                        select new CBlogModel
-                        {
-                            BlogID = blog.BlogId,
-                            Title = blog.Title,
-                            ArticleClassID = blog.ArticleClassId,
-                            Category = blog.ArticleClass.BlogCategory1,
-                            Views = blog.Views,
-                            CreatedAt = blog.CreatedAt,
-                            Content = blog.Content,
-                            BlogImage = blog.BlogImage,
-                            AuthorID = blog.EmployeeId,
-                            AuthorName = blog.Employee.EmployeeName
-                        };
+                if (string.IsNullOrEmpty(vm.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs
+                            where blog.EmployeeId == id
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs
+                            where (blog.EmployeeId == id)&&(blog.Title.Contains(vm.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword))
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                
             }
             return View(blogs);
         }
