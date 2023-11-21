@@ -159,24 +159,25 @@
                                 </td>
                                 <td>
                                     @{
-                                    if(item.EmployeeClassId==1)
-                                    {
-                                                <p>醫生</p>
-                                                                            }
-                                    else if (item.EmployeeClassId==2)
-                                    {
-                                                <p>護理師</p>
-                                                                            }
-                                    else if (item.EmployeeClassId==3)
-                                    {
-                                                <p>行政人員</p>
-                                                        }
-                                    else
-                                    {
-                                                <p>一般員工</p>
+                                    //if(item.EmployeeClassId==1)
+                                    //{
+                                    //            <p>醫生</p>
+                                    //                                        }
+                                    //else if (item.EmployeeClassId==2)
+                                    //{
+                                    //            <p>護理師</p>
+                                    //                                        }
+                                    //else if (item.EmployeeClassId==3)
+                                    //{
+                                    //            <p>行政人員</p>
+                                    //                    }
+                                    //else
+                                    //{
+                                    //            <p>一般員工</p>
+                                    //}
+                                    @Html.DisplayFor(modelItem => item.EmployeeClass.Class)
                                     }
-                                    
-                                    }
+                                 
 
                                     
                                     @* 這邊要改成類型名稱 使用GetEmployeeClassNameById方法，待修正 *@
@@ -272,6 +273,7 @@
                                     <div class="form-group">
                                         <label for="formFile" class="form-label">圖片</label>
                                         <input type="file" class="form-control" id="formFile" name="formFile" />
+                                        <img src="/admin/GetImageByte/1" width="150" />
                                     </div>
                                 </form>
                             </div>
