@@ -5,8 +5,21 @@
     ViewData["Title"] = "BlogList";
     Layout = "_Layout_Admin2";
 }
-@{}
-<h1>BlogList</h1>
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Blog = document.getElementById("li-Blog");
+    const Index = document.getElementById("li-index");
+    Blog.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">部落格管理</h6>
+    </div>
+    <div class="card-body">
 @{
     int empID = 0;
     if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -98,3 +111,5 @@
 }}
     </tbody>
 </table>}
+    </div>
+</div>
