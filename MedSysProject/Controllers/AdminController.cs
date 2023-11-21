@@ -71,7 +71,7 @@ namespace MedSysProject.Controllers
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
             {
-                datas = from t in _db.Employees
+                datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
                         select t;
             }
 
