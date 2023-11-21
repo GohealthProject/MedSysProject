@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<MedSysProject.Models.ReportDetail>
 
+
+
 @{
     ViewData["Title"] = "Report";
     Layout = "_Layout_Admin2";
@@ -38,7 +40,8 @@
                 @Html.DisplayNameFor(model => model.ReportId) 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemId)
+                @Html.DisplayNameFor(model => model.Item.ItemName)
+              
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Result)
@@ -53,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.ReportId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
+                @Html.DisplayFor(modelItem => item.Item.ItemName)
                 
             </td>
             <td>

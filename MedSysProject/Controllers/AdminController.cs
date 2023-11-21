@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Linq;
 using System.IO;
+using NuGet.Protocol;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace MedSysProject.Controllers
 {
@@ -69,7 +71,8 @@ namespace MedSysProject.Controllers
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
             {
-                datas = from t in _db.Employees
+                datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+                datas = from t in _db.Employees.Include(c => c.EmployeeClass.Class)
                         select t;
             }
 
@@ -238,7 +241,7 @@ namespace MedSysProject.Controllers
             IEnumerable<Order> datas = null;
 
             //if (string.IsNullOrEmpty(keyword))
-            datas = from t in _db.Orders
+            datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
                         select t;
             //else
             //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
@@ -253,15 +256,18 @@ namespace MedSysProject.Controllers
         public IActionResult Report(CKeywordViewModel vm)
         {
             IEnumerable<ReportDetail> datas = null;
-
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
             if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails
-                        select s;
+                datas = from s in _db.ReportDetails.Include(p => p.Item)
+                        orderby s.ReportId
+                         select s;
+             
             else
                 datas = _db.ReportDetails.Where(p =>
                 p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
-             
             return View(datas);
+          
 
         }
 
@@ -473,5 +479,16 @@ namespace MedSysProject.Controllers
             return NotFound();
         }
 
+        public string GetMemberName(int? id)
+        {
+            Member member = _db.Members.Find(id);
+
+            if (member != null)
+            {
+                return member.MemberName;
+            }
+
+            return "";
+        }
     }
 }

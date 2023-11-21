@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MedSysProject.Models
 {
@@ -8,22 +11,24 @@ namespace MedSysProject.Models
         public CReportWrap() 
         {
             _ReportDetail = new ReportDetail();
-        
+            
         }
         private ReportDetail _ReportDetail;
-
+        
         public ReportDetail ReportDetail 
         { 
             get { return _ReportDetail; }
-            set { this.ReportDetail = value; }
+            set { this._ReportDetail = value; }
         }
         [DisplayName("健檢報告詳細ID")]
+        [Display(Name = "健檢報告詳細ID")]
         public int ReportDetailId
         {
             get { return _ReportDetail.ReportDetailId; }
             set { this.ReportDetail.ReportDetailId = value; }
         }
         [DisplayName("健檢報告ID")]
+        [Display(Name = "健檢報告ID")]
         public int? ReportId 
         {
             get { return _ReportDetail.ReportId; } 
@@ -42,11 +47,11 @@ namespace MedSysProject.Models
             set { this.ReportDetail.Result = value; }
         }
 
-        public virtual Item Item
-        {
-            get { return _ReportDetail.Item; }
-            set { this.ReportDetail.Item = value; }
-        }
+        //public virtual Item Item
+        //{
+        //    get { return _ReportDetail.Item; }
+        //    set { this.ReportDetail.Item = value; }
+        //}
 
         public virtual HealthReport Report 
         {
@@ -54,7 +59,7 @@ namespace MedSysProject.Models
             set { this.ReportDetail.Report = value; }
         }
 
-
+      
 
 
     }
