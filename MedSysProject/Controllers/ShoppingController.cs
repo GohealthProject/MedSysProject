@@ -73,5 +73,10 @@ namespace MedSysProject.Controllers
                 return View(cart);
             }
         }
+        public IActionResult KeySearch(string Key)
+        {
+            var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
+            return View(q);
+        }
     }
 }
