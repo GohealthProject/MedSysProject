@@ -90,23 +90,55 @@ namespace MedSysProject.Controllers
 
 
 
-            public IActionResult EmpClass()
+        public IActionResult EmpClass()
         {
             return View();
         }
 
-        public IActionResult Blog()
+        public IActionResult BlogIndex(int? id,CKeywordViewModel input) 
         {
-            return View();
-        }
+            IEnumerable<Blog> blogs = null;
+            if (id == null)
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                   .Include(blog => blog.ArticleClass)
+                            select blog;
+                }
+                else
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee).Include(blog => blog.ArticleClass)
+                            where blog.Title.Contains(input.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword)
+                            select blog;
 
-        public IActionResult BlogIndex() 
-        {//測試
-            var blogs = from t in _db.Blogs
-                        select t;
+                }
+            }
+            else 
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                          .Include(blog => blog.ArticleClass)
+                            where blog.EmployeeId == id
+                            select blog;
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                  .Include(blog => blog.ArticleClass)
+                            where (blog.EmployeeId == id) && (blog.Title.Contains(input.txtKeyword) ||
+                                                          blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                                          blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword))
+                            select blog;
+                }
+            }
             return View(blogs);
         }
 
+        
         public IActionResult BlogList(int? id,CKeywordViewModel vm) 
         {//
             IEnumerable<CBlogModel> blogs = null;
