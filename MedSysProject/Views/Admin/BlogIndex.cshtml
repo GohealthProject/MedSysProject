@@ -24,6 +24,7 @@
             int empID = 0;
             if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
             {
+                
                 string Json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
                 Employee emp = JsonSerializer.Deserialize<Employee>(Json);
                 empID = emp.EmployeeId;
