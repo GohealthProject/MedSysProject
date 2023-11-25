@@ -540,7 +540,7 @@ section {
   border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
   position: relative;
   overflow: hidden;
-}
+}(v)
 
 .trending .trending-post li a .number {
   position: absolute;
@@ -550,29 +550,29 @@ section {
   top: -20px;
   font-weight: 700;
   color: rgba(var(--color-black-rgb), 0.05);
-}
+}(v)
 
 .trending .trending-post li a h3 {
   font-size: 18px;
   color: rgba(var(--color-black-rgb), 0.9);
-}
+}(v)
 
 .trending .trending-post li a .author {
   color: rgba(var(--color-black-rgb), 0.7);
   font-weight: 500;
-}
+}(v)
 
 .trending .trending-post li a:hover h3 {
   color: rgba(var(--color-black-rgb), 1);
-}
+}(v)
 
 .trending .trending-post li:last-child a {
   border-bottom: none;
-}
+}(v)
 
 .post-entry-2 {
   margin-bottom: 30px;
-}
+}(v)
 
 .post-entry-2 .post-meta {
   font-size: 11px;
@@ -582,26 +582,26 @@ section {
   font-family: var(--font-secondary);
   color: rgba(var(--color-black-rgb), 0.4);
   margin-bottom: 10px;
-}
+}(v)
 
 .post-entry-2 .author {
   color: rgba(var(--color-black-rgb), 0.7);
   font-weight: 500;
   margin-bottom: 20px;
   display: block;
-}
+}(v)
 
 .post-entry-2 .thumbnail {
   flex: 0 0 65%;
-}
+}(v)
 
 @media (max-width: 960px) {
   .post-entry-2 .thumbnail {
     flex: 0 0 100%;
     margin-bottom: 20px;
   }
-}
-
+}(v)
+暫時沒遇到不過應該是類別那頁的
 .post-entry-2.half .thumbnail {
   flex: 0 0 50%;
 }
@@ -630,13 +630,13 @@ section {
   background-repeat: no-repeat;
   position: relative;
   background-position: center center;
-}
+}(v)
 
 @media (max-width: 768px) {
   .img-bg {
     height: 400px;
   }
-}
+}(v)
 
 .img-bg:before {
   position: absolute;
@@ -649,7 +649,7 @@ section {
   right: 0;
   z-index: 1;
   top: 0;
-}
+}(v)
 
 .img-bg .img-bg-inner {
   position: relative;
@@ -659,7 +659,7 @@ section {
   padding-left: 100px;
   padding-right: 100px;
   margin-bottom: 50px;
-}
+}(v)
 
 @media (max-width: 768px) {
   .img-bg .img-bg-inner {
@@ -667,12 +667,12 @@ section {
     padding-right: 30px;
     margin-bottom: 50px;
   }
-}
+}(v)
 
 .img-bg .img-bg-inner h2,
 .img-bg .img-bg-inner p {
   color: var(--color-white);
-}
+}(v)
 
 @media (max-width: 500px) {
   .img-bg .img-bg-inner p {
