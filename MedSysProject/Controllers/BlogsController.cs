@@ -16,6 +16,10 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        public IActionResult SelectBlogCategory(int? CategoryID) 
+        {//
+            return View();
+        }
 
         
 

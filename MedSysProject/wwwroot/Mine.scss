@@ -467,3 +467,43 @@ section {
         }
     }
 }
+
+/*最近流行文章窗格(可能ajax??)*/
+.trending{
+    border:1px solid rgba(var(--color-black-rgb),0.1);
+    >h3{
+        color:(--color-black);
+        padding:20px;
+        border-bottom: 1px solid rgba(var(--color-black-rgb),0.1);
+    }
+    .trending-post{
+        padding:0;
+        margin:0;
+        li{
+            padding:0;
+            margin:0;
+            list-style:none;
+            display:block;
+            a{
+                display:0;
+                padding:20px;
+                border-bottom:1px solid rgba(var(--color-black-rgb),0.1);
+                position:relative;
+                overflow:hidden;
+                .number{
+                    position:absolute;
+                    z-index:-1;
+                    font-size:5rem;
+                    left:-10px;
+                    top:-20px;
+                    font-weight:700;
+                    color:rgba(var(--color-black-rgb),0.05);
+                }
+                h3{
+                    font-size:18px;
+
+                }
+            }
+        }
+    }
+}
