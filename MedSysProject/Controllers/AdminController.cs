@@ -113,7 +113,6 @@ namespace MedSysProject.Controllers
                                   blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
                                   blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword)
                             select blog;
-
                 }
             }
             else 
