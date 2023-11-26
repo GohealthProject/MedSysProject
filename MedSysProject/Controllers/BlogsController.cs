@@ -22,6 +22,11 @@ namespace MedSysProject.Controllers
 
             return View();
         }
+
+        public IActionResult SinglePost(int? BlogID) 
+        {
+            return View();
+        }
         public IActionResult SelectBlogCategory(int? CategoryID) 
         {//
             return View();

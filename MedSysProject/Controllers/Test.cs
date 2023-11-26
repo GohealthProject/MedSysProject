@@ -42,6 +42,28 @@ namespace MedSysProject.Controllers
                         select blog;
             return View(blogs);
         }
+        public IActionResult TestList() 
+        {
+            IEnumerable<Blog> blogs = from blog in _db.Blogs
+                                      .Include(blog=>blog.Employee)
+                                      .Include(blog=>blog.ArticleClass)
+                                      select blog;
+            return View(blogs);
+        }
+        public IActionResult TestTinyMCE() 
+        {
+            return View();
+        }
+        /// <summary>
+        /// 偷雞摸狗
+        /// </summary>
+        /// <param name="newBlog"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult TestTinyMCE(Blog newBlog) 
+        {
+            return RedirectToAction("TestList");
+        }
 
     }
 }
