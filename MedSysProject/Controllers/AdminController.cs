@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Linq;
 using System.IO;
+using NuGet.Protocol;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace MedSysProject.Controllers
 {
@@ -63,21 +65,21 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult EmpManager()
+        public IActionResult EmpManager(CKeywordViewModel vm)
         {
-            string keyword = "";
             IEnumerable<Employee> datas = null;
 
-            if (string.IsNullOrEmpty(keyword))
+            if (string.IsNullOrEmpty(vm.txtKeyword))
             {
-                datas = from t in _db.Employees
+                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+                datas = from t in _db.Employees.Include(p => p.EmployeeClass)
                         select t;
             }
 
             else
-                datas = _db.Employees.Where(p => p.EmployeeName.Contains(keyword) ||
-                p.EmployeePhoneNum.Contains(keyword) ||
-                p.EmployeeEmail.Contains(keyword));
+                datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
+                p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
+                p.EmployeeEmail.Contains(vm.txtKeyword));
             return View(datas);
         }
 
@@ -88,20 +90,139 @@ namespace MedSysProject.Controllers
 
 
 
-            public IActionResult EmpClass()
+        public IActionResult EmpClass()
         {
             return View();
         }
 
-        public IActionResult Blog()
+        public IActionResult BlogIndex(int? id,CKeywordViewModel input) 
         {
-            return View();
+            IEnumerable<Blog> blogs = null;
+            if (id == null)
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                   .Include(blog => blog.ArticleClass)
+                            select blog;
+                }
+                else
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee).Include(blog => blog.ArticleClass)
+                            where blog.Title.Contains(input.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword)
+                            select blog;
+                }
+            }
+            else 
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                          .Include(blog => blog.ArticleClass)
+                            where blog.EmployeeId == id
+                            select blog;
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                  .Include(blog => blog.ArticleClass)
+                            where (blog.EmployeeId == id) && (blog.Title.Contains(input.txtKeyword) ||
+                                                          blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                                          blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword))
+                            select blog;
+                }
+            }
+            return View(blogs);
         }
 
-        public IActionResult BlogIndex() 
-        {//測試
-            var blogs = from t in _db.Blogs
-                        select t;
+        
+        public IActionResult BlogList(int? id,CKeywordViewModel vm) 
+        {//
+            IEnumerable<CBlogModel> blogs = null;
+            if (id == null)
+            {
+                if (string.IsNullOrEmpty(vm.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs
+                            where blog.Title.Contains(vm.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword)
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                
+            }
+            else {
+                if (string.IsNullOrEmpty(vm.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs
+                            where blog.EmployeeId == id
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs
+                            where (blog.EmployeeId == id)&&(blog.Title.Contains(vm.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword))
+                            select new CBlogModel
+                            {
+                                BlogID = blog.BlogId,
+                                Title = blog.Title,
+                                ArticleClassID = blog.ArticleClassId,
+                                Category = blog.ArticleClass.BlogCategory1,
+                                Views = blog.Views,
+                                CreatedAt = blog.CreatedAt,
+                                Content = blog.Content,
+                                BlogImage = blog.BlogImage,
+                                AuthorID = blog.EmployeeId,
+                                AuthorName = blog.Employee.EmployeeName
+                            };
+                }
+                
+            }
             return View(blogs);
         }
 
@@ -151,7 +272,7 @@ namespace MedSysProject.Controllers
             IEnumerable<Order> datas = null;
 
             //if (string.IsNullOrEmpty(keyword))
-            datas = from t in _db.Orders
+            datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
                         select t;
             //else
             //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
@@ -163,22 +284,57 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report()
+        public IActionResult Report(CKeywordViewModel vm)
         {
-            var data = from s in _db.ReportDetails
-                       select s;
-            return View(data);
+            IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails.Include(p => p.Item)
+                        orderby s.ReportId
+                         select s;
+             
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return View(datas);
+          
 
         }
 
-        public IActionResult qureyReportDetailAll()
+        public IActionResult ReportDelete(int? id)
         {
-            var data = from s in _db.ReportDetails
-                       select s;
-            return View(data);
-
+            ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
+            if (rd != null)
+            {
+                _db.ReportDetails.Remove(rd);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Report");
         }
 
+        public IActionResult ReportEdit(int? id)
+        {
+          
+            ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
+            if (rd == null)
+                return RedirectToAction("Report");
+            return View(rd);
+        }
+
+        [HttpPost]
+        public IActionResult ReportEdit(CReportWrap pIn)
+        {
+            ReportDetail rdDb = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == pIn.ReportDetailId);
+            if (rdDb != null)
+            {
+                rdDb.ReportDetailId = pIn.ReportDetailId;
+                rdDb.ItemId = pIn.ItemId;
+                rdDb.Result = pIn.Result;
+                _db.SaveChanges();
+            }
+            return RedirectToAction("Report");
+        }
 
 
         public IActionResult GetImage(int id)
@@ -354,5 +510,41 @@ namespace MedSysProject.Controllers
             return NotFound();
         }
 
+        public string GetMemberName(int? id)
+        {
+            Member member = _db.Members.Find(id);
+
+            if (member != null)
+            {
+                return member.MemberName;
+            }
+
+            return "";
+        }
+
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 從資料庫中檢索產品
+            Product product = _db.Products.Find(productId);
+
+            if (product != null)
+            {
+                // 切換「上架」狀態
+                product.Discontinued = !discontinued;
+
+                // 將更改保存到資料庫
+                _db.SaveChanges();
+
+                // 返回 JSON 回應，指示新的狀態
+                return Json(new { discontinued = product.Discontinued });
+            }
+
+            // 返回 JSON 回應，指示錯誤
+            return Json(new { error = "找不到產品" });
+        }
+
     }
+
+
 }

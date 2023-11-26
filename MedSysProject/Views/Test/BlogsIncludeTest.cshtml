@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MedSysProject.Models.Blog>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>BlogsIncludeTest</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                圖片
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BlogId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Views)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            
+            
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Employee.EmployeeName)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) 
+{
+            <tr>
+            <td>
+                        @if (item.BlogImage != null && item.BlogImage.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.BlogImage)" alt="Image" width="100" />
+                        }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BlogId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Views)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

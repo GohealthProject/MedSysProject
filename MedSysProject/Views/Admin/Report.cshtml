@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<MedSysProject.Models.ReportDetail>
 
+
+
 @{
     ViewData["Title"] = "Report";
     Layout = "_Layout_Admin2";
@@ -25,13 +27,12 @@
         @* 內容從這裡開始 *@
 
 
-    </div>
-</div>
-<h1>Report</h1>
 
-<p>
+<h1>健檢報告編輯系統</h1>
+
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -39,7 +40,8 @@
                 @Html.DisplayNameFor(model => model.ReportId) 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemId)
+                @Html.DisplayNameFor(model => model.Item.ItemName)
+              
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Result)
@@ -54,22 +56,38 @@
                 @Html.DisplayFor(modelItem => item.ReportId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
+                @Html.DisplayFor(modelItem => item.Item.ItemName)
                 
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Result)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
+               @* <a asp-action="Edit" asp-route-id="@item.ReportDetailId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>*@
+                          @*<a asp-action="xxx" asp-controller="Home">*@
+                            <a href="@Url.Action("ReportEdit","Admin",new { id = item.ReportDetailId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <a class="btn btn-danger" id="btnDel">
+
+                                <i class="fas fa-trash-alt">
+                                   @* @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
+                                new { onclick = "return confirm('確定要刪除嗎?')" })*@
+                                </i>
+                            </a>
+                   @* @Html.ActionLink("修改", "ReportEdit", "Admin", new { id = item.ReportDetailId }, null) |
+                    @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
+                new { onclick = "return confirm('確定要刪除嗎?')" })*@
             </td>
         </tr>
 }
     </tbody>
 </table>
-
+    </div>
+</div>
 
 
 

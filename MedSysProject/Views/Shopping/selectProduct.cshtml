@@ -1,0 +1,37 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "selectProduct";
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+}
+
+<div class="container"style="padding:20px;">
+    <div style="width:50%;float:left ;height:500px" class="border-end" >
+        <img src="~/img/Login2.png" style="width:620px;height:400px ;margin-left:10px;margin-top:50px"/>
+    </div>
+    <div style="width:50%;height:500px;float:right ;padding:20px" class="border-left">
+        <div><span class="fs-2">產品標語</span><br /><span class="fs-1">產品名稱</span><br /><span class="fs-2">產品簡述</span></div>
+        <div class="col-12 border rounded " style="margin-top:20px;padding:10px;display: flex; justify-content: space-between;"><span class="text-danger">價格 : 66,666</span><a asp-action="折價券">折價券</a></div>
+        <div class="col-12"><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /></div>
+        <div class="col-12" style="margin-top:50px;">
+            <form method="post" asp-action="AddToCart">
+            <select class="form-select" style="width:200px;display:inline" name="count">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <input type="hidden" name="id" value="@Model.ProductId" />
+            <input type="checkbox"  value="追蹤"style="margin-left:180px"/>
+            <button>加入購物車</button>
+            <input type="submit" value="立即購買" />
+            </form>
+        </div>
+    </div>
+    
+    <div style="clear:both"></div>
+    <hr  style="margin-top:20px; margin-bottom:20px;"/>
+    <span>以下待開發</span>
+    <div style="height:1000px " class="bg-danger">詳細內容</div>
+</div>
+

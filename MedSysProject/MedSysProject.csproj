@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Html檔案放這邊\Zen\" />
     <Folder Include="Html檔案放這邊\Test\" />
     <Folder Include="Html檔案放這邊\後端介面\js\" />
     <Folder Include="Html檔案放這邊\後端介面\styles\" />

@@ -198,6 +198,7 @@ section {
         display:none;/*大畫面類別選單消失*/
     }
 }
+
 /*RWD行動裝置*/
 @media(max-width:1279px){
     body.mobile-nav-active{
@@ -296,6 +297,7 @@ section {
 
 
 }
+
 /*Footer*/
 .footer {
     overflow: hidden;
@@ -389,3 +391,281 @@ section {
         }
     }
 }
+
+/*----------------------------------------*/
+/*主畫面播放墻下面recent post樣式*/
+/*----------------------------------------*/
+.post-entry-1 {
+    margin-bottom: 30px;
+
+    img {
+        margin-bottom: 30px;
+    }
+
+    .post-meta {
+        /*貼文資訊*/
+        font-size: 11px;
+        letter-spacing: 0.07rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-family: var(--font-secondary);
+        color: rgba(var(--color-black-rgb), 0.4);
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.2;
+
+        a {
+            color: var(--color-black)
+        }
+    }
+}
+/*大張的那張*/
+.post-entry-1 .lg {
+    /*貼文資訊*/
+    .post-meta {
+        font-size: 11px;
+        letter-spacing: 0.07rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-family: var(--font-secondary);
+        color: rgba(var(--color-black-rgb), 0.4);
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 40px;
+        line-height: 1;
+    }
+}
+/*.post-entry-2 那些區塊用到??*/
+.post-entry-2{
+    margin-bottom:30px;
+    .post-meta{
+        font-size:11px;
+        letter-spacing:0.07rem;
+        text-transform:uppercase;
+        font-weight:600;
+        font-family:var(--font-secondary);
+        color:rgba(var(--color-black-rgb),0.4);
+        margin-bottom:10px;
+    }
+    author{
+        color:rgba(var(--color-black-rgb),0.7);
+        font-weight:500;
+        margin-bottom:20px;
+        display:block;
+    }
+    .thumbnail{
+        flex:0 0 65%;
+    }
+}
+@media(max-width:960px){
+    .post-entry-2 .thumbnail{
+        flex:0 0 100%;
+        margin-bottom:20px;
+    }
+}
+
+
+
+/*邊界線media query*/
+@media(max-width: 768px){
+    .custom-border{
+        border:none !important;
+    }
+}
+
+.author {
+    .photo {
+        margin-right: 10px;
+        img{
+            width:40px;
+            border-radius:50%;
+            margin-bottom:0;
+        }
+    }
+    .name{
+        h3{
+            margin:0;
+            padding:0;
+            font-size:15px;
+            font-family:var(--font-secondary);
+        }
+    }
+}
+
+/*最近流行文章窗格(可能ajax??)*/
+.trending{
+    border:1px solid rgba(var(--color-black-rgb),0.1);
+    >h3{
+        color:(--color-black);
+        padding:20px;
+        border-bottom: 1px solid rgba(var(--color-black-rgb),0.1);
+    }
+    .trending-post{
+        padding:0;
+        margin:0;
+        li{
+            padding:0;
+            margin:0;
+            list-style:none;
+            display:block;
+            &:last-child{
+                a{
+                    border-bottom:none;
+                }
+            }
+            a{
+                display:block;
+                padding:20px;
+                border-bottom:1px solid rgba(var(--color-black-rgb),0.1);
+                position:relative;
+                overflow:hidden;
+                .number{
+                    position:absolute;
+                    z-index:-1;
+                    font-size:5rem;
+                    left:-10px;
+                    top:-20px;
+                    font-weight:700;
+                    color:rgba(var(--color-black-rgb),0.05);
+                }
+                h3{
+                    font-size:18px;
+                    color:rgba(var(--color-black-rgb),0.9);
+                }
+                .author{
+                    color:rgba(var(--color-black-rgb),0.7);
+                    font-weight:500;
+                }
+                &:hover{
+                    h3{
+                        color:rgba(var(--color-black-rgb),1);
+                    }
+                }
+            }
+        }
+    }
+}
+/*----------------------------------------*/
+/*輪播牆*/
+/*----------------------------------------*/
+.img-bg {
+    height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    background-position: center center;
+
+    &:before {
+        /*漸層效果*/
+        position: absolute;
+        content: "";
+        background: rgb(0,0,0);
+        background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+        opacity: 0.5;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        top: 0;
+    }
+
+    .img-bg-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        position: relative;
+        padding-left: 100px;
+        padding-right: 100px;
+        margin-bottom: 50px;
+        p,h2{
+            color:var(--color-white);   
+        }
+    }
+}
+@media(max-width:768px){
+    .img-bg{
+        height:400px;
+    }
+    .img-bg .img-bg-inner {
+        padding-left: 30px;
+        padding-right: 30px;
+        margin-bottom: 50px;
+    }
+}
+@media(max-width:500px){
+    .img-bg{
+        .img-bg-inner{
+            p{
+                display:none;
+            }
+        }
+    }
+}
+
+.custom-swiper-button-next,
+.custom-swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9;
+    span{
+        font-size:20px;
+        color:rgba(var(--color-white-rgb),0.7);
+        transition:0.3s all ease;
+    }
+    &:hover,&:focus{
+        color:rgba(var(--color-white-rgb),1);
+    }
+}
+
+@media(max-width:768px){
+    .custom-swiper-button-next,
+    .custom-swiper-button-prev{
+        display:none;
+    }
+}
+
+.custom-swiper-button-next{
+    right:40px;
+}
+.custom-swiper-button-prev{
+    left:40px;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+    background-color: rgba(var(--color-white-rgb), 0.8);
+}
+
+.swiper-pagination .swiper-pagination-bullet-active {
+    background-color: rgba(var(--color-white-rgb), 1);
+}
+
+/*查看更多連結按紐*/
+.more{
+    font-family:var(--font-secondary);
+    text-transform:uppercase;
+    font-size:12px;
+    font-weight:500;
+    position:relative;
+    display:inline-block;
+    padding-bottom:5px;
+    &:before{
+        /*元素底線*/
+        content:"";
+        position:absolute;
+        height:2px;
+        left:0;
+        right:0;
+        bottom:0;
+        background:var(--color-black);
+    }
+}
+
+

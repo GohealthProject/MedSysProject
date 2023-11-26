@@ -44,7 +44,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">GO健康購物中心</a></h1>
+        <h1><a href="@Url.Content("~/home/Index")">GO健康購物中心</a></h1>
 
       </div>
 
@@ -56,8 +56,8 @@
         <ul>
             <li>
                         <div class="input-group mb-3" style="padding-top:16px">
-                            <input type="text" class="form-control" placeholder="請輸入關鍵字" aria-label="請輸入關鍵字" aria-describedby="button-addon2">
-                            <input type="submit" class="btn btn-outline-secondary btn-light" value="搜尋" id="button-addon2" />
+                            <input type="text" class="form-control" placeholder="請輸入關鍵字" aria-label="請輸入關鍵字" aria-describedby="button-addon2" id="Key">
+                            <input type="button" class="btn btn-outline-secondary btn-light" value="搜尋" id="KeySearch"   />
                         </div>
             </li>
                     @{
@@ -73,18 +73,31 @@
                             <li>@Html.ActionLink("註冊","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
                         }
                     }
-                    <li>@Html.ActionLink("會員中心","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    <li>@Html.ActionLink("會員中心","MemberCenter","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
                     <li>@Html.ActionLink("查訂單","Login","Accout",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
+                    <li>@Html.ActionLink("查看購物車","CartList","Shopping",null,new{Class="nav-link scrollto", style="font-size:20px"})</li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
     </div>
   </header><!-- End #header -->
-    <main id="main" style="background-color:#F2F9F8" >
-        <div style="background-color:#2D6760">
+    <main id="main" style="background-color:#F2F9F8"  >
+        <div  class="container">
         <link rel="stylesheet" href="~/css/Shopping.css" />
-        <div class="ShoppingNav">
-            </div>
+            <div class=" row align-items-center">
+                <div class="col text-center"><a style="margin:auto" asp-action="Search" asp-route-id="1">胃腸道</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="2">調節血脂</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="3">護肝</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="4">骨質保健</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="5">免疫調節</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="6">調整過敏</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="7">不形成體脂</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="8">調節血糖</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="9">調節血壓</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="10">抗疲勞</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="11">延緩衰老</a></div>
+                <div class="col text-center"><a asp-action="Search" asp-route-id="12">促進鐵利用</a></div>
+        </div>
         </div>
         
     @RenderBody()
@@ -116,6 +129,15 @@
     <!-- Template Main JS File -->
     @*<script src="/js/foremain.js"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const KeySearch = document.querySelector('#KeySearch');
+
+        KeySearch.addEventListener('click',()=>{
+            var Key = document.querySelector('#Key').value;
+            var Url = `https://localhost:7203/Shopping/KeySearch/${Key}`
+            window.location.href=Url;
+        })
+    </script>
 </body>
 
 </html>

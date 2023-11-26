@@ -2,6 +2,7 @@
     ViewData["Title"] = "Reserve";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <style>
    
     .A {
@@ -104,18 +105,30 @@
                     <table border="1">
                         <thead class="col-6">
                             <tr>
-                            <th>
+                                <th class="col-1">
                                 編號
                             </th>
-                                <th>
+                                <th class="col-5">
                                     項目
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="d-none show">
                             <tr>
-                                <td>A</td>
-                                <td>B</td>
+                                <td>1</td>
+                                <td>身高</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>體重</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>血壓-收縮壓</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>理學檢查</td>
                             </tr>
                         </tbody>
                      
@@ -136,7 +149,7 @@
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                     <div class="accordion-body">
-                                <div class="list-group">
+                                <div class="list-group click">
                                     <label class="list-group-item">
                                         <input class="form-check-input me-2" type="checkbox" value="">
                                         樂活銀髮方案
@@ -333,11 +346,12 @@
   
    
 
-    <script src="bootstrap5/bootstrap.bundle.min.js"></script>
+ 
 </body>
 </html>
 
 <script>
-
+    $(".click").click(function () {
+        $(".show").removeClass("d-none")})
 </script>
 

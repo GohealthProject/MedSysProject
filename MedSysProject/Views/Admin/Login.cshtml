@@ -99,10 +99,19 @@
     <script src="js-admin/sb-admin-2.min.js"></script>
 
     <script>
-        $("#ttestt").click(function () {
-            $("#exampleInputEmail").val("James555@gmail.com");
-            $("#exampleInputPassword").val("James555");
+        const adminDemo = document.getElementById("ttestt");
+
+        adminDemo = document.addEventListener("click", () => {
+            document.getElementById("exampleInputEmail").value = "James555@gmail.com";
+            document.getElementById("exampleInputPassword").value = "James555";
         });
+
+
+
+        // $("#ttestt").click(function () {
+        //     $("#exampleInputEmail").val("James555@gmail.com");
+        //     $("#exampleInputPassword").val("James555");
+        // });
     </script>
 </body>
 
