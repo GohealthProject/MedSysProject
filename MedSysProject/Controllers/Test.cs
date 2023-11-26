@@ -55,13 +55,22 @@ namespace MedSysProject.Controllers
             return View();
         }
         /// <summary>
-        /// 偷雞摸狗
+        /// 好像不能偷雞摸狗，參數名稱要與asp-for一致
         /// </summary>
         /// <param name="newBlog"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult TestTinyMCE(Blog newBlog) 
+        public IActionResult TestTinyMCE(string Title,int ArticleClassId,string Content, IFormFile BlogImage,int EmployeeId) 
         {
+            Blog newBlog = new Blog();
+            newBlog.Title = Title;
+            newBlog.ArticleClassId = ArticleClassId;
+            newBlog.Views = 0;
+            newBlog.Content = Content;
+            //已經二進位了嗎??
+            //IFromFile怎麼轉二進位寫入資料庫??
+            //newBlog.BlogImage = BlogImage;
+            newBlog.EmployeeId= EmployeeId;
             return RedirectToAction("TestList");
         }
 
