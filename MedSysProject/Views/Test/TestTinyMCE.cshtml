@@ -26,9 +26,10 @@
         tinymce.init({
             selector: '#mytextarea',
             plugins: 'advlist link image lists',
-            toolbar:'image',
+            toolbar:'undo redo| image',
+            image_caption:true,
             images_upload_handler: function (blobInfo,success,failure) 
-            { 
+            { //todo需要理解一下在幹嘛
                 return new Promise(function (resolve, reject) {
                     handleImageUpload(blobInfo.blob(), resolve, reject);
                 });
@@ -48,7 +49,7 @@
                 <div class="previewImage" style="margin-bottom:20px;">
                     <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:500px; max-height:250px;">
                 </div>
-                <form asp-action="TestTinyMCE">
+                <form asp-action="TestTinyMCE" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @* <div class="form-group">
                     <label asp-for="BlogId" class="control-label"></label>
@@ -113,6 +114,7 @@
                 reader.readAsDataURL(input.files[0]);
             }
         };
+   
     </script>
 
 </body>

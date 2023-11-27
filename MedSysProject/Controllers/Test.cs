@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 
 namespace MedSysProject.Controllers
 {
@@ -62,16 +63,39 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult TestTinyMCE(string Title,int ArticleClassId,string Content, IFormFile BlogImage,int EmployeeId) 
         {
-            Blog newBlog = new Blog();
-            newBlog.Title = Title;
-            newBlog.ArticleClassId = ArticleClassId;
-            newBlog.Views = 0;
-            newBlog.Content = Content;
-            //已經二進位了嗎??
-            //IFromFile怎麼轉二進位寫入資料庫??
-            //newBlog.BlogImage = BlogImage;
-            newBlog.EmployeeId= EmployeeId;
+            TempData["SuccessMessage"] = "";
+            try
+            {
+                Blog newBlog = new Blog();
+                newBlog.Title = Title;
+                newBlog.ArticleClassId = ArticleClassId;
+                newBlog.Views = 0;//開局瀏覽次數為0
+                newBlog.Content = Content;
+                newBlog.CreatedAt = DateTime.Now;
+                //已經二進位了嗎??
+                //IFromFile怎麼轉二進位寫入資料庫??
+                //newBlog.BlogImage = BlogImage;
+                if (BlogImage != null && BlogImage.Length > 0)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        BlogImage.CopyTo(ms);
+                        newBlog.BlogImage = ms.ToArray();
+                    }
+                }
+                else { newBlog.BlogImage = null; }
+                newBlog.EmployeeId = EmployeeId;//先寫死，如果新增成功的話作者應該都是1號James
+                _db.Blogs.Add(newBlog);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "部落格已成功新增！";
+            }
+            catch (Exception ex) 
+            {
+                TempData["SuccessMessage"] = ex.Message;
+            }
+            
             return RedirectToAction("TestList");
+
         }
 
     }
