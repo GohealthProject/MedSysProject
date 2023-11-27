@@ -12,12 +12,27 @@
     <!--引用文字編輯器-->
     <script src="https://cdn.tiny.cloud/1/b28bwm26rz9ry64nn5n351uce6944auxt8eorcif07y5uxa9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
+        function handleImageUpload(blob, success, failure) 
+        { 
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var base64data = e.target.result;
+                success(base64data);
+            };
+            reader.onerror = failure;
+            console.log(blob);
+            reader.readAsDataURL(blob);
+        }
         tinymce.init({
             selector: '#mytextarea',
             plugins: 'advlist link image lists',
             toolbar:'image',
-            images_upload_url:'/Test/TestTinyMCE',
-            images_file_types: 'jpg,svg,webp'
+            images_upload_handler: function (blobInfo,success,failure) 
+            { 
+                return new Promise(function (resolve, reject) {
+                    handleImageUpload(blobInfo.blob(), resolve, reject);
+                });
+            }
 
         });
     </script>
