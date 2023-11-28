@@ -21,6 +21,10 @@ namespace MedSysProject.Controllers
             {
                 CProductWarp item = new CProductWarp();
                 item.Product = product;
+                if(item.ProductName.Length > 9)
+                {
+                    item.ProductName = item.ProductName.Substring(0, 9);
+                }
                 list.Add(item);
             }
             return View(list);
