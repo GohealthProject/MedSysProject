@@ -273,6 +273,20 @@ namespace MedSysProject.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 根據 productId 更新數據庫中的 discontinued 屬性
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null)
+            {
+                product.Discontinued = discontinued;
+                _db.SaveChanges();
+            }
+
+            // 返回 JSON 物件，包含更新後的 discontinued 值
+            return Json(new { discontinued = product?.Discontinued });
+        }
 
 
         public IActionResult Order()
@@ -604,27 +618,7 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-        [HttpPost]
-        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
-        {
-            // 從資料庫中檢索產品
-            Product product = _db.Products.Find(productId);
-
-            if (product != null)
-            {
-                // 切換「上架」狀態
-                product.Discontinued = !discontinued;
-
-                // 將更改保存到資料庫
-                _db.SaveChanges();
-
-                // 返回 JSON 回應，指示新的狀態
-                return Json(new { discontinued = product.Discontinued });
-            }
-
-            // 返回 JSON 回應，指示錯誤
-            return Json(new { error = "找不到產品" });
-        }
+      
 
     }
 

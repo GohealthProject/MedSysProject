@@ -96,17 +96,11 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.WrappedIngredient)
                             </th>
-                            @*             <th>
-                            @Html.DisplayNameFor(model => model.WrappedDescription)
-                            </th> *@
                             <th>
                                 @Html.DisplayNameFor(model => model.FimagePath)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedDiscontinued)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.WrappedDiscontinued)
@@ -136,9 +130,6 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.WrappedIngredient)
                                     </td>
-                                    @* <td>
-                            @Html.DisplayFor(modelItem => item.WrappedDescription)
-                            </td>*@
                                     <td>
                                         <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
 
@@ -146,12 +137,6 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
                                     </td>
-                                    <td>
-                                        <button class="btn btn-toggle-discontinued @((item.WrappedDiscontinued == null) ? "btn-outline-secondary" : (item.WrappedDiscontinued.Value ? "btn-outline-success" : "btn-outline-danger"))" data-product-id="@item.WrappedProductId" data-discontinued="@item.WrappedDiscontinued">
-                                            @(item.WrappedDiscontinued == null ? "未確認" : (item.WrappedDiscontinued.Value ? "上架中" : "已下架"))
-                                        </button>
-                                    </td>
-
                                     <td>
                                         @if (item.WrappedDiscontinued == true)
                                         {
@@ -175,51 +160,57 @@
                 </table>
             </div>
 
-            <script>
-                $(document).ready(function () {
-                    $('.btn-toggle-discontinued').click(function () {
-                        const productId = parseInt($(this).data('product-id'));
-                        const discontinued = parseBool($(this).data('discontinued'));
+          
+              <script>
+    $(document).ready(function () {
+        $('.btn-toggle-discontinued').click(function () {
+            const productId = parseInt($(this).data('product-id'));
+            const discontinued = parseBool($(this).data('discontinued'));
 
-                        // 發送 AJAX 請求以切換「上架」狀態
-                        $.ajax({
-                            url: '/Admin/ToggleDiscontinued',
-                            type: 'POST',
-                            data: { productId: productId, discontinued: discontinued },
-                            success: function (result) {
-                                // 根據伺服器的回應更新按鈕的文字和樣式
-                                const button = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
+            let confirmationMessage = "";
+            if (discontinued === true) {
+                confirmationMessage = "確定將此商品上架?";
+            } else {
+                confirmationMessage = "確定將此商品下架?";
+            }
 
-                                if (result.discontinued == null) {
-                                    button.removeClass('btn-outline-success btn-outline-danger').addClass('btn-outline-secondary');
-                                    button.text('未確認');
-                                } else if (result.discontinued) {
-                                    button.removeClass('btn-outline-danger').addClass('btn-outline-success');
-                                    button.text('已下架');
-                                    // 更新data-discontinued屬性
-                                    button.data('discontinued', false);
-                                } else {
-                                    button.removeClass('btn-outline-success').addClass('btn-outline-danger');
-                                    button.text('上架中');
-                                    // 更新data-discontinued屬性
-                                    button.data('discontinued', true);
-                                }
-                            },
-                            error: function () {
-                                alert('處理請求時發生錯誤。');
-                            }
-                        });
-                    });
+            if (confirm(confirmationMessage)) {
+                // 發送 AJAX 請求以切換「上架」狀態
+                $.ajax({
+                    url: '/Admin/ToggleDiscontinued',
+                    type: 'POST',
+                    data: { productId: productId, discontinued: discontinued },
+                    success: function (result) {
+                        // 根據伺服器的回應更新 label 的文字和樣式
+                        const label = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
+                        label.removeClass('btn-outline-success btn-outline-danger');
 
-                    // 自定義函式以將字串轉換為布林值
-                    function parseBool(value) {
-                        return value === 'True' || value === 'true';
+                        if (result.discontinued === true) {
+                            label.addClass('btn-outline-success');
+                            label.text('上架中');
+                        } else if (result.discontinued === false) {
+                            label.addClass('btn-outline-danger');
+                            label.text('已下架');
+                        } else {
+                            label.text('未確認');
+                        }
+
+                        // 更新data-discontinued屬性
+                        label.data('discontinued', result.discontinued);
                     }
                 });
+            }
+        });
+
+        // 自定義函式以將字串轉換為布林值
+        function parseBool(value) {
+            return value === 'True' || value === 'true';
+        }
+    });
+</script>
 
 
-
-            </script>
+         
 
 
         
