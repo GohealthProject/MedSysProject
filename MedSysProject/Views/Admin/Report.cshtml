@@ -6,7 +6,7 @@
     ViewData["Title"] = "Report";
     Layout = "_Layout_Admin2";
 }
-
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 @* 這邊是確保左側邊欄的目前區域標亮 *@
 @* ---------------------------------------------- *@
 <script>
@@ -67,16 +67,16 @@
                 <a asp-action="Details" asp-route-id="@item.ReportDetailId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ReportDetailId">Delete</a>*@
                           @*<a asp-action="xxx" asp-controller="Home">*@
-                            <a href="@Url.Action("ReportEdit","Admin",new { id = item.ReportDetailId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                            <a href="@Url.Action("ReportEdit",new { id = item.ReportDetailId })" class="btn btn-primary" data-toggle="modal" data-target="#edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            
-                            <a class="btn btn-danger" id="btnDel">
 
-                                <i class="fas fa-trash-alt">
+                            <a href="@Url.Action("ReportDelete",new { id = item.ReportDetailId })" class="btn btn-danger" data-toggle="modal" data-target="#delete">
+
+                                <i class="fas fa-trash-alt"></i>
                                    @* @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
                                 new { onclick = "return confirm('確定要刪除嗎?')" })*@
-                                </i>
+                                
                             </a>
                    @* @Html.ActionLink("修改", "ReportEdit", "Admin", new { id = item.ReportDetailId }, null) |
                     @Html.ActionLink("刪除", "ReportDelete", "Admin", new { id = item.ReportDetailId },
@@ -85,7 +85,48 @@
         </tr>
 }
     </tbody>
+   
+
 </table>
+        @*互動式選單修*@
+        <div class="modal fade" tabindex="-1" id="edit">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">修改</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消並返回</button>
+                        <button type="button" class="btn btn-primary">儲存變更</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*互動式選單刪*@
+        <div class="modal fade" tabindex="-1" id="delete">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">刪除</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-target="#delete">取消並返回</button>
+                        <button type="button" class="btn btn-danger">確認刪除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
     </div>
 </div>
 

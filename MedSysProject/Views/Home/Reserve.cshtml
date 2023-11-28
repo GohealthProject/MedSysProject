@@ -2,6 +2,7 @@
     ViewData["Title"] = "Reserve";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+@model IEnumerable<MedSysProject.Models.PlanRef>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <style>
    
@@ -150,8 +151,20 @@
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
                     <div class="accordion-body">
                                 <div class="list-group click">
-                                    <label class="list-group-item">
-                                        <input class="form-check-input me-2" type="checkbox" value="">
+                                    
+                                    @{
+
+                                        foreach(var s in Model)
+                                        {
+                                            <label class="list-group-item">
+                                                <input class="form-check-input me-2" type="checkbox" value="">
+                                                @Html.DisplayFor(modelitem => s.Plan.PlanName)
+                                            </label>
+                                         
+                                        }
+                                    }
+                                  @*  <label class="list-group-item">
+                                      <input class="form-check-input me-2" type="checkbox" value="">
                                         樂活銀髮方案
                                     </label>
                                     <label class="list-group-item">
@@ -169,7 +182,7 @@
                                     <label class="list-group-item">
                                         <input class="form-check-input me-2" type="checkbox" value="">
                                         自選套餐
-                                    </label>
+                                    </label>*@
                                 </div>
                     </div>
                 </div>
@@ -182,8 +195,19 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
                     <div class="accordion-body">
-                                <div class="list-group list-group-horizontal">
-                                    <label class="list-group-item col-6 ">
+                                <div class="list-group ">
+                                    @{
+
+                                        foreach (var s in Model)
+                                        {
+                                            <label class="list-group-item">
+                                                <input class="form-check-input me-2" type="checkbox" value="">
+                                                @Html.DisplayFor(modelitem => s.Project.ProjectName)
+                                            </label>
+
+                                        }
+                                    }
+                                  @*  <label class="list-group-item col-6 ">
                                         <input class="form-check-input me-2" type="checkbox" value="">
                                         一般生理檢查
                                     </label>
@@ -200,7 +224,7 @@
                                     <label class="list-group-item col-6 ">
                                         <input class="form-check-input me-2" type="checkbox" value="">
                                         血液常規檢查
-                                    </label>
+                                    </label>*@
                                 </div>
                     </div>
                 </div>
@@ -214,8 +238,19 @@
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
                     <div class="accordion-body">
                                
-                                    <div class="list-group list-group-horizontal">
-                                        <label class="list-group-item col-6 ">
+                                    <div class="list-group">
+                                    @{
+
+                                        foreach (var s in Model)
+                                        {
+                                            <label class="list-group-item">
+                                                <input class="form-check-input me-2" type="checkbox" value="">
+                                                @Html.DisplayFor(modelitem => s.Project.Items)
+                                            </label>
+
+                                        }
+                                    }
+                                      @*  <label class="list-group-item col-6 ">
                                             <input class="form-check-input me-2" type="checkbox" value="">
                                         身高
                                         </label>
@@ -232,14 +267,14 @@
                                         <label class="list-group-item col-6 ">
                                             <input class="form-check-input me-2" type="checkbox" value="">
                                         理學檢查
-                                        </label>
+                                        </label>*@
                                    
                                 </div>
                             </div>
                 </div>
              
             </div>
-                    <div class="row">
+                    @*<div class="row">
                         <div class="col-3"></div>
                         <div class="col-3">
                             <form class="form">
@@ -253,9 +288,9 @@
                                     <span class="validity"></span>
                                 </label>
 
-                                @*<p>
+                                <p>
                                     <button>Submit</button>
-                                </p>*@
+                                </p>
                                 <select class="form-select col-12 mb-2" aria-label="Default select example">
                                     <option selected>付款方式</option>
                                     <option value="1">付現</option>
@@ -275,17 +310,68 @@
                             <label for="floatingPassword">密碼</label>
                                 </div>
                             </form>
-                      
-                        </div>
+
+                                </div>
                       </div>
-                    </div>
+                    </div>*@
         </div>
-
-
+      
     </div>
     </div>
-    
- 
+
+        *@*預約詳細*@
+        <div class="modal" tabindex="-1" id="detail">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">資料確認</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form">
+                            <label class="mb-2 mt-2">
+                                預約日期:
+                                <input type="date"
+                                       name="party"
+                                       min=new date()
+                                       max="2023/11/21"
+                                       required />
+                                <span class="validity"></span>
+                            </label>
+
+                            <p>
+                                <button>Submit</button>
+                            </p>
+                            <select class="form-select col-12 mb-2" aria-label="Default select example">
+                                <option selected>付款方式</option>
+                                <option value="1">付現</option>
+                                <option value="2">刷卡</option>
+
+                            </select>
+
+
+                            <div class="form-floating mb-2 col-12">
+                                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                <label for="floatingInput">帳號</label>
+                            </div>
+
+
+                            <div class="form-floating col-12 mb-2">
+                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                <label for="floatingPassword">密碼</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" href="#reserve">確認</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
+@* 預約確認*@
     <div class="modal fade" id="reserve" aria-hidden="true" aria-labelledby="reservelbl" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -337,10 +423,10 @@
     </div>
     <div class="row">
         <div class="col-5"></div>
-        <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#reserve" role="button">馬上預約</a>
+        <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#detail" role="button">馬上預約</a>
         <div class="col-5"></div>
     </div>
-
+       
 
 
   
