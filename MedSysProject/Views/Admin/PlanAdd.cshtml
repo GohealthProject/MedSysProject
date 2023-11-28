@@ -53,7 +53,7 @@
                 @Html.DisplayFor(modelItem => item.PlanDescription)
             </td>
             <td>
-                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                            <a href="@Url.Action(" Details", new { id=item.PlanId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a class="btn btn-danger" id="btnDel">
