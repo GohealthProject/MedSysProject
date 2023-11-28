@@ -76,6 +76,10 @@ namespace MedSysProject.Models
             set { Product.Discontinued = value; }
         }
 
+
+        // 確保 SelectedCategories 不為 null
+        public List<int> SelectedCategories { get; set; } = new List<int>();
+
         //private TProp GetPropertyValue<TProp>(string propertyName)
         //{
         //    var propInfo = typeof(Products).GetProperty(propertyName);

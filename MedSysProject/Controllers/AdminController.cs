@@ -435,22 +435,39 @@ namespace MedSysProject.Controllers
         //    return Json(new { productId = product.ProductId });
         //}
 
-
-
         public IActionResult Edit(int? id)
         {
+            var categories = _db.ProductsCategories.ToList();
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
 
             if (x == null)
                 return RedirectToAction("Product");
 
-            return View(x);
+            // 將 Product 對象包裝到 CProductsWrap 中
+            CProductsWrap productWrap = new CProductsWrap
+            {
+                WrappedProductId = x.ProductId,
+                WrappedProductName = x.ProductName,
+                WrappedUnitPrice = x.UnitPrice,
+                WrappedLicense = x.License,
+                WrappedIngredient = x.Ingredient,
+                WrappedDescription = x.Description,
+                WrappedUnitsInStock = x.UnitsInStock,
+                WrappedDiscontinued = x.Discontinued,
+                FimagePath = x.FimagePath
+            };
+            
+
+            ViewBag.Categories = categories;
+
+
+            return View(productWrap);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile)
-        {
 
+        [HttpPost]
+        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile, List<int> SelectedCategories)
+        {
             Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
             if (pDb != null)
             {
@@ -481,40 +498,78 @@ namespace MedSysProject.Controllers
                 pDb.Discontinued = productId.WrappedDiscontinued;
 
                 _db.Products.Update(pDb);
+
+                // 處理 ProductsClassification 資料表
+                if (SelectedCategories != null && SelectedCategories.Any())
+                {
+                    // 移除所有現有的 CategoriesId 記錄
+                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+
+                    // 新增選擇的 CategoriesId 記錄
+                    foreach (var categoryId in SelectedCategories)
+                    {
+                        var classification = new ProductsClassification
+                        {
+                            ProductId = productId.WrappedProductId,
+                            CategoriesId = categoryId
+                        };
+
+                        _db.ProductsClassifications.Add(classification);
+                    }
+                }
+
                 try
                 {
                     _db.SaveChanges();
+                    return RedirectToAction("Product");
                 }
                 catch (Exception ex)
                 {
                     // 處理異常，或輸出到日誌
                     Console.WriteLine(ex.Message);
                 }
+
+                CProductsWrap productWrap = new CProductsWrap
+                {
+                    WrappedProductId = productId.WrappedProductId,
+                    WrappedDescription = productId.WrappedDescription,
+                    WrappedDiscontinued = productId.WrappedDiscontinued,
+                    WrappedIngredient = productId.WrappedIngredient,
+                    WrappedLicense = productId.WrappedLicense,
+                    WrappedProductName = productId.WrappedProductName,
+                    WrappedUnitPrice = productId.WrappedUnitPrice,
+                    WrappedUnitsInStock = productId.WrappedUnitsInStock,
+                    FimagePath = productId.FimagePath,
+                    SelectedCategories = productId.SelectedCategories,
+                };
+
+                return View(productWrap); // 或者 return RedirectToAction("Edit", productWrap);
             }
 
-            return RedirectToAction("Product");
+            // 在這裡加上一個 return 陳述式
+            return View(productId);
         }
+
+
+
 
         public IActionResult Delete(int? id)
         {
-
-
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
                 // 刪除相關聯的 ProductsClassification 記錄
-                var relatedClassification = _db.ProductsClassifications.FirstOrDefault(pc => pc.ProductId == id);
-                if (relatedClassification != null)
-                {
-                    _db.ProductsClassifications.Remove(relatedClassification);
-                }
+                var relatedClassifications = _db.ProductsClassifications
+                    .Where(pc => pc.ProductId == id)
+                    .ToList();
 
+                _db.ProductsClassifications.RemoveRange(relatedClassifications);
                 _db.Products.Remove(x);
                 _db.SaveChanges();
             }
             return RedirectToAction("Product");
-
         }
+
 
         public IActionResult GetImageByte(int? id)
         {
