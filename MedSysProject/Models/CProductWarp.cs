@@ -30,5 +30,8 @@ namespace MedSysProject.Models
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
         public virtual ICollection<ProductsClassification> ProductsClassifications { get; set; } = new List<ProductsClassification>();
+
+        // 確保 SelectedCategories 不為 null
+        public List<int> SelectedCategories { get; set; } = new List<int>();
     }
 }

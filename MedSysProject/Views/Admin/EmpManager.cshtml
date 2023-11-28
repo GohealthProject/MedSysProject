@@ -138,14 +138,15 @@
                     <th>執行動作</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id ="go">
                 @{
                     int count = 0;
                     foreach (var item in Model)
                     {
                         count++;
-                            <tr>
+                            <tr >
                                 <td>
+                                    <input type="hidden" value=@item.EmployeeId>
                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                 </td>
                                 <td>
@@ -196,18 +197,17 @@
                                     @Html.DisplayFor(modelItem => item.EmployeePassWord)
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("Edit", new { id = item.EmployeeId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                    <a href="@Url.Action("Edit", new { id = item.EmployeeId })" id="EmpEdit" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                         <i class="fas fa-user-edit"></i>
                                     </a>
                                     @*
                                     <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
                                         <i class="fas fa-info-circle"></i>
                                     </a>*@
-                                <a class="btn btn-danger" id="btnDel">
+                                <a class="btn btn-danger" onclick="get(this)">
                                     @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
                                         <i class="fas fa-user-times"></i>
                                     </a>
-
                                     @*
                                 @Html.ActionLink("", "Edit", new { id = item.EmployeeId }, new {@class="btn btn-primary"}) 
                                 @Html.ActionLink("", "Details", new { id = item.EmployeeId }, new {@class="btn btn-info"}) 
@@ -301,18 +301,98 @@
 </div>
 
 <script>
-    const delbtn = document.getElementById("btnDel");
-
-    delbtn.addEventListener("click", () => {
-        Swal.fire({
-            title: "確定要刪除嗎？",
-            text: "此步驟將無法復原！",
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: "取消",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "確定刪除"
+    const delbtn = document.querySelector("#btnDDD")
+    const id = document.querySelector("Empid");
+   function get(element){
+        let par = element.parentNode.parentNode;
+        var hidd = par.querySelector('input[type="hidden"]');
+        console.log(hidd.value);
+        del(hidd.value);
+        
+   }
+   async function research(){
+        const response = await fetch(`https://localhost:7078/api/Employees`)
+        const datas = await response.json();
+        console.log(datas.$values)
+        let count =1;
+        const value = datas.$values.map(emp=>{
+            const id = emp.employeeId;
+            const name = emp.employeeName;
+            const date = emp.employeeBirthDate;
+            const phone = emp.employeePhoneNum;
+            const email = emp.employeeEmail;
+            const pwd = emp.employeePassWord;
+            const cid = emp.employeeClassId;
+            
+            let s = 
+            `
+             <tr>
+                <td>
+                     <input type="hidden" value=${id}>
+                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                </td>
+                <td>
+                      ${count}
+                 </td>
+                 <td>
+                     <img src="/Admin/GetImageByte/${id}" width="100">
+                  </td>
+                  <td>
+                       ${name}
+                  </td>
+                  <td>
+                       ${cid}
+                  </td>
+                  <td>
+                       ${date}
+                   </td>
+                   <td>
+                        ${phone}
+                   </td>
+                   <td>
+                        ${email}
+                    </td>
+                    <td>
+                        ${pwd}
+                    </td>
+                    <td>
+                         <a href="@Url.Action("Edit", new { id = 5 })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                         <i class="fas fa-user-edit"></i>
+                         </a>
+                         <a class="btn btn-danger" onclick="get(this)">
+                         <i class="fas fa-user-times"></i>
+                         </a>
+                      </td>
+                </tr>
+            `
+            return s
         })
-    });
+        console.log(value.join(""))
+        document.querySelector("#go").innerHTML = value.join("");
+   }
+   async function del(id){
+        const response = await fetch(`https://localhost:7078/api/Employees/${id}`,{
+            method:'DELETE'
+        });
+        let data = await response.status
+        if (data = 200){
+            alert('成功')
+        }else{
+            alert('刪除失敗')
+        }
+        alert(data);
+        research()
+   }
+    //delbtn.addEventListener("click", () => {
+    //    Swal.fire({
+    //        title: "確定要刪除嗎？",
+    //        text: "此步驟將無法復原！",
+    //        icon: "warning",
+    //        showCancelButton: true,
+    //        cancelButtonText: "取消",
+    //        confirmButtonColor: "#3085d6",
+    //        cancelButtonColor: "#d33",
+    //        confirmButtonText: "確定刪除"
+    //    })
+    //});
 </script>

@@ -1,4 +1,4 @@
-﻿@model MedSysProject.Models.Product
+﻿@model MedSysProject.Models.CProductsWrap
 
 @{
     ViewData["Title"] = "Edit";
@@ -78,31 +78,31 @@
                 <h4>請輸入欲修改的產品資訊</h4>
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" id="ProductId" name="WrappedProductId" asp-for="ProductId" value="@Model.ProductId" />
+            <input type="hidden" id="ProductId" name="WrappedProductId" asp-for="WrappedProductId" value="@Model.WrappedProductId" />
             <div class="form-group">
-                <label asp-for="ProductName" class="control-label">產品名稱</label>
-                <input asp-for="ProductName" class="form-control" name="WrappedProductName" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
+                <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
+                <input asp-for="WrappedProductName" class="form-control" name="WrappedProductName" />
+                <span asp-validation-for="WrappedProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnitPrice" class="control-label">單價</label>
-                <input asp-for="UnitPrice" class="form-control" name="WrappedUnitPrice" />
-                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                <label asp-for="WrappedUnitPrice" class="control-label">單價</label>
+                <input asp-for="WrappedUnitPrice" class="form-control" name="WrappedUnitPrice" />
+                <span asp-validation-for="WrappedUnitPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="License" class="control-label">核可證號</label>
-                <input asp-for="License" class="form-control" name="WrappedLicense" />
-                <span asp-validation-for="License" class="text-danger"></span>
+                <label asp-for="WrappedLicense" class="control-label">核可證號</label>
+                <input asp-for="WrappedLicense" class="form-control" name="WrappedLicense" />
+                <span asp-validation-for="WrappedLicense" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ingredient" class="control-label">有效成分</label>
-                <input asp-for="Ingredient" class="form-control" name="WrappedIngredient" />
-                <span asp-validation-for="Ingredient" class="text-danger"></span>
+                <label asp-for="WrappedIngredient" class="control-label">有效成分</label>
+                <input asp-for="WrappedIngredient" class="form-control" name="WrappedIngredient" />
+                <span asp-validation-for="WrappedIngredient" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" name="WrappedDescription" rows="8"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="WrappedDescription" class="control-label"></label>
+                <textarea asp-for="WrappedDescription" class="form-control" name="WrappedDescription" rows="8"></textarea>
+                <span asp-validation-for="WrappedDescription" class="text-danger"></span>
             </div>
 
            
@@ -112,17 +112,26 @@
 
 
             <div class="form-group">
-                <label asp-for="UnitsInStock" class="control-label">庫存</label>
-                <input asp-for="UnitsInStock" class="form-control" name="WrappedUnitsInStock" />
-                <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+                <label asp-for="WrappedUnitsInStock" class="control-label">庫存</label>
+                <input asp-for="WrappedUnitsInStock" class="form-control" name="WrappedUnitsInStock" />
+                <span asp-validation-for="WrappedUnitsInStock" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label for="inputDiscontinued" class="form-label">上架狀態</label>
                 <select class="form-control" id="inputDiscontinued" name="WrappedDiscontinued">
-                    <option value="true" selected="@(Model?.Discontinued == true)">上架中</option>
-                    <option value="false" selected="@(Model?.Discontinued == false)">已下架</option>
+                    <option value="true" selected="@(Model?.WrappedDiscontinued == true)">上架中</option>
+                    <option value="false" selected="@(Model?.WrappedDiscontinued == false)">已下架</option>
                 </select>
             </div>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="SelectedCategories" value="@category.CategoriesId" @(Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
+                            <label class="form-check-label" for="category@(category.CategoriesId)">
+                                @category.CategoriesName
+                            </label>
+                        </div>
+                    }
                     <div class="mb-3">
                         <label for="formFile" class="form-label">產品圖片上傳</label>
                         <input class="form-control" type="file" id="formFile" name="formFile">
