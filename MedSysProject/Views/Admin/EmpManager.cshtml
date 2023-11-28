@@ -197,7 +197,7 @@
                                     @Html.DisplayFor(modelItem => item.EmployeePassWord)
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("Edit", new { id = item.EmployeeId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                    <a href="@Url.Action("Edit", new { id = item.EmployeeId })" id="EmpEdit" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                         <i class="fas fa-user-edit"></i>
                                     </a>
                                     @*

@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using System.Diagnostics;
 
 namespace MedSysProject.Controllers
@@ -30,26 +31,36 @@ namespace MedSysProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult xxx(int? id)
+        public IActionResult xxx()
         {//plan選擇，個人版，男女區別，待更改CONTROLL名稱
-         
-            var description = from d in _context.Plans.Where(d => d.PlanId == id)
-                              select d.PlanDescription;
-      
-           
 
-            return View(description);
+    
+            
+            return View(_context.Projects) ;
         }
+        /////====start 這裡是partialview區====
+        
         public IActionResult partialvew1()
         { //放選擇方案用的購物車
 
             return PartialView();
         }
-        public IActionResult partialview2()
-        { //測試動畫用
+        public IActionResult partialviewPlan()
+        { //plan區
+
+            return PartialView(_context.Projects);
+        }
+        public IActionResult partialviewProject()
+        { //project區
 
             return PartialView();
         }
+        public IActionResult partialviewItem()
+        { //items區
+
+            return PartialView();
+        }
+        ///// ====end這裡是partialview區=====
         public IActionResult testplan()
         { //plan 企業版，待更改CONTROLL名稱
             return View();
@@ -60,12 +71,15 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Reserve()
         { //預約總覽
-            var Plndata = from s in _context.Plans
-                        select s;
-            var Prjdata = from s in _context.Projects
-                       select s;
-            var itemdata = from s in _context.Items
-                           select s;
+
+            //var datas = (from s in _context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)
+
+            //            select  s).Distinct();
+
+            //var datas = (from s in _context.PlanRefs.Include(p => p.Project.Items)
+
+            //             select s).Distinct();
+
             return View();
         }
         public IActionResult Member()
