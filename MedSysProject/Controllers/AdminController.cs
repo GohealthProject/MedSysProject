@@ -361,11 +361,12 @@ namespace MedSysProject.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Categories = _db.ProductsCategories.ToList();
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Product product, IFormFile formFile)
+        public IActionResult Create(Product product, IFormFile formFile, int[] CategoriesIds)
         {
             // 檢查並創建目錄
             string imagePath = Path.Combine(_host.WebRootPath, "img-product");
@@ -395,6 +396,23 @@ namespace MedSysProject.Controllers
             // 儲存到資料庫
             _db.Products.Add(product);
             _db.SaveChanges();
+
+            // 將產品與所選分類關聯
+            if (CategoriesIds != null)
+            {
+                foreach (var categoryId in CategoriesIds)
+                {
+                    var classification = new ProductsClassification
+                    {
+                        ProductId = product.ProductId,
+                        CategoriesId = categoryId
+                    };
+
+                    _db.ProductsClassifications.Add(classification);
+                }
+
+                _db.SaveChanges();
+            }
 
             return RedirectToAction("Product");
         }
