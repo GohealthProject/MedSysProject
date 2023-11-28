@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using System.Diagnostics;
 
 namespace MedSysProject.Controllers
@@ -70,12 +71,15 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Reserve()
         { //預約總覽
-            var Plndata = from s in _context.Plans
-                        select s;
-            var Prjdata = from s in _context.Projects
-                       select s;
-            var itemdata = from s in _context.Items
-                           select s;
+
+            //var datas = (from s in _context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)
+
+            //            select  s).Distinct();
+
+            //var datas = (from s in _context.PlanRefs.Include(p => p.Project.Items)
+
+            //             select s).Distinct();
+
             return View();
         }
         public IActionResult Member()
