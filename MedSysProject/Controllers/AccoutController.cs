@@ -87,7 +87,6 @@ namespace MedSysProject.Controllers
             
             if (_db.Members.FirstOrDefault(n => n.MemberEmail == vm.MemberEmail) == null)
             {
-                
                 _db.Members.Add(vm.member);
                 _db.SaveChanges();
                 ViewBag.Sussess = true;

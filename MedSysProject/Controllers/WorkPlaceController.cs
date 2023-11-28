@@ -10,9 +10,11 @@ namespace MedSysProject.Controllers
             return View();
 
         }
-        public IActionResult malePlanConfirm()
+        public IActionResult malePlanConfirm(string words)
         {
-            return Content("TEST");
+            string word = "this is test";
+            words = word;
+            return Content(word);
 
         }
 

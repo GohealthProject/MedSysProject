@@ -3,11 +3,11 @@
 *@
 @{
 }
-<div id="test"></div>@*內置table做購物車*@
-<div class="align-items-start">
-<div class="accordion accordion-flush" id="accordionFlushExample">
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="flush-headingOne">
+@*內置table做購物車*@
+<div class="align-items-start" style="border:solid 2px saddlebrown">
+    <div class="accordion accordion-flush" id="accordionFlushExample" >
+        <div class="accordion-item" >
+            <h2 class="accordion-header" id="flush-headingOne" >
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
               方案選擇
             </button>
@@ -122,12 +122,33 @@
     </div>
 </div>
 </div>
-<div class="card">
-    <p>總計</p>
-    <button type="button" class="btn btn-outline-danger" ><a asp-action="Reserve" asp-controller="Home">送出</a></button>
+
+
+    <div class="card">
+    <div style="background-color:saddlebrown">
+        <p>總計</p>
+        
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="Reserve" asp-controller="Home">送出</a></button>
 </div>
+
+
 @section Scripts{
-    <script></script>
+    <script>
+ document.querySelector("#plancontent").addEventListener('load',()=>{
+        async function malePlanConfirm() {
+  const response = await fetch('@Url.Content("~/WorkPlace/malePlanConfirm")');
+            const data = await (response.text());
+                 const plan = await(data.map(p =>` <div class="accordion-body" id="plancontent">${p}<code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+        </div>`));
+ document.querySelector("#plancontent").innerHTML = plan.join("");
+                   };
+            malePlanConfirm();
+            });
+
+        
+        malePlanConfirm();
+    </script>
 
 
     }
