@@ -108,6 +108,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.WrappedDiscontinued)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.WrappedDiscontinued)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -144,6 +147,12 @@
                                         @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
                                     </td>
                                     <td>
+                                        <button class="btn btn-toggle-discontinued @((item.WrappedDiscontinued == null) ? "btn-outline-secondary" : (item.WrappedDiscontinued.Value ? "btn-outline-success" : "btn-outline-danger"))" data-product-id="@item.WrappedProductId" data-discontinued="@item.WrappedDiscontinued">
+                                            @(item.WrappedDiscontinued == null ? "未確認" : (item.WrappedDiscontinued.Value ? "上架中" : "已下架"))
+                                        </button>
+                                    </td>
+
+                                    <td>
                                         @if (item.WrappedDiscontinued == true)
                                         {
                                             <span class="badge badge-success">上架中</span>
@@ -165,32 +174,55 @@
                     </tbody>
                 </table>
             </div>
+
             <script>
-                //這段是ajax 還沒做好
                 $(document).ready(function () {
-                    $('#createForm').submit(function (e) {
-                        e.preventDefault();
+                    $('.btn-toggle-discontinued').click(function () {
+                        const productId = parseInt($(this).data('product-id'));
+                        const discontinued = parseBool($(this).data('discontinued'));
 
-                        // 準備資料
-                        const formData = new FormData();
-                        formData.append('ProductName', $('#ProductName').val());
-
-                        // 發送 AJAX 請求
+                        // 發送 AJAX 請求以切換「上架」狀態
                         $.ajax({
-                            url: '/YourController/Create',
+                            url: '/Admin/ToggleDiscontinued',
                             type: 'POST',
-                            processData: false,
-                            contentType: false,
-                            data: formData
-                        }).done(function (data) {
-                            alert("新增成功，編號為 " + data.productId);
-                            load();
-                            clearData();
-                            $('#addModal').modal('hide');
+                            data: { productId: productId, discontinued: discontinued },
+                            success: function (result) {
+                                // 根據伺服器的回應更新按鈕的文字和樣式
+                                const button = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
+
+                                if (result.discontinued == null) {
+                                    button.removeClass('btn-outline-success btn-outline-danger').addClass('btn-outline-secondary');
+                                    button.text('未確認');
+                                } else if (result.discontinued) {
+                                    button.removeClass('btn-outline-danger').addClass('btn-outline-success');
+                                    button.text('已下架');
+                                    // 更新data-discontinued屬性
+                                    button.data('discontinued', false);
+                                } else {
+                                    button.removeClass('btn-outline-success').addClass('btn-outline-danger');
+                                    button.text('上架中');
+                                    // 更新data-discontinued屬性
+                                    button.data('discontinued', true);
+                                }
+                            },
+                            error: function () {
+                                alert('處理請求時發生錯誤。');
+                            }
                         });
                     });
+
+                    // 自定義函式以將字串轉換為布林值
+                    function parseBool(value) {
+                        return value === 'True' || value === 'true';
+                    }
                 });
+
+
+
             </script>
+
+
+        
 
 
             <!-- 引入相應的JavaScript -->

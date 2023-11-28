@@ -90,23 +90,54 @@ namespace MedSysProject.Controllers
 
 
 
-            public IActionResult EmpClass()
+        public IActionResult EmpClass()
         {
             return View();
         }
 
-        public IActionResult Blog()
+        public IActionResult BlogIndex(int? id,CKeywordViewModel input) 
         {
-            return View();
-        }
-
-        public IActionResult BlogIndex() 
-        {//測試
-            var blogs = from t in _db.Blogs
-                        select t;
+            IEnumerable<Blog> blogs = null;
+            if (id == null)
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                   .Include(blog => blog.ArticleClass)
+                            select blog;
+                }
+                else
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee).Include(blog => blog.ArticleClass)
+                            where blog.Title.Contains(input.txtKeyword) ||
+                                  blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                  blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword)
+                            select blog;
+                }
+            }
+            else 
+            {
+                if (string.IsNullOrEmpty(input.txtKeyword))
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                          .Include(blog => blog.ArticleClass)
+                            where blog.EmployeeId == id
+                            select blog;
+                }
+                else 
+                {
+                    blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                  .Include(blog => blog.ArticleClass)
+                            where (blog.EmployeeId == id) && (blog.Title.Contains(input.txtKeyword) ||
+                                                          blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
+                                                          blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword))
+                            select blog;
+                }
+            }
             return View(blogs);
         }
 
+        
         public IActionResult BlogList(int? id,CKeywordViewModel vm) 
         {//
             IEnumerable<CBlogModel> blogs = null;
@@ -490,5 +521,30 @@ namespace MedSysProject.Controllers
 
             return "";
         }
+
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 從資料庫中檢索產品
+            Product product = _db.Products.Find(productId);
+
+            if (product != null)
+            {
+                // 切換「上架」狀態
+                product.Discontinued = !discontinued;
+
+                // 將更改保存到資料庫
+                _db.SaveChanges();
+
+                // 返回 JSON 回應，指示新的狀態
+                return Json(new { discontinued = product.Discontinued });
+            }
+
+            // 返回 JSON 回應，指示錯誤
+            return Json(new { error = "找不到產品" });
+        }
+
     }
+
+
 }

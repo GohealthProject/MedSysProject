@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\img\PersonalPlan\1601.m10.i308.n030.F.c06.295008629 Tree with roots and green leaves. Vector illustration.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\4481481.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\hand-drawn-tree-life-brown-shades_23-2148703761.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\leaf1.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\tree-clipart-1520959433vmu.jpg" />
   </ItemGroup>
 
   <ItemGroup>

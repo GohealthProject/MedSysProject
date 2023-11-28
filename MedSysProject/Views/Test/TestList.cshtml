@@ -1,0 +1,96 @@
+﻿@model IEnumerable<MedSysProject.Models.Blog>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TestList</title>
+</head>
+<body>
+<p>
+    <a asp-action="TestTinyMCE">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序號
+            </th>
+            <th style="width:250px;">
+                文章標題
+            </th>
+            <th>
+                文章類別
+            </th>
+            <th>
+                瀏覽人次
+            </th>
+            <th>
+                建立時間
+            </th>
+            <th>
+                文章內容
+            </th>
+            <th>
+                文章圖片
+            </th>
+            <th>
+                作者
+            </th>
+         
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+       @{
+           int count = 0;
+            foreach (var item in Model) 
+            {
+             count++;
+            <tr>
+            <td>
+                @count
+            </td>
+            <td style="width:250px;">
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Views)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @if (item.BlogImage != null && item.BlogImage.Length > 0)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.BlogImage)" alt="Image" width="100" />
+                    }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}}
+    </tbody>
+</table>
+<script>
+        alert('@TempData["SuccessMessage"]');
+</script>
+</body>
+</html>

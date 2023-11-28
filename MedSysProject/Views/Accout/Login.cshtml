@@ -22,7 +22,7 @@
     <div class="col-4 ">
         <form method="post" id="from" >
                 <div class="my-3 h3 mb-3 fw-normal">登入</div>
-
+                @Html.ActionLink("後台登入", "index", "Admin", new { }, new {})
             <div class="  px-1 form-floating">
                     
                     <input type="text" class="form-control" id="txtAccout" name="txtEmail">
@@ -50,6 +50,7 @@
                     <div class="mb-3  col-12"><button id="testButton" type="button" class="btn btn-primary w-100 py-2">測試</button></div>
                 </div>
                 <div class="g_id_signin" data-type="standard"></div>
+                <div style="padding-top:10px;"><img src="~/img//ios-line-login1.png" width="260" /></div>
             </form>
     </div>
 </div>
@@ -57,6 +58,10 @@
 
 
 <script>
+
+
+
+
     $('#testLabel').css("font-size", "15px");
     $('#testButton').on('click',()=>{
         $('#txtAccout').val('night90810@gmail.com');
