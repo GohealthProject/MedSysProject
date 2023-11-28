@@ -1,0 +1,30 @@
+﻿@using MedSysProject
+@using MedSysProject.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@* 
+<a asp-action="clas" asp-controller="blos" asp-route-id="1">企業責任</a>
+<a asp-action="clas" asp-controller="blos" asp-route-id="2"></a>
+<a asp-action="clas" asp-controller="blos" asp-route-id="3"></a>
+<a asp-action="clas" asp-controller="blos" asp-route-id="4"></a>
+
+<a asp-action="clas" asp-controller="blos" asp-route-id="5"></a>
+
+clas(int id){
+    var q = _db.blogs.where(n=>n.catid=id);
+    
+    類別 blog = new 類別();
+    foreach(var item in q){
+        blog.blogs.add(item);
+    }
+    return (blog);
+}
+
+foreach(var item in @Model.blogs){
+    <div class="row">
+    <div><img src="item.image" /></div>
+    <div>
+        <span class="fs-1"></span>
+    </div>
+    </div>
+} *@

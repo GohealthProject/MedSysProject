@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "testplan";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+<figure class="text-center">
+<h1 class="display-1">@{
+        string corporation = "企業";
+    }企業員工歡迎您</h1>
+</figure>
+<div class="container bg-warning">
+    <div class="table-responsive ">
+    <table class="table table-striped text-successtable-border border-light">
+        <thead class="border-light">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"><strong>男</strong></th>
+                <th scope="col"><strong>女</strong></th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">一般生理檢查</th>
+                <td>v</td>
+                <td>v</td>
+               
+            </tr>
+            <tr>
+                <th scope="row">尿液一般檢查</th>
+                <td><i class="fas fa-check"></i></td>
+                <td><i class="fas fa-check"></i></td>
+                
+            </tr>
+            <tr>
+                <th scope="row">血液常規檢查</th>
+                <td>-</td>
+                <td>Optional</td>
+                
+            </tr>
+            <tr>
+                <th scope="row">腎功能檢查</th>
+                <td>-</td>
+              
+                <td><i class="fas fa-check"></i></td>
+            </tr>
+            <tr>
+                <th scope="row">肝功能檢查</th>
+                <td>-</td>
+                
+                <td><i class="fas fa-check"></i></td>
+            </tr>
+            <tr>
+                <th scope="row">新陳代謝檢查</th>
+                <td>None</td>
+              
+                <td>v</td>
+            </tr>
+            <tr>
+                <td>附餐</td>
+                <td class="fw-bold">v</td>
+               
+                <td class="fw-bold"><a href>v</a></td>
+            </tr>
+            <tr>
+                <th class=""></th>
+                <th class=""><button class="btn btn-primary">加入</button></th>
+                <th class=""><button class="btn btn-primary">加入</button></th>
+               
+                @*<th class=""></th>*@
+            </tr>
+        </tbody>
+    </table>
+        <div id="partialview" style="border:5px double #FA714B">
+        這是partialview，拿來放加入項目
+        @Html.Partial("partialview1")
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    <script></script>
+
+
+    }

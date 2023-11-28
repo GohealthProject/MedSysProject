@@ -1,0 +1,152 @@
+﻿@using System.Text.Json;
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Amoeba Bootstrap Template - Home</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/img/favicon.png" rel="icon">
+    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Lato:400,300,700,900" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/forevendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/forevendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/css/forestyle.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Amoeba
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    @await RenderSectionAsync("LinkStyle", required: false)
+    <script src="@Url.Content("~/js-Account/LayoutFore.js")"></script>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+   <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <div class="logo me-auto">
+        <h1><a href="~/Home/Index">GO健康</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav id="navbar" class="navbar">
+                <!-- =======最上方欄位 ======= -->
+        <ul>
+                    <li><a class="nav-link scrollto" href="#about">關於GO健康的成立</a></li>
+                    <li><a class="nav-link scrollto" href="#services">GO健康與您</a></li>
+                    <li class="dropdown">
+                        <a href="#"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li class="dropdown">
+                                <a href="#"><span>線上預約</span> <i class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="~/Home/xxx">個人健檢</a></li>
+                                    <li><a href="~/Home/testplan">企業健檢</a></li>
+                                    <li><a href="#">PLAN 3</a></li>
+                                    <li><a href="#">PLAN 4</a></li>
+                                    <li><a href="#">PLAN 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="~/Home/live">現場狀況</a></li>
+                            <li><a href="#">啥 3</a></li>
+                            <li><a href="#">啥 4</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a asp-action="Index" asp-controller="Shopping"><span>好物推薦</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li class="dropdown">
+                                <a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                    <li><a href="#">Deep Drop Down 2</a></li>
+                                    <li><a href="#">Deep Drop Down 3</a></li>
+                                    <li><a href="#">Deep Drop Down 4</a></li>
+                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Drop Down 2</a></li>
+                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#">Drop Down 4</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="nav-link scrollto" href="#portfolio">健康部落格</a></li>
+                    <li><a class="nav-link scrollto" href="#team">GO健康團隊</a></li>
+                    <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
+                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        {
+                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                        }else{
+                            string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                            Member m = new Member();
+                            m = JsonSerializer.Deserialize<Member>(json);
+                                <li class="dropdown">
+                                    <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                                    <ul>
+                                <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                        <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
+                                    </ul>
+                                </li>
+                            }
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End #header -->
+    <main id="main" style="background-color:#F2F9F8">
+    @RenderBody()
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Amoeba</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- End #footer -->
+    </main>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!-- Template Main JS File -->
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

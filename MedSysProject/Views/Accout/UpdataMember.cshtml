@@ -1,0 +1,56 @@
+﻿@model MedSysProject.Models.MemberWarp
+
+@{
+    ViewData["Title"] = "UpdataMember";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+@section LinkStyle{
+    <link rel="stylesheet" href="~/css/AccoutUpdataMember.css" />
+}
+
+<div class="UPdiv"style="width:70%">
+<form class="row g-3 fromP" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="MemberId" value=@Model.MemberId />
+    <div class="col-12">
+            <label for="inputEmail4" class="form-label" name="MemberEmail">電子郵件</label>
+            <input type="email" class="form-control" id="inputEmail4" name="MemberEmail" value="@Model.MemberEmail">
+    </div>
+    
+    <div class="col-12">
+         <label for="inputAddress" class="form-label" name="MemberAddress">地址</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="MemberAddress" value="@Model.MemberAddress">
+    </div>
+        <div class="col-md-6">
+            <label  class="form-label" name="MemberNickname">暱稱</label>
+            <input type="text" class="form-control" id="MemberNickname" name="MemberNickname" value="@Model.MemberNickname">
+        </div>
+        <div class="col-md-6">
+            <label  class="form-label" name="MemberName">會員姓名</label>
+            <input type="text" class="form-control" id="MemberName" name="MemberName" value="@Model.MemberName">
+        </div>
+        
+        <div class="col-12">
+            <div class="form-group">
+                <label asp-for="MemberBirthdate" class="control-label"></label>
+                <input asp-for="MemberBirthdate" class="form-control" name="MemberBirthdate" />
+                <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
+            </div>
+        </div>
+    <div class="col-12">
+        <span >瀏覽圖片</span>
+            <input type="file" name="fileN" />
+    </div>
+    
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">儲存並修改</button>
+    </div>
+</form>
+
+</div>
+@section Scripts{
+    <script>
+        const btnImg =document.querySelector('#btnImg');
+
+
+    </script>
+}

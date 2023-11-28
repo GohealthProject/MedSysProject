@@ -1,0 +1,71 @@
+﻿@model MedSysProject.ViewModels.CLoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout_Fore";
+}
+@section LinkStyle{
+    <link href="~/css/AccoutLogin.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+}
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload" data-client_id="5432xxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com" data-callback="onSignIn1"></div>
+
+
+<div class="container">
+    <div class="row align-items-center" style="height:600px">
+    <div class="col-8">
+            <img src="~/img/Login2.png" class="img-fluid" />
+    </div>
+    
+    <div class="col-4 ">
+        <form method="post" id="from" >
+                <div class="my-3 h3 mb-3 fw-normal">登入</div>
+                @Html.ActionLink("後台登入", "index", "Admin", new { }, new {})
+            <div class="  px-1 form-floating">
+                    
+                    <input type="text" class="form-control" id="txtAccout" name="txtEmail">
+                    <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
+            </div>
+            <div class="px-1 form-floating">
+                    
+                    <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
+                    <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
+            </div>
+            <div class="mb-3 px-3">
+                    <div class="form-check text-start my-3">
+                        <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Remember me
+                        </label>
+                        @Html.ActionLink("註冊會員","Register","Accout",new{},new{style="margin-left:160px"})
+                    </div>
+            </div>
+            <div class="row">
+                <div class="mb-3  col-5"></div>
+                    <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-primary w-100 py-2">登入</button></div>
+            </div>
+                <div class="row">
+                    <div class="mb-3  col-12"><button id="testButton" type="button" class="btn btn-primary w-100 py-2">測試</button></div>
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+                <div style="padding-top:10px;"><img src="~/img//ios-line-login1.png" width="260" /></div>
+            </form>
+    </div>
+</div>
+</div>
+
+
+<script>
+
+
+
+
+    $('#testLabel').css("font-size", "15px");
+    $('#testButton').on('click',()=>{
+        $('#txtAccout').val('night90810@gmail.com');
+        $('#txtPassWord').val('Test');
+    });
+</script>
+

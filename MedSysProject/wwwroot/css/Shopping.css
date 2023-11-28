@@ -1,0 +1,24 @@
+﻿.Shopping {
+    height: 50px;
+
+}
+.ShoppingNav{
+
+margin:auto
+}
+.ShoppingNavList {
+
+    margin-left:273px
+}
+.navbar li {
+    list-style-position: inside;
+}
+body li{
+    padding-left:0px;
+}
+.Shul{
+    padding-left:0px;
+}
+.navbar ul li {
+    margin:auto;
+}

@@ -1,0 +1,198 @@
+﻿@using System.Text.Json;
+@model IEnumerable<MedSysProject.Models.Blog>
+
+@{
+    ViewData["Title"] = "BlogList";
+    Layout = "_Layout_Admin2";
+}
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Blog = document.getElementById("li-Blog");
+    const Index = document.getElementById("li-index");
+    Blog.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">部落格管理</h6>
+    </div>
+    <div class="card-body">
+        @{
+            int empID = 0;
+            if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+            {
+                
+                string Json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+                Employee emp = JsonSerializer.Deserialize<Employee>(Json);
+                empID = emp.EmployeeId;
+            }
+
+            <p>
+                @Html.ActionLink("我的貼文","BlogList","Admin",new{id=empID},new{@class="btn btn-primary",style="margin-left:10px"})
+                <a href="@Url.Content("~/Admin/BlogList")" class="btn btn-primary" style="margin-left:10px">全部貼文</a>
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            序號
+                        </th>
+                        <th style="width:250px;">
+                            文章標題
+                        </th>
+                        <th>
+                            文章類別
+                        </th>
+                        <th>
+                            瀏覽人次
+                        </th>
+                        <th>
+                            建立時間
+                        </th>
+                        <th>
+                            文章圖片
+                        </th>
+                        <th>
+                            作者
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int count = 0;
+                        foreach (var item in Model)
+                        {
+                            count++;
+                            <tr>
+                                <td>
+                                    @count
+                                </td>
+                                <td style="width:250px;">
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Views)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                                </td>
+
+                                <td>
+                                    @if (item.BlogImage != null && item.BlogImage.Length > 0)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.BlogImage)" alt="Image" width="100" />
+                                    }
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                </td>
+                                <td>
+
+                                    <a href="@Url.Action("Details", new { id = item.BlogId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a class="btn btn-danger" id="btnDel">
+                                        @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">修改部落格</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+                @*部落格修改窗口*@
+
+                @*<hr />*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Edit" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div>
+                                <input type="hidden" name="FId" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label>文章標題</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+                                <label>文章類別</label>
+                                <input type="text">
+                            </div>
+                            <div class="form-group">
+                                <label>文章內容</label>
+                                <textarea id="myTextarea" name="content"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="file" name="photo" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="修改並送出" class="btn btn-primary" />
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+<script>
+    const delbtn = document.getElementById("btnDel");
+
+    delbtn.addEventListener("click", () => {
+        Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        })
+    });
+</script>
+<script src="~/lib/tinymce/tinymce.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        inymce.init({
+            selector: '#myTextarea',
+            plugins: 'advlist autolink lists link image charmap print preview anchor',
+            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            menubar: false
+        });
+    })
+</script>
+

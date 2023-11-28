@@ -1,0 +1,154 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*內置table做購物車*@
+<div class="align-items-start" style="border:solid 2px saddlebrown">
+    <div class="accordion accordion-flush" id="accordionFlushExample" >
+        <div class="accordion-item" >
+            <h2 class="accordion-header" id="flush-headingOne" >
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              方案選擇
+            </button>
+        </h2>@*@*
+       *內置TABLE*@
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body"> 
+                        <table id="PlanList" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>序</th>
+                                    <th>方案名稱</th>
+                                    <th>價格</th>
+                                    <th>編輯</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>男性保健方案</td>
+                                    <td>NT$20750</td>
+                                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>婦女安心方案</td>
+                                    <td>NT$25550</td>
+                                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+          </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                類別選擇
+            </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                    <table id="PlanList" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>序</th>
+                                <th>類別名稱</th>
+                                <th>價格</th>
+                                <th>編輯</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    一般生理檢查
+                                </td>
+                                <td>
+                                    800
+                                </td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>尿液一般檢查</td>
+                                <td>1200</td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+              </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                  細項選擇
+            </button>
+        </h2>
+        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <table id="PlanList" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>序</th>
+                                <th>細項名稱</th>
+                                <th>價格</th>
+                                <th>編輯</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    膽紅素 
+                                </td>
+                                <td>
+                                    NT$100
+                                </td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>尿酸 </td>
+                                <td>NT$150</td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+    <div class="card">
+    <div style="background-color:saddlebrown">
+        <p>總計</p>
+        
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="Reserve" asp-controller="Home">送出</a></button>
+</div>
+
+
+@section Scripts{
+    <script>
+ document.querySelector("#plancontent").addEventListener('load',()=>{
+        async function malePlanConfirm() {
+  const response = await fetch('@Url.Content("~/WorkPlace/malePlanConfirm")');
+            const data = await (response.text());
+                 const plan = await(data.map(p =>` <div class="accordion-body" id="plancontent">${p}<code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+        </div>`));
+ document.querySelector("#plancontent").innerHTML = plan.join("");
+                   };
+            malePlanConfirm();
+            });
+
+        
+        malePlanConfirm();
+    </script>
+
+
+    }
