@@ -1,4 +1,4 @@
-﻿
+﻿@model List<CProductWarp>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
@@ -7,80 +7,58 @@
 <div style="height:3000px" class="container">
     <img src="~/img/ShoppingIndex.jpg" class="img-fluid" alt="...">
     <div class="bg-white w-100 rounded-2 " style="height:653px">
-        <div style="height:10% ; text-align:justify" class=" w-100 align-items-center p-7  ">
-            <span class="fs-1 " style="margin:10px ;">產品類別</span>
-            <span class="fs-1 " style="margin:10px ; "><a asp-action="Search" asp-route-id="2">看更多</a></span>
+        <div style="height:10% ; text-align:justify" class=" w-100 align-items-center p-7  " id="divTitle">
+            <p class="fs-1 " style="margin:10px ; display:inline">產品類別</p>
+            <span class="fs-1 " style="margin:10px ; "><a href="@Url.Content("~/Shopping/Search/")" id="more">看更多</a></span>
         </div>
         <hr style="margin:0px; padding:0px;"/>
         <div style="height:90%;width:100%">
             <div class="  h-100 " style="float:left ;width:20%">
-                <div class="list-group">
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category1">最新消息</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category2">胃腸道功能改善</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category3">調節血脂</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category4">護肝</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category5">骨質保健</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category6">免疫調節</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category7">輔助調整過敏體質</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category8">不易形成體脂肪</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category9">調節血糖</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category10" >輔助調節血壓</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category11">抗疲勞</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category12">延緩衰老</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category13">促進鐵可利用率</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" id="category14">牙齒保健</button>
+                <div class="list-group" id="btnList">
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="0">最新消息</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="1">胃腸道功能改善</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="2">調節血脂</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="3">護肝</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="4">骨質保健</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="5">免疫調節</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="6">輔助調整過敏體質</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="7">不易形成體脂肪</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="8">調節血糖</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="9">輔助調節血壓</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="10" ">抗疲勞</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="11">延緩衰老</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="12">促進鐵可利用率</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="13">牙齒保健</button>
                 </div>
             </div>
             <div class="  h-100  border-start border-success" style="display:inline-block ;width:80%; padding:20px" id="inhere">
-                <div class="row">
-                <div class=" col "  style="height:200px;width:300px">
-                    <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px"/>
-                    <div>
-                        <a asp-action="selectProduct" asp-route-id="1" class="fs-3">A產品產品產品產品產品產品產品</a><br />
-                        <span class="fs-3 text-danger">$1,300</span>
-                    </div>
-                </div>
-                    <div class=" col " style="height:300px;width:300px">
-                        <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                        <div>
-                            <span class="fs-3">A產品</span><br />
-                            <span class="fs-3 text-danger">$1,300</span>
+                @{
+                    for(int i = 0; i < Model.Count; i++)
+                    {
+                        @if (i % 3 == 0)
+                        {
+                            if (i != 0)
+                            {
+                                @Html.Raw("</div>")
+                            }
+                            @Html.Raw("<div class='row'>")
+                            }
+                            string s = Model[i].UnitPrice.ToString();
+                            <div class=" col " style="height:300px;width:300px">
+                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:300px;padding-top:10px" />
+                            <div>
+                                <a asp-action="selectProduct" asp-route-id="@Model[i].ProductId" class="fs-3">@Model[i].ProductName</a><br />
+                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class=" col " style="height:200px;width:300px">
-                        <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                        <div>
-                            <span class="fs-3">A產品</span><br />
-                            <span class="fs-3 text-danger">$1,300</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top:20px">
-                    <div class=" col " style="height:300px;width:300px">
-                        <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                        <div>
-                            <span class="fs-3">A產品</span><br />
-                            <span class="fs-3 text-danger">$1,300</span>
-                        </div>
-                    </div>
-                    <div class=" col " style="height:200px;width:300px">
-                        <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                        <div>
-                            <span class="fs-3">A產品</span><br />
-                            <span class="fs-3 text-danger">$1,300</span>
-                        </div>
-                    </div>
-                    <div class=" col " style="height:200px;width:300px">
-                        <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                        <div>
-                            <span class="fs-3">A產品</span><br />
-                            <span class="fs-3 text-danger">$1,300</span>
-                        </div>
-                    </div>
-                </div>
+                        @if(i!=0&&i+i%3==0||i==Model.Count-1){
+                            @Html.Raw("</div>")
+                        }
+                    }
+                }
+                
             </div>
-
-            <div style="clear:both"></div>
+            
             <div class="bg-body" style="width:10px; height:10px"></div>
             
             <div style="height:1000px;width:100%;" class="bg-danger"></div>
@@ -97,70 +75,58 @@
             </div>
 
         </div>
+        <div style="clear:both"></div>
     </div>
 </div>
 
  @section Scripts{
      <script>
-        const inhere = document.querySelector('#inhere');
-         async function getProduct(){
-            const response = await fetch('https://localhost:7078/api/Products/3');
-            const data = await response.json();
-            console.log(data);
-            const view = await data[0].productsClassifications.$values[0].product;
-            console.log(view);
-            const img = await data[0].productsClassifications.$values[0].product.fimagePath;
-            console.log(img);
-            let s = `<div class="row">
-                        <div class=" col "  style="height:200px;width:300px">
-                                            <img src="@Url.Content("~")${img}" style="height:150px; width:300px;padding-top:10px"/>
-                            <div>
-                                <span class="fs-3">${view.productName}</span><br />
-                                                <span class="fs-3 text-danger">${view.unitPrice}</span>
-                            </div>
-                        </div>
-                            <div class=" col " style="height:300px;width:300px">
-                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                                <div>
-                                    <span class="fs-3">A產品</span><br />
-                                    <span class="fs-3 text-danger">$1,300</span>
+        const divHere = document.querySelector("#inhere");
+
+         async function CatByProduct(id){
+            const response = await fetch("https://localhost:7078/api/Products/category/"+id);
+            const data = await response.json()
+
+            $("#divTitle").children().first().html(data[0].categoriesName);
+            document.querySelector("#more").href=`@Url.Content("~/Shopping/Search/")${id}`;
+            const datas = data[0].productsClassifications.$values
+
+            const info = datas.map(product=>{
+                const Name = product.product.productName.substring(0,9);
+                const Price = product.product.unitPrice;
+                const Path = product.product.fimagePath;
+                const id = product.product.$id;
+                console.log(`${Name} 價格 ${Price} 路徑 ${Path}`)
+                const pro =
+               `
+                       <div class=" col " style="height:300px;width:300px">
+                                    <img src="@Url.Content("~")${Path}" style="height:150px; width:300px;padding-top:10px" />
+                                    <div>
+                                                <a asp-action="selectProduct" asp-route-id="${id}" class="fs-3">${Name}</a><br />
+                                        <span class="fs-3 text-danger">$${Price}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class=" col " style="height:200px;width:300px">
-                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                                <div>
-                                    <span class="fs-3">A產品</span><br />
-                                    <span class="fs-3 text-danger">$1,300</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top:20px">
-                            <div class=" col " style="height:300px;width:300px">
-                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                                <div>
-                                    <span class="fs-3">A產品</span><br />
-                                    <span class="fs-3 text-danger">$1,300</span>
-                                </div>
-                            </div>
-                            <div class=" col " style="height:200px;width:300px">
-                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                                <div>
-                                    <span class="fs-3">A產品</span><br />
-                                    <span class="fs-3 text-danger">$1,300</span>
-                                </div>
-                            </div>
-                            <div class=" col " style="height:200px;width:300px">
-                                <img src="~/img/Login1.jpg" style="height:150px; width:300px;padding-top:10px" />
-                                <div>
-                                    <span class="fs-3">A產品</span><br />
-                                    <span class="fs-3 text-danger">$1,300</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`
-                    inhere.innerHTML=s;
-         }
-        
-         document.addEventListener('DOMContentLoaded',getProduct);
+               `
+               return pro;
+            })
+            
+            let s = "";
+            for(var i =0 ; i<info.length;i++){
+                if(i%3===0||i===0){
+                    s += `<div class="row">`
+                }
+                s+= info[i];
+                if ((i +1) %3 ===0 || i === info.length-1) {
+                    s += "</div>"
+                }
+            }
+            divHere.innerHTML=s;
+            }
+         
+        $(document).ready(()=>{
+            $("#btnList>button").click((event) => {
+                CatByProduct($(event.target).val())
+            })
+        })
      </script>
  }

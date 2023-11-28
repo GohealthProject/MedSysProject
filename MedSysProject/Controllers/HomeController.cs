@@ -46,6 +46,11 @@ namespace MedSysProject.Controllers
 
             return PartialView();
         }
+        public IActionResult partialview2()
+        { //測試動畫用
+
+            return PartialView();
+        }
         public IActionResult testplan()
         { //plan 企業版，待更改CONTROLL名稱
             return View();
