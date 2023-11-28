@@ -226,6 +226,15 @@ namespace MedSysProject.Controllers
             return View(blogs);
         }
 
+        public IActionResult PlanAdd()
+        {
+            var q = from p in _db.Plans
+                    select p;
+
+
+            return View(q);
+        }
+
         public IActionResult Product(CKeywordViewModel vm)
         {
             var datas = _db.Products.AsQueryable();
