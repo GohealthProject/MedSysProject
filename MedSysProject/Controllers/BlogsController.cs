@@ -36,13 +36,18 @@ namespace MedSysProject.Controllers
 
             if (CategoryID == null)
             {
-                q = _db.Blogs.Include(e => e.Employee);
+                q = from blog in _db.Blogs.Include(e => e.Employee)
+                    .Include(e => e.ArticleClass)
+                    select blog;
+
+                ViewBag.Cate = "";
             }
             else
             {
-                q = _db.Blogs.Include(e => e.Employee).Where(c => c.ArticleClassId == CategoryID);
+                q = _db.Blogs.Include(e => e.Employee).Include(e => e.ArticleClass).Where(c => c.ArticleClassId == CategoryID);
+                ViewBag.Cate = "分類：" + (q.ToList())[0].ArticleClass.BlogCategory1;
             }
-            ViewBag.Cate = "aaa";/*(q.ToList())[0].ArticleClass.BlogCategory1;*/
+            
 
             return View(q);
         }
