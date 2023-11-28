@@ -15,7 +15,15 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            List<CProductWarp> list = new List<CProductWarp>();
+            var q = _db.Products.OrderByDescending(n => n.ProductId).Select(n => n).Take(6);
+            foreach(var product in q)
+            {
+                CProductWarp item = new CProductWarp();
+                item.Product = product;
+                list.Add(item);
+            }
+            return View(list);
         }
         public IActionResult Search(int id)
         {
