@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewData["Title"] = "planComeparison";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>方案比較</h2>
+            <ol>
+                <li><a href="~/Home/Index">Home</a></li>
+                <li>內頁</li>
+            </ol>
+        </div>
+
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+</section>
+
+
+
+<section id="portfolio" class="portfolio">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>GO健康方案</h2>
+            <p>方案介紹</p>
+
+        </div>
+            <div class="row">
+                <div class="col-lg-12">篩選區
+                <ul id="portfolio-flters">
+                    <li data-filter="*" class="filter-active">全部類別</li>
+                    <li data-filter=".filter-heart">心血管相關</li>
+                    <li data-filter=".filter-metabloism">新陳代謝相關</li>
+                    <li data-filter=".filter-endocrine">內分泌疾病</li>
+                    <li data-filter=".filter-dementia">失智症相關</li>
+                    <li data-filter=".filter-AMA">高齡生育相關</li>
+                </ul>
+                    </div>
+            </div>
+
+
+        <div class="row portfolio-container">
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-heart filter-dementia">
+                <div class="portfolio-wrap" >
+                    <img src="~/img/PersonalPlan/heart.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info" >
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                         <div>
+                            <a href="~/Home/PlanIntroductionProject" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="~/Home/PlanIntroductionProject"  title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-heart">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/kidney.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-metabloism">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/liver.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-heart">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/lung.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-metabloism">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/colon.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-heart">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/bladder.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-metabloism">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/pancreas.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-endocrine">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/stomach.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 portfolio-item filter-AMA">
+                <div class="portfolio-wrap">
+                    <img src="~/img/PersonalPlan/uterus.jpg" class="img-fluid" alt="" >
+                    <div class="portfolio-info">
+                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                        <div>
+                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
+                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       
+    </div>
+        
+    
+    
+
+</section><!-- End Our Team Section -->
+
+   
+      
+  <!-- End Our Portfolio Section -->
+
+
+
+        
+
+
