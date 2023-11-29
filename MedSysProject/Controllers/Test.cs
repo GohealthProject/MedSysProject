@@ -56,6 +56,7 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+
         /// <summary>
         /// 好像不能偷雞摸狗，參數名稱要與asp-for一致
         /// </summary>
@@ -104,7 +105,7 @@ namespace MedSysProject.Controllers
         /// <returns></returns>
         public IActionResult SinglePost(int? singleBlogID) 
         {
-            singleBlogID = 35;
+            singleBlogID = 37;
             IEnumerable<Blog> singlePost = null;
             if (singleBlogID != null)
             {
