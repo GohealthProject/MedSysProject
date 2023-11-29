@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Primitives;
 using NuGet.Protocol.Plugins;
 
 namespace MedSysProject.Controllers
@@ -44,6 +45,13 @@ namespace MedSysProject.Controllers
                         select blog;
             return View(blogs);
         }
+
+        #region 模擬部落格後台
+
+        /// <summary>
+        /// 文章列表
+        /// </summary>
+        /// <returns></returns>
         public IActionResult TestList() 
         {
             IEnumerable<Blog> blogs = from blog in _db.Blogs
@@ -52,6 +60,11 @@ namespace MedSysProject.Controllers
                                       select blog;
             return View(blogs);
         }
+
+        /// <summary>
+        /// 新增文章
+        /// </summary>
+        /// <returns></returns>
         public IActionResult TestTinyMCE() 
         {
             return View();
@@ -99,11 +112,54 @@ namespace MedSysProject.Controllers
             return RedirectToAction("TestList");
 
         }
+        //------------------------------------
+        //edit跟新增一樣都要寫兩個
+        //------------------------------------
+        /// <summary>
+        /// 文章列表點擊執行，id指定修改哪篇文章
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult TestEdit(int? id) 
+        {
+            Blog blog = _db.Blogs.FirstOrDefault(n => n.BlogId == id);
+            if (blog == null) { return RedirectToAction("TestList"); }
+            else { return View(blog); }
+        }
+        /// <summary>
+        /// 按下submit把修改後的資料傳送到這裡
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult TestEdit(Blog Edit)
+        {
+            //Blog original =_db.Blogs.FirstOrDefault(n=>n.BlogId==Edit.BlogId);
+            //if (original != null) 
+            //{//那些欄位可以讓人修改??標題 類別 內文
+            //    original.Title = Edit.Title;//標題
+            //    original.ArticleClassId= Edit.ArticleClassId;//文章類別
+            //    original.Content = Edit.Content;
+            //    if (Edit.BlogImage != null) 
+            //    {
+            //        using (MemoryStream ms = new MemoryStream()) 
+            //        {
+            //            Edit.BlogImage.CopyTo(ms);
+            //            original.BlogImage=ms.ToArray();
+            //        }
+            //    }
+
+            //}
+            return View();
+        }
+
+        #endregion
+
+        #region 前台顯示
         /// <summary>
         /// 測試顯示單篇文章
         /// </summary>
         /// <returns></returns>
-        public IActionResult SinglePost(int? singleBlogID) 
+        public IActionResult SinglePost(int? singleBlogID)
         {
             singleBlogID = 37;
             IEnumerable<Blog> singlePost = null;
@@ -112,19 +168,20 @@ namespace MedSysProject.Controllers
                 singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
                                           .Include(blog => blog.Employee)
                                           .Where(blog => blog.BlogId == singleBlogID)
-                             select blog).ToList();
+                              select blog).ToList();
             }
-            else 
+            else
             {
-                 singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
-                                                   .Include(blog => blog.Employee)
-                                                   .OrderByDescending(blog => blog.BlogId).Take(1)
-                                                   select blog).ToList();
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                                  .Include(blog => blog.Employee)
+                                                  .OrderByDescending(blog => blog.BlogId).Take(1)
+                              select blog).ToList();
             }
-            
-            
+
+
             return View(singlePost);
         }
-
+        #endregion
     }
+
 }
