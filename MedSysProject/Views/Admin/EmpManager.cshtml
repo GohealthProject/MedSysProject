@@ -311,10 +311,11 @@
         del(hidd.value);
         
    }
+   //主畫面按下去要彈框框的事件
     function updata(element) {
         showTogget(element)
-
     }
+    //修改員工資料
  async function putdata(){
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/${id}`
@@ -337,6 +338,7 @@
         console.log(jsonstring);
         research()
     }
+    //把資料印到彈出來的視窗
    function showTogget(element){
        let par = element.closest("tr");
        let tds = par.getElementsByTagName("td");
