@@ -128,6 +128,7 @@ namespace MedSysProject.Controllers
 
             // 將等待情形傳遞到 View
             ViewBag.HealthCheckStatus = healthCheckStatus;
+            return View();
 
         }
 
