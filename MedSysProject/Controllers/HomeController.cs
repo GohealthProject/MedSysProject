@@ -115,7 +115,7 @@ namespace MedSysProject.Controllers
             var healthCheckStatus = new List<string>
     {
         "high", "medium", "low", "low", "high", "medium", "low", "high", "medium", "low",
-        "high", "medium", "low", "high", "medium", "low"
+        "high", "medium", "low", "high", "medium"
     };
 
             // 將等待情形傳遞到 View
