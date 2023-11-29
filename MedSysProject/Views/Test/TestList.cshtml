@@ -34,9 +34,6 @@
                 建立時間
             </th>
             <th>
-                文章內容
-            </th>
-            <th>
                 文章圖片
             </th>
             <th>
@@ -67,9 +64,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
                 @if (item.BlogImage != null && item.BlogImage.Length > 0)

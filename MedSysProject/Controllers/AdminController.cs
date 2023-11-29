@@ -14,8 +14,8 @@ namespace MedSysProject.Controllers
     {
         private MedSysContext _db;
         private readonly IWebHostEnvironment _host;
-       
-       
+
+
 
 
         public AdminController(MedSysContext db, IWebHostEnvironment host)
@@ -58,7 +58,7 @@ namespace MedSysProject.Controllers
             }
             return View();
         }
-    
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -74,6 +74,8 @@ namespace MedSysProject.Controllers
                 //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
                 datas = from t in _db.Employees.Include(p => p.EmployeeClass)
                         select t;
+
+
             }
 
             else
@@ -95,7 +97,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult BlogIndex(int? id,CKeywordViewModel input) 
+        public IActionResult BlogIndex(int? id, CKeywordViewModel input)
         {
             IEnumerable<Blog> blogs = null;
             if (id == null)
@@ -115,7 +117,7 @@ namespace MedSysProject.Controllers
                             select blog;
                 }
             }
-            else 
+            else
             {
                 if (string.IsNullOrEmpty(input.txtKeyword))
                 {
@@ -124,7 +126,7 @@ namespace MedSysProject.Controllers
                             where blog.EmployeeId == id
                             select blog;
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
                                   .Include(blog => blog.ArticleClass)
@@ -137,8 +139,8 @@ namespace MedSysProject.Controllers
             return View(blogs);
         }
 
-        
-        public IActionResult BlogList(int? id,CKeywordViewModel vm) 
+
+        public IActionResult BlogList(int? id, CKeywordViewModel vm)
         {//
             IEnumerable<CBlogModel> blogs = null;
             if (id == null)
@@ -160,7 +162,7 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs
                             where blog.Title.Contains(vm.txtKeyword) ||
@@ -180,9 +182,10 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                
+
             }
-            else {
+            else
+            {
                 if (string.IsNullOrEmpty(vm.txtKeyword))
                 {
                     blogs = from blog in _db.Blogs
@@ -201,10 +204,10 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs
-                            where (blog.EmployeeId == id)&&(blog.Title.Contains(vm.txtKeyword) ||
+                            where (blog.EmployeeId == id) && (blog.Title.Contains(vm.txtKeyword) ||
                                   blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
                                   blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword))
                             select new CBlogModel
@@ -221,7 +224,7 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                
+
             }
             return View(blogs);
         }
@@ -245,7 +248,7 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p =>
                     p.ProductName.Contains(keyword) ||
                     p.Ingredient.Contains(keyword) ||
-                    p.License.Contains(keyword)||
+                    p.License.Contains(keyword) ||
                     p.Description.Contains(keyword));
             }
 
@@ -296,7 +299,7 @@ namespace MedSysProject.Controllers
 
             //if (string.IsNullOrEmpty(keyword))
             datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
-                        select t;
+                    select t;
             //else
             //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
             return View(datas);
@@ -315,13 +318,13 @@ namespace MedSysProject.Controllers
             if (string.IsNullOrEmpty(vm.txtKeyword))
                 datas = from s in _db.ReportDetails.Include(p => p.Item)
                         orderby s.ReportId
-                         select s;
-             
+                        select s;
+
             else
                 datas = _db.ReportDetails.Where(p =>
                 p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
             return View(datas);
-          
+
 
         }
 
@@ -338,7 +341,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult ReportEdit(int? id)
         {
-          
+
             ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
             if (rd == null)
                 return RedirectToAction("Report");
@@ -479,7 +482,7 @@ namespace MedSysProject.Controllers
                 WrappedDiscontinued = x.Discontinued,
                 FimagePath = x.FimagePath
             };
-            
+
 
             ViewBag.Categories = categories;
 
@@ -596,7 +599,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult GetImageByte(int? id)
         {
-           Employee emp = _db.Employees.Find(id);
+            Employee emp = _db.Employees.Find(id);
             byte[]? img = emp?.EmployeePhoto;
 
             if (img != null)
@@ -618,7 +621,7 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-      
+
 
     }
 
