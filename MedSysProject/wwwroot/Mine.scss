@@ -485,6 +485,7 @@ section {
         margin-right: 10px;
         img{
             width:40px;
+            height:40px;
             border-radius:50%;
             margin-bottom:0;
         }
@@ -667,5 +668,60 @@ section {
         background:var(--color-black);
     }
 }
+
+/*類別檢索專屬區塊*/
+.post-entry-2 .half{
+    .thumbnail{
+        flex:0 0 50%;
+    }
+}
+@media(max-width:768px)
+{
+    .post-entry-2 .half{
+        .thumbnail{
+            flex:0 0 100%;
+            margin-bottom:20px;
+        }
+    }
+}
+
+/*頁數切換數字?，是否會根據文章數量自動新增?????是的話????*/
+.custom-pagination {
+    a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 50%;
+        font-family: var(--font-secondary);
+        margin: 5px;
+        transition: 0.3s all ease;
+
+        &:hover {
+            background: rgba(var(--color-black-rgb),0.9);
+        }
+
+        &.active {
+            background: var(--color-black);
+            color: var(--color-white);
+
+            &:hover {
+                background: rgba(var(--color-black-rgb),0.9);
+            }
+        }
+    }
+
+    a.prev, a.next {
+        width: auto !important; /*如果相衝突，次樣式有較高優先*/
+        border-radius: 4px;
+        padding: 0 10px;
+
+        &:hover {
+            background: rgba(var(--color-black-rgb),0.1);
+        }
+    }
+}
+
 
 

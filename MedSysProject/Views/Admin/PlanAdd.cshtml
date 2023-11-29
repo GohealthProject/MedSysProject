@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MedSysProject.Models.Plan>
+
+@{
+    ViewData["Title"] = "PlanAdd";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const PlanAdd = document.getElementById("li-PlanAdd");
+    const Index = document.getElementById("li-index");
+    PlanAdd.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">方案調整</h6>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
+                <i class="fas fa-plus"></i>
+            </a>
+        </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                方案ID
+            </th>
+            <th>
+                方案名稱
+            </th>
+            <th>
+                方案描述
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlanDescription)
+            </td>
+            <td>
+                            <a href="@Url.Action(" Details", new { id=item.PlanId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-danger" id="btnDel">
+                                @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>

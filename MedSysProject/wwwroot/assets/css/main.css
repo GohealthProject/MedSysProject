@@ -45,7 +45,7 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Sections & Section Header(V)
+# Sections & Section Header
 --------------------------------------------------------------*/
 /*section {
   padding: 40px 0;
@@ -126,7 +126,7 @@ h6 {
 }*/
 
 /*--------------------------------------------------------------
-# Header
+# Header(v)
 --------------------------------------------------------------*/
 /*.header {
   height: 90px;
@@ -487,13 +487,13 @@ section {
   font-family: var(--font-secondary);
   color: rgba(var(--color-black-rgb), 0.4);
   margin-bottom: 10px;
-}
+}(v)
 
 @media (max-width: 768px) {
   .custom-border {
     border: none !important;
   }
-}
+}(v)
 
 .author .photo {
   margin-right: 10px;
@@ -604,19 +604,19 @@ section {
 暫時沒遇到不過應該是類別那頁的
 .post-entry-2.half .thumbnail {
   flex: 0 0 50%;
-}
+}(v)
 
 @media (max-width: 768px) {
   .post-entry-2.half .thumbnail {
     flex: 0 0 100%;
     margin-bottom: 20px;
   }
-}
-
+}(v)
+small-img是誰
 .post-entry-2.small-img .thumbnail {
   flex: 0 0 30%;
 }
-
+small-img是誰
 @media (max-width: 768px) {
   .post-entry-2.small-img .thumbnail {
     flex: 0 0 100%;
@@ -745,7 +745,7 @@ section {
   bottom: 0;
   background: var(--color-black);
 }(v)
-
+應該與單篇貼文相關，有待研究因為可能要先看看文字編輯器的內容如何讀出來?
 .post-content {
   padding-left: 10%;
   padding-right: 10%;
@@ -813,20 +813,20 @@ section {
   font-family: var(--font-secondary);
   margin: 5px;
   transition: 0.3s all ease;
-}
+}(v)
 
 .custom-pagination a.active {
   background: var(--color-black);
   color: var(--color-white);
-}
+}(v)
 
 .custom-pagination a.active:hover {
   background: rgba(var(--color-black-rgb), 0.9);
-}
+}(v)
 
 .custom-pagination a:hover {
   background: rgba(var(--color-black-rgb), 0.1);
-}
+}(v)
 
 .custom-pagination a.prev,
 .custom-pagination a.next {
@@ -834,12 +834,12 @@ section {
   border-radius: 4px;
   padding-left: 10px;
   padding-right: 10px;
-}
+}(v)
 
 .custom-pagination a.prev:hover,
 .custom-pagination a.next:hover {
   background: rgba(var(--color-black-rgb), 0.1);
-}*/
+}*(v)/
 
 /* custom tab nav on sidebar */
 /*.aside-block {

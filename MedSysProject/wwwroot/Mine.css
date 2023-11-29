@@ -449,6 +449,7 @@ section .section-header p {
 }
 .author .photo img {
   width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-bottom: 0;
 }
@@ -620,4 +621,46 @@ section .section-header p {
   right: 0;
   bottom: 0;
   background: var(--color-black);
+}
+
+/*類別檢索專屬區塊*/
+.post-entry-2 .half .thumbnail {
+  flex: 0 0 50%;
+}
+
+@media (max-width: 768px) {
+  .post-entry-2 .half .thumbnail {
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  }
+}
+/*頁數切換數字?，是否會根據文章數量自動新增?????是的話????*/
+.custom-pagination a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  font-family: var(--font-secondary);
+  margin: 5px;
+  transition: 0.3s all ease;
+}
+.custom-pagination a:hover {
+  background: rgba(var(--color-black-rgb), 0.9);
+}
+.custom-pagination a.active {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+.custom-pagination a.active:hover {
+  background: rgba(var(--color-black-rgb), 0.9);
+}
+.custom-pagination a.prev, .custom-pagination a.next {
+  width: auto !important; /*如果相衝突，次樣式有較高優先*/
+  border-radius: 4px;
+  padding: 0 10px;
+}
+.custom-pagination a.prev:hover, .custom-pagination a.next:hover {
+  background: rgba(var(--color-black-rgb), 0.1);
 }

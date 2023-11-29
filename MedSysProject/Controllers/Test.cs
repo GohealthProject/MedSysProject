@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Protocol.Plugins;
 
 namespace MedSysProject.Controllers
@@ -55,6 +56,7 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+
         /// <summary>
         /// 好像不能偷雞摸狗，參數名稱要與asp-for一致
         /// </summary>
@@ -96,6 +98,32 @@ namespace MedSysProject.Controllers
             
             return RedirectToAction("TestList");
 
+        }
+        /// <summary>
+        /// 測試顯示單篇文章
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult SinglePost(int? singleBlogID) 
+        {
+            singleBlogID = 37;
+            IEnumerable<Blog> singlePost = null;
+            if (singleBlogID != null)
+            {
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                          .Include(blog => blog.Employee)
+                                          .Where(blog => blog.BlogId == singleBlogID)
+                             select blog).ToList();
+            }
+            else 
+            {
+                 singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                                   .Include(blog => blog.Employee)
+                                                   .OrderByDescending(blog => blog.BlogId).Take(1)
+                                                   select blog).ToList();
+            }
+            
+            
+            return View(singlePost);
         }
 
     }

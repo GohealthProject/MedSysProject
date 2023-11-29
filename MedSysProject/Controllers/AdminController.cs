@@ -14,8 +14,8 @@ namespace MedSysProject.Controllers
     {
         private MedSysContext _db;
         private readonly IWebHostEnvironment _host;
-       
-       
+
+
 
 
         public AdminController(MedSysContext db, IWebHostEnvironment host)
@@ -58,7 +58,7 @@ namespace MedSysProject.Controllers
             }
             return View();
         }
-    
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -74,6 +74,8 @@ namespace MedSysProject.Controllers
                 //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
                 datas = from t in _db.Employees.Include(p => p.EmployeeClass)
                         select t;
+
+                
             }
 
             else
@@ -95,7 +97,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult BlogIndex(int? id,CKeywordViewModel input) 
+        public IActionResult BlogIndex(int? id, CKeywordViewModel input)
         {
             IEnumerable<Blog> blogs = null;
             if (id == null)
@@ -115,7 +117,7 @@ namespace MedSysProject.Controllers
                             select blog;
                 }
             }
-            else 
+            else
             {
                 if (string.IsNullOrEmpty(input.txtKeyword))
                 {
@@ -124,7 +126,7 @@ namespace MedSysProject.Controllers
                             where blog.EmployeeId == id
                             select blog;
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
                                   .Include(blog => blog.ArticleClass)
@@ -137,8 +139,8 @@ namespace MedSysProject.Controllers
             return View(blogs);
         }
 
-        
-        public IActionResult BlogList(int? id,CKeywordViewModel vm) 
+
+        public IActionResult BlogList(int? id, CKeywordViewModel vm)
         {//
             IEnumerable<CBlogModel> blogs = null;
             if (id == null)
@@ -160,7 +162,7 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs
                             where blog.Title.Contains(vm.txtKeyword) ||
@@ -180,9 +182,10 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                
+
             }
-            else {
+            else
+            {
                 if (string.IsNullOrEmpty(vm.txtKeyword))
                 {
                     blogs = from blog in _db.Blogs
@@ -201,10 +204,10 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                else 
+                else
                 {
                     blogs = from blog in _db.Blogs
-                            where (blog.EmployeeId == id)&&(blog.Title.Contains(vm.txtKeyword) ||
+                            where (blog.EmployeeId == id) && (blog.Title.Contains(vm.txtKeyword) ||
                                   blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
                                   blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword))
                             select new CBlogModel
@@ -221,9 +224,18 @@ namespace MedSysProject.Controllers
                                 AuthorName = blog.Employee.EmployeeName
                             };
                 }
-                
+
             }
             return View(blogs);
+        }
+
+        public IActionResult PlanAdd()
+        {
+            var q = from p in _db.Plans
+                    select p;
+
+
+            return View(q);
         }
 
         public IActionResult Product(CKeywordViewModel vm)
@@ -236,7 +248,7 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p =>
                     p.ProductName.Contains(keyword) ||
                     p.Ingredient.Contains(keyword) ||
-                    p.License.Contains(keyword)||
+                    p.License.Contains(keyword) ||
                     p.Description.Contains(keyword));
             }
 
@@ -264,6 +276,20 @@ namespace MedSysProject.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 根據 productId 更新數據庫中的 discontinued 屬性
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null)
+            {
+                product.Discontinued = discontinued;
+                _db.SaveChanges();
+            }
+
+            // 返回 JSON 物件，包含更新後的 discontinued 值
+            return Json(new { discontinued = product?.Discontinued });
+        }
 
 
         public IActionResult Order()
@@ -273,7 +299,7 @@ namespace MedSysProject.Controllers
 
             //if (string.IsNullOrEmpty(keyword))
             datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
-                        select t;
+                    select t;
             //else
             //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
             return View(datas);
@@ -292,13 +318,13 @@ namespace MedSysProject.Controllers
             if (string.IsNullOrEmpty(vm.txtKeyword))
                 datas = from s in _db.ReportDetails.Include(p => p.Item)
                         orderby s.ReportId
-                         select s;
-             
+                        select s;
+
             else
                 datas = _db.ReportDetails.Where(p =>
                 p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
             return View(datas);
-          
+
 
         }
 
@@ -315,7 +341,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult ReportEdit(int? id)
         {
-          
+
             ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
             if (rd == null)
                 return RedirectToAction("Report");
@@ -435,22 +461,39 @@ namespace MedSysProject.Controllers
         //    return Json(new { productId = product.ProductId });
         //}
 
-
-
         public IActionResult Edit(int? id)
         {
+            var categories = _db.ProductsCategories.ToList();
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
 
             if (x == null)
                 return RedirectToAction("Product");
 
-            return View(x);
+            // 將 Product 對象包裝到 CProductsWrap 中
+            CProductsWrap productWrap = new CProductsWrap
+            {
+                WrappedProductId = x.ProductId,
+                WrappedProductName = x.ProductName,
+                WrappedUnitPrice = x.UnitPrice,
+                WrappedLicense = x.License,
+                WrappedIngredient = x.Ingredient,
+                WrappedDescription = x.Description,
+                WrappedUnitsInStock = x.UnitsInStock,
+                WrappedDiscontinued = x.Discontinued,
+                FimagePath = x.FimagePath
+            };
+
+
+            ViewBag.Categories = categories;
+
+
+            return View(productWrap);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile)
-        {
 
+        [HttpPost]
+        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile, List<int> SelectedCategories)
+        {
             Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
             if (pDb != null)
             {
@@ -481,44 +524,82 @@ namespace MedSysProject.Controllers
                 pDb.Discontinued = productId.WrappedDiscontinued;
 
                 _db.Products.Update(pDb);
+
+                // 處理 ProductsClassification 資料表
+                if (SelectedCategories != null && SelectedCategories.Any())
+                {
+                    // 移除所有現有的 CategoriesId 記錄
+                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+
+                    // 新增選擇的 CategoriesId 記錄
+                    foreach (var categoryId in SelectedCategories)
+                    {
+                        var classification = new ProductsClassification
+                        {
+                            ProductId = productId.WrappedProductId,
+                            CategoriesId = categoryId
+                        };
+
+                        _db.ProductsClassifications.Add(classification);
+                    }
+                }
+
                 try
                 {
                     _db.SaveChanges();
+                    return RedirectToAction("Product");
                 }
                 catch (Exception ex)
                 {
                     // 處理異常，或輸出到日誌
                     Console.WriteLine(ex.Message);
                 }
+
+                CProductsWrap productWrap = new CProductsWrap
+                {
+                    WrappedProductId = productId.WrappedProductId,
+                    WrappedDescription = productId.WrappedDescription,
+                    WrappedDiscontinued = productId.WrappedDiscontinued,
+                    WrappedIngredient = productId.WrappedIngredient,
+                    WrappedLicense = productId.WrappedLicense,
+                    WrappedProductName = productId.WrappedProductName,
+                    WrappedUnitPrice = productId.WrappedUnitPrice,
+                    WrappedUnitsInStock = productId.WrappedUnitsInStock,
+                    FimagePath = productId.FimagePath,
+                    SelectedCategories = productId.SelectedCategories,
+                };
+
+                return View(productWrap); // 或者 return RedirectToAction("Edit", productWrap);
             }
 
-            return RedirectToAction("Product");
+            // 在這裡加上一個 return 陳述式
+            return View(productId);
         }
+
+
+
 
         public IActionResult Delete(int? id)
         {
-
-
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
                 // 刪除相關聯的 ProductsClassification 記錄
-                var relatedClassification = _db.ProductsClassifications.FirstOrDefault(pc => pc.ProductId == id);
-                if (relatedClassification != null)
-                {
-                    _db.ProductsClassifications.Remove(relatedClassification);
-                }
+                var relatedClassifications = _db.ProductsClassifications
+                    .Where(pc => pc.ProductId == id)
+                    .ToList();
 
+                _db.ProductsClassifications.RemoveRange(relatedClassifications);
                 _db.Products.Remove(x);
                 _db.SaveChanges();
             }
             return RedirectToAction("Product");
-
         }
+
 
         public IActionResult GetImageByte(int? id)
         {
-           Employee emp = _db.Employees.Find(id);
+            Employee emp = _db.Employees.Find(id);
             byte[]? img = emp?.EmployeePhoto;
 
             if (img != null)
@@ -540,27 +621,7 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-        [HttpPost]
-        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
-        {
-            // 從資料庫中檢索產品
-            Product product = _db.Products.Find(productId);
 
-            if (product != null)
-            {
-                // 切換「上架」狀態
-                product.Discontinued = !discontinued;
-
-                // 將更改保存到資料庫
-                _db.SaveChanges();
-
-                // 返回 JSON 回應，指示新的狀態
-                return Json(new { discontinued = product.Discontinued });
-            }
-
-            // 返回 JSON 回應，指示錯誤
-            return Json(new { error = "找不到產品" });
-        }
 
     }
 
