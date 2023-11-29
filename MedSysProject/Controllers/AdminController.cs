@@ -75,7 +75,7 @@ namespace MedSysProject.Controllers
                 datas = from t in _db.Employees.Include(p => p.EmployeeClass)
                         select t;
 
-
+                
             }
 
             else
