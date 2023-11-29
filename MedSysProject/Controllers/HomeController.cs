@@ -65,10 +65,7 @@ namespace MedSysProject.Controllers
         { //plan 企業版，待更改CONTROLL名稱
             return View();
         }
-        public IActionResult live()
-        { //現場檢查狀況
-            return View();
-        }
+     
         public IActionResult Reserve()
         { //預約總覽
 
@@ -109,6 +106,27 @@ namespace MedSysProject.Controllers
            
 
         }
+
+
+        public IActionResult live()
+        { //現場檢查狀況
+          // 模擬每個檢查項目的等待情形
+          // 先用假資料
+            var healthCheckStatus = new List<string>
+    {
+        "high", "medium", "low", "low", "high", "medium", "low", "high", "medium", "low",
+        "high", "medium", "low", "high", "medium", "low"
+    };
+
+            // 將等待情形傳遞到 View
+            ViewBag.HealthCheckStatus = healthCheckStatus;
+
+            return View();
+        }
+
+
+
+
 
     }
 }
