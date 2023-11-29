@@ -316,28 +316,28 @@
         showTogget(element)
     }
     //修改員工資料
- async function putdata(){
-        let id = document.querySelector("#inputId").value;
-        let apiurl = `https://localhost:7078/api/Employees/${id}`
-        var myForm = document.querySelector("#myUpdataform");
-        var data = new FormData(myForm);
-        var jsonobj = {};
-        data.forEach((value, key) => { 
-            jsonobj[key] = value;
-        })
-        const jsonstring = JSON.stringify(jsonobj);
+ // async function putdata(){
+ //        let id = document.querySelector("#inputId").value;
+ //        let apiurl = `https://localhost:7078/api/Employees/${id}`
+ //        var myForm = document.querySelector("#myUpdataform");
+ //        var data = new FormData(myForm);
+ //        var jsonobj = {};
+ //        data.forEach((value, key) => { 
+ //            jsonobj[key] = value;
+ //        })
+ //        const jsonstring = JSON.stringify(jsonobj);
        
-        const response = await fetch(apiurl,{
-            method: 'PUT', 
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: jsonstring
-        });
-    const state = await response.status;
-        console.log(jsonstring);
-        research()
-    }
+ //        const response = await fetch(apiurl,{
+ //            method: 'PUT', 
+ //            headers: {
+ //                'Content-Type': 'application/json'
+ //            },
+ //            body: jsonstring
+ //        });
+ //    const state = await response.status;
+ //        console.log(jsonstring);
+ //        research()
+ //    }
     async function putdata2() {
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
