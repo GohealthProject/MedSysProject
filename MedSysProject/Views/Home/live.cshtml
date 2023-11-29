@@ -1,205 +1,77 @@
-﻿
-@{
-    ViewData["Title"] = "live";
+﻿@{
+    ViewData["Title"] = "個人檢查項目完成清單";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
-}
+    var healthCheckStatus = ViewBag.HealthCheckStatus as List<string>;
 
-<h1>live</h1>
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<h1>個人檢查項目完成清單</h1>
 
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">第一檢查室</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">第二檢查室</button>
-        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">第三檢查室</button>
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">個人檢查項目完成清單</button>
     </div>
 </nav>
+
 <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">@*第一檢查室項目*@
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        @*個人檢查項目完成清單*@
         <div class="offcanvas-body">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    一般生理檢查
-                </li>
+                @{
+                    var healthCheckItems = new List<string>
+                {
+                "一般生理檢查", "尿液一般檢查", "血液常規檢查", "腎功能檢查", "肝功能檢查", "新陳代謝檢查",
+                "男性內分泌檢查", "男性癌症檢查", "體脂肪檢查", "腹部超音波", "頸動脈超音波", "男性超音波檢查",
+                "眼部檢查", "胸腔檢查", "自律神經壓力檢查"
+                };
 
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    尿液一般檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    血液常規檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    腎功能檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    肝功能檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    新陳代謝檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    男性內分泌檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    男性癌症檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    體脂肪檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    腹部超音波
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    頸動脈超音波
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    男性超音波檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    眼部檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    胸腔檢查
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                    自律神經壓力檢查
-                </li>
+                    if (healthCheckStatus != null && healthCheckStatus.Count == healthCheckItems.Count)
+                    {
+                        for (int i = 0; i < healthCheckItems.Count; i++)
+                        {
+                            var status = healthCheckStatus[i];
 
+                            // 判斷是否做過
+                            var isDone = new Random().Next(2) == 0; // 50% 的機率假設為已做
+
+                            <li class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkbox@i" @(isDone ? "checked disabled" : "")>
+                                    <label class="form-check-label" for="checkbox@i">@healthCheckItems[i]</label>
+                                </div>
+
+                                <span class="wait-status">
+                                    @{
+                                        if (status == "high")
+                                        {
+                                            <i class="fas fa-user-nurse text-danger"></i>
+                                            <i class="fas fa-user-nurse text-danger"></i>
+                                            <i class="fas fa-user-nurse text-danger"></i>
+                                        }
+                                        else if (status == "medium")
+                                        {
+                                            <i class="fas fa-user-nurse text-warning"></i>
+                                            <i class="fas fa-user-nurse text-warning"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-user-nurse text-success"></i>
+                                        }
+                                    }
+                                </span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">
+                            Data not available.
+                        </li>
+                    }
+                }
             </ul>
         </div>
-        </div>
-    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">        @*第二檢查室項目*@
-
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                一般生理檢查               
-            </li>
-          
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                尿液一般檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                血液常規檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                腎功能檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                肝功能檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                新陳代謝檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性內分泌檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性癌症檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                體脂肪檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                腹部超音波</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                頸動脈超音波</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性超音波檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                眼部檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                胸腔檢查</li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                自律神經壓力檢查</li>
-          
-        </ul>
-         
-      </div>
-    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">        @*第三檢查室項目*@
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                一般生理檢查
-            </li>
-
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                尿液一般檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                血液常規檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                腎功能檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                肝功能檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                新陳代謝檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性內分泌檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性癌症檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                體脂肪檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                腹部超音波
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                頸動脈超音波
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                男性超音波檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                眼部檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                胸腔檢查
-            </li>
-            <li class="list-group-item">
-                <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                自律神經壓力檢查
-            </li>
-
-        </ul>
-        </div>
+    </div>
 </div>
