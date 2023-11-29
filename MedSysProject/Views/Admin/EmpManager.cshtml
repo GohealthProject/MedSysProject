@@ -263,7 +263,7 @@
                         <!--Footer-->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                            <button class="btn btn-success" onclick="putdata()">確定修改</button>
+                            <button class="btn btn-success" onclick="putdata2()">確定修改</button>
                         </div>
                     </div>
                 </div>
@@ -309,6 +309,18 @@
         });
         const state = await response.status;
         console.log(jsonstring);
+        research()
+    }
+    async function putdata2() {
+        let id = document.querySelector("#inputId").value;
+        let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
+        var myForm = document.querySelector("#myUpdataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'PUT',
+            body: data
+        });
+        const state = await response.status;
         research()
     }
     //把資料印到彈出來的視窗
