@@ -251,11 +251,11 @@
                                         <input class="form-control" value="醫生" id="inputClass" name="EmployeeClassId" />
                                         <span class="text-danger"></span>
                                     </div>
-@*                                     <div class="form-group">
+                                    <div class="form-group">
                                         <label class="control-label">生日</label>
                                         <input class="form-control" value="1997/10/13" id="inputDate" name="employeeBirthDate" />
                                         <span class="text-danger"></span>
-                                    </div> *@
+                                    </div>
                                     <div class="form-group">
                                         <label class="control-label">電話</label>
                                         <input class="form-control" value="789446" id="inputPhone" name="EmployeePhoneNum" />
@@ -271,11 +271,11 @@
                                         <input class="form-control" value="James555" id="inputPwd" name="EmployeePassWord" />
                                         <span class="text-danger"></span>
                                     </div>
-@*                                     <div class="form-group">
+                                    <div class="form-group">
                                         <label for="formFile" class="form-label">圖片</label>
                                         <input type="file" class="form-control" id="formFile" name="formFile"  />
                                         <img src="/admin/GetImageByte/1" width="150" />
-                                    </div> *@
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -290,7 +290,7 @@
                         <!--Footer-->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                            <button class="btn btn-success" onclick="putdata()">確定修改</button>
+                            <button class="btn btn-success" onclick="putdata2()">確定修改</button>
                         </div>
                     </div>
                 </div>
@@ -338,13 +338,25 @@
         console.log(jsonstring);
         research()
     }
+    async function putdata2() {
+        let id = document.querySelector("#inputId").value;
+        let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
+        var myForm = document.querySelector("#myUpdataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'PUT',
+            body: data
+        });
+        const state = await response.status;
+        research()
+    }
     //把資料印到彈出來的視窗
    function showTogget(element){
        let par = element.closest("tr");
        let tds = par.getElementsByTagName("td");
        let tdName = tds[3].innerHTML;
        let tdClas = tds[4].innerHTML;
-       // let tddate = tds[5].innerHTML;
+       let tddate = tds[5].innerHTML;   
        let tdphone = tds[6].innerHTML;
        let tdemail = tds[7].innerHTML;
        let tdpwd = tds[8].innerHTML;
@@ -353,7 +365,7 @@
        console.log(tdid);
         document.querySelector("#inputName").value = tdName.trim();
         document.querySelector("#inputClass").value = tdClas.trim();
-        // document.querySelector("#inputDate").value = tddate.trim();
+        document.querySelector("#inputDate").value = tddate.trim();
         document.querySelector("#inputPhone").value = tdphone.trim();
         document.querySelector("#inputEmail").value = tdemail.trim();
         document.querySelector("#inputPwd").value = tdpwd.trim();
