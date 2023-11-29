@@ -131,25 +131,27 @@ namespace MedSysProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult TestEdit(Blog Edit)
+        public IActionResult TestEdit(int BlogId,string Title,int ArticleClassId,string Content,IFormFile BlogImage,int EmployeeId)
         {
-            //Blog original =_db.Blogs.FirstOrDefault(n=>n.BlogId==Edit.BlogId);
-            //if (original != null) 
-            //{//那些欄位可以讓人修改??標題 類別 內文
-            //    original.Title = Edit.Title;//標題
-            //    original.ArticleClassId= Edit.ArticleClassId;//文章類別
-            //    original.Content = Edit.Content;
-            //    if (Edit.BlogImage != null) 
-            //    {
-            //        using (MemoryStream ms = new MemoryStream()) 
-            //        {
-            //            Edit.BlogImage.CopyTo(ms);
-            //            original.BlogImage=ms.ToArray();
-            //        }
-            //    }
+            Blog original = _db.Blogs.FirstOrDefault(n => n.BlogId == BlogId);
+            if (original != null) 
+            { 
+                original.Title = Title;
+                original.ArticleClassId = ArticleClassId;
+                original.Content = Content;
+                if (BlogImage != null&&BlogImage.Length>0) 
+                {
+                    using (MemoryStream ms = new MemoryStream()) 
+                    { 
+                        BlogImage.CopyTo(ms);
+                        original.BlogImage=ms.ToArray();
+                    }
+                }
+                _db.SaveChanges();
 
-            //}
-            return View();
+            }
+            
+            return RedirectToAction("TestList");
         }
 
         #endregion
