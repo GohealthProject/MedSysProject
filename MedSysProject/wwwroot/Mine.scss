@@ -723,5 +723,44 @@ section {
     }
 }
 
+/*單篇貼文相關*/
+.post-content{
+   /* padding-left:10%;*/
+    padding-right:10%;
+    figure{
+        position:relative;
+        left:52%;
+        min-width:990px;
+        transform:translateX(-50%);
+        img{
+            max-width:auto;
+            height:100%;
+        }
+        figurecaption{
+            font-family:var(--font-secondary);
+            font-size:14px;
+            padding:10px 0 0 0 ;
+        }
+    }
+}
+
+@media(max-width:1255px)
+{
+    .post-content{
+        figure{
+            min-width:auto;
+            left:auto!important;
+            transform:none;
+        }
+    }
+}
+@media(max-width:768px)
+{
+    .post-content{
+        padding-left:15px;
+        padding-right:15px;
+    }
+}
+
 
 
