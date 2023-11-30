@@ -153,6 +153,28 @@ namespace MedSysProject.Controllers
             
             return RedirectToAction("TestList");
         }
+        /// <summary>
+        /// 刪除文章，刪除之前=>留言要先處理
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult TestDelete(int? id) 
+        {
+            if (id == null) { return RedirectToAction("TestList"); }
+            else 
+            { //找出該篇所有留言
+                var comments = from comment in _db.Comments
+                               where comment.BlogId == id
+                               select comment;
+                foreach (var comment in comments) 
+                { //刪除留言
+                    this._db.Comments.Remove(comment);
+                }
+                Blog iWantDelete = _db.Blogs.FirstOrDefault(blog=>blog.BlogId == id);
+                _db.Blogs.Remove(iWantDelete);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("TestList");
+        }
 
         #endregion
 

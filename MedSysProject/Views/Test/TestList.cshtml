@@ -77,7 +77,7 @@
             <td>
                 @Html.ActionLink("修改內容", "TestEdit", "Test",new { id=item.BlogId },null) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "TestDelete","Test", new { id=item.BlogId  },new{onclick="confirm('確定要刪除嗎?')"})
             </td>
         </tr>
 }}
