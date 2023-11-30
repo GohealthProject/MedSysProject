@@ -15,6 +15,8 @@
      data-login_uri="/Accout/ValidGoogleLogin"
      data-auto_prompt="false">
 </div>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v18.0" nonce="XWFh9EQT"></script>
 
 
 <div class="container">
@@ -36,6 +38,7 @@
                     
                     <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
                     <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
+
             </div>
             <div class="mb-3 px-3">
                     <div class="form-check text-start my-3">
@@ -53,8 +56,8 @@
                 <div class="row">
                     <div class="mb-3  col-12"><button id="testButton" type="button" class="btn btn-primary w-100 py-2">測試</button></div>
                 </div>
-                <div class="g_id_signin" data-type="standard"></div>
-                <div style="padding-top:10px;"><img src="~/img//ios-line-login1.png" width="260" /></div>
+                <div class="g_id_signin py-2" data-type="standard"></div>
+                <div class="fb-login-button py-2" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div>
             </form>
     </div>
 </div>
