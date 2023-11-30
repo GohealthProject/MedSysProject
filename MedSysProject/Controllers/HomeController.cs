@@ -51,6 +51,32 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+      public IActionResult PlanIntroductionProject(int? id)
+        { //project區==>放方案介紹
+            var project = _context.Plans.Where(p => p.PlanId == id);
+            var join = from p in project
+                       from pj in _context.Projects.DefaultIfEmpty()
+                       from it in _context.Items.DefaultIfEmpty()
+                       select new
+                       {
+                           p.PlanId,
+                           p.PlanName,
+                           p.PlanDescription,
+                           p.PlanRefs,
+                           pj.ProjectId,
+                           pj.ProjectName,
+                           pj.ProjectPrice,
+                           it.ItemId,
+                           it.ItemName,
+
+                       };
+            //_context.Plans.ToList();
+            //_context.Products.ToList();
+          
+
+         
+            return View(join);
+        }
         /////====start 這裡是partialview區====
 
         public IActionResult partialvew1()
@@ -63,11 +89,7 @@ namespace MedSysProject.Controllers
 
             return PartialView(_context.Projects);
         }
-        public IActionResult PlanIntroductionProject()
-        { //project區==>放方案介紹
-
-            return View();
-        }
+  
         public IActionResult partialviewItem()
         { //items區
 
