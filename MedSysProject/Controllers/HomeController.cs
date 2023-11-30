@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
-
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
 
 namespace MedSysProject.Controllers
 {
