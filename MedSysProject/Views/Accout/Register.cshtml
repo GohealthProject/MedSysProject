@@ -20,14 +20,14 @@
                     <label asp-for="MemberName" class="control-label"></label>
                     <div style="display:inline" id="alertName"></div>
                     <hr class="border border-danger border-2 opacity-50">
-                    <input asp-for="MemberName" class="form-control" id="inputName" />
+                    <input asp-for="MemberName" class="form-control" id="inputName" value="@ViewBag.GAccountName" />
                     <span asp-validation-for="MemberName" class="text-danger"></span>
                 </div>
             <div class="form-group">
                 <label asp-for="MemberEmail" class="control-label"></label>
                 <div style="display:inline" id="alertEmail"></div>
                     <hr class="border border-danger border-2 opacity-50">
-                <input asp-for="MemberEmail" class="form-control" id="inputEmail"/>
+                    <input asp-for="MemberEmail" class="form-control" id="inputEmail" value="@ViewBag.GAccountEmail" />
                 <span asp-validation-for="MemberEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
