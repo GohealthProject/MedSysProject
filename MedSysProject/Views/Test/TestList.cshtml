@@ -75,7 +75,7 @@
                 @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("修改內容", "TestEdit", "Test",new { id=item.BlogId },null) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
@@ -84,7 +84,7 @@
     </tbody>
 </table>
 <script>
-        alert('@TempData["SuccessMessage"]');
+        
 </script>
 </body>
 </html>
