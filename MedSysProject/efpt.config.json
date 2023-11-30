@@ -36,6 +36,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[EcpayOrders]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[EmployeeClass]",
          "ObjectType": 0
       },

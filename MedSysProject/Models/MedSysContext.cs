@@ -23,6 +23,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<Corporation> Corporations { get; set; }
 
+    public virtual DbSet<EcpayOrder> EcpayOrders { get; set; }
+
     public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<EmployeeClass> EmployeeClasses { get; set; }
@@ -76,9 +78,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.Content).IsRequired();
             entity.Property(e => e.CreatedAt).HasColumnType("smalldatetime");
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.Title).IsRequired();
 
             entity.HasOne(d => d.ArticleClass).WithMany(p => p.Blogs)
                 .HasForeignKey(d => d.ArticleClassId)
@@ -172,6 +172,25 @@ public partial class MedSysContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("password");
+        });
+
+        modelBuilder.Entity<EcpayOrder>(entity =>
+        {
+            entity.HasKey(e => e.MerchantTradeNo);
+
+            entity.Property(e => e.MerchantTradeNo).HasMaxLength(50);
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
+            entity.Property(e => e.MemberId)
+                .HasMaxLength(50)
+                .HasColumnName("MemberID");
+            entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+            entity.Property(e => e.PaymentType).HasMaxLength(50);
+            entity.Property(e => e.PaymentTypeChargeFee).HasMaxLength(50);
+            entity.Property(e => e.RtnMsg).HasMaxLength(50);
+            entity.Property(e => e.TradeDate).HasMaxLength(50);
+            entity.Property(e => e.TradeNo).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Employee>(entity =>
