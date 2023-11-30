@@ -1,15 +1,12 @@
 ﻿using Google.Apis.Auth;
 using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NuGet.Protocol;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
-
 
 namespace MedSysProject.Controllers
 {
@@ -105,15 +102,15 @@ namespace MedSysProject.Controllers
         public IActionResult Reserve()
         { //預約總覽
 
-            //var datas = (from s in _context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)
-
-            //            select  s).Distinct();
-
-            //var datas = (from s in _context.PlanRefs.Include(p => p.Project.Items)
+            //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
             //             select s).Distinct();
 
-            return View();
+            var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
+
+                         select s).Distinct();
+
+            return View(datas);
         }
         public IActionResult Member()
         { //會員專項
@@ -141,7 +138,7 @@ namespace MedSysProject.Controllers
                        select s;
             return data;
 
-
+           
 
         }
 
