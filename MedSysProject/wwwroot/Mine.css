@@ -667,18 +667,26 @@ section .section-header p {
 
 /*單篇貼文相關*/
 .post-content {
+  /*img{
+      max-width:900px;
+      height:auto;*/
+  /*上傳一張小於990px看看*/
+  /*}*/
   /* padding-left:10%;*/
   padding-right: 10%;
 }
+.post-content p {
+  word-break: break-all;
+}
 .post-content figure {
-  position: relative;
-  left: 52%;
-  min-width: 990px;
-  transform: translateX(-50%);
+  /*position:relative;
+  left:52%;
+  min-width:990px;
+  transform:translateX(-50%);*/
 }
 .post-content figure img {
-  max-width: auto;
-  height: 100%;
+  max-width: 100%;
+  height: auto;
 }
 .post-content figure figurecaption {
   font-family: var(--font-secondary);
