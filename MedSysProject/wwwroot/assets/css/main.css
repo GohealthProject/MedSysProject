@@ -757,7 +757,7 @@ small-img是誰
     padding-right: 15px;
   }
 }
-
+暫時先不搬
 .post-content .firstcharacter {
   float: left;
   font-family: Georgia;
@@ -773,14 +773,14 @@ small-img是誰
   left: 52%;
   min-width: 990px;
   transform: translateX(-50%);
-}
+}(v)
 
 @media (max-width: 1255px) {
   .post-content figure {
     min-width: auto;
     left: auto !important;
     transform: none;
-  }
+  }(v)
 }
 
 .post-content figure figcaption {
