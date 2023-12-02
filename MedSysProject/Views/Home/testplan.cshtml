@@ -2,83 +2,159 @@
     ViewData["Title"] = "testplan";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-<figure class="text-center">
-<h1 class="display-1">@{
-        string corporation = "企業";
-    }企業員工歡迎您</h1>
-</figure>
-<div class="container bg-warning">
-    <div class="table-responsive ">
-    <table class="table table-striped text-successtable-border border-light">
-        <thead class="border-light">
-            <tr>
-                <th scope="col"></th>
-                <th scope="col"><strong>男</strong></th>
-                <th scope="col"><strong>女</strong></th>
-               
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">一般生理檢查</th>
-                <td>v</td>
-                <td>v</td>
-               
-            </tr>
-            <tr>
-                <th scope="row">尿液一般檢查</th>
-                <td><i class="fas fa-check"></i></td>
-                <td><i class="fas fa-check"></i></td>
-                
-            </tr>
-            <tr>
-                <th scope="row">血液常規檢查</th>
-                <td>-</td>
-                <td>Optional</td>
-                
-            </tr>
-            <tr>
-                <th scope="row">腎功能檢查</th>
-                <td>-</td>
-              
-                <td><i class="fas fa-check"></i></td>
-            </tr>
-            <tr>
-                <th scope="row">肝功能檢查</th>
-                <td>-</td>
-                
-                <td><i class="fas fa-check"></i></td>
-            </tr>
-            <tr>
-                <th scope="row">新陳代謝檢查</th>
-                <td>None</td>
-              
-                <td>v</td>
-            </tr>
-            <tr>
-                <td>附餐</td>
-                <td class="fw-bold">v</td>
-               
-                <td class="fw-bold"><a href>v</a></td>
-            </tr>
-            <tr>
-                <th class=""></th>
-                <th class=""><button class="btn btn-primary">加入</button></th>
-                <th class=""><button class="btn btn-primary">加入</button></th>
-               
-                @*<th class=""></th>*@
-            </tr>
-        </tbody>
-    </table>
-        <div id="partialview" style="border:5px double #FA714B">
-        這是partialview，拿來放加入項目
-        @Html.Partial("partialview1")
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        h5 {
+            font-size: 32px;
+            font-weight: bold;
+        }
 
+        .bg {
+            background-image: url('/img/personalplan/tree.jpg');
+            background-size: cover;
+            background-position: top center;
+        }
+
+        .card {
+            background-color: #2F8927;
+            background-position: center;
+            background-size: contain;
+            border: solid;
+            border-color: #2F8927;
+        }
+
+        .text-pink {
+            color: #BF0060;
+        }
+
+        .text-blue {
+            color: #005AB5;
+        }
+
+    </style>
+    <title>方案比較</title>
+</head>
+<body>
+    <div class="container">
+        <section class="text-center">
+            <h4 class="mb-4 bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
+            <div class="row gx-lg-5">
+                <div class="col-lg-6 mb-4">
+                    <div class="card ">
+                        <div class="card-header bg-white py-3">
+                            <p class="text-uppercase small mb-2" style="font-size: 200%;"><strong>婦女安心方案</strong></p>
+                            <h5 class="mb-0">NT$25550</h5>
+                        </div>
+                        <div class="card-body" id="femaleplan">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">一般生理檢查</li>
+                                <li class="list-group-item">尿液一般檢查</li>
+                                <li class="list-group-item">血液常規檢查</li>
+                                <li class="list-group-item">腎功能檢查</li>
+                                <li class="list-group-item">肝功能檢查</li>
+                                <li class="list-group-item">新陳代謝檢查</li>
+                                <li class="list-group-item" style="background-color: #FF79BC;">女性內分泌檢查</li>
+                                <li class="list-group-item" style="background-color: #FF79BC;">女性癌症檢查</li>
+                                <li class="list-group-item">體脂肪檢查</li>
+                                <li class="list-group-item">腹部超音波</li>
+                                <li class="list-group-item">頸動脈超音波</li>
+                                <li class="list-group-item">甲狀腺超音波</li>
+                                <li class="list-group-item" style="background-color: #FF79BC;">女性超音波檢查</li>
+                                <li class="list-group-item">眼部檢查</li>
+                                <li class="list-group-item">胸腔檢查</li>
+                                <li class="list-group-item">自律神經壓力檢查</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white py-3">
+                            <button type="button" id="malePlanConfirm" class="btn btn-success btn-sm">確認方案</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card ">
+                        <div class="card-header bg-white py-3">
+                            <p class="text-uppercase small mb-2" style="font-size: 200%;"><strong>男性保健方案</strong></p>
+                            <h5 class="mb-0">NT$20750</h5>
+                        </div>
+                        <div class="card-body" id="maleplan">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">一般生理檢查</li>
+                                <li class="list-group-item">尿液一般檢查</li>
+                                <li class="list-group-item">血液常規檢查</li>
+                                <li class="list-group-item">腎功能檢查</li>
+                                <li class="list-group-item">肝功能檢查</li>
+                                <li class="list-group-item">新陳代謝檢查</li>
+                                <li class="list-group-item" style="background-color: #66B3FF;">男性內分泌檢查</li>
+                                <li class="list-group-item" style="background-color: #66B3FF;">男性癌症檢查</li>
+                                <li class="list-group-item">體脂肪檢查</li>
+                                <li class="list-group-item">腹部超音波</li>
+                                <li class="list-group-item">頸動脈超音波</li>
+                                <li class="list-group-item">甲狀腺超音波</li>
+                                <li class="list-group-item" style="background-color: #66B3FF;">男性超音波檢查</li>
+                                <li class="list-group-item">眼部檢查</li>
+                                <li class="list-group-item">胸腔檢查</li>
+                                <li class="list-group-item">自律神經壓力檢查</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white py-3">
+                            <button type="button" id="malePlanConfirm" class="btn btn-success btn-sm">確認方案</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
-@section Scripts{
-    <script></script>
 
+<div class="container">
+    <section class="text-center">
+        <h4 class="mb-4 bg-green" style="background-color: aliceblue"><strong class="text-dark">請輸入預約資料</strong></h4>
+        <div class="row gx-lg-5 justify-content-center">
+            <div class="col-lg-12 mb-4">
+                <div class="mb-4">
+                    <label for="companyName" class="form-label">公司名稱：</label>
+                    <input type="text" class="form-control col-md-4 mx-auto" id="companyName" placeholder="輸入公司名稱">
+                </div>
+                <div class="mb-4">
+                    <label for="companyTaxId" class="form-label">公司統編：</label>
+                    <input type="text" class="form-control col-md-4 mx-auto" id="companyTaxId" placeholder="輸入公司統編">
+                </div>
+                <div class="mb-4">
+                    <label for="fullName" class="form-label">姓名：</label>
+                    <input type="text" class="form-control col-md-4 mx-auto" id="fullName" placeholder="輸入您的姓名">
+                </div>
+                <div class="mb-4">
+                    <label for="phoneNumber" class="form-label">電話：</label>
+                    <input type="tel" class="form-control col-md-4 mx-auto" id="phoneNumber" placeholder="輸入您的電話號碼">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="form-label">電子郵件：</label>
+                    <input type="email" class="form-control col-md-4 mx-auto" id="email" placeholder="輸入您的電子郵件">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">送出</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+
+<!--Grid column-->
+@section Scripts{
+    <script>
+
+    </script>
+   
 
     }
