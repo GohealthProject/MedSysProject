@@ -2,10 +2,10 @@
 
 @{
     ViewData["Title"] = "Login";
-    Layout = "_Layout_Fore";
+    Layout = "_Layout_Fore_Login";
 }
-@section LinkStyle{
-    <link href="~/css/AccoutLogin.css" rel="stylesheet"/>
+@section LinkStyle {
+    <link href="~/css/AccoutLogin.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 }
 
@@ -18,61 +18,69 @@
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v18.0" nonce="XWFh9EQT"></script>
 
-
 <div class="container">
     <div class="row align-items-center" style="height:600px">
-    <div class="col-8">
+        <div class="col-8">
             <img src="~/img/Login2.png" class="img-fluid" />
-    </div>
-    
-    <div class="col-4 ">
-        <form method="post" id="from" >
-                <div class="my-3 h3 mb-3 fw-normal">登入</div>
-                @Html.ActionLink("後台登入", "index", "Admin", new { }, new {})
-            <div class="  px-1 form-floating">
-                    
+        </div>
+
+        <div class="col-4 shadow p-3 mb-5 mt-4 bg-white rounded" >
+            <form method="post" id="from" style="padding-top:0px;">
+                <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
+                @* @Html.ActionLink("後台登入", "index", "Admin", new { }, new { }) *@
+
+                <div class="g_id_signin py-1" data-type="standard"></div>
+                <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div>
+
+                <div class="row">
+                    <hr class="line" />
+                </div>
+
+                <div class="  px-1 form-floating">
                     <input type="text" class="form-control" id="txtAccout" name="txtEmail">
                     <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
-            </div>
-            <div class="px-1 form-floating">
-                    
+                </div>
+                <div class="px-1 form-floating">
+
                     <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
                     <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
 
-            </div>
-            <div class="mb-3 px-3">
+                </div>
+                <div class="mb-3 px-3">
                     <div class="form-check text-start my-3">
                         <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">
                             Remember me
                         </label>
-                        @Html.ActionLink("註冊會員","Register","Accout",new{},new{style="margin-left:160px"})
+                        @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:160px" })
                     </div>
-            </div>
-            <div class="row">
-                <div class="mb-3  col-5"></div>
-                    <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-primary w-100 py-2">登入</button></div>
-            </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3  col-5"></div>
+                    <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
+                </div>
                 <div class="row">
                     <div class="mb-3  col-12"><button id="testButton" type="button" class="btn btn-primary w-100 py-2">測試</button></div>
                 </div>
-                <div class="g_id_signin py-2" data-type="standard"></div>
-                <div class="fb-login-button py-2" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div>
+                <div class="row">
+                    <div class="mb-3  col-12"><a href="~/admin" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
+                </div>
             </form>
+        </div>
     </div>
 </div>
-</div>
 
+@section Scripts {
 
 <script>
 
-
+    $('#footer').css("margin-top","150px");
 
 
     $('#testLabel').css("font-size", "15px");
-    $('#testButton').on('click',()=>{
+    $('#testButton').on('click', () => {
         $('#txtAccout').val('night90810@gmail.com');
         $('#txtPassWord').val('Test');
     });
 </script>
-
+}

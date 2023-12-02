@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Amoeba Bootstrap Template - Home</title>
+    <title>GO健康</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -39,13 +39,12 @@
 </head>
 
 <body>
-
     <!-- ======= Header ======= -->
    <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="~/Home/Index">GO健康</a></h1>
+                <h1><a href="~/Home/Index"><img src="~/img/gohealth-logo.png" alt="" class="img-fluid"> GO健康</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
@@ -55,8 +54,10 @@
         <ul>
                     <li><a class="nav-link scrollto" href="#about">關於GO健康的成立</a></li>
                     <li><a class="nav-link scrollto" href="#services">GO健康與您</a></li>
+                    <li><a class="nav-link scrollto" href="#team">GO健康團隊</a></li>
+                    <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
                     <li class="dropdown">
-                        <a href="#"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li><a href="~/Home/planComeparison">方案比較</a></li>
                             <li class="dropdown">
@@ -64,9 +65,9 @@
                                 <ul>
                                     <li><a href="~/Home/xxx">個人健檢</a></li>
                                     <li><a href="~/Home/testplan">企業健檢</a></li>
-                                    <li><a href="#">PLAN 3</a></li>
-                                    <li><a href="#">PLAN 4</a></li>
-                                    <li><a href="#">PLAN 5</a></li>
+                                    <li><a href="#">xx健檢</a></li>
+                                    <li><a href="#">xx健檢</a></li>
+                                    <li><a href="#">xx健檢</a></li>
                                 </ul>
                             </li>
                             <li><a href="~/Home/live">現場狀況</a></li>
@@ -94,8 +95,6 @@
                         </ul> *@
                     </li>
                     <li><a class="nav-link scrollto" href="/blogs/indexold">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
-                    <li><a class="nav-link scrollto" href="#team">GO健康團隊</a></li>
-                    <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
                         <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
@@ -125,20 +124,19 @@
     <footer id="footer">
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong><span>Amoeba</span></strong>. All Rights Reserved
+        <strong><span>GO健康 版權所有</span></strong>
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    <a href="~/">GO健康</a>
       </div>
     </div>
   </footer><!-- End #footer -->
     </main>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
@@ -149,6 +147,7 @@
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>
