@@ -5,11 +5,52 @@
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<style>
+    .collapse-button {
+        cursor: pointer;
+        position: absolute;
+        left: 80%; /*摺疊按鈕放置到檢查項目的右邊 */
+        top: 50%; /* 將摺疊按鈕垂直置中 */
+        transform: translate(-50%, -50%); /* 調整垂直置中 */
+    }
+
+    .list-group-item-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .item-check {
+        flex: 1;
+    }
+
+    .wait-status {
+        flex: 1;
+    }
+
+    .item-details {
+        flex: 3;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .item-details .form-check {
+            margin-right: 20px;
+            
+    }
+
+    .form-check-label {
+        margin-right: px;
+    }
+   
+
+
+</style>
 
 <div>
     <div style="display: flex; justify-content: space-around;">
-
-
         <div style="width: 30%;">
         </div>
         <div style="width: 60%;">
@@ -35,13 +76,13 @@
                             <i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i>: 需等候20分鐘以上，建議先進行其他檢查項目
                         </div>
                     </div>
-                    <div style="display: flex; width: 100%; margin-bottom: 20px;margin-top: 50px;">
-                        <div style="width: 50%; text-align: center;"><strong>檢查完成</strong></div>
-                        <div style="width: 50%; text-align: center;"><strong>檢查項目</strong></div>
-                        <div style="width: 50%; text-align: center;"><strong>現場等候情形</strong></div>
+                    <div style="display: flex; width: 100%; margin-bottom: 20px; margin-top: 50px; justify-content: space-between;">
+                        <div style="width: 33.33%; text-align: left;"><strong>檢查完成</strong></div>
+                        <div style="width: 33.33%; text-align: center;"><strong>檢查項目</strong></div>
+                        <div style="width: 33.33%; text-align: right;"><strong>現場等候情形</strong></div>
                     </div>
                     <div class="offcanvas-body">
-                        <ul class="list-group list-group-flush" style="margin-bottom:100px;">
+                        <ul class="list-group list-group-flush" style="margin-bottom: 100px;">
                             @{
                                 if (ViewBag.HealthCheckStatus != null && ViewBag.HealthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
                                 {
@@ -49,8 +90,8 @@
                                     {
                                         var status = ViewBag.HealthCheckStatus[i];
                                         var isDone = new Random().Next(2) == 0;
-                                        <li class="list-group-item" style="display: flex; justify-content: space-between; align-items: center; text-align: center;">
-                                            <div style="flex: 1;">
+                                        <li class="list-group-item-container">
+                                            <div class="item-check">
                                                 <div class="form-check">
                                                     @if (isDone)
                                                     {
@@ -62,12 +103,17 @@
                                                     }
                                                 </div>
                                             </div>
-                                            <div style="flex: 1;">
+                                            <div class="item-details">
                                                 <div class="form-check">
-                                                    <label class="form-check-label" for="checkbox@i">@ViewBag.HealthCheckItems[i]</label>
+                                                    <label style="justify-content: center" class="form-check-label" for="checkbox@i">@ViewBag.HealthCheckItems[i]</label>
                                                 </div>
+                                                <!-- + 摺疊按鈕，綁定 Click 事件 -->
+                                                <div class="collapse-button" onclick="toggleDetails(@i)">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                </div>
+                                                
                                             </div>
-                                            <div style="flex: 1;">
+                                            <div class="wait-status">
                                                 <span class="wait-status">
                                                     @{
                                                         if (status == "high")
@@ -89,6 +135,32 @@
                                                 </span>
                                             </div>
                                         </li>
+
+                                        <li id="@Html.Raw("details" + i)" style="display: none; flex: 1; width: 50%; margin: 0 auto;">
+                                            <ul class="list-group list-group-flush" style="display: flex; flex-direction: column;">
+                                                @{
+                                                    // 取得對應 ProjectId 的 ItemName 列表
+                                                    var projectId = i + 1; // 假設 ProjectId 從 1 開始
+                                                    var itemNames = ViewBag.ItemNamesByProjectId[projectId] as List<string>;
+
+                                                    if (itemNames != null && itemNames.Any())
+                                                    {
+                                                        foreach (var itemName in itemNames)
+                                                        {
+                                                            <li class="list-group-item">@itemName</li>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="list-group-item">No items available.</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+
+
+
+
                                     }
                                 }
                                 else
@@ -100,13 +172,25 @@
                             }
                         </ul>
                     </div>
-
-                  
                 </div>
+
             </div>
         </div>
         <div style="width: 30%;">
         </div>
-
     </div>
 </div>
+
+<script>
+    // JavaScript 或 jQuery 部分
+    function toggleDetails(index) {
+        var detailsId = "details" + index;
+        var details = document.getElementById(detailsId);
+
+        if (details && details.style.display === "none") {
+            details.style.display = "block";
+        } else if (details) {
+            details.style.display = "none";
+        }
+    }
+</script>

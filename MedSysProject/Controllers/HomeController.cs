@@ -165,8 +165,29 @@ namespace MedSysProject.Controllers
             ViewBag.HealthCheckItems = healthCheckItems;
             ViewBag.HealthCheckStatus = healthCheckStatus;
 
+            // 取得每個 ProjectId 對應的 ItemName 列表
+            var itemNamesByProjectId = new Dictionary<int, List<string>>();
+
+            // 使用 ToList() 將 _context.Projects 查詢的結果讀取到內存中
+            var projects = _context.Projects.ToList();
+
+            foreach (var project in projects)
+            {
+                var itemNames = _context.Items
+                    .Where(item => item.ProjectId == project.ProjectId)
+                    .Select(item => item.ItemName)
+                    .ToList();
+
+                itemNamesByProjectId.Add(project.ProjectId, itemNames);
+            }
+
+            ViewBag.ItemNamesByProjectId = itemNamesByProjectId;
+
             return View();
         }
+
+
+
 
 
         public IActionResult payment()
