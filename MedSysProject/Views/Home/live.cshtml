@@ -2,7 +2,6 @@
     ViewData["Title"] = "個人檢查項目及現場情形";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
     var healthCheckStatus = ViewBag.HealthCheckStatus as List<string>;
-
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -42,21 +41,14 @@
                         <div style="width: 50%; text-align: center;"><strong>現場等候情形</strong></div>
                     </div>
                     <div class="offcanvas-body">
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush" style="margin-bottom:100px;">
                             @{
-                                var healthCheckItems = new List<string>
-                            {
-                            "一般生理檢查", "尿液一般檢查", "血液常規檢查", "腎功能檢查", "肝功能檢查", "新陳代謝檢查",
-                            "男性內分泌檢查", "男性癌症檢查", "體脂肪檢查", "腹部超音波", "頸動脈超音波", "男性超音波檢查",
-                            "眼部檢查", "胸腔檢查", "自律神經壓力檢查"
-                            };
-
-                                if (healthCheckStatus != null && healthCheckStatus.Count == healthCheckItems.Count)
+                                if (ViewBag.HealthCheckStatus != null && ViewBag.HealthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
                                 {
-                                    for (int i = 0; i < healthCheckItems.Count; i++)
+                                    for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
                                     {
-                                        var status = healthCheckStatus[i];
-                                        var isDone = new Random().Next(2) == 0; 
+                                        var status = ViewBag.HealthCheckStatus[i];
+                                        var isDone = new Random().Next(2) == 0;
                                         <li class="list-group-item" style="display: flex; justify-content: space-between; align-items: center; text-align: center;">
                                             <div style="flex: 1;">
                                                 <div class="form-check">
@@ -72,7 +64,7 @@
                                             </div>
                                             <div style="flex: 1;">
                                                 <div class="form-check">
-                                                    <label class="form-check-label" for="checkbox@i">@healthCheckItems[i]</label>
+                                                    <label class="form-check-label" for="checkbox@i">@ViewBag.HealthCheckItems[i]</label>
                                                 </div>
                                             </div>
                                             <div style="flex: 1;">
