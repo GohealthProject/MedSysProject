@@ -38,20 +38,20 @@
                         {
                             if (i != 0)
                             {
-                                @Html.Raw("</div>")
+                                @:</div>
                             }
-                            @Html.Raw("<div class='row'>")
+                            @:<div class='row'>
                             }
                             string s = Model[i].UnitPrice.ToString();
                             <div class=" col " style="height:300px;width:300px">
                             <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:300px;padding-top:10px" />
                             <div>
-                                <a asp-action="selectProduct" asp-route-id="@Model[i].ProductId" class="fs-3">@Model[i].ProductName</a><br />
+                                <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
                                 <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
                             </div>
                         </div>
                         @if(i!=0&&i+i%3==0||i==Model.Count-1){
-                            @Html.Raw("</div>")
+                            @:</div>
                         }
                     }
                 }
@@ -62,7 +62,7 @@
             
             <div style="height:1000px;width:100%;" class="bg-danger"></div>
             <div class="px-4 py-5 my-5 text-center">
-                <img class="d-block mx-auto mb-4" src="~/img/Login1.jpg" alt="" width="72" height="57">
+                <img class="d-block mx-auto mb-4" src="/img/Login1.jpg" alt="" width="72" height="57">
                 <h1 class="display-5 fw-bold text-body-emphasis">Centered hero</h1>
                 <div class="col-lg-6 mx-auto">
                     <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
@@ -102,7 +102,7 @@
                        <div class=" col " style="height:300px;width:300px">
                                     <img src="@Url.Content("~")${Path}" style="height:150px; width:300px;padding-top:10px" />
                                     <div>
-                                                <a asp-action="selectProduct" asp-route-id="${id}" class="fs-3">${Name}</a><br />
+                                        <a href="@Url.Content("~/Shopping/selectProduct/${id}")">${Name}</a><br/>
                                         <span class="fs-3 text-danger">$${Price}</span>
                                     </div>
                                 </div>
