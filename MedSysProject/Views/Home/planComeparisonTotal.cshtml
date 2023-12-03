@@ -3,206 +3,47 @@
     ViewData["Title"] = "planComeparisonTotal";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 <h1>planComeparisonTotal</h1>
 @*暫存*@
 <div class="row gy-4 ">
 
     @*移動區*@
-    <div class="col-lg-3 col-md-4 portfolio-item  filter-heart  ">
-        <div class="member">
-            <img src="~/img/PersonalPlan/heart.jpg" alt="" >
-            <h4>樂活銀髮方案</h4>
-            <span>
-                <input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">
-                加入方案比較
-            </span>
-            <p>
-                方案描述
-            </p>
-
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
+    <div class="container">
+        <h2>Filterable List</h2>
+        <p>Type something in the input field to search the list for specific items:</p>
+        <input class="form-control" id="myInput" type="text" placeholder="Search..">
+        <br>
+        <ul class="list-group" id="myList">
+            <li class="list-group-item">First item</li>
+            <li class="list-group-item">Second item</li>
+            <li class="list-group-item">Third item</li>
+            <li class="list-group-item">Fourth</li>
+        </ul>
     </div>
-
-    <div class="col-lg-3 col-md-4 ">
-        <div class="member">
-            <img src="~/img/PersonalPlan/kidney.jpg" alt="" width="200" height="150">
-            <h4>活力青年方案</h4>
-            <span>方案</span>
-            <p>
-                方案描述
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/liver.jpg" alt="" width="200" height="150">
-            <h4>護肝方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/lung.jpg" alt="" width="200" height="150">
-            <h4>健肺方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4 ">
-        <div class="member">
-            <img src="~/img/PersonalPlan/colon.jpg" alt="" width="200" height="150">
-            <h4>樂活銀髮方案</h4>
-            <span>方案</span>
-            <p>
-                方案描述
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/bladder.jpg" alt="" width="200" height="150">
-            <h4>活力青年方案</h4>
-            <span>方案</span>
-            <p>
-                方案描述
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/pancreas.jpg" width="200" height="150">
-            <h4>護肝方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/stomach.jpg" width="200" height="150">
-            <h4>健肺方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/uterus.jpg" width="200" height="150">
-            <h4>健肺方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/golbladder.jpg" width="200" height="150">
-            <h4>健肺方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-4">
-        <div class="member">
-            <img src="~/img/PersonalPlan/spleen.jpg" width="200" height="150">
-            <h4>健肺方案</h4>
-            <span>方案</span>
-            <p>
-                方案介紹
-            </p>
-            <div class="social">
-                <a href=""><i class="bi bi-twitter"></i></a>
-                <a href=""><i class="bi bi-facebook"></i></a>
-                <a href=""><i class="bi bi-instagram"></i></a>
-                <a href=""><i class="bi bi-linkedin"></i></a>
-            </div>
-        </div>
-    </div>
-
     
 
     @*移動區*@
 
 
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myList li").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+}
