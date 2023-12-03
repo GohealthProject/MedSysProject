@@ -1032,10 +1032,10 @@ section {
 # Footer
 --------------------------------------------------------------*/
 #footer {
-  background: #073839;
-  padding: 30px 0;
-  color: #fff;
-  font-size: 14px;
+    background: #073839;
+    padding: 30px 0;
+    color: #fff;
+    font-size: 14px;
 }
 
 #footer .copyright {
@@ -1048,3 +1048,4 @@ section {
   font-size: 13px;
   color: #fff;
 }
+

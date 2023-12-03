@@ -185,7 +185,7 @@ namespace MedSysProject.Controllers
         /// <returns></returns>
         public IActionResult SinglePost(int? singleBlogID)
         {
-            singleBlogID = 37;
+            //singleBlogID = 37;
             IEnumerable<Blog> singlePost = null;
             if (singleBlogID != null)
             {

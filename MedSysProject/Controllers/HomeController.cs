@@ -143,21 +143,51 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult live()
-        { //現場檢查狀況
-          // 模擬每個檢查項目的等待情形
-          // 先用假資料
-            var healthCheckStatus = new List<string>
-    {
-        "high", "medium", "low", "low", "high", "medium", "low", "high", "medium", "low",
-        "high", "medium", "low", "high", "medium"
-    };
+        public IActionResult Live()
+        {
+            // 使用 DbContext 取得檢查項目名稱列表
+            var healthCheckItems = _context.Projects.Select(p => p.ProjectName).ToList();
 
-            // 將等待情形傳遞到 View
+            // 模擬每個檢查項目的等待情形
+            // 使用隨機生成的資料
+            var random = new Random();
+            var healthCheckStatus = new List<string>();
+
+            string[] possibleStatus = { "high", "medium", "low" };
+
+            for (int i = 0; i < healthCheckItems.Count; i++)
+            {
+                int index = random.Next(possibleStatus.Length);
+                healthCheckStatus.Add(possibleStatus[index]);
+            }
+
+            // 將檢查項目和等待情形傳遞到 View
+            ViewBag.HealthCheckItems = healthCheckItems;
             ViewBag.HealthCheckStatus = healthCheckStatus;
-            return View();
 
+            // 取得每個 ProjectId 對應的 ItemName 列表
+            var itemNamesByProjectId = new Dictionary<int, List<string>>();
+
+            // 使用 ToList() 將 _context.Projects 查詢的結果讀取到內存中
+            var projects = _context.Projects.ToList();
+
+            foreach (var project in projects)
+            {
+                var itemNames = _context.Items
+                    .Where(item => item.ProjectId == project.ProjectId)
+                    .Select(item => item.ItemName)
+                    .ToList();
+
+                itemNamesByProjectId.Add(project.ProjectId, itemNames);
+            }
+
+            ViewBag.ItemNamesByProjectId = itemNamesByProjectId;
+
+            return View();
         }
+
+
+
 
 
         public IActionResult payment()

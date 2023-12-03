@@ -725,16 +725,25 @@ section {
 
 /*單篇貼文相關*/
 .post-content{
+    p{
+        word-break:break-all;//break-all長度到了換行
+    }
+    /*img{
+        max-width:900px;
+        height:auto;*/
+        /*上傳一張小於990px看看*/
+    /*}*/
    /* padding-left:10%;*/
     padding-right:10%;
     figure{
-        position:relative;
+        //這邊不加看起來比較自然，後續再評估
+        /*position:relative;
         left:52%;
         min-width:990px;
-        transform:translateX(-50%);
+        transform:translateX(-50%);*/
         img{
-            max-width:auto;
-            height:100%;
+            max-width:100%;
+            height:auto;
         }
         figurecaption{
             font-family:var(--font-secondary);
