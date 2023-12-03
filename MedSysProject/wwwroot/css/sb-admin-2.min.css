@@ -5000,7 +5000,9 @@ input[type=submit].btn-block {
     background-color: #fff;
     background-clip: border-box;
     border: 1px solid #e3e6f0;
-    border-radius: .35rem
+    border-radius: .35rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
     .card > hr {
@@ -10758,7 +10760,8 @@ button.bg-dark:hover {
 }
 
 .text-primary {
-    color: #4e73df !important
+    color: #379564 !important;
+    font-size: large !important;
 }
 
 a.text-primary:focus,
@@ -11103,7 +11106,7 @@ a:focus {
 /* 左側邊欄顏色 */
 .bg-gradient-primary {
     background-color: #133322;
-    background-image: linear-gradient(180deg, #133322 50%, #07120d 100%);
+    background-image: linear-gradient(90deg,#19211d 0%, #133322 100%);
     background-size: cover
 }
 
@@ -11714,7 +11717,7 @@ a:focus {
         }
 
 
-        /*側邊欄的寬度*/
+/*側邊欄的寬度*/
 @media (min-width:768px) {
     .sidebar {
         width: 20rem !important
@@ -11753,8 +11756,8 @@ a:focus {
         }
 
             .sidebar .nav-item .nav-link i {
-                font-size: .85rem;
-                margin-right: .25rem
+                font-size: 1.35rem;
+                margin-right: 1.25rem
             }
 
             .sidebar .nav-item .nav-link span {
