@@ -143,20 +143,24 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult live()
-        { //現場檢查狀況
-          // 模擬每個檢查項目的等待情形
-          // 先用假資料
-            var healthCheckStatus = new List<string>
-    {
-        "high", "medium", "low", "low", "high", "medium", "low", "high", "medium", "low",
-        "high", "medium", "low", "high", "medium"
-    };
+        public IActionResult Live()
+        {
+            // 模擬每個檢查項目的等待情形
+            // 使用隨機生成的資料
+            var random = new Random();
+            var healthCheckStatus = new List<string>();
+
+            string[] possibleStatus = { "high", "medium", "low" };
+
+            for (int i = 0; i < 15; i++)
+            {
+                int index = random.Next(possibleStatus.Length);
+                healthCheckStatus.Add(possibleStatus[index]);
+            }
 
             // 將等待情形傳遞到 View
             ViewBag.HealthCheckStatus = healthCheckStatus;
             return View();
-
         }
 
 
