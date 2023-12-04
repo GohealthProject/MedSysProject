@@ -46,40 +46,42 @@
 
                         <div class="row">
                             <div class="col-md-10">
-                                <form asp-action="EmpCreate">
+                                <form asp-action="EmpCreate" id="myCreatedataform">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
+                                        <input type="hidden" id="inputId" value="" name="EmployeeId" />
                                         <label class="control-label">姓名</label>
-                                        <input class="form-control" />
+                                        <input class="form-control" id="inputName" name="EmployeeName" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
-                                        <select class="form-control"  id="inputClass" name="EmployeeClassId">
+                                        <select class="form-control" id="inputClass" name="EmployeeClassId">
                                             <option value="1">醫生</option>
                                             <option value="2">護理師</option>
                                             <option value="3">行政人員</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
+                                    @* 生日 *@
                                     <div class="form-group">
                                         <label class="control-label">生日</label>
-                                        <input type="date" class="form-control" />
+                                        <input type="date" class="form-control" id="inputDate" name="employeeBirthDate" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">電話</label>
-                                        <input class="form-control" />
+                                        <input class="form-control" id="inputPhone" name="EmployeePhoneNum" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">信箱</label>
-                                        <input class="form-control" />
+                                        <input class="form-control" id="inputEmail" name="EmployeeEmail" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">密碼</label>
-                                        <input class="form-control" />
+                                        <input class="form-control" id="inputPwd" name="EmployeePassWord" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
@@ -100,7 +102,7 @@
                         <!--Footer-->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                            <button class="btn btn-success">確定新增</button>
+                            <button class="btn btn-success" onclick="postdata2()">確定新增</button>
                         </div>
                     </div>
                 </div>
@@ -295,29 +297,21 @@
     function updata(element) {
         showTogget(element)
     }
-    //修改員工資料
-    // async function putdata(){
-    //        let id = document.querySelector("#inputId").value;
-    //        let apiurl = `https://localhost:7078/api/Employees/${id}`
-    //        var myForm = document.querySelector("#myUpdataform");
-    //        var data = new FormData(myForm);
-    //        var jsonobj = {};
-    //        data.forEach((value, key) => {
-    //            jsonobj[key] = value;
-    //        })
-    //        const jsonstring = JSON.stringify(jsonobj);
 
-    //        const response = await fetch(apiurl,{
-    //            method: 'PUT',
-    //            headers: {
-    //                'Content-Type': 'application/json'
-    //            },
-    //            body: jsonstring
-    //        });
-    //    const state = await response.status;
-    //        console.log(jsonstring);
-    //        research()
-    //    }
+    async function postdata2() {
+        let apiurl = `https://localhost:7078/api/Employees/PostEmployee`
+        var myForm = document.querySelector("#myCreatedataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'POST',
+            body: data
+        });
+        const state = await response.status;
+        if (response.ok) {
+            research()
+        }
+    }
+    
     async function putdata2() {
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
@@ -328,7 +322,9 @@
             body: data
         });
         const state = await response.status;
-        research()
+        if(response.ok){
+            research()
+        }
     }
     //把資料印到彈出來的視窗
     function showTogget(element) {
@@ -368,6 +364,16 @@
             const phone = emp.employeePhoneNum;
             const email = emp.employeeEmail;
             const pwd = emp.employeePassWord;
+            const photo = emp.employeePhoto;
+            let binary = window.atob(photo);
+            let binarydata = new Uint8Array(binary.length);
+            for (let i = 0 ; i <binary.length ; i++){
+                binarydata[i]= binary.charCodeAt(i);
+            }
+            let blob = new Blob([binarydata],{type:'image/jpg'});
+            let imgurl = URL.createObjectURL(blob);
+            console.log(blob);
+            console.log(imgurl);
             let cid = emp.employeeClassId;
             if(cid ==1){
                 cid = "醫生";
@@ -387,7 +393,7 @@
                                                       ${count}
                                                  </td>
                                                  <td>
-                                                     <img src="/Admin/GetImageByte/${id}" width="100">
+                                                         <img src="${imgurl}" width="100">
                                                   </td>
                                                   <td>
                                                        ${name}
@@ -408,7 +414,7 @@
                                                         ${pwd}
                                                     </td>
                                                     <td>
-                                                         <a href="@Url.Action("Edit", new { id = 5 })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                             <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                                          <i class="fas fa-user-edit"></i>
                                                          </a>
                                                          <a class="btn btn-danger" onclick="get(this)">
@@ -417,7 +423,10 @@
                                                       </td>
                                                 </tr>
                                             `
+                                            count++;
+            console.log(count);
             return s
+            
         })
         document.querySelector("#go").innerHTML = value.join("");
     }
