@@ -6,6 +6,10 @@
 }
 <script src="~/forevendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
 <style>
     .left {
        /* position: fixed;*/
@@ -48,14 +52,18 @@
         color: #fff;
     }
 
-    td, th {
+    td, th, h4 {
         text-align: center;
-        
+        justify-content: center;
     }
     #co{
         text-align: center;
         justify-content: center;
         
+    }
+
+    #chose1, #chose2 {
+        width:80%;
     }
   /*  div {
         border: 1px solid #333;
@@ -76,7 +84,11 @@
         <div class="container-fluid col-10 tab-content position-relative">
             <div class="tab-pane fade show active" id="tab2">
                 <div class="row">
-                    <div class="col-6 title">
+                    <div class="col-2"></div>
+                    <div class="col-2" >
+                        <h4 >同方案數值比較</h4>
+                    </div>
+                    <div class="col-2 title">
                         <select class="form-select" aria-label="Default select example" id="chose1">
                             <option selected>選擇健檢報告</option>
 
@@ -85,7 +97,7 @@
                                 foreach (var item in Model)
                                 {
                                     count++;
-                                    <option value="1">@item</option>
+                                    <option value="1">@item.Value.ToShortDateString()</option>
                                     
                                 }
                             }
@@ -93,110 +105,157 @@
                             
                         </select>
                     </div>
-                    <div class="col-6 title">
+                    <div class="col-2 title">
+                        <select class="form-select" aria-label="Default select example" id="chose1">
+                            <option selected>選擇健檢報告</option>
+
+                            @{
+                                int count1 = 0;
+                                foreach (var item in Model)
+                                {
+                                    count1++;
+                                    <option value="1">@item</option>
+
+                                }
+                            }
+
+
+                        </select>
+                    </div>
+                   <div class="col-4"></div>
+                  @*  <div class="col-6 title">
                         <select class="form-select" aria-label="Default select example" id="chose2">
                             <option selected>選擇健檢報告</option>
                             <option value="1">2023/09/30</option>
                             <option value="2">2023/11/11</option>
                         </select>
-                    </div>
+                    </div>*@
+                    <div class="col-2"></div>
                     <div class="col-6">
-                        <table border="1" class="col-12">
+                        <table border="1" id="table1" data-show-print="true">
                             <thead>
                                 <tr>
                                     <th class="col-4">
                                         項目
                                     </th>
-                                    <th class="col-4">
-                                        檢驗結果
+                                    <th class="col-3">
+                                        XX年度檢驗結果
                                     </th>
-                                    <th class="col-4">
+                                    <th class="col-3">
+                                        XX年度檢驗結果
+                                    </th>
+                                    <th class="col-3">
                                         標準值
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id ="reportshow1" class="d-none">
+                            <tbody id ="reportshow1" @*class="d-none"*@>
                                 <tr>
-                                    <td class="col-4">
+                                    <td>
                                         白血球總數
                                     </td>
-                                    <td class="col-4">3.3</td>
-                                    <td class="col-4">
+                                    <td>3.3</td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
+
+                                    </td>
+                                    <td>
                                         3.25~9.16 (10^3/uL)
 
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="col-4">
+                                    <td>
                                         白血球分類-嗜中性球
 
                                     </td>
-                                    <td class="col-4 color-red">80</td>
-                                    <td class="col-4">
+                                    <td class="color-red">80</td>
+                                    
+                                    <td>
                                         39-74
                                         (%)
+
+                                    </td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
 
                                     </td>
                                 </tr>
                                 <tr >
                                    
                                    
-                                    <td class="col-4">
+                                    <td>
                                         白血球分類-淋巴球
 
                                     </td>
-                                    <td class="col-4">30</td>
-                                    <td class="col-4">
+                                    <td>30</td>
+                                    <td>
                                         19-48
                                         (%)
+
+                                    </td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
 
                                     </td>
                                 
                                 </tr>
                                 <tr>
-                                    <td class="col-4">
+                                    <td>
                                         白血球分類-單核球
 
 
                                     </td>
-                                    <td class="col-4">
+                                    <td>
                                         8
                                     </td>
-                                    <td class="col-4">
+                                    <td>
                                         2.0-10.0
                                         (%)
 
                                     </td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
+
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="col-4">
+                                    <td>
                                         白血球分類-嗜酸性球
 
 
                                     </td>
-                                    <td class="col-4 color-red">9</td>
-                                    <td class="col-4">
+                                    <td>9</td>
+                                    <td>
                                         0-7
 
                                         (%)
+
+                                    </td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
 
                                     </td>
                                 </tr>
                                 <tr>
                                    
                                     
-                                    <td class="col-4">
+                                    <td>
                                         白血球分類-嗜鹼性球
 
                                     </td>
-                                    <td class="col-4">
+                                    <td class="col-3">
                                         1
                                     </td>
-                                    <td class="col-4">
+                                    <td class="col-3">
                                         0-1.5
 
 
                                         (%)
+
+                                    </td>
+                                    <td>
+                                        3.25~9.16 (10^3/uL)
 
                                     </td>
                                 </tr>
@@ -204,7 +263,8 @@
 
                         </table>
                     </div>
-                    <div class="col-6">
+
+                   @* <div class="col-6">
                         <table border="1" class="col-12">
                             <thead>
                                 <tr>
@@ -247,11 +307,11 @@
                             </tbody>
                             
                         </table>
-                    </div>
+                    </div>*@
 
                 </div>
             </div>
-            <div class="tab-pane fade" id="tab4">
+ @*           <div class="tab-pane fade" id="tab4">
                 <!-- Tab panes -->
 
                 <ul class="nav nav-tabs mb-2" id="myTab">
@@ -261,9 +321,7 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#profile">回覆</a>
                     </li>
-                   @* <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact</a>
-                    </li>*@
+                 
                 </ul>
                 <!--content zone-->
                 <div class="tab-content ">
@@ -332,9 +390,8 @@
                         </div>
                     </div>
                   
-                    @*<div class="tab-pane fade" id="contact">Contact Text</div>
-                </div>*@
-            </div>
+             
+            </div>*@
 
             
         </div>
@@ -375,6 +432,12 @@
         $("#reportshow2").removeClass("d-none")
 
 
+    })
+
+    var $table = $('#table1')
+
+    $(function () {
+        $table.bootstrapTable()
     })
    
 </script>
