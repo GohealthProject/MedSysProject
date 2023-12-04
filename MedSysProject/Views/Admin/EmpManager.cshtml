@@ -295,29 +295,7 @@
     function updata(element) {
         showTogget(element)
     }
-    //修改員工資料
-    // async function putdata(){
-    //        let id = document.querySelector("#inputId").value;
-    //        let apiurl = `https://localhost:7078/api/Employees/${id}`
-    //        var myForm = document.querySelector("#myUpdataform");
-    //        var data = new FormData(myForm);
-    //        var jsonobj = {};
-    //        data.forEach((value, key) => {
-    //            jsonobj[key] = value;
-    //        })
-    //        const jsonstring = JSON.stringify(jsonobj);
-
-    //        const response = await fetch(apiurl,{
-    //            method: 'PUT',
-    //            headers: {
-    //                'Content-Type': 'application/json'
-    //            },
-    //            body: jsonstring
-    //        });
-    //    const state = await response.status;
-    //        console.log(jsonstring);
-    //        research()
-    //    }
+    
     async function putdata2() {
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
@@ -328,7 +306,9 @@
             body: data
         });
         const state = await response.status;
-        research()
+        if(response.ok){
+            research()
+        }
     }
     //把資料印到彈出來的視窗
     function showTogget(element) {
@@ -368,6 +348,16 @@
             const phone = emp.employeePhoneNum;
             const email = emp.employeeEmail;
             const pwd = emp.employeePassWord;
+            const photo = emp.employeePhoto;
+            let binary = window.atob(photo);
+            let binarydata = new Uint8Array(binary.length);
+            for (let i = 0 ; i <binary.length ; i++){
+                binarydata[i]= binary.charCodeAt(i);
+            }
+            let blob = new blob([binarydata],{type:'image/jpg'});
+            let imgurl = URL.createObjectURL(blob);
+            console.log(blob);
+            console.log(imgurl);
             let cid = emp.employeeClassId;
             if(cid ==1){
                 cid = "醫生";
@@ -378,6 +368,7 @@
             };
             let s =
                 `
+                
                                              <tr>
                                                 <td>
                                                      <input type="hidden" value=${id}>
@@ -387,7 +378,7 @@
                                                       ${count}
                                                  </td>
                                                  <td>
-                                                     <img src="/Admin/GetImageByte/${id}" width="100">
+                                                         <img src="${imgurl}" width="100">
                                                   </td>
                                                   <td>
                                                        ${name}
@@ -419,6 +410,7 @@
                                             `
             return s
         })
+        console.log(value.join(""));
         document.querySelector("#go").innerHTML = value.join("");
     }
     async function del(id) {
