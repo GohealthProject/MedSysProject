@@ -2,6 +2,7 @@
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace MedSysProject.Controllers
@@ -99,6 +100,21 @@ namespace MedSysProject.Controllers
         {
             var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
             return View(q);
+        }
+        public IActionResult OrderList()
+        {
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            List<COrderWarp>list = new List<COrderWarp>();
+            var q = _db.Orders.Where(n => n.MemberId == m.MemberId);
+            foreach(var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                list.Add(od);
+            }
+             
+            return View(list);
         }
     }
 }

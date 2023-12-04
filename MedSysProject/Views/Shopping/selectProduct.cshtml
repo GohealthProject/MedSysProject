@@ -28,7 +28,7 @@
             <form method="post"  id="datas">
             <select class="form-select" style="width:200px;display:inline" name="count">
                     @{
-                        for (int i = 1; i == Model.UnitsInStock; i++)
+                        for (int i = 1; i <= Model.UnitsInStock; i++)
                         {
                             <option value="@i">@i</option>
                             if (i == 50)
