@@ -35,22 +35,18 @@ namespace MedSysProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult xxx()
-        {//plan選擇，個人版，男女區別，待更改CONTROLL名稱==>自訂方案(含搜尋項目功能)
-
-            return View(_context.Projects);
-        }
+       
         public IActionResult planComeparison()
         {////方案比較(設計filter篩選方案)
             return View();
         }
         public IActionResult planComeparisonTotal()
-        {////方案比較總攬(總項+PDF產生)
+        {////方案比較總計(總項+PDF產生)
             return View();
         }
 
       public IActionResult PlanIntroductionProject(int? id)
-        { //project區==>放方案介紹
+        { //放方案介紹
             var project = _context.Plans.Where(p => p.PlanId == id);
             var join = from p in project
                        from pj in _context.Projects.DefaultIfEmpty()
@@ -75,6 +71,13 @@ namespace MedSysProject.Controllers
          
             return View(join);
         }
+       public IActionResult xxx()
+        {//自訂方案加選與總計(含搜尋項目功能)
+
+            return View(_context.Projects);
+        }
+
+
         /////====start 這裡是partialview區====
 
         public IActionResult partialvew1()
@@ -89,7 +92,7 @@ namespace MedSysProject.Controllers
         }
   
         public IActionResult partialviewItem()
-        { //items區
+        { //items區==>測試用
 
             return PartialView();
         }
