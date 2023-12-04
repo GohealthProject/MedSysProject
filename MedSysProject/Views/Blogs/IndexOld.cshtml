@@ -1,4 +1,4 @@
-﻿
+﻿@model List<MedSysProject.Models.Blog>
 @{
     ViewData["Title"] = "IndexOld";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
@@ -6,7 +6,7 @@
 
 
 <main id="main">
-    <!-- ======= Hero Slider Section ======= -->
+    <!-- ======= 播放牆 ======= -->
     <section id="hero-slider" class="hero-slider">
         <div class="container-md">
             <div class="row">
@@ -114,6 +114,8 @@
     </section>
     <!-- End Hero Slider Section -->
     <!-- ======= Post Grid Section ======= -->
+    @{
+       
     <section id="posts" class="posts">
         <div class="container">
             <div class="row g-5">
@@ -125,12 +127,12 @@
                                  class="img-fluid" />
                         </a>
                         <div class="post-meta">
-                            <span class="date">Culture</span>
+                            <span class="date">@Model[0].ArticleClass.BlogCategory1</span>
                             <span class="mx-1">&bullet;</span>
-                            <span>Jul 5th '22</span>
+                            <span>@Model[0].CreatedAt</span>
                         </div>
                         <h2>
-                            <a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a>
+                            <a href="single-post.html">@Model[0].Title</a>
                         </h2>
                         <p class="mb-4 d-block">
                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
@@ -965,5 +967,5 @@
             <!-- End .row -->
         </div>
     </section>
-    
+    }
 </main>
