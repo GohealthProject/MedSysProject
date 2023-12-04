@@ -55,10 +55,10 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
-                                        <select class="form-control" value="醫生" id="inputClass" name="EmployeeClassId">
-                                            <option value="醫生">醫生</option>
-                                            <option value="護理師">護理師</option>
-                                            <option value="行政人員">行政人員</option>
+                                        <select class="form-control"  id="inputClass" name="EmployeeClassId">
+                                            <option value="1">醫生</option>
+                                            <option value="2">護理師</option>
+                                            <option value="3">行政人員</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -225,9 +225,9 @@
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
                                         <select class="form-control" value="醫生" id="inputClass" name="EmployeeClassId">
-                                            <option value="醫生">醫生</option>
-                                            <option value="護理師">護理師</option>
-                                            <option value="行政人員">行政人員</option>
+                                            <option value="1">醫生</option>
+                                            <option value="2">護理師</option>
+                                            <option value="3">行政人員</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -368,8 +368,14 @@
             const phone = emp.employeePhoneNum;
             const email = emp.employeeEmail;
             const pwd = emp.employeePassWord;
-            const cid = emp.employeeClassId;
-
+            let cid = emp.employeeClassId;
+            if(cid ==1){
+                cid = "醫生";
+            }else if(cid==2){
+                cid = "護理師";
+            }else{
+                cid = "行政人員";
+            };
             let s =
                 `
                                              <tr>

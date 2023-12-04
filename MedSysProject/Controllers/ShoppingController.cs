@@ -45,32 +45,42 @@ namespace MedSysProject.Controllers
         public IActionResult selectProduct(int id)
         {
             var q = _db.Products.Find(id);
-            return View(q);
+            if((bool)q.Discontinued)
+            {
+                return View(q);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+            
         }
-       public IActionResult AddToCart(CAddToCartViewModel vm)
+        [HttpPost]
+        public IActionResult AddToCart()
         {
+            var data = Request.Form;
             List<CCartItem> cart = null;
-            var q = _db.Products.Find(vm.id);
+            var q = _db.Products.Find(Int32.Parse(data["id"]));
             string json = "";
-            if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART)!=null)
+            if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) != null)
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                cart =JsonSerializer.Deserialize<List<CCartItem>>(json);
+                cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
             }
             else
                 cart = new List<CCartItem>();
 
-                CCartItem item = new CCartItem();
-                item.Product = q;
-                item.ProductName = q.ProductName;
-                item.UnitPrice = (int)q.UnitPrice;
-                item.小計 = vm.count * (int)q.UnitPrice;
-                item.count = vm.count;
-                cart.Add(item);
-                json = JsonSerializer.Serialize(cart);
-                HttpContext.Session.SetString(CDictionary.SK_ADDTOCART,json);
+            CCartItem item = new CCartItem();
+            item.Product = q;
+            item.ProductName = q.ProductName;
+            item.UnitPrice = (int)q.UnitPrice;
+            item.小計 = Int32.Parse(data["count"]) * (int)q.UnitPrice;
+            item.count = Int32.Parse(data["count"]);
+            cart.Add(item);
+            json = JsonSerializer.Serialize(cart);
+            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, json);
 
-            return Content("加入成功");
+            return Content("加入購物車成功");
         }
         public IActionResult CartList()
         {

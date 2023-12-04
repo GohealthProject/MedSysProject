@@ -2,29 +2,47 @@
 @{
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    string s = Model.UnitPrice.ToString();
 }
 
 <div class="container"style="padding:20px;">
-    <div style="width:50%;float:left ;height:500px" class="border-end" >
-        <img src="~/img/Login2.png" style="width:620px;height:400px ;margin-left:10px;margin-top:50px"/>
+    <div style="width:50%;float:left ;height:550px" class="border-end" >
+        <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model.FimagePath))" style="width:620px;height:400px ;margin-left:10px;" id="mainImg" />
+        <div style="margin-top:20px;" id="imgList">
+            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model.FimagePath))" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
+            <img src="~/img/Login1.jpg" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)"/>
+            <img src="~/img/Member.jpg" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
+            <img src="~/img/favicon.png" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
+        </div>
     </div>
-    <div style="width:50%;height:500px;float:right ;padding:20px" class="border-left">
-        <div><span class="fs-2">產品標語</span><br /><span class="fs-1">產品名稱</span><br /><span class="fs-2">產品簡述</span></div>
-        <div class="col-12 border rounded " style="margin-top:20px;padding:10px;display: flex; justify-content: space-between;"><span class="text-danger">價格 : 66,666</span><a asp-action="折價券">折價券</a></div>
+    <div style="width:50%;height:550px;float:right ;padding:20px" class="border-left">
+        <div><span class="fs-1">@Model.ProductName</span><br />@{
+                if (Model.License != null)
+                {
+                    <span class="fs-4">@Model.License</span>
+                }
+            }</div>
+        <div class="col-12 border rounded " style="margin-top:20px;padding:10px;display: flex; justify-content: space-between;"><span class="text-danger fs-2">$@s.TrimEnd('0').TrimEnd('.')</span><a asp-action="折價券" class="fs-2">折價券</a></div>
         <div class="col-12"><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /></div>
         <div class="col-12" style="margin-top:50px;">
-            <form method="post" asp-action="AddToCart">
+            <form method="post"  id="datas">
             <select class="form-select" style="width:200px;display:inline" name="count">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+                    @{
+                        for (int i = 1; i < Model.UnitsInStock; i++)
+                        {
+                            <option value="@i">@i</option>
+                            if (i == 50)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    }
             </select>
             <input type="hidden" name="id" value="@Model.ProductId" />
             <input type="checkbox"  value="追蹤"style="margin-left:180px"/>
             <button>加入購物車</button>
-            <input type="submit" value="立即購買" />
+                <input type="button" onclick="addToCart()" value="立即購買" />
             </form>
         </div>
     </div>
@@ -35,3 +53,29 @@
     <div style="height:1000px " class="bg-danger">詳細內容</div>
 </div>
 
+@section Scripts{
+    <script>
+        const item = document.querySelector("#datas");
+        var data = new FormData(item);
+        
+        async function addToCart(){
+            var data = new FormData(item);
+            const response = await fetch("@Url.Content("~/Shopping/AddToCart")",{
+                body: data,
+                method:"POST",
+            })
+            const re = await response.text();
+            alert(re);
+        }
+        document.addEventListener('DOMContentLoaded',()=>{
+            
+        })
+        function changeImg(imgElement) {
+            $("#imgList>img").css("border", "");
+            const src = imgElement.src;
+            document.querySelector("#mainImg").src = src;
+            imgElement.style.border = "1px dashed red";
+            
+        }
+    </script>
+}
