@@ -368,7 +368,6 @@
             };
             let s =
                 `
-                
                                              <tr>
                                                 <td>
                                                      <input type="hidden" value=${id}>
@@ -408,9 +407,11 @@
                                                       </td>
                                                 </tr>
                                             `
+                                            count++;
+            console.log(count);
             return s
+            
         })
-        console.log(value.join(""));
         document.querySelector("#go").innerHTML = value.join("");
     }
     async function del(id) {
