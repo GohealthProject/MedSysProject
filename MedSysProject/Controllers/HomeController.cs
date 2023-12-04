@@ -266,7 +266,10 @@ namespace MedSysProject.Controllers
             return result.ToString();
         }
 
-
+        public IActionResult about()
+        { //緣由
+            return View();
+        }
 
 
 

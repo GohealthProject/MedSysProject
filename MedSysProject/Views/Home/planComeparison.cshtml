@@ -3,6 +3,17 @@
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+<head>
+    <style>
+        .countblock{ 
+     
+            background-image: url('/img/personalplan/count.jpg');
+            background-size: contain;
+            background-position: top center;
+            border-block-color:black;
+        }
+    </style>
+</head>
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
     <div class="container">
@@ -24,12 +35,16 @@
 
 <section id="portfolio" class="portfolio">
     <div class="container">
-
+        <div class="countblock">
+          @*  <a><img src="~/img/personalplan/count.jpg" class="w-100 h-100 " />count</a>*@
+            <h2>目前選取方案個數count</h2>
+        </div>
         <div class="section-title">
             <h2>GO健康方案</h2>
             <p>方案介紹</p>
-
-        </div>
+          
+                   </div>
+        
             <div class="row">
                 <div class="col-lg-12">篩選區
                 <ul id="portfolio-flters">
