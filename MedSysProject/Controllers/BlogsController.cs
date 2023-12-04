@@ -18,10 +18,17 @@ namespace MedSysProject.Controllers
         /// </summary>
         /// <returns></returns>
         public IActionResult IndexOld() 
-        {
-            
+        {//要放什麼過去?
+            //能不能裝在List當中
+            //測試能不能傳送List
+            var post = (from blog in _db.Blogs
+                       .Include(blog=>blog.Employee)
+                       .Include(blog=>blog.ArticleClass)
+                       .Take(7)
+                       orderby blog.CreatedAt descending
+                       select blog).ToList();//全部文章類別 新->舊
 
-            return View();
+            return View(post);
         }
 
         public IActionResult SinglePost(int? BlogID) 
