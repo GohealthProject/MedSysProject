@@ -4991,6 +4991,9 @@ input[type=submit].btn-block {
             color: #fff
         }
 
+
+       
+/*卡片的寬度，高度等等*/
 .card {
     position: relative;
     display: flex;
@@ -5003,6 +5006,7 @@ input[type=submit].btn-block {
     border-radius: .35rem;
     margin-left: 1rem;
     margin-right: 1rem;
+    /*margin-top: 5.5rem;*/
 }
 
     .card > hr {
@@ -10993,16 +10997,22 @@ a:focus {
     display: flex
 }
 
+    /*這裡是內文(含卡片)的寬度*/
+
     #wrapper #content-wrapper {
         background-color: #f8f9fc;
         width: 100%;
-        overflow-x: hidden
+        overflow-x: hidden;
+        margin-left: 17em;
     }
 
         #wrapper #content-wrapper #content {
-            flex: 1 0 auto
+            flex: 1 0 auto;
+            margin-top:5.5em;
         }
 
+
+/* 內容的顯示 */
 .container,
 .container-fluid,
 .container-lg,
@@ -11010,7 +11020,8 @@ a:focus {
 .container-sm,
 .container-xl {
     padding-left: 1.5rem;
-    padding-right: 1.5rem
+    padding-right: 1.5rem;
+    margin-top: 5.5rem;
 }
 
 .scroll-to-top {
@@ -11373,8 +11384,10 @@ a:focus {
         width: 2rem
     }
 
+/*頂部固定(bootstrap)，並調整*/
 .topbar {
-    height: 4.375rem
+    height: 4.375rem;
+    margin-left: 17em;
 }
 
     .topbar #sidebarToggleTop {
@@ -11718,9 +11731,12 @@ a:focus {
 
 
 /*側邊欄的寬度*/
+/*目前固定*/
 @media (min-width:768px) {
     .sidebar {
-        width: 20rem !important
+        width: 17rem !important;
+        position: fixed;
+        z-index: 1;
     }
 
         .sidebar .nav-item .collapse {
@@ -12617,4 +12633,16 @@ footer.sticky-footer {
 
 body.sidebar-toggled footer.sticky-footer {
     width: 100%
+}
+
+body.sidebar-toggled .topbar {
+    height: 4.375rem;
+    margin-left: 6.5em;
+}
+
+body.sidebar-toggled #wrapper #content-wrapper {
+    background-color: #f8f9fc;
+    width: 100%;
+    overflow-x: hidden;
+    margin-left: 6.5em;
 }
