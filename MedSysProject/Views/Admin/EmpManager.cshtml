@@ -354,7 +354,7 @@
             for (let i = 0 ; i <binary.length ; i++){
                 binarydata[i]= binary.charCodeAt(i);
             }
-            let blob = new blob([binarydata],{type:'image/jpg'});
+            let blob = new Blob([binarydata],{type:'image/jpg'});
             let imgurl = URL.createObjectURL(blob);
             console.log(blob);
             console.log(imgurl);
