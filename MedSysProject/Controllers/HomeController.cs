@@ -132,7 +132,12 @@ namespace MedSysProject.Controllers
             return View(j);
         }
 
+        public IActionResult Customcompare()
 
+        { 
+            return View();
+        }
+            
 
         public IQueryable<ReportDetail?> qureyReportDetailAll()
         {

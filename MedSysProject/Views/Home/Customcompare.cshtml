@@ -1,0 +1,229 @@
+﻿@{
+    ViewData["Title"] = "planComeparison";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>方案比較</h2>
+            <ol>
+                <li><a href="~/Home/Index">Home</a></li>
+                <li>內頁</li>
+            </ol>
+        </div>
+
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+</section>
+<style>
+    div,table{border:dashed 3px red}
+    table{
+        align-content:center;
+        text-align:center;
+    }
+</style>
+
+
+<section id="portfolio" class="portfolio">
+  
+    
+    <div class="container">
+
+   
+    <div class="row">
+    <div class="col-lg-12">
+
+                <ul id="portfolio-flters" class="row" style="margin-left:15%;" >
+                        <li data-filter="*" class="filter-active col-3">
+                            <img src="~/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+                            <div class=" portfolio-item filter-app">
+                                全部類別
+                            </div>
+                        </li>
+                        
+                        <li data-filter=".filter-app" class="col-3">
+                            <img src="~/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-app">
+                            一般生理檢查
+                            </div>
+                        </li>
+                   
+                        <li data-filter=".filter-card" class="col-3">
+                            <img src="~/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-web">
+                            尿液一般檢查
+                            </div>
+                        </li>
+                        <li data-filter=".filter-card" class="col-3">
+                            <img src="~/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-web">
+                            血液常規檢查
+                            </div>
+                        </li>
+                    <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-item filter-web">
+                            血液常規檢查
+                        </div>
+                    </li>
+                    <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+                        <div class="portfolio-item filter-web">
+                            血液常規檢查
+                        </div>
+                    </li>
+    </ul>
+    </div>
+    </div>
+
+            <div class="row portfolio-container portfolio-flters p-5">
+            
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">身高</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">體重</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">脈搏</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">血壓-收縮壓</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">血壓-舒張壓</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">腰圍</button>
+                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">理學檢查</button>
+
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液外觀</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿比重</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液酸鹼度</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿膽素原</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿蛋白</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿糖</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">酮尿</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">膽紅素</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿潛血</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液白血球</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">亞硝酸鹽</button>
+                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿沉渣</button>
+            
+            </div>
+
+        </div>
+        </section>
+    
+
+ @*   <div class="row">
+        <div class="col-lg-12">
+            篩選區
+            <ul id="portfolio-flters">
+                <li data-filter="*" class="filter-active">全部類別</li>
+                <li data-filter=".filter-p1">心血管相關</li>
+                <li data-filter=".filter-p2">新陳代謝相關</li>
+                <li data-filter=".filter-endocrine">內分泌疾病</li>
+                <li data-filter=".filter-dementia">失智症相關</li>
+                <li data-filter=".filter-AMA">高齡生育相關</li>
+                <li data-filter=".filter-order">自訂方案</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row portfolio-container">
+
+        <div class="col-lg-4 col-md-6 portfolio-item filter-heart filter-dementia">
+            <div class="portfolio-wrap">
+              身高
+                </div>
+            </div>
+    </div>
+
+        
+
+
+        
+
+    <div class="row">
+        <div class="col-lg-12 row portfolio-container">
+                篩選區
+            <ul id="portfolio-flters portfolio-container">
+
+                <li class="portfolio-item filter-heart filter-dementia">身高</li>
+                <li class="portfolio-item filter-p1">體重</li>
+                <li class="portfolio-item filter-p1">體溫</li>
+                <li class="portfolio-item filter-p1">脈搏</li>
+                    <li class="portfolio-item filter-p1">血壓-收縮壓</li>
+                    <li class="portfolio-item filter-p1">血壓-舒張壓</li>
+                    <li class="portfolio-item filter-p1">腰圍</li>
+                    <li class="portfolio-item filter-p1">理學檢查</li>
+
+                <li class="filter-endocrine">尿液外觀</li>
+                <li class="filter-endocrine">尿比重</li>
+                    <li class="filter-p2">尿液酸鹼度</li>
+                    <li class="filter-p2">尿膽素原</li>
+                    <li class="filter-p2">尿蛋白</li>
+                    <li class="filter-p2">尿糖</li>
+                    <li class="filter-p2">酮尿</li>
+                    <li class="filter-p2">膽紅素</li>
+                    <li class="filter-p2">尿潛血</li>
+                    <li class="filter-p2">尿液白血球</li>
+                    <li class="filter-p2">亞硝酸鹽</li>
+                    <li class="filter-p2">尿沉渣</li>
+
+
+            </ul>
+        </div>
+    </div>*@
+
+
+     
+
+    
+    @*canvas*@
+    <div class="row fixed-bottom">
+        <div class="col-10"></div>
+    <button class="btn btn-primary col-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">我的自選方案</button>
+    </div>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">已選項目</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <table class="table table-hover">
+              <thead>
+                    <tr>
+                        <th class="col-3">
+                            編號
+                        </th>
+
+                        <th>
+                            項目
+                        </th>
+                        <th class="col-2">
+                            移除
+                        </th>
+                    </tr>
+              </thead>
+                <tbody>
+                  <tr>
+                      <td>
+                          A
+                      </td>
+                        <td>
+                            B
+                        </td>
+                        <td><img src="~/img/icon/x.png" /></td>
+                  </tr>
+                    <tr>
+                        <td>
+                            A
+                        </td>
+                        <td>
+                            B
+                        </td>
+                        <td><img src="~/img/icon/x.png" /></td>
+                        
+                    </tr>
+       
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</section><!-- End Our Team Section -->
+<!-- End Our Portfolio Section -->
