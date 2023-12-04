@@ -82,6 +82,9 @@ namespace MedSysProject.Controllers
                 datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
                 p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
                 p.EmployeeEmail.Contains(vm.txtKeyword));
+
+                ViewBag.key = vm.txtKeyword;
+
             return View(datas);
         }
 
