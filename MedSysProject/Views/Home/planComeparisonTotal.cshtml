@@ -1,34 +1,288 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "planComeparisonTotal";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 <head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+    <style>
+        .text-custom-truncate {
+            display: -webkit-box !important;
+            max-width: 230px;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden
+        }
+
+        .table thead tr th {
+            background-color: white ;
+            z-index: 10;
+            color: #705972;
+        }
+
+        .table tbody tr th {
+            background-color: #5b5d23;
+            color: #a7a5e4;
+            z-index: 10
+        }
+
+        
+        body {
+            margin: 0;
+            padding: 2rem
+        }
+
+        table {
+            text-align: left;
+            position: relative;
+            border-collapse: collapse
+        }
+
+        th {
+            background: white;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4)
+        }
+
+        .table-responsive {
+            overflow-x: inherit !important
+        }
+
+    </style>
+
+
 </head>
-<h1>planComeparisonTotal</h1>
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>方案比較total</h2>
+            <ol>
+                <li><a href="~/Home/Index">Home</a></li>
+                <li>內頁</li>
+            </ol>
+        </div>
+
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+</section>
+
 @*暫存*@
-<div class="row gy-4 ">
+<div class="container ">
 
     @*移動區*@
-    <div class="container">
-        <h2>Filterable List</h2>
-        <p>Type something in the input field to search the list for specific items:</p>
-        <input class="form-control" id="myInput" type="text" placeholder="Search..">
-        <br>
-        <ul class="list-group" id="myList">
-            <li class="list-group-item">First item</li>
-            <li class="list-group-item">Second item</li>
-            <li class="list-group-item">Third item</li>
-            <li class="list-group-item">Fourth</li>
-        </ul>
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table">
+                @*欄位區*@
+                <thead>
+                    <tr class="simple-head">
+                        <th width="20%">
+                            <div class="bg-white h-100 w-100">
+                            </div>
+                        </th>
+                        <th width="20%">
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img src="~/img/PersonalPlan/heart.jpg" width="50">
+                                    <span class="d-block text-custom-truncate ml-1">
+                                        樂活銀髮方案
+                                    </span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">NT$34450</h6>
+                                    <button class="btn btn-sm btn-primary" ><a asp-action="Reserve" asp-controller="Home">確認方案選擇</a></button>
+                                </div>
+                            </div>
+                        </th>
+                        <th width="20%">
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img src="~/img/PersonalPlan/liver.jpg" width="50">
+                                    <span class="d-block text-custom-truncate ml-1">
+                                        活力青年方案
+                                        </span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">NT$244500</h6>
+                                    <button class="btn btn-sm btn-primary">確認方案選擇</button>
+                                </div>
+                            </div>
+                        </th>
+                        <th width="20%">
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img src="~/img/PersonalPlan/uterus.jpg" width="50">
+                                    <span class="d-block text-custom-truncate ml-1">
+                                        婦女安心方案
+                                    </span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">NT$25550</h6>
+                                    <button class="btn btn-sm btn-primary">確認方案選擇</button>
+                                </div>
+                            </div>
+                        </th>
+                        <th width="20%">
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img src="~/img/PersonalPlan/pancreas.jpg" width="50">
+                                    <span class="d-block text-custom-truncate ml-1">
+                                        男性保健方案
+                                        </span>
+                                </div>
+                                <hr> 
+                                <div class="d-flex justify-content-between align-items-center"> 
+                                    <h6 class="mb-0">NT$20750</h6>
+                                    <button class="btn btn-sm btn-primary">確認方案選擇</button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                @*欄位區*@
+                @*內容細項區*@
+                <tbody>
+                    <tr>
+                        <th scope="row">一般生理檢查
+                            <br>(身高、體重、體溫、脈搏、血壓-收縮壓、血壓-舒張壓、腰圍、理學檢查)<br />
+                            </th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">尿液一般檢查
+                            <br>(尿液外觀、尿比重、尿液酸鹼度、尿膽素原、尿蛋白、尿糖、酮尿、膽紅素、尿潛血、尿液白血球、亞硝酸鹽、尿沉渣)<br />
+                                                  </th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>血液常規檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">腎功能檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">肝功能檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>新陳代謝檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">女性內分泌檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">男性內分泌檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>女性癌症檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">男性癌症檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">體脂肪檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>腹部超音波</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">頸動脈超音波</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">甲狀腺超音波</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>心臟超音波</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">女性超音波檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">男性超音波檢查</th>
+                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                    <tr>
+                        <th>胸腔檢查</th>
+                     <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
+                    </tr>
+                </tbody>
+                @*內容細項區*@
+            </table>
+        </div>
     </div>
-    
+
 
     @*移動區*@
 
