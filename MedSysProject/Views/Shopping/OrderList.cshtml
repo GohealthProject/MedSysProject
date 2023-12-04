@@ -1,0 +1,112 @@
+﻿@model List<COrderWarp>
+
+@{
+    ViewData["Title"] = "OrderList";
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].ShipId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].PayId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].StateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].ShipDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].DeliveryDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model) {
+                count++;
+        <tr>
+            <td>
+                @count
+            </td>
+                    @{
+                        string s3 = item.OrderDate.ToString().Split(" ")[0];
+                        <td>@s3</td>
+                    }
+            <td class="ship">
+                @Html.DisplayFor(modelItem => item.ShipId)
+            </td>
+            <td class="pay">
+                @Html.DisplayFor(modelItem => item.PayId)
+            </td>
+            <td class="state">
+                @Html.DisplayFor(modelItem => item.StateId)
+            </td>
+                        @{
+                            string s = item.ShipDate.ToString().Split(" ")[0];
+                            <td>@s</td>
+                        }
+                    @{
+                        string s2 = item.DeliveryDate.ToString().Split(" ")[0];
+                        <td>@s2</td>
+                    }
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}}
+    </tbody>
+</table>
+@section Scripts{
+     <script>
+         const paylist = document.getElementsByClassName('pay');
+         const shiplist = document.getElementsByClassName('ship');
+         const statelist = document.getElementsByClassName('state');
+         document.addEventListener('DOMContentLoaded',()=>{
+             for(let i =0; i<paylist.length;i++){
+                loadpay(paylist[i])
+             }
+             for(let i =0; i<shiplist.length;i++){
+                 loadship(shiplist[i])
+             }
+            for (let i = 0; i < statelist.length; i++) {
+                loadstate(statelist[i])
+            }
+         })
+         async function loadpay(element){
+            const apiurl = `https://localhost:7078/api/OrderPays/${element.innerText}`
+             const response = await fetch(apiurl);
+             const data = await response.json();
+             element.innerText=data.payName;
+         }
+        async function loadship(element) {
+            const apiurl = `https://localhost:7078/api/OrderShips/${element.innerText}`
+            const response = await fetch(apiurl);
+            const data = await response.json();
+            element.innerText=data.shipName;
+        }
+        async function loadstate(element) {
+            const apiurl = `https://localhost:7078/api/OrderStates/${element.innerText}`
+            const response = await fetch(apiurl);
+            const data = await response.json();
+            element.innerText =data.stateName;
+        }
+
+     </script>
+}

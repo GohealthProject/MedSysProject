@@ -49,14 +49,14 @@
                                 <form asp-action="EmpCreate" id="myCreatedataform">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
-                                        <input type="hidden" id="inputId" value="" name="EmployeeId" />
+                                        <input type="hidden" id="CinputId" value="" name="EmployeeId" />
                                         <label class="control-label">姓名</label>
-                                        <input class="form-control" id="inputName" name="EmployeeName" />
+                                        <input class="form-control" id="CinputName" name="EmployeeName" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
-                                        <select class="form-control" id="inputClass" name="EmployeeClassId">
+                                        <select class="form-control" id="CinputClass" name="EmployeeClassId">
                                             <option value="1">醫生</option>
                                             <option value="2">護理師</option>
                                             <option value="3">行政人員</option>
@@ -66,27 +66,27 @@
                                     @* 生日 *@
                                     <div class="form-group">
                                         <label class="control-label">生日</label>
-                                        <input type="date" class="form-control" id="inputDate" name="employeeBirthDate" />
+                                        <input type="date" class="form-control" id="CinputDate" name="employeeBirthDate" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">電話</label>
-                                        <input class="form-control" id="inputPhone" name="EmployeePhoneNum" />
+                                        <input class="form-control" id="CinputPhone" name="EmployeePhoneNum" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">信箱</label>
-                                        <input class="form-control" id="inputEmail" name="EmployeeEmail" />
+                                        <input class="form-control" id="CinputEmail" name="EmployeeEmail" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">密碼</label>
-                                        <input class="form-control" id="inputPwd" name="EmployeePassWord" />
+                                        <input class="form-control" id="CinputPwd" name="EmployeePassWord" />
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="formFile" class="form-label">圖片</label>
-                                        <input type="file" class="form-control" id="formFile" name="formFile" />
+                                        <input type="file" class="form-control" id="CformFile" name="formFile" />
                                     </div>
                                 </form>
                             </div>
@@ -103,6 +103,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
                             <button class="btn btn-success" onclick="postdata2()">確定新增</button>
+                            <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
                         </div>
                     </div>
                 </div>
@@ -167,9 +168,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeClass.Class)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EmployeeBirthDate)
-                            </td>
+                             @{string date = item.EmployeeBirthDate.ToString().Split(" ")[0];
+                                    <td>@date</td>
+                             }
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
                             </td>
@@ -283,6 +284,7 @@
     </div>
 </div>
 
+<script src="/vendor/jquery/jquery.min.js"></script>
 <script>
     const delbtn = document.querySelector("#btnDDD")
     const id = document.querySelector("Empid");
@@ -299,7 +301,12 @@
     }
 
     async function postdata2() {
-        let apiurl = `https://localhost:7078/api/Employees/PostEmployee`
+        if (document.querySelector("#CinputName").value == "") {
+
+            return;
+        })
+
+        let apiurl = `https://localhost:7078/api/Employees`
         var myForm = document.querySelector("#myCreatedataform");
         var data = new FormData(myForm);
         const response = await fetch(apiurl, {
@@ -311,7 +318,7 @@
             research()
         }
     }
-    
+
     async function putdata2() {
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
@@ -322,7 +329,7 @@
             body: data
         });
         const state = await response.status;
-        if(response.ok){
+        if (response.ok) {
             research()
         }
     }
@@ -332,7 +339,18 @@
         let tds = par.getElementsByTagName("td");
         let tdName = tds[3].innerHTML;
         let tdClas = tds[4].innerHTML;
-        let tddate = tds[5].innerHTML;
+
+        let tddateA = tds[5].innerHTML; //這裡要把2000/01/01轉成2000-01-01
+        let tddateB = tddateA.replace('/', '-');
+        let tddateC = tddateB.replace('/', '-');
+        var tddateD = new Date(tddateC.trim());
+        var year = tddateD.getFullYear();
+        // getMonth() 返回的月份是從 0 開始的，所以需要加 1
+        var month = (tddateD.getMonth() + 1).toString().padStart(2, '0');
+        var day = tddateD.getDate().toString().padStart(2, '0');
+        var tddate = `${year}-${month}-${day}`;
+
+        console.log("aaassss" + tddate);
         let tdphone = tds[6].innerHTML;
         let tdemail = tds[7].innerHTML;
         let tdpwd = tds[8].innerHTML;
@@ -361,72 +379,74 @@
             const id = emp.employeeId;
             const name = emp.employeeName;
             const date = emp.employeeBirthDate;
+            const valuedate = date.split("T")[0];
+            console.log(valuedate)
             const phone = emp.employeePhoneNum;
             const email = emp.employeeEmail;
             const pwd = emp.employeePassWord;
             const photo = emp.employeePhoto;
             let binary = window.atob(photo);
             let binarydata = new Uint8Array(binary.length);
-            for (let i = 0 ; i <binary.length ; i++){
-                binarydata[i]= binary.charCodeAt(i);
+            for (let i = 0; i < binary.length; i++) {
+                binarydata[i] = binary.charCodeAt(i);
             }
-            let blob = new Blob([binarydata],{type:'image/jpg'});
+            let blob = new Blob([binarydata], { type: 'image/jpg' });
             let imgurl = URL.createObjectURL(blob);
             console.log(blob);
             console.log(imgurl);
             let cid = emp.employeeClassId;
-            if(cid ==1){
+            if (cid == 1) {
                 cid = "醫生";
-            }else if(cid==2){
+            } else if (cid == 2) {
                 cid = "護理師";
-            }else{
+            } else {
                 cid = "行政人員";
             };
             let s =
                 `
-                                             <tr>
-                                                <td>
-                                                     <input type="hidden" value=${id}>
-                                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                </td>
-                                                <td>
-                                                      ${count}
-                                                 </td>
-                                                 <td>
-                                                         <img src="${imgurl}" width="100">
-                                                  </td>
-                                                  <td>
-                                                       ${name}
-                                                  </td>
-                                                  <td>
-                                                       ${cid}
-                                                  </td>
-                                                  <td>
-                                                       ${date}
-                                                   </td>
-                                                   <td>
-                                                        ${phone}
-                                                   </td>
-                                                   <td>
-                                                        ${email}
-                                                    </td>
-                                                    <td>
-                                                        ${pwd}
-                                                    </td>
-                                                    <td>
-                                                             <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                         <i class="fas fa-user-edit"></i>
-                                                         </a>
-                                                         <a class="btn btn-danger" onclick="get(this)">
-                                                         <i class="fas fa-user-times"></i>
-                                                         </a>
-                                                      </td>
-                                                </tr>
-                                            `
-                                            count++;
+                                                     <tr>
+                                                        <td>
+                                                             <input type="hidden" value=${id}>
+                                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                        </td>
+                                                        <td>
+                                                              ${count}
+                                                         </td>
+                                                         <td>
+                                                                 <img src="${imgurl}" width="100">
+                                                          </td>
+                                                          <td>
+                                                               ${name}
+                                                          </td>
+                                                          <td>
+                                                               ${cid}
+                                                          </td>
+                                                          <td>
+                                                                           ${valuedate}
+                                                           </td>
+                                                           <td>
+                                                                ${phone}
+                                                           </td>
+                                                           <td>
+                                                                ${email}
+                                                            </td>
+                                                            <td>
+                                                                ${pwd}
+                                                            </td>
+                                                            <td>
+                                                                     <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                 <i class="fas fa-user-edit"></i>
+                                                                 </a>
+                                                                 <a class="btn btn-danger" onclick="get(this)">
+                                                                 <i class="fas fa-user-times"></i>
+                                                                 </a>
+                                                              </td>
+                                                        </tr>
+                                                    `
+            count++;
             console.log(count);
             return s
-            
+
         })
         document.querySelector("#go").innerHTML = value.join("");
     }
@@ -469,4 +489,14 @@
 
 
 
+
+
+    $("#demoEmpCreate").click(function () {
+        $("#CinputName").val("Tomori");
+        // $("#inputClass")
+        $("#CinputDate").val("1998-11-10");
+        $("#CinputPhone").val("0923232323");
+        $("#CinputEmail").val("tomori@gmail.com");
+        $("#CinputPwd").val("tomoriaaa");
+    });
 </script>
