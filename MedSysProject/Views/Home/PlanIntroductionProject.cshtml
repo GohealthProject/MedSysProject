@@ -4,8 +4,23 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 
-<h1>方案詳細</h1>
 
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>方案詳細</h1>
+            <ol>
+                <li><a href="~/Home/planComeparison">回上頁</a></li>
+                <li>目前位置</li>
+                <li><a href="~/Home/xxx">確認方案與加選自訂方案</a></li>
+            </ol>
+        </div>
+
+    </div>
+    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+</section>
 
 
 <body>
@@ -52,9 +67,17 @@
                             </ul>
                             
                         </div>
-                        <div class="portfolio-description ">
-                            <h2>This is an example of portfolio detail</h2>
-                      
+                        <div class="portfolio-description">
+                       
+                            <h2 class="badge  text-wrap">
+                               
+                                <a href="~/Home/xxx">
+                                    <hr />  <i class="bi bi-mouse2-fill">
+                                         確認方案與加選自訂方案 
+                                    </i><hr />
+                                </a>
+                                 </h2>
+                        
                             <div class="table-responsive-lg ">
                                 <table class="table ">
                                     <thead>

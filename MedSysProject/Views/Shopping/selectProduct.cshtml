@@ -28,7 +28,7 @@
             <form method="post"  id="datas">
             <select class="form-select" style="width:200px;display:inline" name="count">
                     @{
-                        for (int i = 1; i < Model.UnitsInStock; i++)
+                        for (int i = 1; i == Model.UnitsInStock; i++)
                         {
                             <option value="@i">@i</option>
                             if (i == 50)
@@ -49,8 +49,39 @@
     
     <div style="clear:both"></div>
     <hr  style="margin-top:20px; margin-bottom:20px;"/>
-    <span>以下待開發</span>
-    <div style="height:1000px " class="bg-danger">詳細內容</div>
+    <div style="height:100px" class="d-flex align-items-center border-bottom" >
+        <div class="fs-1">商品詳細規格</div>
+    </div>
+    <div  class="border">
+        <div style="width:70%;float:left;" class=" p-3">
+            <div >
+                <div  class=" fs-1 text-info">商品規格</div>
+                <hr />
+                <div class="fs-3">
+                    <p>分類 : 健康食品</p>
+                    <p>品牌 : 雙賀</p>
+                    <p>保固 : 3年</p>
+                    <p>證號 : @Model.License</p>
+                    <p>產地 : 台灣</p>
+                    <p>庫存 : @Model.UnitsInStock</p>
+                    <p>出貨地 : 台灣</p>
+                </div>
+                <div class="fs-1 text-info">商品詳細介紹</div>
+                <hr />
+                <div class="fs-3">@Model.Description</div>
+            </div>
+            
+        </div>
+        <div style="width:25%;float:right" class="border mt-3">
+            <div class=" p-3">
+                    <img src="~/img/Login1.jpg" style="height:150px; width:200px;" class="mb-3 ms-5" >
+                    <br />
+                    <a href="" class="fs-3 ms-3">產品A產品A產品A</a><br />
+                <span class="fs-3 text-danger ms-3">$6666</span>
+             </div>
+        </div>
+        <div style="clear:both"></div>
+    </div>
 </div>
 
 @section Scripts{

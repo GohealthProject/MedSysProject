@@ -8,10 +8,11 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>方案比較</h2>
+            <h2>個人方案選擇</h2>
             <ol>
                 <li><a href="~/Home/Index">Home</a></li>
-                <li>內頁</li>
+                <li>目前位置</li>
+                <li><a href="~/Home/planComeparisonTotal">方案比較</a></li>
             </ol>
         </div>
 
@@ -50,10 +51,11 @@
                 <div class="portfolio-wrap" >
                     <img src="~/img/PersonalPlan/heart.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info" >
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
+                       
                          <div>
-                            <a href="~/Home/PlanIntroductionProject" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="~/Home/PlanIntroductionProject"  title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                          @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
                             
                         </div>
                     </div>
