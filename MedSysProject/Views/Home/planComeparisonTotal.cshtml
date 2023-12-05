@@ -3,7 +3,10 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 <head>
-  
+    <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
     <style>
         .text-custom-truncate {
             display: -webkit-box !important;
@@ -59,22 +62,31 @@
         <div class="d-flex justify-content-between align-items-center">
             <h2>個人方案比較</h2>
             <ol>
+                
                 <li><a href="~/Home/planComeparison">回上頁</a></li>
-                <li><a href="~/Home/xxx">確認方案與加選自訂方案</a></li>
+                <li><a href="~/Home/Customcompare">確認方案與加選自訂方案</a></li>
             </ol>
+            <button onclick=" window.print()" class="btn btn-secondary"> <i class="bi bi-printer"></i></button>
         </div>
 
     </div>
-    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+   @* <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
 </section>
 
 @*暫存*@
 <div class="container ">
-
+    @*PDF產生器*@
+    <div>
+   
+       
+    </div>
+   
     @*移動區*@
     <div class="container-fluid">
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="table" data-show-print="true"
+                   data-url="json/data1.json" >
+                
                 @*欄位區*@
                 <thead>
                     <tr class="simple-head">
@@ -93,7 +105,7 @@
                                 <hr>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="mb-0">NT$34450</h6>
-                                    <button class="btn btn-sm btn-primary" ><a asp-action="xxx" asp-controller="Home">確認方案與加選</a></button>
+                                    <button class="btn btn-sm btn-primary"><a asp-action="Customcompare" asp-controller="Home">確認方案與加選</a></button>
                                 </div>
                             </div>
                         </th>
@@ -290,14 +302,12 @@
 </div>
 @section Scripts{
     <script>
-        $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#myList li").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
+        //var $table = $('#table');
+
+        //function pdf () {
+        //    $table.bootstrapTable();
+        //};
+    
     </script>
 
 }
