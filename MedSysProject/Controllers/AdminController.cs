@@ -664,6 +664,39 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-      
+        public IActionResult test(CKeywordViewModel vm)
+        {
+            IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails
+                        orderby s.ReportId
+                        select s;
+
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return View(datas);
+
+        }
+
+        public IActionResult test1(CKeywordViewModel vm)
+        {
+            IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails
+                        orderby s.ReportId
+                        select s;
+
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return Json(datas);
+
+        }
+
     }
 }

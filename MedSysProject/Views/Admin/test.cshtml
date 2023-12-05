@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
+
+
+<table id="table"
+       data-toggle="table"
+       data-height="460"
+       data-ajax="ajaxRequest"
+       data-search="true"
+       data-side-pagination="server"
+       data-pagination="true">
+    <thead>
+        <tr>
+            <th data-field="reportDetailId">reportDetailId</th>
+            <th data-field="reportId">reportId</th>
+            <th data-field="itemId">itemId</th>
+            <th data-field="result">itemId</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    // your custom ajax request here
+    function ajaxRequest(params) {
+        var url = 'https://localhost:7203/admin/test1'
+        $.get(url + '?' + $.param(params.data)).then(function (res) {
+            params.success(res)
+        })
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+        test();
+    })
+    async function test (){
+        const response = await fetch("https://localhost:7203/admin/test1");
+        const data = await response.json();
+        console.log(data);
+    }
+</script>
