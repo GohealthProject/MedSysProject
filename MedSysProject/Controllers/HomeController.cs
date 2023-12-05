@@ -45,34 +45,34 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-      public IActionResult PlanIntroductionProject(int? id)
+      public IActionResult PlanIntroductionProject(/*int? id*/)
         { //放方案介紹
-            var project = _context.Plans.Where(p => p.PlanId == id);
-            var join = from p in project
-                       from pj in _context.Projects.DefaultIfEmpty()
-                       from it in _context.Items.DefaultIfEmpty()
-                       select new
-                       {
-                           p.PlanId,
-                           p.PlanName,
-                           p.PlanDescription,
-                           p.PlanRefs,
-                           pj.ProjectId,
-                           pj.ProjectName,
-                           pj.ProjectPrice,
-                           it.ItemId,
-                           it.ItemName,
+            //var project = _context.Plans.Where(p => p.PlanId == id);
+         /*   var join = from p in*/ /*project*/ /*_context.Plans*/
+                       //from pj in _context.Projects.DefaultIfEmpty()
+                       //from it in _context.Items.DefaultIfEmpty()
+                       //select new
+                       //{
+                       //    p.PlanId,
+                       //    p.PlanName,
+                       //    p.PlanDescription,
+                       //    //p.PlanRefs,
+                       //    //pj.ProjectId,
+                       //    //pj.ProjectName,
+                       //    //pj.ProjectPrice,
+                       //    //it.ItemId,
+                       //    //it.ItemName,
 
-                       };
+                       //};
             //_context.Plans.ToList();
             //_context.Products.ToList();
           
 
          
-            return View(join);
+            return View(/*join*/_context.Plans);
         }
        public IActionResult xxx()
-        {//自訂方案加選與總計(含搜尋項目功能)
+        {//自訂方案加選與總計(含搜尋項目功能):備用
 
             return View(_context.Projects);
         }

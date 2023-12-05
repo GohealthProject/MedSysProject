@@ -3,7 +3,7 @@
     ViewData["Title"] = "PlanIntroductionProject";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-
+@model  IEnumerable<MedSysProject.Models.Plan>
 
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
@@ -59,7 +59,11 @@
                  @*  原位置在這裡 *@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-                            <h3 style="color:#7045af">樂活銀髮方案</h3>
+                            @foreach(var p in Model){
+                                <h3 style="color:#7045af" id="PlanName">@* 樂活銀髮方案 *@ @p.PlanName  </h3>
+                                
+                            }
+                            
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
@@ -127,3 +131,11 @@
    
 
 </body>
+@section Scripts{
+<script>
+const PlanName = document.querySelector("#PlanName");
+
+
+
+</script>
+}
