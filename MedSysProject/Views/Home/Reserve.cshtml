@@ -5,10 +5,10 @@
 @model IEnumerable<MedSysProject.Models.Plan>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
-@*<link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
-*@
+
 <style>
    
     .A {
@@ -355,20 +355,20 @@
 
 </div>
   
-  @*<div id="abc">66666666666666</div>
+  <div id="abc">66666666666666</div>
     <div id="acc">00000000000</div>
-*@
+
  
 </body>
 </html>
 
 <script>
     //Print//
-    //var $table = $('#table')
+    var $table = $('#table')
 
-    //$(function () {
-    //    $table.bootstrapTable()
-    //})
+    $(function () {
+        $table.bootstrapTable()
+    })
 
     ////////
     var item = document.querySelector("#abc").innerHTML;
@@ -381,7 +381,7 @@
         console.log(item)
         
     reserve = "AAA";
-        reserve = document.querySelector("#acc").innerHTML="987"
+        document.querySelector("#acc").innerHTML="987"
         console.log(reserve)
     })
 
