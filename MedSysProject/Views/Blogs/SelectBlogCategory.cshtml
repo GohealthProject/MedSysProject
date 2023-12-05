@@ -51,48 +51,96 @@
                     <div class="text-start py-4">
                         <div class="custom-pagination">
                             @{
-                                if (ViewBag.page == null)
+                                if (ViewBag.Cate == null)
                                 {
-
-                                }
-
-                                else
-                                {
-                                    int previous = ViewBag.page - 1;
-                                    int next = ViewBag.page + 1;
-                                    int current = ViewBag.page;
-
-                                    if (ViewBag.page == 1)
+                                    if (ViewBag.page == null)
                                     {
-                                        <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev disabled">上一頁</a>
+
                                     }
+
                                     else
                                     {
-                                        <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
-                                    }
-                                    
+                                        int previous = ViewBag.page - 1;
+                                        int next = ViewBag.page + 1;
+                                        int current = ViewBag.page;
 
-                                    for (int i = 1; i <= ViewBag.MaxPage; i++)
-                                    {
-                                        if (i == current)
+                                        if (ViewBag.page == 1)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
+                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev disabled">上一頁</a>
                                         }
                                         else
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
+                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
                                         }
+
+
+                                        for (int i = 1; i <= ViewBag.MaxPage; i++)
+                                        {
+                                            if (i == current)
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
+                                            }
+                                        }
+
+                                        if (ViewBag.page == ViewBag.MaxPage)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="prev disabled">下一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    if (ViewBag.page == null)
+                                    {
+
                                     }
 
-                                    if (ViewBag.page == ViewBag.MaxPage)
-                                    {
-                                        <a href="~/blogs/SelectBlogCategory?page=@next" class="prev disabled">下一頁</a>
-                                    }
                                     else
                                     {
-                                        <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
-                                    }
+                                        int previous = ViewBag.page - 1;
+                                        int next = ViewBag.page + 1;
+                                        int current = ViewBag.page;
 
+                                        if (ViewBag.page == 1)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev disabled">上一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev">上一頁</a>
+                                        }
+
+
+                                        for (int i = 1; i <= ViewBag.MaxPage; i++)
+                                        {
+                                            if (i == current)
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i" class="active">@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i">@i</a>
+                                            }
+                                        }
+
+                                        if (ViewBag.page == ViewBag.MaxPage)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev disabled">下一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev">下一頁</a>
+                                        }
+                                    }
                                 }
                             }
                         </div>

@@ -66,19 +66,16 @@ namespace MedSysProject.Controllers
             IEnumerable<Blog> q = null;
 
             int pageSize = 5;
-            int total = _db.Blogs.Count();
-            int maxPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
-            if (page < 1) page = 1;
-            if (page > maxPage) page = maxPage;
-
-
+            int total;
 
             if (CategoryID == null)
             {
+                total = _db.Blogs.Count();
+
                 q = _db.Blogs.Include(e => e.Employee)
                     .Include(e => e.ArticleClass)
                     .OrderByDescending(e => e.BlogId)
-                    .Skip((int)(page - 1) * pageSize)
+                    .Skip((page - 1) * pageSize)
                     .Take(pageSize);
 
                 //q = from blog in _db.Blogs.Include(e => e.Employee)
@@ -87,21 +84,33 @@ namespace MedSysProject.Controllers
 
                 ViewBag.Cate = "";
             }
+
             else
             {
+                total = _db.Blogs.Include(e => e.Employee)
+                    .Include(e => e.ArticleClass)
+                    .Where(c => c.ArticleClassId == CategoryID)
+                    .Count();
+
                 q = _db.Blogs.Include(e => e.Employee)
                     .Include(e => e.ArticleClass)
+                    .Where(c => c.ArticleClassId == CategoryID)
                     .OrderByDescending(e => e.BlogId)
-                    .Skip((int)(page - 1) * pageSize)
-                    .Take(pageSize).Where(c => c.ArticleClassId == CategoryID);
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+
 
                 ViewBag.Cate = "分類：" + (q.ToList())[0].ArticleClass.BlogCategory1;
             }
 
+            int maxPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+            if (page < 1) page = 1;
+            if (page > maxPage) page = maxPage;
             ViewBag.Page = page;
             ViewBag.MaxPage = maxPage;
             ViewBag.total = total;
             ViewBag.pagesize = pageSize;
+            ViewBag.CategoryID = CategoryID;
 
             return View(q);
         }
