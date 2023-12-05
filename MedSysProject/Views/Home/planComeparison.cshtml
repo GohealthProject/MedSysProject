@@ -3,17 +3,80 @@
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+@*這是方案選擇紐css*@
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+@*這是方案選擇紐css*@
 <head>
     <style>
-        .countblock{ 
-     
-            background-image: url('/img/personalplan/count.jpg');
-            background-size: contain;
-            background-position: top center;
-            border-block-color:black;
+   /* @*這是方案選擇紐css*@*/
+      
+        .lblue {
+            color: #32c8de;
         }
-    </style>
+         .blue {
+            color: #609cee;
+        }
+
+        .br-lblue {
+            background: #32c8de !important;
+        }
+
+        .br-blue {
+            background: #609cee !important;
+        }
+
+        .config .tab-content .tab-pane {
+          /*  background: #fff;*/
+            /*border: 1px solid #ddd;
+            border-radius: 8px;*/
+           /* padding: 20px;*/
+        }
+
+        .config .tab-content .config-one-item {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+            animation-duration: 1s;
+            animation-delay: 0s;
+            -webkit-animation-duration: 1s;
+            -webkit-animation-delay: 0s;
+            -moz-animation-duration: 1s;
+            -moz-animation-delay: 0s;
+            -ms-animation-duration: 1s;
+            -ms-animation-delay: 0s;
+            -o-animation-duration: 1s;
+            -o-animation-delay: 0s;
+        }
+
+            .config .tab-content .config-one-item i {
+                font-size: 45px;
+            }
+
+            .config .tab-content .config-one-item h2 {
+                font-size: 85px;
+                font-weight: normal;
+                margin-bottom: 20px;
+                line-height: 60px;
+            }
+
+            .config .tab-content .config-one-item h4 {
+                display: inline;
+                font-family: 'Open Sans', sans-serif;
+                font-size: 12px;
+                font-weight: normal;
+                color: #fff;
+                background: #f75353;
+                padding: 5px 10px 5px 10px;
+                border-radius: 5px;
+            }
+
+       
+
+        /*@*這是方案選擇紐css*@*/
+  </style>
 </head>
+
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
     <div class="container">
@@ -28,21 +91,18 @@
         </div>
 
     </div>
-    <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
+    @*<button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
 </section>
 
 
 
 <section id="portfolio" class="portfolio">
     <div class="container">
-        <div class="countblock">
-          @*  <a><img src="~/img/personalplan/count.jpg" class="w-100 h-100 " />count</a>*@
-            <h2>目前選取方案個數count</h2>
-        </div>
+   
         <div class="section-title">
             <h2>GO健康方案</h2>
             <p>方案介紹</p>
-          
+      
                    </div>
         
             <div class="row">
@@ -58,7 +118,34 @@
                 </ul>
                     </div>
             </div>
+        @*這是方案選擇紐*@
+        <div>
+            <div class="container" container bootstrap snippets bootdey>
+                <div class="config block container-xxl">
+                    <div class="tab-content container-xxl">
+                        <!-- 1st Block of tab-content -->
+                        <div class="tab-pane active container-xxl" id="home">
+                            <div class="container bootstrap snippets bootdey">
+                                <div>
+                                    <div class="col-md-12 col-xs-3">
+                                        <div class="config-one-item animated animation fadeInDown">
+                                            <a href="~/Home/planComeparisonTotal">
+                                                <i class="fa fa-desktop lblue"></i>
+                                                <h2>0</h2>
+                                                <h4 class="br-lblue">目前方案個數</h4>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+        </div>
+
+        @*這是方案選擇紐*@
 
         <div class="row portfolio-container">
 
@@ -66,7 +153,7 @@
                 <div class="portfolio-wrap" >
                     <img src="~/img/PersonalPlan/heart.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info" >
-                       
+                        <h3 style="color:#bd93e8">樂活銀髮方案</h3>
                          <div>
                           @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
                             <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
@@ -81,10 +168,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/kidney.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -95,10 +183,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/liver.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -109,10 +198,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/lung.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -123,10 +213,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/colon.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -137,10 +228,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/bladder.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -151,10 +243,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/pancreas.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -165,10 +258,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/stomach.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">樂活銀髮方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -179,10 +273,11 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/uterus.jpg" class="img-fluid" alt="" >
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="123">123</a></h3>
                         <div>
-                            <a href="~/img/PersonalPlan/leaf1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
-                            <a href="" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
+                            @*  <a href="" data-gallery="portfolioGallery" class="portfolio-lightbox" title=""><i class="bi bi-card-list">點擊後可跳轉，目前沒功能</i></a>*@
+                            <h3 style="color:#bd93e8">婦女安心方案</h3>
+                            <a href="~/Home/PlanIntroductionProject" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                            <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較">加入方案比較</a>
 
                         </div>
                     </div>
@@ -193,7 +288,6 @@
                 <div class="portfolio-wrap">
                     <img src="~/img/PersonalPlan/leaf1.jpg" class="img-fluid" alt="">
                     <div class="portfolio-info">
-                        <h3><a href="~/img/PersonalPlan/leaf2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="order">自訂方案</a></h3>
                         <div>
                             <a href="~/Home/PlanIntroductionProject" data-gallery="portfolioGallery" class="portfolio-lightbox" title="方案詳細"><i class="bi bi-plus"></i></a>
                             <a href="~/Home/Customcompare" title="Details"><i class="bi bi-link"><input class="form-check-input" type="checkbox" id="planCheckbox1" value="加入方案比較"></i>加入方案比較</a>
@@ -215,7 +309,9 @@
    
       
   <!-- End Our Portfolio Section -->
-
+  @section Scripts{
+   
+  }
 
 
         

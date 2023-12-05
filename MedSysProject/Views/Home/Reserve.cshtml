@@ -18,7 +18,8 @@
        /* width: 20%; /*270px;*/
         height: 75%;
         margin-left:25%;
-        margin-bottom: 30%;
+        margin-bottom: 26%;
+        /*margin-bottom: 5px;*/
        
        /* left: 20px;*/
         overflow: visible;
@@ -88,7 +89,21 @@
     td,th {
         text-align:center;
     }
-  /*  div{border:dashed 3px red;}*/
+
+    #sbmbnt{
+        margin-top:30px;
+        margin-bottom:3px;
+    }
+    /*#bigC{
+        position:relative;
+    }*/
+
+   /* #sbmbtn{
+        position:absolute;
+        bottom:3px;
+        left:40%;
+    }*/
+   /* div{border:dashed 3px red;}*/
    
 </style>
 
@@ -108,16 +123,19 @@
             <h5 id="h5" class="col-1">目前選擇項目</h5>
             <div class="col-6"></div>
             <div class="col-4"></div>
-            <div class="overflow-auto col-6 A">
+            <div class="overflow-auto col-6 A #bigC">
                 <div id="rsitem">
-                    <table border="1" data-show-print="false" id="table">
+                    <table border="1" data-toggle="table" data-show-print="false" data-show-footer="true" id="table">
                         <thead>
                             <tr>
-                                <th>
+                                <th data-field="id" data-falign="left" data-footer-formatter="idFormatter" class="col-1">
                                 編號
                             </th>
-                                <th class="col-11">
+                                <th data-field="name" data-falign="center" data-footer-formatter="nameFormatter" class="col-9">
                                     項目
+                                </th>
+                                <th data-field="price" data-falign="right" data-footer-formatter="priceFormatter" class="col-2">
+                                    價格
                                 </th>
                             </tr>
                         </thead>
@@ -125,23 +143,27 @@
                             <tr>
                                 <td>1</td>
                                 <td>身高</td>
+                                <td>$100</td>
                             </tr>
                             <tr>
                                 <td>2</td>
                                 <td>體重</td>
+                                <td>$100</td>
                             </tr>
                             <tr>
                                 <td>3</td>
                                 <td>血壓-收縮壓</td>
+                                <td>$100</td>
                             </tr>
                             <tr>
                                 <td>4</td>
                                 <td>理學檢查</td>
+                                <td>$100</td>
                             </tr>
-                            <tr>
-                                <td>共""項</td>
-                                <td>總金額為""新台幣</td>
-                            </tr>
+                          @*  <tr>
+                                <td colspan="3">共"4"項,總金額為"400"元新台幣</td>
+                                
+                            </tr>*@
                            
                         </tbody>
                         
@@ -149,9 +171,14 @@
 
                        
                     </table>
-             
+                  
                  </div>
+                
              </div>
+            
+            <div class="col-5 id=btndiv"></div>
+            <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>
+            <div class="col-5"></div>
             <div class="col-5"></div>
 
             @*<div class="container-fluid col-9">
@@ -251,7 +278,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id="rsdiv"></div>
+                        <div id="rsdiv" class="container-fluid"></div>
                         <form class="form">
                             
                             <label class="mb-2 mt-2">
@@ -348,21 +375,41 @@
     </div>
     <div class="row">
         <div class="col-5"></div>
-            <a class="btn btn-primary but col-2 sticky-bottom" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>
+            @*<a class="btn btn-primary but col-2 sticky-bottom" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>*@
         <div class="col-5"></div>
     </div>
        
 
 </div>
-  
-  @*<div id="abc">66666666666666</div>
+ @* <div>
+  <div id="abc" style="left:50px">66666666666666</div>
     <div id="acc">00000000000</div>
-*@
+    </div>*@
  
 </body>
 </html>
 
 <script>
+    ////total sum////
+   function idFormatter() {
+    return 'Total'
+  }
+
+  function nameFormatter(data) {
+    return data.length
+  }
+
+  function priceFormatter(data) {
+    var field = this.field
+    return '$' + data.map(function (row) {
+      return +row[field].substring(1)
+    }).reduce(function (sum, i) {
+      return sum + i
+            console(sum)
+    }, 0)
+  }
+    ////////////
+
     //Print//
     var $table = $('#table')
 
@@ -371,17 +418,17 @@
     })
 
     ////////
-    var item = document.querySelector("#abc").innerHTML;
+    var item = document.querySelector("#rsitem").innerHTML;
     
-    var reserve = document.querySelector("#acc").innerHTML;
+    var reserve = document.querySelector("#rsdiv").innerHTML.valueOf
     $(".click").click(function () {
         $(".show").removeClass("d-none")})
 
     $("#sbmbtn").click(()=>{
         console.log(item)
         
-    reserve = "AAA";
-        document.querySelector("#acc").innerHTML="987"
+    //reserve = "987";
+        document.querySelector("#rsdiv").innerHTML = `${item}`
         console.log(reserve)
     })
 
