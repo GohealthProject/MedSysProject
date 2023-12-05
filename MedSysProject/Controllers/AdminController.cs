@@ -65,7 +65,7 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult EmpManager(CKeywordViewModel vm)
+        public IActionResult EmpManager(CKeywordViewModel? vm,int page=1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
@@ -74,10 +74,21 @@ namespace MedSysProject.Controllers
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
             {
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                        select t;
+                int pgsize = 10;
+                int total = _db.Employees.Count();
+                int maxpage = total % pgsize == 0 ? total / pgsize : total / pgsize + 1;
+                if (page < 1) page = 1;
+                if (page > maxpage) page = maxpage;
+                datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
+                ViewBag.page = page;
+                ViewBag.maxpage = maxpage;
+                ViewBag.total = total;
+                ViewBag.pgsize = pgsize;
 
+
+                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+                //        select t;
 
             }
 

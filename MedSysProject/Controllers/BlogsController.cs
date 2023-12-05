@@ -27,7 +27,31 @@ namespace MedSysProject.Controllers
                        .OrderByDescending(blog=>blog.BlogId)
                        .Take(7)
                        select blog).ToList();//全部文章類別 新->舊
-
+            var activity = from blog in _db.Blogs
+                            .Include(blog => blog.Employee)
+                            .Include(blog => blog.ArticleClass)
+                            .Where(blog => blog.ArticleClass.BlogClassId == 1)
+                            .OrderByDescending(blog => blog.BlogId)
+                            .Take(4)
+                            select blog;
+            
+            foreach (var blog in activity) { post.Add(blog); }
+            var medical = from blog in _db.Blogs
+                          .Include(blog => blog.Employee)
+                          .Include(blog => blog.ArticleClass)
+                          .Where(blog => blog.ArticleClass.BlogClassId == 2)
+                          .OrderByDescending(blog => blog.BlogId)
+                          .Take(4)
+                          select blog;
+            foreach (var blog in medical) { post.Add(blog); }
+            var celebrity = from blog in _db.Blogs
+                            .Include(blog => blog.Employee)
+                            .Include(blog => blog.ArticleClass)
+                            .Where(blog => blog.ArticleClass.BlogClassId == 3)
+                            .OrderByDescending(blog => blog.BlogId)
+                            .Take(9)
+                            select blog;
+            foreach (var blog in celebrity) { post.Add(blog); }
             return View(post);
         }
 
