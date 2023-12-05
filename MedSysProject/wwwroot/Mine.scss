@@ -45,11 +45,12 @@ section {
     height: 90px;
     transition: all 0.5s;
     z-index: 997;
-    background: #1d443f;
+    background: #2d6760;
 
     &.sticked {
         //當滑鼠滾動超過100px，加上
         height: 70px;
+        background:#1d443f;
     }
 
     .search-form-wrap {
