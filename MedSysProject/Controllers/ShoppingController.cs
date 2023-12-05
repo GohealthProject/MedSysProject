@@ -45,7 +45,7 @@ namespace MedSysProject.Controllers
         }
         public IActionResult selectProduct(int id)
         {
-            var q = _db.Products.Find(id);
+            var q = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
             if((bool)q.Discontinued)
             {
                 return View(q);
@@ -63,14 +63,16 @@ namespace MedSysProject.Controllers
             List<CCartItem> cart = null;
             var q = _db.Products.Find(Int32.Parse(data["id"]));
             string json = "";
+            string count = "";
             if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) != null)
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+                count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
                 cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
             }
             else
                 cart = new List<CCartItem>();
-
+            
             CCartItem item = new CCartItem();
             item.Product = q;
             item.ProductName = q.ProductName;
@@ -78,10 +80,24 @@ namespace MedSysProject.Controllers
             item.小計 = Int32.Parse(data["count"]) * (int)q.UnitPrice;
             item.count = Int32.Parse(data["count"]);
             cart.Add(item);
+            count = cart.Count().ToString();
             json = JsonSerializer.Serialize(cart);
             HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, json);
-
-            return Content("加入購物車成功");
+            HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
+            return Ok();
+        }
+        public IActionResult getcartList()
+        {
+            if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
+            {
+                string? count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
+                return Content(count);
+            }
+            else
+            {
+                return Content("0");
+            }
+            
         }
         public IActionResult CartList()
         {
