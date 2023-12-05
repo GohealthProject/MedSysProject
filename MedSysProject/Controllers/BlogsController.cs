@@ -21,12 +21,14 @@ namespace MedSysProject.Controllers
         {//要放什麼過去?
             //能不能裝在List當中
             //測試能不能傳送List
+            //最近的文章
             var post = (from blog in _db.Blogs
                        .Include(blog => blog.Employee)
                        .Include(blog => blog.ArticleClass)
                        .OrderByDescending(blog => blog.BlogId)
                        .Take(7)
                         select blog).ToList();//全部文章類別 新->舊
+            //活動快訊最新文章
             var activity = from blog in _db.Blogs
                             .Include(blog => blog.Employee)
                             .Include(blog => blog.ArticleClass)
@@ -36,6 +38,7 @@ namespace MedSysProject.Controllers
                            select blog;
 
             foreach (var blog in activity) { post.Add(blog); }
+            //醫療新知最新文章
             var medical = from blog in _db.Blogs
                           .Include(blog => blog.Employee)
                           .Include(blog => blog.ArticleClass)
@@ -44,6 +47,7 @@ namespace MedSysProject.Controllers
                           .Take(4)
                           select blog;
             foreach (var blog in medical) { post.Add(blog); }
+            //名人分享會最新文章
             var celebrity = from blog in _db.Blogs
                             .Include(blog => blog.Employee)
                             .Include(blog => blog.ArticleClass)
