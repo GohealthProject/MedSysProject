@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<MedSysProject.Models.CProductsWrap>
 @using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Product
 
 @{
     ViewData["Title"] = "產品管理";
@@ -21,197 +23,342 @@
         <h6 class="m-0 font-weight-bold text-primary">產品管理</h6>
     </div>
     <div class="card-body">
-@*             <style>
-                body {
-                    background-color: aqua;
-                }
 
-                .table img {
-                    background-color: transparent;
-                    object-fit: cover;
-                }
 
-                .table th {
-                    white-space: nowrap; /* 避免文字換行 */
-                    overflow: hidden;
-                    text-overflow: ellipsis; /* 在溢出時顯示省略號 */
-                }
+        <div>
+            @using (Html.BeginForm())
+            {
+                @: 價格區間
+                @: 最小價格 @Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control pr-1" })
+                @: 最大價格 @Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control pr-1" })
+                <input type="submit" class="btn btn-primary" value="查詢" style="margin-top:.5em;" />
+            }
+            <p class="mt-3">
+                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </p>
+        </div>
 
-                h1 {
-                    font-size: 3rem; /* 設定字體大小，可根據需要調整 */
-                    font-weight: bold; /* 使用粗體字型 */
-                    color: #333; /* 設定文字顏色，可根據需要調整 */
-                    background: linear-gradient(45deg, #3498db, #2ecc71); /* 使用漸層背景色，可根據需要調整 */
-                    -webkit-background-clip: text; /* 將文字內容限制在漸層範圍內 */
-                    color: transparent; /* 隱藏文字顏色，以顯示漸層效果 */
-                }
-            </style> *@
-
-            <div class="container mt-5">
-              @*   <h1>產品管理一覽表</h1> *@
-                @using (Html.BeginForm())
-                {
-                    @: 產品關鍵字(包含產品名稱、有效成分、核准證號或產品描述) @Html.TextBox("txtKeyword")
-                    @:
-                    <input type="submit" value="查詢" />
-                }
-                <br/>
-                @using (Html.BeginForm())
-                {
-                    @: 價格區間
-                    @: 最小價格 @Html.TextBox("txtMinPrice", null, new { type = "number" })
-                    @: 最大價格 @Html.TextBox("txtMaxPrice", null, new { type = "number" })
-                    <input type="submit" value="查詢" />
-                }
-
-                <p>
-                    <a asp-action="Create" class="btn btn-outline-success">新增產品</a>
-                </p>
-                <button id="buttonAdd" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
-                    <i class="bi bi-person-fill-add"></i>
-                </button>
-                <table class="table table-hover" style="width: 100%;">
-                    <thead>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedUnitPrice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedLicense)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedIngredient)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FimagePath)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WrappedDiscontinued)
+                    </th>
+                    <th>
+                        執行動作
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
                         <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedProductId)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedProductName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedUnitPrice)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedLicense)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedIngredient)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FimagePath)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.WrappedDiscontinued)
-                            </th>
-                            <th></th>
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WrappedProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WrappedUnitPrice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WrappedLicense)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WrappedIngredient)
+                            </td>
+                            <td>
+                                <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
+                            </td>
+                            <td>
+                                @if (item.WrappedDiscontinued == true)
+                                {
+                                    <span class="badge badge-success">上架中</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger">已下架</span>
+                                }
+                            </td>
+                            <td>
+                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                @*
+                        <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
+                        <i class="fas fa-info-circle"></i>
+                        </a>*@
+                                <a class="btn btn-danger" onclick="get(this)">
+                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            int count = 0;
-                            foreach (var item in Model)
+                    }
+                }
+            </tbody>
+        </table>
+
+
+        @* ---新增彈窗開始--- *@
+        <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">新增產品</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
+                            <div class="mb-3">
+                                <label for="inputName" class="form-label">產品名稱</label>
+                                <input type="text" class="form-control" id="inputName" name="ProductName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputPrice" class="form-label">單價</label>
+                                <input type="text" class="form-control" id="inputPrice" name="UnitPrice">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputLicense" class="form-label">認證字號</label>
+                                <input type="text" class="form-control" id="inputLicense" name="License">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputIngredient" class="form-label">有效成分</label>
+                                <input type="text" class="form-control" id="inputIngredient" name="Ingredient">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDescription" class="form-label">產品描述</label>
+                                <textarea class="form-control" id="inputDescription" name="Description" rows="4"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDiscontinued" class="form-label">上架狀態</label>
+                                <select class="form-control" id="inputDiscontinued" name="Discontinued">
+                                    <option value="true" selected="">上架中</option>
+                                    <option value="false" selected="">已下架</option>
+                                </select>
+                            </div>
+                            @*                             <div class="mb-3">
+                            <label for="categories" class="form-label">產品分類</label>
+                            @foreach (var category in ViewBag.Categories)
                             {
-                                count++;
-                                <tr>
-                                    <td>
-                                        @count
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.WrappedProductName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.WrappedUnitPrice)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.WrappedLicense)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.WrappedIngredient)
-                                    </td>
-                                    <td>
-                                        <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
-                                    </td>
-                                    <td>
-                                        @if (item.WrappedDiscontinued == true)
-                                        {
-                                            <span class="badge badge-success">上架中</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge badge-danger">已下架</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-controller="Admin" asp-route-id="@item.WrappedProductId" class="btn btn-outline-primary" style="white-space: nowrap;">修改</a>
-                                    </td>
-                                    <td>
-                                        <a asp-action="Delete" asp-controller="Admin" asp-route-id="@item.WrappedProductId" class="btn btn-outline-danger" onclick="return confirm('確定要刪除嗎?')" style="white-space: nowrap;">刪除</a>
-                                    </td>
-                                </tr>
+                            <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId">
+                            <label class="form-check-label" for="category@(category.CategoriesId)">
+                            @category.CategoriesName
+                            </label>
+                            </div>
                             }
-                        }
-                    </tbody>
-                </table>
+                            </div> *@
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">產品圖片上傳</label>
+                                <input class="form-control" type="file" id="formFile" name="formFile">
+                            </div>
+                            <div id="imagePreviewContainer" class="mb-3">
+                                <label for="inputDescription" class="form-label">圖片預覽</label>
+                                <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
+                            </div>
+
+                            @*   <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button> *@
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定新增</button>
+                            <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        @* ---新增彈窗結束--- *@
 
-          
-              <script>
-    $(document).ready(function () {
-        $('.btn-toggle-discontinued').click(function () {
-            const productId = parseInt($(this).data('product-id'));
-            const discontinued = parseBool($(this).data('discontinued'));
+        @* ---修改彈窗開始--- *@
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">修改產品</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
+                            <div class="mb-3">
+                                <label for="inputName" class="form-label">產品名稱</label>
+                                <input type="text" class="form-control" id="inputName" name="ProductName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputPrice" class="form-label">單價</label>
+                                <input type="text" class="form-control" id="inputPrice" name="UnitPrice">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputLicense" class="form-label">認證字號</label>
+                                <input type="text" class="form-control" id="inputLicense" name="License">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputIngredient" class="form-label">有效成分</label>
+                                <input type="text" class="form-control" id="inputIngredient" name="Ingredient">
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDescription" class="form-label">產品描述</label>
+                                <textarea class="form-control" id="inputDescription" name="Description" rows="4"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputDiscontinued" class="form-label">上架狀態</label>
+                                <select class="form-control" id="inputDiscontinued" name="Discontinued">
+                                    <option value="true" selected="">上架中</option>
+                                    <option value="false" selected="">已下架</option>
+                                </select>
+                            </div>
+                            @*                             <div class="mb-3">
+                            <label for="categories" class="form-label">產品分類</label>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                            <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId">
+                            <label class="form-check-label" for="category@(category.CategoriesId)">
+                            @category.CategoriesName
+                            </label>
+                            </div>
+                            }
+                            </div> *@
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">產品圖片上傳</label>
+                                <input class="form-control" type="file" id="formFile" name="formFile">
+                            </div>
+                            <div id="imagePreviewContainer" class="mb-3">
+                                <label for="inputDescription" class="form-label">圖片預覽</label>
+                                <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
+                            </div>
 
-            let confirmationMessage = "";
-            if (discontinued === true) {
-                confirmationMessage = "確定將此商品上架?";
-            } else {
-                confirmationMessage = "確定將此商品下架?";
+                            @*   <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button> *@
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" onclick="putdata2()" id="Cbtn">確認修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* ---修改彈窗結束--- *@
+
+
+
+        <script>
+            function get(element) {
+                let par = element.parentNode.parentNode;
+                var hidd = par.querySelector('input[type="hidden"]');
+                console.log(hidd.value);
+                del(hidd.value);
+
+            }
+            //主畫面按下去要彈框框的事件
+            function updata(element) {
+                showTogget(element)
             }
 
-            if (confirm(confirmationMessage)) {
-                // 發送 AJAX 請求以切換「上架」狀態
-                $.ajax({
-                    url: '/Admin/ToggleDiscontinued',
-                    type: 'POST',
-                    data: { productId: productId, discontinued: discontinued },
-                    success: function (result) {
-                        // 根據伺服器的回應更新 label 的文字和樣式
-                        const label = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
-                        label.removeClass('btn-outline-success btn-outline-danger');
 
-                        if (result.discontinued === true) {
-                            label.addClass('btn-outline-success');
-                            label.text('上架中');
-                        } else if (result.discontinued === false) {
-                            label.addClass('btn-outline-danger');
-                            label.text('已下架');
-                        } else {
-                            label.text('未確認');
-                        }
 
-                        // 更新data-discontinued屬性
-                        label.data('discontinued', result.discontinued);
+            $(document).ready(function () {
+                $('.btn-toggle-discontinued').click(function () {
+                    const productId = parseInt($(this).data('product-id'));
+                    const discontinued = parseBool($(this).data('discontinued'));
+
+                    let confirmationMessage = "";
+                    if (discontinued === true) {
+                        confirmationMessage = "確定將此商品上架?";
+                    } else {
+                        confirmationMessage = "確定將此商品下架?";
+                    }
+
+                    if (confirm(confirmationMessage)) {
+                        // 發送 AJAX 請求以切換「上架」狀態
+                        $.ajax({
+                            url: '/Admin/ToggleDiscontinued',
+                            type: 'POST',
+                            data: { productId: productId, discontinued: discontinued },
+                            success: function (result) {
+                                // 根據伺服器的回應更新 label 的文字和樣式
+                                const label = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
+                                label.removeClass('btn-outline-success btn-outline-danger');
+
+                                if (result.discontinued === true) {
+                                    label.addClass('btn-outline-success');
+                                    label.text('上架中');
+                                } else if (result.discontinued === false) {
+                                    label.addClass('btn-outline-danger');
+                                    label.text('已下架');
+                                } else {
+                                    label.text('未確認');
+                                }
+
+                                // 更新data-discontinued屬性
+                                label.data('discontinued', result.discontinued);
+                            }
+                        });
                     }
                 });
-            }
-        });
 
-        // 自定義函式以將字串轉換為布林值
-        function parseBool(value) {
-            return value === 'True' || value === 'true';
-        }
-    });
-</script>
+                // 自定義函式以將字串轉換為布林值
+                function parseBool(value) {
+                    return value === 'True' || value === 'true';
+                }
+            });
+        </script>
 
 
-         
 
 
-        
 
 
-            <!-- 引入相應的JavaScript -->
-            @* <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> *@
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+        <!-- 引入相應的JavaScript -->
+        @* <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> *@
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
