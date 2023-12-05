@@ -67,6 +67,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult EmpManager(CKeywordViewModel vm)
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             IEnumerable<Employee> datas = null;
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
@@ -102,6 +105,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult BlogIndex(int? id, CKeywordViewModel input)
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             IEnumerable<Blog> blogs = null;
             if (id == null)
             {
@@ -145,6 +151,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult BlogList(int? id, CKeywordViewModel vm)
         {//
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             IEnumerable<CBlogModel> blogs = null;
             if (id == null)
             {
@@ -234,6 +243,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult PlanAdd()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             var q = from p in _db.Plans
                     select p;
 
@@ -243,6 +255,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult Product(CKeywordViewModel vm)
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             var datas = _db.Products.AsQueryable();
 
             if (!string.IsNullOrEmpty(vm.txtKeyword))
@@ -297,6 +312,9 @@ namespace MedSysProject.Controllers
 
         public IActionResult Order()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             //string keyword = "";
             IEnumerable<Order> datas = null;
 
@@ -310,11 +328,17 @@ namespace MedSysProject.Controllers
 
         public IActionResult Data()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             return View();
         }
 
         public IActionResult Report(CKeywordViewModel vm)
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();

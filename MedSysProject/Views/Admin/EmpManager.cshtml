@@ -99,7 +99,7 @@
                             </div>
                         </form>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
                             <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定新增</button>
                             <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
                         </div>
@@ -385,6 +385,13 @@
 
     }
     async function research() {
+        $("#CinputName").val("");
+        $("#CinputClass").val("");
+        $("#CinputDate").val("");
+        $("#CinputPhone").val("");
+        $("#CinputEmail").val("");
+        $("#CinputPwd").val("");
+
         const response = await fetch(`https://localhost:7078/api/Employees`)
         const datas = await response.json();
         console.log(datas.$values)
@@ -512,5 +519,15 @@
         $("#CinputPhone").val("0923232323");
         $("#CinputEmail").val("tomori@gmail.com");
         $("#CinputPwd").val("tomoriaaa");
+    });
+
+    $("#CancelEmpCreate").click(function () {
+        $("#CinputId").val("");
+        $("#CinputName").val("");
+        $("#CinputClass").val("");
+        $("#CinputDate").val("");
+        $("#CinputPhone").val("");
+        $("#CinputEmail").val("");
+        $("#CinputPwd").val("");
     });
 </script>
