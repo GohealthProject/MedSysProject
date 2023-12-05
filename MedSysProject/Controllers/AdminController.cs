@@ -268,6 +268,8 @@ namespace MedSysProject.Controllers
                     p.Ingredient.Contains(keyword) ||
                     p.License.Contains(keyword) ||
                     p.Description.Contains(keyword));
+
+                ViewBag.key = keyword;
             }
 
             var defaultImagePath = "/img-product/default-image.jpg";

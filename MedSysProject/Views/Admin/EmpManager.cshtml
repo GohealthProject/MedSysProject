@@ -345,7 +345,17 @@
         });
         const state = await response.status;
         if (response.ok) {
-            research()
+            $('#modalEdit').modal('hide');
+
+            Swal.fire({
+                title: "修改成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            research();
         }
     }
     //把資料印到彈出來的視窗
