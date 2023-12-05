@@ -2,6 +2,7 @@
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
     <div class="container">
@@ -10,7 +11,7 @@
             <h2>方案比較</h2>
             <ol>
                 <li><a href="~/Home/Index">Home</a></li>
-                <li>內頁</li>
+                <li><a href="~/Home/planComeparison">方案比較</a></li>
             </ol>
         </div>
 
@@ -18,11 +19,14 @@
     <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>
 </section>
 <style>
-    div,table{border:dashed 3px red}
+/*    div,table{border:dashed 3px red}
     table{
         align-content:center;
         text-align:center;
     }
+    .col-3{
+        height:230px;
+    }*/
 </style>
 
 
@@ -37,7 +41,7 @@
 
                 <ul id="portfolio-flters" class="row" style="margin-left:15%;" >
                         <li data-filter="*" class="filter-active col-3">
-                        <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="">
+                        <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="" style="height:230px;">
                             <div class=" portfolio-item filter-app">
                                 全部類別
                             </div>
@@ -63,13 +67,13 @@
                             </div>
                         </li>
                     <li data-filter=".filter-card" class="col-3">
-                        <img src="~/img/customcompare/p-04.jpg" class="img-fluid" alt="">
+                        <img src="~/img/customcompare/p-04.jpg" class="img-fluid" alt="" style="height:230px">
                         <div class="portfolio-item filter-web">
                             腎功能檢查
                         </div>
                     </li>
                     <li data-filter=".filter-card" class="col-3">
-                        <img src="~/img/customcompare/p-05.jpg" class="img-fluid" alt="">
+                        <img src="~/img/customcompare/p-05.jpg" class="img-fluid" alt="" style="height:230px">
                         <div class="portfolio-item filter-web">
                             腎功能檢查
                         </div>
@@ -78,28 +82,28 @@
     </div>
     </div>
 
-            <div class="row portfolio-container portfolio-flters p-5">
+            <div class="row portfolio-container portfolio-flters p-5" id="btng">
             
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">身高</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">體重</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">脈搏</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">血壓-收縮壓</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">血壓-舒張壓</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">腰圍</button>
-                <button class="portfolio-item filter-app col-2 m-1 btn btn-success">理學檢查</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">身高</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">體重</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">脈搏</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">血壓-收縮壓</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">血壓-舒張壓</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">腰圍</button>
+            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">理學檢查</button>
 
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液外觀</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿比重</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液酸鹼度</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿膽素原</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿蛋白</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿糖</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">酮尿</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">膽紅素</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿潛血</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿液白血球</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">亞硝酸鹽</button>
-                <button class="portfolio-item filter-card col-2 m-1 btn btn-success">尿沉渣</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液外觀</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿比重</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液酸鹼度</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿膽素原</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿蛋白</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿糖</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">酮尿</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">膽紅素</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿潛血</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液白血球</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">亞硝酸鹽</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿沉渣</button>
             
             </div>
 
@@ -176,7 +180,7 @@
         <div class="col-10"></div>
     <button class="btn btn-primary col-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">我的自選方案</button>
     </div>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-scroll="true">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasRightLabel">已選項目</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -197,7 +201,7 @@
                         </th>
                     </tr>
               </thead>
-                <tbody>
+                <tbody id="ilist">
                   <tr>
                       <td>
                           A
@@ -223,7 +227,25 @@
         </div>
     </div>
 
+@section Scripts{
+    <script>
+
+        $("#btng:has(#ibtn)").click(() => {
+            //console(this)
+            document.querySelector("#ilist").innerHTML +=
+            `<tr>
+                <td>
+                ${"aa"}
+                </td>
+                <td>
+               BB
+                </td>
+                <td><img src="~/img/icon/x.png"/></td>
+             </tr>`
+            
+
+        })
+    </script>
+}
 
 
-</section><!-- End Our Team Section -->
-<!-- End Our Portfolio Section -->
