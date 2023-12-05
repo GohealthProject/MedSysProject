@@ -9,28 +9,59 @@
 
 <div class="container">
     <div class="list-group inDiv" >
-        <button type="button" class="list-group-item list-group-item-action active" aria-current="true" id="click">
-            @Model[0].OrderId
+        <button type="button" class="list-group-item list-group-item-action active click" aria-current="true"  value="1">555
         </button>
-
+    </div>
+    <div class="list-group inDiv">
+        <button type="button" class="list-group-item list-group-item-action active click" aria-current="true"  value="2">444
+        </button>
     </div>
 </div>
 @section Scripts{
      <script>
-        document.querySelector("#click").addEventListener('click',out);
+
        
+        let clicks =document.querySelectorAll(".click");
+        for(var i =0; i <clicks.length;i++){
+            clicks[i].addEventListener('click',out);
+        }
+
          function out(event){
             event.target.removeEventListener('click',out);
-            let ps  = document.createElement("p");
-            ps.innerText="@Model[0].OrderDate.ToString().Split(" ")[0]";
-            ps.className="fs-2"
-            document.querySelector(".inDiv").appendChild(ps);
+            
+            //<a href="#" class="list-group-item list-group-item-action" > A second link item < /a>
+            console.log(event.target.value)
+            let ppay = document.createElement("p");
+            ppay.innerText = "支付方式 : @Model[0].PayId";
+            event.target.parentNode.appendChild(ppay);
+            let pship = document.createElement("p");
+            pship.innerText = "@Model[0].ShipId";
+            event.target.parentNode.appendChild(pship);
+            let pstate = document.createElement("p");
+            pstate.innerText = "@Model[0].StateId";
+            event.target.parentNode.appendChild(pstate);
+            let pod = document.createElement("p");
+            pod.innerText = "@Model[0].OrderDate.ToString().Split(" ")[0]";
+            event.target.parentNode.appendChild(pod);
+            let psd = document.createElement("p");
+            psd.innerText = "@Model[0].ShipDate.ToString().Split(" ")[0]";
+            event.target.parentNode.appendChild(psd);
+            let pdd = document.createElement("p");
+            pdd.innerText = "@Model[0].DeliveryDate.ToString().Split(" ")[0]";
+            event.target.parentNode.appendChild(pdd);
+            
+            
+            let newp = event.target.parentNode.querySelectorAll("p");
+            for (var i = 0; i < newp.length; i++) {
+                newp[i].className = "list-group-item list-group-item-action";
+                newp[i].style.margin="0";
+            }
             alert("新增成功");
             event.target.addEventListener('click', hide);
          }
          function hide(event){
              event.target.removeEventListener('click',hide);
-             let ps =document.querySelector('.inDiv').getElementsByTagName("p");
+            let ps = event.target.parentNode.getElementsByTagName("p");
              for(var i = 0 ; i <ps.length ; i++){
                  ps[i].remove();
              }
