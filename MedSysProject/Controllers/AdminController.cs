@@ -267,63 +267,7 @@ namespace MedSysProject.Controllers
             return View(q);
         }
 
-        public IActionResult Product(CKeywordViewModel vm)
-        {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
-
-            var datas = _db.Products.AsQueryable();
-
-            if (!string.IsNullOrEmpty(vm.txtKeyword))
-            {
-                var keyword = vm.txtKeyword.Trim();
-                datas = datas.Where(p =>
-                    p.ProductName.Contains(keyword) ||
-                    p.Ingredient.Contains(keyword) ||
-                    p.License.Contains(keyword) ||
-                    p.Description.Contains(keyword));
-
-                ViewBag.key = keyword;
-            }
-
-            var defaultImagePath = "/img-product/default-image.jpg";
-
-            if (vm.txtMinPrice.HasValue)
-            {
-                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
-            }
-
-            if (vm.txtMaxPrice.HasValue)
-            {
-                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
-            }
-
-
-            var viewModel = datas.Select(product => new CProductsWrap
-            {
-                Product = product,
-                ImagePath = product.FimagePath != null
-                    ? Path.Combine("/img-product", product.FimagePath)
-                    : defaultImagePath
-            }).ToList();
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
-        {
-            // 根據 productId 更新數據庫中的 discontinued 屬性
-            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
-            if (product != null)
-            {
-                product.Discontinued = discontinued;
-                _db.SaveChanges();
-            }
-
-            // 返回 JSON 物件，包含更新後的 discontinued 值
-            return Json(new { discontinued = product?.Discontinued });
-        }
+       
 
 
         public IActionResult Order()
@@ -405,6 +349,71 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Report");
         }
 
+
+
+        public async Task<IActionResult> Product(CKeywordViewModel vm)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
+            // 初始化 ViewBag.Categories
+            ViewBag.Categories = await _db.ProductsClassifications
+                .Include(pc => pc.Categories)
+                .Select(pc => pc.Categories)
+                .Distinct()
+                .ToListAsync();
+
+            var datas = _db.Products.AsQueryable();
+
+            var keyword = vm.txtKeyword?.Trim();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                datas = datas.Where(p =>
+                    p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.Ingredient.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.License.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+
+                ViewBag.key = keyword;
+            }
+
+            var defaultImagePath = "/img-product/default-image.jpg";
+
+            if (vm.txtMinPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
+            }
+
+            if (vm.txtMaxPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
+            }
+
+            var viewModel = await datas.Select(product => new CProductsWrap
+            {
+                Product = product,
+                ImagePath = product.FimagePath != null
+                    ? Path.Combine("/img-product", product.FimagePath)
+                    : defaultImagePath
+            }).ToListAsync();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 根據 productId 更新數據庫中的 discontinued 屬性
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null)
+            {
+                product.Discontinued = discontinued;
+                _db.SaveChanges();
+            }
+
+            // 返回 JSON 物件，包含更新後的 discontinued 值
+            return Json(new { discontinued = product?.Discontinued });
+        }
 
         public IActionResult GetImage(int id)
         {
