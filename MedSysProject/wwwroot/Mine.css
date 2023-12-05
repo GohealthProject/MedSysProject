@@ -10,6 +10,9 @@ a {
   text-decoration: none;
 }
 a:hover {
+  color: #fff;
+}
+a:hover {
   color: var(--color-links);
   text-decoration: none;
 }
@@ -164,6 +167,7 @@ section .section-header p {
     font-size: 15px;
     text-transform: none;
     font-weight: 400;
+    color: blue;
   }
   .navbar ul .dropdown ul li a:hover {
     color: var(--color-primary);

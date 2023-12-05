@@ -35,8 +35,8 @@
     <body>
         <header id="header" class="header d-flex align-items-center fixed-top">
         <div class ="container-fluid container-xl d-flex align-items-center justify-content-between">
-           @*  @Html.ActionLink("GoHealthyBlog","IndexOld","Blogs",null,new{@class="h1 logo"}) *@
-            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[0].BlogId">GoHealthBlog</a>
+           
+            <a href="@Url.Content("~/Blogs/IndexOld")" class="logo">GoHealthBlog</a>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li>@Html.ActionLink("部落格首頁","Index","Blogs",null,null)</li>
