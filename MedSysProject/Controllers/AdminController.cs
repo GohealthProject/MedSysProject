@@ -78,7 +78,7 @@ namespace MedSysProject.Controllers
                 datas = from t in _db.Employees.Include(p => p.EmployeeClass)
                         select t;
 
-                
+
             }
 
             else
@@ -86,7 +86,7 @@ namespace MedSysProject.Controllers
                 p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
                 p.EmployeeEmail.Contains(vm.txtKeyword));
 
-                ViewBag.key = vm.txtKeyword;
+            ViewBag.key = vm.txtKeyword;
 
             return View(datas);
         }
@@ -650,9 +650,6 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-
-
+      
     }
-
-
 }
