@@ -8,14 +8,24 @@
 
 
 <div class="container">
-    <div class="list-group inDiv" >
-        <button type="button" class="list-group-item list-group-item-action active click" aria-current="true"  value="1">555
-        </button>
-    </div>
-    <div class="list-group inDiv">
-        <button type="button" class="list-group-item list-group-item-action active click" aria-current="true"  value="2">444
-        </button>
-    </div>
+    @{
+        int count = 0;
+        for(int i =0; i < Model.Count; i++)
+        {
+            count++;
+            <div class="list-group inDiv">
+                <button type="button" class="list-group-item list-group-item-action active click" aria-current="true" value="@count">
+                第 @count 筆資料
+                </button>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">支付方式 : @Model[i].PayId</p>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">訂單狀態 : @Model[i].StateId</p>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">運送方式 : @Model[i].ShipId</p>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">下訂日期 : @Model[0].OrderDate.ToString().Split(" ")[0]</p>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">出貨日期 : @Model[0].ShipDate.ToString().Split(" ")[0]</p>
+                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">預計到達日期 : @Model[0].DeliveryDate.ToString().Split(" ")[0]</p>
+            </div>
+        }
+    }
 </div>
 @section Scripts{
      <script>
@@ -25,47 +35,20 @@
         for(var i =0; i <clicks.length;i++){
             clicks[i].addEventListener('click',out);
         }
-
          function out(event){
             event.target.removeEventListener('click',out);
-            
-            //<a href="#" class="list-group-item list-group-item-action" > A second link item < /a>
-            console.log(event.target.value)
-            let ppay = document.createElement("p");
-            ppay.innerText = "支付方式 : @Model[0].PayId";
-            event.target.parentNode.appendChild(ppay);
-            let pship = document.createElement("p");
-            pship.innerText = "@Model[0].ShipId";
-            event.target.parentNode.appendChild(pship);
-            let pstate = document.createElement("p");
-            pstate.innerText = "@Model[0].StateId";
-            event.target.parentNode.appendChild(pstate);
-            let pod = document.createElement("p");
-            pod.innerText = "@Model[0].OrderDate.ToString().Split(" ")[0]";
-            event.target.parentNode.appendChild(pod);
-            let psd = document.createElement("p");
-            psd.innerText = "@Model[0].ShipDate.ToString().Split(" ")[0]";
-            event.target.parentNode.appendChild(psd);
-            let pdd = document.createElement("p");
-            pdd.innerText = "@Model[0].DeliveryDate.ToString().Split(" ")[0]";
-            event.target.parentNode.appendChild(pdd);
-            
-            
-            let newp = event.target.parentNode.querySelectorAll("p");
-            for (var i = 0; i < newp.length; i++) {
-                newp[i].className = "list-group-item list-group-item-action";
-                newp[i].style.margin="0";
+            let ps = event.target.parentNode.querySelectorAll("p");
+            for(var i =0; i<ps.length;i++){
+                ps[i].style.display="";
             }
-            alert("新增成功");
             event.target.addEventListener('click', hide);
          }
          function hide(event){
              event.target.removeEventListener('click',hide);
-            let ps = event.target.parentNode.getElementsByTagName("p");
-             for(var i = 0 ; i <ps.length ; i++){
-                 ps[i].remove();
+             let ps = event.target.parentNode.querySelectorAll("p");
+             for(var i =0 ; i<ps.length;i++){
+                 ps[i].style.display="none";
              }
-             alert("刪除成功");
              event.target.addEventListener('click',out);
          }
          const paylist = document.getElementsByClassName('pay');

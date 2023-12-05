@@ -9,8 +9,8 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-md-9" >
-                        <h3 class="category-title">@ViewBag.Cate</h3>
+                <div class="col-md-9">
+                    <h3 class="category-title">@ViewBag.Cate</h3>
 
                     @* ---------開始區塊-------- *@
 
@@ -24,12 +24,14 @@
                             <div>
                                 <div class="post-meta"><span class="date">@Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)</span> <span class="mx-1">&bullet;</span> <span>@Html.DisplayFor(modelItem => item.CreatedAt)</span></div>
                                 <h3><a href="single-post.html">@Html.DisplayFor(modelItem => item.Title)</a></h3>
-                                <p>@{
+                                <p>
+                                    @{
                                         string content = item.Content;
                                         string truncatedContent = content.Length > 50 ? content.Substring(0, 50) + "..." : content;
-                                        
+
                                         <>@truncatedContent</>
-                                }</p>
+                                    }
+                                </p>
                                 <div class="d-flex align-items-center author">
                                     <div class="photo"><img src="/blogs/GetEmpImageByte/@item.EmployeeId" alt="" class="img-fluid"></div>
                                     <div class="name">
@@ -48,13 +50,51 @@
 
                     <div class="text-start py-4">
                         <div class="custom-pagination">
-                            <a href="#" class="prev">Prevous</a>
-                            <a href="#" class="active">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#">4</a>
-                            <a href="#">5</a>
-                            <a href="#" class="next">Next</a>
+                            @{
+                                if (ViewBag.page == null)
+                                {
+
+                                }
+
+                                else
+                                {
+                                    int previous = ViewBag.page - 1;
+                                    int next = ViewBag.page + 1;
+                                    int current = ViewBag.page;
+
+                                    if (ViewBag.page == 1)
+                                    {
+                                        <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev disabled">上一頁</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
+                                    }
+                                    
+
+                                    for (int i = 1; i <= ViewBag.MaxPage; i++)
+                                    {
+                                        if (i == current)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
+                                        }
+                                    }
+
+                                    if (ViewBag.page == ViewBag.MaxPage)
+                                    {
+                                        <a href="~/blogs/SelectBlogCategory?page=@next" class="prev disabled">下一頁</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
+                                    }
+
+                                }
+                            }
                         </div>
                     </div>
                 </div>

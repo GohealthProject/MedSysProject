@@ -65,7 +65,7 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult EmpManager(CKeywordViewModel? vm,int page=1)
+        public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
@@ -74,9 +74,10 @@ namespace MedSysProject.Controllers
 
             if (string.IsNullOrEmpty(vm.txtKeyword))
             {
-                int pgsize = 10;
+
+                int pgsize = 5;
                 int total = _db.Employees.Count();
-                int maxpage = total % pgsize == 0 ? total / pgsize : total / pgsize + 1;
+                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
                 if (page < 1) page = 1;
                 if (page > maxpage) page = maxpage;
                 datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
@@ -93,11 +94,13 @@ namespace MedSysProject.Controllers
             }
 
             else
+            {
                 datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
                 p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
                 p.EmployeeEmail.Contains(vm.txtKeyword));
 
                 ViewBag.key = vm.txtKeyword;
+            }
 
             return View(datas);
         }
@@ -661,9 +664,6 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-
-
+      
     }
-
-
 }

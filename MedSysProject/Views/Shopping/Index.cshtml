@@ -42,13 +42,14 @@
                             }
                             @:<div class='row'>
                             }
+                            string max = (Model[i].UnitPrice + 200).ToString();
                             string s = Model[i].UnitPrice.ToString();
                             
                             <div class=" col " style="height:300px;width:300px">
                             <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:300px;"  />
                             <div class="mt-3">
                                 <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                <span class="fs-3 text-danger" style="text-decoration:line-through">$@max.TrimEnd('0').TrimEnd('.')</span><span class="fs-3 text-danger ms-5">$@s.TrimEnd('0').TrimEnd('.')</span>
                             </div>
                         </div>
                         @if(i!=0&&i+i%3==0||i==Model.Count-1){
@@ -151,26 +152,22 @@
          async function CatByProduct(id){
             const response = await fetch("https://localhost:7078/api/Products/category/"+id);
             const data = await response.json()
-            console.log(id);
-            $("#divTitle").children().first().html(data[0].categoriesName);
+            $("#divTitle").children().first().html(data[0].categoriesName+"("+data[0].productsClassifications.$values.length+")");
             document.querySelector("#more").href=`@Url.Content("~/Shopping/Search/")${id}`;
             const datas = data[0].productsClassifications.$values
-            console.log(datas)
-            console.log(datas[0].$id)
             const info = datas.map(product=>{
                 const Name = product.product.productName.substring(0,9);
+                const maxPrice = (product.product.unitPrice+200);
                 const Price = product.product.unitPrice;
                 const Path = product.product.fimagePath;
                 const id = product.product.productId;
-                console.log(product.product.productId)
-                console.log(`${Name} 價格 ${Price} 路徑 ${Path} id ${id}`)
                 const pro =
                `
                        <div class=" col " style="height:300px;width:300px">
                                     <img src="@Url.Content("~")${Path}" style="height:150px; width:300px;padding-top:10px" />
                                     <div class="mt-3">
                                         <a href="@Url.Content("~/Shopping/selectProduct/")${id}" class="fs-3">${Name}</a><br/>
-                                        <span class="fs-3 text-danger">$${Price}</span>
+                                        <span class="fs-3 text-danger" style="text-decoration:line-through">$${maxPrice}</span><span class="fs-3 text-danger ms-5">$${Price}</span>
                                     </div>
                                 </div>
                `
@@ -193,6 +190,7 @@
         $(document).ready(()=>{
             $("#btnList>button").click((event) => {
                 CatByProduct($(event.target).val())
+
             })
         })
      </script>
