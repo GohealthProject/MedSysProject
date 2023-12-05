@@ -41,56 +41,61 @@ section {
 }
 
 /*Header*/
-.header{
-    height:90px;
-    transition:all 0.5s;
-    z-index:997;
-    background:#f2f2f2;
-    &.sticked{
+.header {
+    height: 90px;
+    transition: all 0.5s;
+    z-index: 997;
+    background: #1d443f;
+
+    &.sticked {
         //當滑鼠滾動超過100px，加上
-        height:70px;
+        height: 70px;
     }
 
-    .search-form-wrap{
-        position:absolute;
-        right:0;
-        top:0;
-        z-index:9;
-        transition:0.3s all ease;
-        visibility:hidden;
-        opacity:0;
+    .search-form-wrap {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 9;
+        transition: 0.3s all ease;
+        visibility: hidden;
+        opacity: 0;
 
-        .search-form{
-            position:relative;
-            .form-control{
-                width:300px;
-                border:none;
-                box-shadow:0 15px 20px -10px rgba(var(--color-black-rgb),0.5);
-                padding:0 40px;/*上下 左右*/
-                &:active,&:focus{
-                    outline:none;
-                    box-shadow:none;
+        .search-form {
+            position: relative;
+
+            .form-control {
+                width: 300px;
+                border: none;
+                box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb),0.5);
+                padding: 0 40px; /*上下 左右*/
+                &:active, &:focus {
+                    outline: none;
+                    box-shadow: none;
                 }
             }
-            .icon{
-                position:absolute;
-                left:0;//貼左邊
-                top:0px;
-                opacity:0.5;
-                left:10px;
+
+            .icon {
+                position: absolute;
+                left: 0; //貼左邊
+                top: 0px;
+                opacity: 0.5;
+                left: 10px;
             }
-            .btn{
-                position:absolute;
-                top:0px;
-                right:4px;
-                padding:0;
-                margin:0;
-                line-height:1;
-                font-size:25px;
-                opacity:0.5;
-                &:active,&:focus{
-                    outline:none;
-                    box-shadow:none;
+
+            .btn {
+                position: absolute;
+                top: 0px;
+                right: 4px;
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+                font-size: 25px;
+                opacity: 0.5;
+
+                &:active, &:focus {
+                    outline: none;
+                    box-shadow: none;
                 }
             }
         }
