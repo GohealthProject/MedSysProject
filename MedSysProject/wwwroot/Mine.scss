@@ -700,6 +700,7 @@ section {
 
         &:hover {
             background: rgba(var(--color-black-rgb),0.9);
+            color: var(--color-white);
         }
 
         &.active {

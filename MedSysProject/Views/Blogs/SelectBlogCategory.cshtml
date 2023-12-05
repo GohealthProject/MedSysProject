@@ -4,6 +4,16 @@
     ViewData["Title"] = "IndexOld";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
+
+@section IndexCss
+{
+    <style>
+        .custom-pagination a:hover {
+            background: rgba(var(--color-black-rgb), 0.9);
+            color: var(--color-white);
+        }
+    </style>
+}
 <main id="main">
     <section>
         <div class="container">
@@ -66,7 +76,7 @@
 
                                         if (ViewBag.page == 1)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev disabled">上一頁</a>
+                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="btn prev disabled" hidden>上一頁</a>
                                         }
                                         else
                                         {
@@ -88,7 +98,7 @@
 
                                         if (ViewBag.page == ViewBag.MaxPage)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="prev disabled">下一頁</a>
+                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="btn prev disabled" hidden>下一頁</a>
                                         }
                                         else
                                         {
@@ -112,7 +122,7 @@
 
                                         if (ViewBag.page == 1)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev disabled">上一頁</a>
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="btn prev disabled" hidden>上一頁</a>
                                         }
                                         else
                                         {
@@ -134,7 +144,7 @@
 
                                         if (ViewBag.page == ViewBag.MaxPage)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev disabled">下一頁</a>
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="btn prev disabled" hidden>下一頁</a>
                                         }
                                         else
                                         {
