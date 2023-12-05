@@ -513,10 +513,16 @@ namespace MedSysProject.Controllers
         //    return Json(new { productId = product.ProductId });
         //}
 
-        public IActionResult Edit(int? id)
+        [HttpGet]
+        public IActionResult Edit(int? productId)
         {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
             var categories = _db.ProductsCategories.ToList();
-            Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
+            Product x = _db.Products.FirstOrDefault(p => p.ProductId == productId);
 
             if (x == null)
                 return RedirectToAction("Product");
@@ -535,98 +541,115 @@ namespace MedSysProject.Controllers
                 FimagePath = x.FimagePath
             };
 
-
+            // 初始化 ViewBag.Categories
             ViewBag.Categories = categories;
 
-
-            return View(productWrap);
+            // 回傳 JSON 格式的產品資訊
+            return Json(productWrap);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile, List<int> SelectedCategories)
+        public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
         {
-            Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
-            if (pDb != null)
+            try
             {
-                if (formFile != null)
+                // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
+                if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
-                    // 生成唯一的檔案名稱
-                    string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                    // 將圖片存放在 wwwroot/img-product 資料夾中
-                    string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                    // 將圖片路徑存入資料庫
-                    pDb.FimagePath = "/img-product/" + photoName;
-
-                    // 寫入圖片檔案
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(fileStream);
-                    }
-                }
-
-                pDb.ProductName = productId.WrappedProductName;
-                pDb.UnitsInStock = productId.WrappedUnitsInStock;
-                pDb.License = productId.WrappedLicense;
-                pDb.UnitPrice = productId.WrappedUnitPrice;
-                pDb.Ingredient = productId.WrappedIngredient;
-                pDb.Description = productId.WrappedDescription;
-                pDb.Discontinued = productId.WrappedDiscontinued;
-
-                _db.Products.Update(pDb);
-
-                // 處理 ProductsClassification 資料表
-                if (SelectedCategories != null && SelectedCategories.Any())
-                {
-                    // 移除所有現有的 CategoriesId 記錄
-                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
-
-                    // 新增選擇的 CategoriesId 記錄
-                    foreach (var categoryId in SelectedCategories)
-                    {
-                        var classification = new ProductsClassification
+                    var product = _db.Products
+                        .Where(p => p.ProductId == productId.WrappedProductId)
+                        .Select(p => new
                         {
-                            ProductId = productId.WrappedProductId,
-                            CategoriesId = categoryId
-                        };
+                            p.ProductId,
+                            p.ProductName,
+                            p.UnitPrice,
+                            p.License,
+                            p.Ingredient,
+                            p.Description,
+                            p.UnitsInStock,
+                            p.Discontinued,
+                        })
+                        .FirstOrDefault();
 
-                        _db.ProductsClassifications.Add(classification);
+                    return Json(new { success = true, product });
+                }
+
+                // 非 AJAX 請求，執行原有的編輯邏輯
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
+
+                if (pDb != null)
+                {
+                    if (productId.FormFile != null)
+                    {
+                        // 生成唯一的檔案名稱
+                        string photoName = Guid.NewGuid().ToString() + ".jpg";
+
+                        // 將圖片存放在 wwwroot/img-product 資料夾中
+                        string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
+
+                        // 將圖片路徑存入資料庫
+                        pDb.FimagePath = "/img-product/" + photoName;
+
+                        // 寫入圖片檔案
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await productId.FormFile.CopyToAsync(fileStream);
+                        }
+                    }
+
+                    pDb.ProductName = productId.WrappedProductName;
+                    pDb.UnitsInStock = productId.WrappedUnitsInStock;
+                    pDb.License = productId.WrappedLicense;
+                    pDb.UnitPrice = productId.WrappedUnitPrice;
+                    pDb.Ingredient = productId.WrappedIngredient;
+                    pDb.Description = productId.WrappedDescription;
+                    pDb.Discontinued = productId.WrappedDiscontinued;
+
+                    _db.Products.Update(pDb);
+
+                    // 處理 ProductsClassification 資料表
+                    if (productId.SelectedCategories != null && productId.SelectedCategories.Any())
+                    {
+                        // 移除所有現有的 CategoriesId 記錄
+                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+
+                        // 新增選擇的 CategoriesId 記錄
+                        foreach (var categoryId in productId.SelectedCategories)
+                        {
+                            var classification = new ProductsClassification
+                            {
+                                ProductId = productId.WrappedProductId,
+                                CategoriesId = categoryId
+                            };
+
+                            _db.ProductsClassifications.Add(classification);
+                        }
+                    }
+
+                    try
+                    {
+                        _db.SaveChanges();
+                        return RedirectToAction("Product");
+                    }
+                    catch (Exception ex)
+                    {
+                        // 處理異常，例如記錄日誌
+                        return Json(new { success = false, message = ex.Message });
                     }
                 }
 
-                try
-                {
-                    _db.SaveChanges();
-                    return RedirectToAction("Product");
-                }
-                catch (Exception ex)
-                {
-                    // 處理異常，或輸出到日誌
-                    Console.WriteLine(ex.Message);
-                }
-
-                CProductsWrap productWrap = new CProductsWrap
-                {
-                    WrappedProductId = productId.WrappedProductId,
-                    WrappedDescription = productId.WrappedDescription,
-                    WrappedDiscontinued = productId.WrappedDiscontinued,
-                    WrappedIngredient = productId.WrappedIngredient,
-                    WrappedLicense = productId.WrappedLicense,
-                    WrappedProductName = productId.WrappedProductName,
-                    WrappedUnitPrice = productId.WrappedUnitPrice,
-                    WrappedUnitsInStock = productId.WrappedUnitsInStock,
-                    FimagePath = productId.FimagePath,
-                    SelectedCategories = productId.SelectedCategories,
-                };
-
-                return View(productWrap); // 或者 return RedirectToAction("Edit", productWrap);
+                // 在這裡加上一個 return 陳述式
+                return View(productId);
             }
-
-            // 在這裡加上一個 return 陳述式
-            return View(productId);
+            catch (Exception ex)
+            {
+                // 處理異常，例如記錄日誌
+                return Json(new { success = false, message = ex.Message });
+            }
         }
+
+
 
 
 

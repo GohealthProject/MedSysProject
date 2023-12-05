@@ -8,23 +8,18 @@
     Layout = "_Layout_Admin2";
 }
 
-@* 這邊是確保左側邊欄的目前區域標亮 *@
-@* ---------------------------------------------- *@
 <script>
     const Product = document.getElementById("li-Product");
     const Index = document.getElementById("li-index");
     Product.className = "nav-item active";
     Index.className = "nav-item";
 </script>
-@* ------------------------------------- *@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">產品管理</h6>
     </div>
     <div class="card-body">
-
-
         <div>
             @using (Html.BeginForm())
             {
@@ -41,37 +36,22 @@
         </div>
 
         <table class="table table-hover">
+            <!-- 表格頭部 -->
             <thead>
                 <tr>
-                    <th>
-                        序
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedProductName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedUnitPrice)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedLicense)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedIngredient)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FimagePath)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedUnitsInStock)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WrappedDiscontinued)
-                    </th>
-                    <th>
-                        執行動作
-                    </th>
+                    <!-- 列項目 -->
+                    <th>序</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedUnitPrice)</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedLicense)</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedIngredient)</th>
+                    <th>@Html.DisplayNameFor(model => model.FimagePath)</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedUnitsInStock)</th>
+                    <th>@Html.DisplayNameFor(model => model.WrappedDiscontinued)</th>
+                    <th>執行動作</th>
                 </tr>
             </thead>
+            <!-- 表格內容 -->
             <tbody>
                 @{
                     int count = 0;
@@ -79,28 +59,15 @@
                     {
                         count++;
                         <tr>
-                            <td>
-                                @count
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WrappedProductName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WrappedUnitPrice)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WrappedLicense)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WrappedIngredient)
-                            </td>
+                            <td>@count</td>
+                            <td>@Html.DisplayFor(modelItem => item.WrappedProductName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WrappedUnitPrice)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WrappedLicense)</td>
+                            <td>@Html.DisplayFor(modelItem => item.WrappedIngredient)</td>
                             <td>
                                 <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.WrappedUnitsInStock)
-                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.WrappedUnitsInStock)</td>
                             <td>
                                 @if (item.WrappedDiscontinued == true)
                                 {
@@ -112,15 +79,10 @@
                                 }
                             </td>
                             <td>
-                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                <a onclick="getProductDetails(@item.WrappedProductId)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                @*
-                        <a href="@Url.Action("Details", new { id = item.EmployeeId })" class="btn btn-info">
-                        <i class="fas fa-info-circle"></i>
-                        </a>*@
-                                <a class="btn btn-danger" onclick="get(this)">
-                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                <a class="btn btn-danger" onclick="deleteProduct(@item.WrappedProductId)">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
@@ -209,8 +171,7 @@
         @* ---新增彈窗結束--- *@
 
         @* ---修改彈窗開始--- *@
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" onshown="getProductDetails()">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <!--Header-->
@@ -222,10 +183,10 @@
                     </div>
                     <!--Body-->
                     <div class="modal-body">
-                        <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
+                        <form id="editProductForm" method="post" enctype="multipart/form-data" action="@Url.Action("Edit", "Admin")">
                             <div class="mb-3">
-                                <label for="inputName" class="form-label">產品名稱</label>
-                                <input type="text" class="form-control" id="inputName" name="ProductName">
+                                <label for="editProductName" class="form-label">產品名稱</label>
+                                <input type="text" class="form-control" id="editProductName" name="WrappedProductName">
                             </div>
                             <div class="mb-3">
                                 <label for="inputPrice" class="form-label">單價</label>
@@ -264,102 +225,67 @@
                             </div>
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">產品圖片上傳</label>
-                                <input class="form-control" type="file" id="formFile" name="formFile">
+                                <input class="form-control" type="file" id="formFile" name="FormFile">
                             </div>
                             <div id="imagePreviewContainer" class="mb-3">
                                 <label for="inputDescription" class="form-label">圖片預覽</label>
                                 <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
                             </div>
-
-                              <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-
                         </form>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-success" onclick="putdata2()" id="Cbtn">確認修改</button>
+                            <button type="button" class="btn btn-primary" onclick="updateProduct()">確認修改</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>
         @* ---修改彈窗結束--- *@
+          
+            <!-- 載入 Bootstrap 的 JavaScript -->
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
         <script>
-            function get(element) {
-                let par = element.parentNode.parentNode;
-                var hidd = par.querySelector('input[type="hidden"]');
-                console.log(hidd.value);
-                del(hidd.value);
+                function displayProductDetails(data) {
+                    // 處理產品詳細信息的顯示
+                    $('#editProductName').val(data.WrappedProductName);
+                    $('#inputPrice').val(data.WrappedUnitPrice);
+                    $('#inputLicense').val(data.WrappedLicense);
+                    $('#inputIngredient').val(data.WrappedIngredient);
+                    $('#inputDescription').val(data.WrappedDescription);
+                    $('#inputDiscontinued').val(data.WrappedDiscontinued ? 'true' : 'false');
 
-            }
-            //主畫面按下去要彈框框的事件
-            function updata(element) {
-                showTogget(element)
-            }
+                    // 初始化 SelectedCategories 為空陣列
+                    var selectedCategories = data.SelectedCategories && Array.isArray(data.SelectedCategories) ? data.SelectedCategories : [];
 
+                    selectedCategories.forEach(function (categoryId) {
+                        $('#category' + categoryId).prop('checked', true);
+                    });
 
-
-            $(document).ready(function () {
-                $('.btn-toggle-discontinued').click(function () {
-                    const productId = parseInt($(this).data('product-id'));
-                    const discontinued = parseBool($(this).data('discontinued'));
-
-                    let confirmationMessage = "";
-                    if (discontinued === true) {
-                        confirmationMessage = "確定將此商品上架?";
-                    } else {
-                        confirmationMessage = "確定將此商品下架?";
+                    if (data.FimagePath) {
+                        $('#previewImage').attr('src', data.FimagePath);
                     }
-
-                    if (confirm(confirmationMessage)) {
-                        // 發送 AJAX 請求以切換「上架」狀態
-                        $.ajax({
-                            url: '/Admin/ToggleDiscontinued',
-                            type: 'POST',
-                            data: { productId: productId, discontinued: discontinued },
-                            success: function (result) {
-                                // 根據伺服器的回應更新 label 的文字和樣式
-                                const label = $('.btn-toggle-discontinued[data-product-id="' + productId + '"]');
-                                label.removeClass('btn-outline-success btn-outline-danger');
-
-                                if (result.discontinued === true) {
-                                    label.addClass('btn-outline-success');
-                                    label.text('上架中');
-                                } else if (result.discontinued === false) {
-                                    label.addClass('btn-outline-danger');
-                                    label.text('已下架');
-                                } else {
-                                    label.text('未確認');
-                                }
-
-                                // 更新data-discontinued屬性
-                                label.data('discontinued', result.discontinued);
-                            }
-                        });
-                    }
-                });
-
-                // 自定義函式以將字串轉換為布林值
-                function parseBool(value) {
-                    return value === 'True' || value === 'true';
                 }
-            });
-        </script>
 
 
-
-
-
-
-
-
-        <!-- 引入相應的JavaScript -->
-        @* <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> *@
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+                function getProductDetails(productId) {
+                    $.ajax({
+                        url: '@Url.Action("Edit", "Admin")',
+                        type: 'GET',
+                        data: { productId: productId }, // 使用productId而不是id
+                        success: function (data) {
+                            // 處理成功的回應，填充產品資訊到表單
+                            displayProductDetails(data);
+                        },
+                        error: function (error) {
+                            // 處理 AJAX 請求失敗的情況
+                            alert('獲取產品資訊失敗：' + error.statusText);
+                        }
+                    });
+                }
+            </script>
+     
 
 
     </div>
