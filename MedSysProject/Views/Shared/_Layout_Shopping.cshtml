@@ -75,15 +75,17 @@
                                 </ul>
                             </li>
                             <li><a href="~/Home/live">現場狀況</a></li>
-                            @* <li><a href="#">啥 3</a></li>
-                            <li><a href="#">啥 4</a></li> *@
                         </ul>
                     </li>
                     <li>
                         <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
                     <li><a class="nav-link scrollto" href="/blogs/indexold">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
-                    <li><p class="nav-link scrollto">　　　</p></li>
+                    <li style="margin-left:20px">
+                        <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
+                        <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"  >
+                        </a>
+                    </li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                     {
                         <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
@@ -97,8 +99,8 @@
                             <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                             <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
-                                <li>@Html.ActionLink("會員中心","","",new{},null)</li>
-                                <li>@Html.ActionLink("會員中心","","",new{},null)</li>
+                                <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
+                                <li><a asp-action="OrderList" asp-controller="Shopping">訂單管理</a></li>
                                 <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
                             </ul>
                         </li>
@@ -140,7 +142,18 @@
     <script src="~/js/foremain.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
+    <script>
+        async function getcartList() {
+            let url = "@Url.Content("~/Shopping/getcartList")";
+            const response = await fetch(url);
+            const count = await response.text();
+            document.querySelector("#cartlistcount").innerHTML = count;
+            
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            getcartList()
+        })
+    </script>
 </body>
 
 </html>

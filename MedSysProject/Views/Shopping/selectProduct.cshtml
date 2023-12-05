@@ -4,109 +4,113 @@
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
     string s = Model.UnitPrice.ToString();
 }
+<section class="breadcrumbs">
+    <div class="container">
 
-<div class="container"style="padding:20px;">
-    <div style="width:50%;float:left ;height:550px" class="border-end" >
-        <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model.FimagePath))" style="width:620px;height:400px ;margin-left:10px;" id="mainImg" />
-        <div style="margin-top:20px;" id="imgList">
-            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model.FimagePath))" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
-            <img src="~/img/Login1.jpg" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)"/>
-            <img src="~/img/Member.jpg" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
-            <img src="~/img/favicon.png" style="width:100px ; height:100px; display:inline" onclick="changeImg(this)" />
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>產品規格</h2>
+            <ol>
+                <li><a asp-action="index">主頁</a></li>
+                <li><a asp-action="Search" asp-route-id="@Model.ProductsClassifications.FirstOrDefault().Categories.CategoriesId">@Model.ProductsClassifications.FirstOrDefault().Categories.CategoriesName</a></li>
+                <li>產品規格</li>
+            </ol>
         </div>
+
     </div>
-    <div style="width:50%;height:550px;float:right ;padding:20px" class="border-left">
-        <div><span class="fs-1">@Model.ProductName</span><br />@{
-                if (Model.License != null)
-                {
-                    <span class="fs-4">@Model.License</span>
-                }
-            }</div>
-        <div class="col-12 border rounded " style="margin-top:20px;padding:10px;display: flex; justify-content: space-between;"><span class="text-danger fs-2">$@s.TrimEnd('0').TrimEnd('.')</span><a asp-action="折價券" class="fs-2">折價券</a></div>
-        <div class="col-12"><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /><img src="~/img/Login2.png" style="margin-right:20px;margin-top:20px;height:100px;width:100px" /></div>
-        <div class="col-12" style="margin-top:50px;">
-            <form method="post"  id="datas">
-            <select class="form-select" style="width:200px;display:inline" name="count">
-                    @{
-                        for (int i = 1; i <= Model.UnitsInStock; i++)
-                        {
-                            <option value="@i">@i</option>
-                            if (i == 50)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    }
-            </select>
-            <input type="hidden" name="id" value="@Model.ProductId" />
-            <input type="checkbox"  value="追蹤"style="margin-left:180px"/>
-            <button>加入購物車</button>
-                <input type="button" onclick="addToCart()" value="立即購買" />
-            </form>
-        </div>
-    </div>
-    
-    <div style="clear:both"></div>
-    <hr  style="margin-top:20px; margin-bottom:20px;"/>
-    <div style="height:100px" class="d-flex align-items-center border-bottom" >
-        <div class="fs-1">商品詳細規格</div>
-    </div>
-    <div  class="border">
-        <div style="width:70%;float:left;" class=" p-3">
-            <div >
-                <div  class=" fs-1 text-info">商品規格</div>
-                <hr />
-                <div class="fs-3">
-                    <p>分類 : 健康食品</p>
-                    <p>品牌 : 雙賀</p>
-                    <p>保固 : 3年</p>
-                    <p>證號 : @Model.License</p>
-                    <p>產地 : 台灣</p>
-                    <p>庫存 : @Model.UnitsInStock</p>
-                    <p>出貨地 : 台灣</p>
+</section><!-- Breadcrumbs -->
+<!-- ======= Portfolio Details Section ======= -->
+<section id="portfolio-details" class="portfolio-details">
+    <div class="container">
+
+        <div class="row gy-4">
+
+            <div class="col-lg-8">
+                <div class="portfolio-details-slider swiper">
+                    <div class="swiper-wrapper align-items-center">
+
+                        <div class="swiper-slide">
+                            <img src="@Url.Content("~")@Model.FimagePath" alt="">
+                        </div>
+
+                        <div class="swiper-slide">
+                            <img src="@Url.Content("~/img/Login1.jpg")" alt="">
+                        </div>
+
+                        <div class="swiper-slide">
+                            <img src="@Url.Content("~/img/Login2.png")" alt="">
+                        </div>
+
+                    </div>
+                    <div class="swiper-pagination"></div>
                 </div>
-                <div class="fs-1 text-info">商品詳細介紹</div>
-                <hr />
-                <div class="fs-3">@Model.Description</div>
             </div>
-            
-        </div>
-        <div style="width:25%;float:right" class="border mt-3">
-            <div class=" p-3">
-                    <img src="~/img/Login1.jpg" style="height:150px; width:200px;" class="mb-3 ms-5" >
-                    <br />
-                    <a href="" class="fs-3 ms-3">產品A產品A產品A</a><br />
-                <span class="fs-3 text-danger ms-3">$6666</span>
-             </div>
-        </div>
-        <div style="clear:both"></div>
-    </div>
-</div>
 
+            <div class="col-lg-4">
+                <div class="portfolio-info">
+                    <h3 class="fs-2">@Model.ProductName</h3>
+                    <ul>
+                        <li class="fs-4"><strong>分類</strong>: Web design</li>
+                        <li class="fs-4"><strong>出貨商</strong>: ASU Company</li>
+                        <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s.TrimEnd('0').TrimEnd('.')</span></li>
+                        <li class="fs-4"><strong>證號</strong>: <a href="#">@Model.License</a></lic>
+                    </ul>
+                </div>
+                <div class="portfolio-description">
+                    <h2></h2>
+                    <p>
+                        
+                    </p>
+                    
+                    <p>
+                        <form  id="datas">
+                            <select name="count" class="form-select" style="display:inline ; width:200px" >
+                                @{
+                                    for(int i = 1; i <= Model.UnitsInStock; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                        if (i >= 50)
+                                        {
+                                            <option>...</option>
+                                            break;
+                                        }
+                                    }
+                                }
+                                }
+                        </select>
+                        <input type="hidden" value="@Model.ProductId" name="id"/>
+                        <input type="checkbox" />
+                        <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
+                        </form>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section><!-- End Portfolio Details Section -->
 @section Scripts{
     <script>
         const item = document.querySelector("#datas");
         var data = new FormData(item);
         
-        async function addToCart(){
+        async function addToCart(event){
+            event.preventDefault()
             var data = new FormData(item);
             const response = await fetch("@Url.Content("~/Shopping/AddToCart")",{
                 body: data,
                 method:"POST",
             })
             const re = await response.text();
-            alert(re);
+            getcartList()
+            alert("加入購物車成功");
         }
-        document.addEventListener('DOMContentLoaded',()=>{
-            
-        })
+        
         function changeImg(imgElement) {
             $("#imgList>img").css("border", "");
             const src = imgElement.src;
             document.querySelector("#mainImg").src = src;
             imgElement.style.border = "1px dashed red";
-            
         }
     </script>
 }
