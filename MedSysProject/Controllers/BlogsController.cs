@@ -14,7 +14,7 @@ namespace MedSysProject.Controllers
         }
 
         /// <summary>
-        /// 主畫面
+        /// 主畫面，可能要改寫成Ajax?
         /// </summary>
         /// <returns></returns>
         public IActionResult IndexOld() 

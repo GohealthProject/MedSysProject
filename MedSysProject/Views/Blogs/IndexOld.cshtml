@@ -330,7 +330,7 @@
                     <div class="col-md-9">
                         <!--第一大格-->
                         <div class="d-lg-flex post-entry-2">
-                            <a href="single-post.html"
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[7].BlogId"
                                class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
                                 @if (Model[7].BlogImage != null)
                                 {
@@ -387,10 +387,10 @@
                             <!--左側帶圖小格-->
                             <div class="col-lg-4">
                                 <div class="post-entry-1 border-bottom">
-                                    <a href="single-post.html">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[8].BlogId">
                                         @if (Model[8].BlogImage != null)
                                         {
-                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[7].BlogImage)"
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[8].BlogImage)"
                                                  alt=""
                                                  class="img-fluid" />
                                         }
@@ -409,9 +409,9 @@
                                         <span>@Model[8].CreatedAt</span>
                                     </div>
                                     <h2 class="mb-2">
-                                        <a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a>
+                                        <a href="single-post.html">@Model[8].Title</a>
                                     </h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                    <span class="author mb-3 d-block">@Model[8].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
                                         Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                                         Vero temporibus repudiandae, inventore pariatur numquam
@@ -427,7 +427,7 @@
                                         <span>@Model[10].CreatedAt</span>
                                     </div>
                                     <h2 class="mb-2">
-                                        <a href="single-post.html">@Model[10].Title</a>
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[10].BlogId">@Model[10].Title</a>
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[10].Employee.EmployeeName</span>
                                 </div>
@@ -435,7 +435,7 @@
                             <!--帶圖大格2-->
                             <div class="col-lg-8">
                                 <div class="post-entry-1">
-                                    <a href="single-post.html">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[9].BlogId">
                                         @if (Model[9].BlogImage != null)
                                         {
                                             <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[9].BlogImage)"
@@ -561,7 +561,7 @@
                     <div class="col-md-9 order-md-2">
                     <!--大塊一-->
                         <div class="d-lg-flex post-entry-2">
-                            <a href="single-post.html"
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[11].BlogId"
                                class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
                                 @if (Model[11].BlogImage != null)
                                 {
@@ -583,7 +583,7 @@
                                     <span class="mx-1">&bullet;</span> <span>@Model[11].CreatedAt</span>
                                 </div>
                                 <h3>
-                                    <a href="single-post.html">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[11].BlogId">
                                         @Model[11].Title
                                     </a>
                                 </h3>
@@ -614,7 +614,7 @@
                             <div class="col-lg-4">
                             <!--小塊有圖-->
                                 <div class="post-entry-1 border-bottom">
-                                    <a href="single-post.html">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[12].BlogId">
                                         @if (Model[12].BlogImage != null)
                                         {
                                             <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[12].BlogImage)"
@@ -634,7 +634,7 @@
                                         <span>@Model[12].CreatedAt</span>
                                     </div>
                                     <h2 class="mb-2">
-                                        <a href="single-post.html">@Model[12].Title</a>
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[12].BlogId">@Model[12].Title</a>
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[12].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
@@ -651,7 +651,7 @@
                                         <span>@Model[14].CreatedAt</span>
                                     </div>
                                     <h2 class="mb-2">
-                                        <a href="single-post.html">@Model[14].Title</a>
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[14].BlogId">@Model[14].Title</a>
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[14].Employee.EmployeeName</span>
                                 </div>
@@ -857,57 +857,28 @@
                 <div class="col-lg-8">
                     <div class="row g-5">
                         <div class="col-lg-4 border-start custom-border">
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-6.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Lifestyle</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Jul 5th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">Let’s Get Back to Work, New York</a>
-                                </h2>
-                            </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-5.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Lifestyle</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Jul 17th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">
-                                        How to Avoid Distraction and Stay Focused During Video
-                                        Calls?
-                                    </a>
-                                </h2>
-                            </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-4.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Lifestyle</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Mar 15th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">
-                                        Why Craigslist Tampa Is One of The Most Interesting
-                                        Places On the Web?
-                                    </a>
-                                </h2>
-                            </div>
+                        @for(int i =18;i<=19;i++)
+                                {
+                                    <div class="post-entry-1">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }    
+                                            
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>@Model[i].CreatedAt</span>
+                                        </div>
+                                        <h2>
+                                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                        </h2>
+                                    </div>
+                                }
                         </div>
                         <div class="col-lg-4 border-start custom-border">
                             <div class="post-entry-1">
