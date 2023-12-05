@@ -24,8 +24,8 @@ namespace MedSysProject.Controllers
             var post = (from blog in _db.Blogs
                        .Include(blog=>blog.Employee)
                        .Include(blog=>blog.ArticleClass)
+                       .OrderByDescending(blog=>blog.BlogId)
                        .Take(7)
-                       orderby blog.CreatedAt descending
                        select blog).ToList();//全部文章類別 新->舊
 
             return View(post);

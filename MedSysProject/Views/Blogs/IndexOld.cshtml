@@ -1,4 +1,5 @@
-﻿@model List<MedSysProject.Models.Blog>
+﻿@* @using MedSysProject.Controllers *@
+@model List<MedSysProject.Models.Blog>
 @{
     ViewData["Title"] = "IndexOld";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
@@ -115,16 +116,37 @@
     <!-- End Hero Slider Section -->
     <!-- ======= Post Grid Section ======= -->
     @{
-       
-    <section id="posts" class="posts">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4">
-                    <div class="post-entry-1 lg">
-                        <a href="single-post.html">
-                            <img src="~/assets/img/post-landscape-1.jpg"
-                                 alt=""
-                                 class="img-fluid" />
+        string htmlContent = Model[0].Content;
+        string pattern = @"<p\b[^>]*>(.*?)</p>";
+        System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(htmlContent, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        bool img = false;
+        string firstPContent = match.Success ? match.Value : string.Empty;
+        string modifiedContent = firstPContent;
+        if (firstPContent.Contains("<img")) 
+        { 
+            modifiedContent = firstPContent.Replace("<img", "<img style=\"max-width: 100%; height: auto;\"");
+            img = true;
+        }
+
+        <section id="posts" class="posts">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <div class="post-entry-1 lg">
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[0].BlogId">
+                                @if (Model[0].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
+                                             alt=""
+                                             class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
                         </a>
                         <div class="post-meta">
                             <span class="date">@Model[0].ArticleClass.BlogCategory1</span>
@@ -135,132 +157,101 @@
                             <a href="single-post.html">@Model[0].Title</a>
                         </h2>
                         <p class="mb-4 d-block">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                            @Html.Raw(img?modifiedContent:firstPContent)
+                          <!--  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
                             temporibus repudiandae, inventore pariatur numquam cumque
                             possimus exercitationem? Nihil tempore odit ab minus eveniet
                             praesentium, similique blanditiis molestiae ut saepe
                             perspiciatis officia nemo, eos quae cumque. Accusamus fugiat
                             architecto rerum animi atque eveniet, quo, praesentium
-                            dignissimos
+                            dignissimos-->
                         </p>
 
                         <div class="d-flex align-items-center author">
                             <div class="photo">
-                                <img src="~/assets/img/person-1.jpg"
-                                     alt=""
-                                     class="img-fluid" />
+                                    @if (Model[0].Employee.EmployeePhoto != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].Employee.EmployeePhoto)"
+                                             alt=""
+                                             class="img-fluid" />
+                                    }
+
                             </div>
                             <div class="name">
-                                <h3 class="m-0 p-0">Cameron Williamson</h3>
+                                <h3 class="m-0 p-0">@Model[0].Employee.EmployeeName</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-
+               
                 <div class="col-lg-8">
                     <div class="row g-5">
                         <div class="col-lg-4 border-start custom-border">
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-2.jpg"
+                        @for(int i =1;i<=3;i++)
+                                {
+                                    <div class="post-entry-1">
+                                <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                               <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                             alt=""
+                                                class="img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/assets/img/empty.png"
                                          alt=""
                                          class="img-fluid" />
+                                            }
+
                                 </a>
                                 <div class="post-meta">
-                                    <span class="date">Sport</span>
+                                    <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
                                     <span class="mx-1">&bullet;</span>
-                                    <span>Jul 5th '22</span>
+                                    <span>@Model[i].CreatedAt</span>
                                 </div>
                                 <h2>
-                                    <a href="single-post.html">Let’s Get Back to Work, New York</a>
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
                                 </h2>
                             </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-5.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Food</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Jul 17th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">
-                                        How to Avoid Distraction and Stay Focused During Video
-                                        Calls?
-                                    </a>
-                                </h2>
-                            </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-7.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Design</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Mar 15th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">
-                                        Why Craigslist Tampa Is One of The Most Interesting
-                                        Places On the Web?
-                                    </a>
-                                </h2>
-                            </div>
+                            
+                            }
+
                         </div>
+
+                                
+
                         <div class="col-lg-4 border-start custom-border">
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-3.jpg"
+                        @for(int i =4;i<=6;i++)
+                                {
+                                    <div class="post-entry-1">
+                                <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                               <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                             alt=""
+                                                class="img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/assets/img/empty.png"
                                          alt=""
                                          class="img-fluid" />
+                                            }
+
                                 </a>
                                 <div class="post-meta">
-                                    <span class="date">Business</span>
+                                    <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
                                     <span class="mx-1">&bullet;</span>
-                                    <span>Jul 5th '22</span>
+                                    <span>@Model[i].CreatedAt</span>
                                 </div>
                                 <h2>
-                                    <a href="single-post.html">
-                                        6 Easy Steps To Create Your Own Cute Merch For
-                                        Instagram
-                                    </a>
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
                                 </h2>
                             </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-6.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Tech</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Mar 1st '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
-                                </h2>
-                            </div>
-                            <div class="post-entry-1">
-                                <a href="single-post.html">
-                                    <img src="~/assets/img/post-landscape-8.jpg"
-                                         alt=""
-                                         class="img-fluid" />
-                                </a>
-                                <div class="post-meta">
-                                    <span class="date">Travel</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>Jul 5th '22</span>
-                                </div>
-                                <h2>
-                                    <a href="single-post.html">5 Great Startup Tips for Female Founders</a>
-                                </h2>
-                            </div>
+                            
+                            }
+
                         </div>
 
                         <!-- Trending Section -->

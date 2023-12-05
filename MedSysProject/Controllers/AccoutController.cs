@@ -248,6 +248,11 @@ namespace MedSysProject.Controllers
             }
             return payload;
         }
+
+        public IActionResult MenberQA()
+        {
+            return View();
+        }
     }
 
 }
