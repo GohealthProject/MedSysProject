@@ -5,7 +5,7 @@
 a{
     color:red;
   /*能否取用全域變數?可以，所以不需要在上面引用*/
-  color:var(--color-links);
+ /* color:var(--color-links);*/
   text-decoration:none;
   &:hover{
       color:var(--color-links);
@@ -42,6 +42,15 @@ section {
 
 /*Header*/
 .header {
+    a.h1 .logo {
+        color: #d2ece9;
+        transition: 0.3s all ease;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+
     height: 90px;
     transition: all 0.5s;
     z-index: 997;
@@ -50,7 +59,7 @@ section {
     &.sticked {
         //當滑鼠滾動超過100px，加上
         height: 70px;
-        background:#1d443f;
+        background: #1d443f;
     }
 
     .search-form-wrap {
@@ -117,9 +126,12 @@ section {
 
             li {
                 position: relative;
+                a{
+                    color:#d2ece9;
+                }
 
                 &:hover > a {
-                    color: var(--color-default);
+                    color: #fff;
                 }
             }
 
