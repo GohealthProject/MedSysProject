@@ -122,7 +122,7 @@ namespace MedSysProject.Controllers
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             List<COrderWarp>list = new List<COrderWarp>();
-            var q = _db.Orders.Where(n => n.MemberId == m.MemberId);
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId);
             foreach(var item in q)
             {
                 COrderWarp od = new COrderWarp();

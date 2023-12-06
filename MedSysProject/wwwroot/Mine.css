@@ -191,10 +191,10 @@ section .section-header p {
     margin-left: 5px;
   }
 }
-@media (min-width: 1280px) and (max-width: 1366px) {
-  .mobile.nav-toggle {
-    display: none; /*大畫面類別選單消失*/
-  }
+@media (min-width: 1280px) {
+    .mobile-nav-toggle {
+        display: none; /*大畫面類別選單消失*/
+    }
 }
 /*RWD行動裝置*/
 @media (max-width: 1279px) {
@@ -475,7 +475,7 @@ section .section-header p {
   border: 1px solid rgba(var(--color-black-rgb), 0.1);
 }
 .trending > h3 {
-  color: --color-black;
+  color: var(--color-black);
   padding: 20px;
   border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
 }
