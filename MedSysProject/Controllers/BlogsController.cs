@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TinifyAPI;
 
 namespace MedSysProject.Controllers
 {
@@ -17,11 +18,12 @@ namespace MedSysProject.Controllers
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {//要放什麼過去?
             //能不能裝在List當中
             //測試能不能傳送List
             //最近的文章
+            Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
             var post = (from blog in _db.Blogs
                        .Include(blog => blog.Employee)
                        .Include(blog => blog.ArticleClass)
@@ -56,6 +58,20 @@ namespace MedSysProject.Controllers
                             .Take(9)
                             select blog;
             foreach (var blog in celebrity) { post.Add(blog); }
+
+            #region 把圖片縮小反而比較久
+            //foreach (var blog in post)
+            //{
+            //    var source = Tinify.FromBuffer(blog.BlogImage);
+            //    var resized = await source.Resize(new
+            //    {
+            //        method = "fit",
+            //        width = 545,
+            //        height = 342,
+            //    });
+            //    blog.BlogImage = await resized.ToBuffer();
+            //}
+            #endregion
             return View(post);
         }
 
