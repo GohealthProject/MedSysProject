@@ -8,28 +8,92 @@
 
 
 <div class="container">
+    <div >
+        <div class=" p-3">
+            <span class="fs-2">訂單查詢</span><div><input type="text" /><button>查詢</button></div>
+        </div>
+        <div class="fs-1 my-3">會員訂單管理</div>
     @{
         int count = 0;
         for(int i =0; i < Model.Count; i++)
         {
             count++;
-            <div class="list-group inDiv">
-                <button type="button" class="list-group-item list-group-item-action active click" aria-current="true" value="@count">
-                第 @count 筆資料
-                </button>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">支付方式 : @Model[i].PayId</p>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">訂單狀態 : @Model[i].StateId</p>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">運送方式 : @Model[i].ShipId</p>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">下訂日期 : @Model[0].OrderDate.ToString().Split(" ")[0]</p>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">出貨日期 : @Model[0].ShipDate.ToString().Split(" ")[0]</p>
-                <p class="list-group-item list-group-item-action" style="margin:0px;display:none">預計到達日期 : @Model[0].DeliveryDate.ToString().Split(" ")[0]</p>
+
+            <div class="card w-100 ">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <div class="row mb-3">
+                        <div class="col-2 border ">
+                            訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
+                        </div>
+                        <div class="col-2 border ">
+                            下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
+                        </div>
+                        <div class="col-1 border ">
+                             @Model[i].order.State.StateName
+                        </div>
+                        <div class="col-1 border ">
+                             @Model[i].order.Pay.PayName
+                        </div>
+                        <div class="col-1 border ">
+                            @Model[i].order.Ship.ShipName
+                        </div>
+                        <div class="col-1 border ">
+                            <a asp-action="" asp-controller="" asp-route-id="">發票</a>
+                        </div>
+                        <div class="col-3 border ">
+                            說明 : @Model[i].order.State.StateDetailed
+                        </div>
+                        <div class="col-1 border ">
+                            <a asp-action="" asp-controller="" asp-route-id="">退貨</a>
+                        </div>
+                        </div>
+                    <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
+                    <div id="productList">
+                        <ul class="list-group mt-3" style="display:none;">
+                                @{
+                                    int pcount = 0;
+                                    int total = 0;
+                                    foreach(var item in Model[i].order.OrderDetails)
+                                    {
+                                        total += (int)item.Quantity * (int)item.Product.UnitPrice;
+                                        pcount++;
+                                        <li class="list-group-item ">
+                                        <div class="row">
+                                            <div class="col-3 ">@pcount. @item.Product.ProductName</div>
+                                            <div class="col-3 "></div>
+                                            <div class="col-3 ">件數 : @item.Quantity</div>
+                                            <div class="col-3  text-danger " style="text-align: right;">
+                                            $@{
+                                                int pd = (int)item.Quantity * (int)item.Product.UnitPrice; string p = pd.ToString("N0");
+                                                @p
+                                                    }
+                                            </div>
+                                        </div>
+                                        </li>
+                                        
+                                }
+                                    <li class=" fs-3 d-flex justify-content-end">總金額 : $ @{@total.ToString("N0")}</li>
+                    }
+                        </ul>
+                    </div>
+                </div>
             </div>
+                <hr />
         }
+        
     }
+    
+    </div>
 </div>
 @section Scripts{
      <script>
-
+         document.addEventListener("DOMContentLoaded",()=>{
+            let butons = document.querySelectorAll(".dBtn");
+            for(var i = 0 ; i<butons.length; i++){
+                butons[i].addEventListener("click",out);
+            }
+            })
        
         let clicks =document.querySelectorAll(".click");
         for(var i =0; i <clicks.length;i++){
@@ -37,18 +101,14 @@
         }
          function out(event){
             event.target.removeEventListener('click',out);
-            let ps = event.target.parentNode.querySelectorAll("p");
-            for(var i =0; i<ps.length;i++){
-                ps[i].style.display="";
-            }
+            let ps = event.target.parentNode.querySelector("#productList").querySelector("ul");
+            ps.style.display ="";
             event.target.addEventListener('click', hide);
          }
          function hide(event){
              event.target.removeEventListener('click',hide);
-             let ps = event.target.parentNode.querySelectorAll("p");
-             for(var i =0 ; i<ps.length;i++){
-                 ps[i].style.display="none";
-             }
+            let ps = event.target.parentNode.querySelector("#productList").querySelector("ul");
+            ps.style.display= "none";
              event.target.addEventListener('click',out);
          }
          const paylist = document.getElementsByClassName('pay');
