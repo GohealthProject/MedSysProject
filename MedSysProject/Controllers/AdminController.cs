@@ -544,8 +544,7 @@ namespace MedSysProject.Controllers
             // 初始化 ViewBag.Categories
             ViewBag.Categories = categories;
 
-            // 回傳 JSON 格式的產品資訊
-            return Json(productWrap);
+            return PartialView("_EditProductModal", productWrap);
         }
 
 

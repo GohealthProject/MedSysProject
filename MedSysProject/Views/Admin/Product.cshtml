@@ -107,6 +107,8 @@
                     </div>
                     <!--Body-->
                     <div class="modal-body">
+                        <!-- 編輯模態框的PartialView -->
+                        @await Html.PartialAsync("_EditProductModal", new CProductsWrap())
                         <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
                             <div class="mb-3">
                                 <label for="inputName" class="form-label">產品名稱</label>
@@ -171,7 +173,7 @@
         @* ---新增彈窗結束--- *@
 
         @* ---修改彈窗開始--- *@
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" onshown="getProductDetails()">
+        <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <!--Header-->
@@ -247,6 +249,13 @@
 
 
         <script>
+                $(document).ready(function () {
+                    $('#modalEdit').on('shown.bs.modal', function () {
+                        // 模態框顯示時獲取產品詳細信息
+                        getProductDetails(/* 在這裡傳遞productId */);
+                    });
+                });
+
                 function displayProductDetails(data) {
                     // 處理產品詳細信息的顯示
                     $('#editProductName').val(data.WrappedProductName);
@@ -263,7 +272,7 @@
                         $('#category' + categoryId).prop('checked', true);
                     });
 
-                    if (data.FimagePath) {
+                    if (data && data.FimagePath) {
                         $('#previewImage').attr('src', data.FimagePath);
                     }
                 }
