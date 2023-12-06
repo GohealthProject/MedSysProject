@@ -4,13 +4,23 @@
     ViewData["Title"] = "IndexOld";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
+
+@section IndexCss
+{
+@*     <style>
+        .custom-pagination a:hover {
+            background: rgba(var(--color-black-rgb), 0.9);
+            color: var(--color-white);
+        }
+    </style> *@
+}
 <main id="main">
     <section>
         <div class="container">
             <div class="row">
 
-                <div class="col-md-9" >
-                        <h3 class="category-title">@ViewBag.Cate</h3>
+                <div class="col-md-9">
+                    <h3 class="category-title">@ViewBag.Cate</h3>
 
                     @* ---------開始區塊-------- *@
 
@@ -18,18 +28,20 @@
                     {
 
                         <div class="d-md-flex post-entry-2 half">
-                            <a href="single-post.html" class="me-4 thumbnail">
-                                <img src="/blogs/GetBlogImageByte/@item.BlogId" alt="" class="img-fluid" style="height:263px;">
+                            <a href="~/Test/SinglePost?SingleBlogID=@item.BlogId" class="me-4 thumbnail">
+                                <img src="/blogs/GetBlogImageByte/@item.BlogId" alt="" class="img-fluid" style="width:483px; height:263px;">
                             </a>
                             <div>
                                 <div class="post-meta"><span class="date">@Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)</span> <span class="mx-1">&bullet;</span> <span>@Html.DisplayFor(modelItem => item.CreatedAt)</span></div>
-                                <h3><a href="single-post.html">@Html.DisplayFor(modelItem => item.Title)</a></h3>
-                                <p>@{
+                                <h3><a href="~/Test/SinglePost?SingleBlogID=@item.BlogId">@Html.DisplayFor(modelItem => item.Title)</a></h3>
+                                <p>
+                                    @{
                                         string content = item.Content;
                                         string truncatedContent = content.Length > 50 ? content.Substring(0, 50) + "..." : content;
-                                        
-                                        <>@truncatedContent</>
-                                }</p>
+
+                                        <p>@truncatedContent</p>
+                                    }
+                                </p>
                                 <div class="d-flex align-items-center author">
                                     <div class="photo"><img src="/blogs/GetEmpImageByte/@item.EmployeeId" alt="" class="img-fluid"></div>
                                     <div class="name">
@@ -48,13 +60,99 @@
 
                     <div class="text-start py-4">
                         <div class="custom-pagination">
-                            <a href="#" class="prev">Prevous</a>
-                            <a href="#" class="active">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#">4</a>
-                            <a href="#">5</a>
-                            <a href="#" class="next">Next</a>
+                            @{
+                                if (ViewBag.Cate == null)
+                                {
+                                    if (ViewBag.page == null)
+                                    {
+
+                                    }
+
+                                    else
+                                    {
+                                        int previous = ViewBag.page - 1;
+                                        int next = ViewBag.page + 1;
+                                        int current = ViewBag.page;
+
+                                        if (ViewBag.page == 1)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="btn prev disabled" hidden>上一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
+                                        }
+
+
+                                        for (int i = 1; i <= ViewBag.MaxPage; i++)
+                                        {
+                                            if (i == current)
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
+                                            }
+                                        }
+
+                                        if (ViewBag.page == ViewBag.MaxPage)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="btn prev disabled" hidden>下一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    if (ViewBag.page == null)
+                                    {
+
+                                    }
+
+                                    else
+                                    {
+                                        int previous = ViewBag.page - 1;
+                                        int next = ViewBag.page + 1;
+                                        int current = ViewBag.page;
+
+                                        if (ViewBag.page == 1)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="btn prev disabled" hidden>上一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev">上一頁</a>
+                                        }
+
+
+                                        for (int i = 1; i <= ViewBag.MaxPage; i++)
+                                        {
+                                            if (i == current)
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i" class="active">@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i">@i</a>
+                                            }
+                                        }
+
+                                        if (ViewBag.page == ViewBag.MaxPage)
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="btn prev disabled" hidden>下一頁</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev">下一頁</a>
+                                        }
+                                    }
+                                }
+                            }
                         </div>
                     </div>
                 </div>
@@ -66,9 +164,6 @@
                         <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true">Popular</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-trending-tab" data-bs-toggle="pill" data-bs-target="#pills-trending" type="button" role="tab" aria-controls="pills-trending" aria-selected="false">Trending</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
@@ -115,43 +210,6 @@
                                     <span class="author mb-3 d-block">Jenny Wilson</span>
                                 </div>
                             </div> <!-- End Popular -->
-                            <!-- Trending -->
-                            <div class="tab-pane fade" id="pills-trending" role="tabpanel" aria-labelledby="pills-trending-tab">
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-
-                                <div class="post-entry-1 border-bottom">
-                                    <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                    <h2 class="mb-2"><a href="#">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                                </div>
-                            </div> <!-- End Trending -->
                             <!-- Latest -->
                             <div class="tab-pane fade" id="pills-latest" role="tabpanel" aria-labelledby="pills-latest-tab">
                                 <div class="post-entry-1 border-bottom">

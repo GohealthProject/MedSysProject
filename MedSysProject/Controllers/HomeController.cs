@@ -35,46 +35,48 @@ namespace MedSysProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult xxx()
-        {//plan選擇，個人版，男女區別，待更改CONTROLL名稱==>自訂方案(含搜尋項目功能)
-
-            return View(_context.Projects);
-        }
+       
         public IActionResult planComeparison()
         {////方案比較(設計filter篩選方案)
             return View();
         }
         public IActionResult planComeparisonTotal()
-        {////方案比較總攬(總項+PDF產生)
+        {////方案比較總計(總項+PDF產生)
             return View();
         }
 
-      public IActionResult PlanIntroductionProject(int? id)
-        { //project區==>放方案介紹
-            var project = _context.Plans.Where(p => p.PlanId == id);
-            var join = from p in project
-                       from pj in _context.Projects.DefaultIfEmpty()
-                       from it in _context.Items.DefaultIfEmpty()
-                       select new
-                       {
-                           p.PlanId,
-                           p.PlanName,
-                           p.PlanDescription,
-                           p.PlanRefs,
-                           pj.ProjectId,
-                           pj.ProjectName,
-                           pj.ProjectPrice,
-                           it.ItemId,
-                           it.ItemName,
+      public IActionResult PlanIntroductionProject()
+        { //放方案介紹
+            //var project = _context.Plans.Where(p => p.PlanId == id);
+         /*   var join = from p in*/ /*project*/ /*_context.Plans*/
+                       //from pj in _context.Projects.DefaultIfEmpty()
+                       //from it in _context.Items.DefaultIfEmpty()
+                       //select new
+                       //{
+                       //    p.PlanId,
+                       //    p.PlanName,
+                       //    p.PlanDescription,
+                       //    //p.PlanRefs,
+                       //    //pj.ProjectId,
+                       //    //pj.ProjectName,
+                       //    //pj.ProjectPrice,
+                       //    //it.ItemId,
+                       //    //it.ItemName,
 
-                       };
-            //_context.Plans.ToList();
-            //_context.Products.ToList();
+                       //};
+            
           
 
          
-            return View(join);
+            return View(_context.Plans);
         }
+       public IActionResult xxx()
+        {//自訂方案加選與總計(含搜尋項目功能):備用
+
+            return View(_context.Projects);
+        }
+
+
         /////====start 這裡是partialview區====
 
         public IActionResult partialvew1()
@@ -89,7 +91,7 @@ namespace MedSysProject.Controllers
         }
   
         public IActionResult partialviewItem()
-        { //items區
+        { //items區==>測試用
 
             return PartialView();
         }
@@ -129,6 +131,38 @@ namespace MedSysProject.Controllers
             return View(j);
         }
 
+        public IActionResult Customcompare()
+
+        {
+            //IEnumerable<Item> datas = null;
+             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
+             //            select s;
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs).ThenInclude(n=>n.Plan);
+
+            //List<CProjectWarp> list = new List<CProjectWarp>();
+            
+            //foreach(var item in datass)
+            //{
+            //    CProjectWarp warp = new CProjectWarp();
+            //    warp.project = item;
+            //    list.Add(warp);
+            //    foreach(var items in item.PlanRefs)
+            //    {
+            //        var xx = items.Plan;
+            //    }
+            //}
+            return View(datass.ToList());
+        }
+
+        public IActionResult Customcompare2()
+
+        {
+            //IEnumerable<Item> datas = null;
+            var datas = from s in (_context.Items.Include(p => p.Project)).AsEnumerable()
+                        select s.Project.ProjectName;
+
+            return Ok(datas);
+        }
 
 
         public IQueryable<ReportDetail?> qureyReportDetailAll()
@@ -258,7 +292,10 @@ namespace MedSysProject.Controllers
             return result.ToString();
         }
 
-
+        public IActionResult about()
+        { //緣由
+            return View();
+        }
 
 
 

@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "個人檢查項目及現場情形";
-    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+    Layout = "_Layout_Fore";
     var healthCheckStatus = ViewBag.HealthCheckStatus as List<string>;
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -137,7 +137,7 @@
                                             </div>
                                         </li>
 
-                                        <li id="@Html.Raw("details" + i)" style="display: none; flex: 1; width: 15%; margin: 0 auto;">
+                                        <li id="@Html.Raw("details" + i)" style="display: none; flex: 1; width: 25%; margin: 0 auto;margin:auto">
                                             <ul class="list-group list-group-flush" style="display: flex; flex-direction: column;">
                                                 @{
                                                     // 取得對應 ProjectId 的 ItemName 列表

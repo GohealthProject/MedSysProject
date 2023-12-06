@@ -3,9 +3,24 @@
     ViewData["Title"] = "PlanIntroductionProject";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+@model  IEnumerable<MedSysProject.Models.Plan>
 
-<h1>方案詳細</h1>
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
 
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>方案詳細</h1>
+            <ol>
+                <li><a href="~/Home/planComeparison">回上頁</a></li>
+                <li>目前位置</li>
+                <li><a href="~/Home/Customcompare">確認方案與加選自訂方案</a></li>
+            </ol>
+        </div>
+
+    </div>
+   @* <button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
+</section>
 
 
 <body>
@@ -44,7 +59,9 @@
                  @*  原位置在這裡 *@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-                            <h3 style="color:#7045af">樂活銀髮方案</h3>
+                          
+                                <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
+                                
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
@@ -52,9 +69,20 @@
                             </ul>
                             
                         </div>
-                        <div class="portfolio-description ">
-                            <h2>This is an example of portfolio detail</h2>
-                      
+                        <div class="portfolio-description">
+                       
+                            <h2 class="badge  text-wrap">
+
+                                <button class="btn">
+                                    <a href="~/Home/Customcompare">
+                                    <hr /> <i class="bi bi-mouse2-fill">
+                                         確認方案與加選自訂方案
+                                        </i>
+                                    <hr />
+                                    </a>
+                                </button>
+                            </h2>
+                        
                             <div class="table-responsive-lg ">
                                 <table class="table ">
                                     <thead>
@@ -65,7 +93,7 @@
                                             <th scope="col">女</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="ProjectDetail">
                                         <tr>
                                             <th scope="row">一般生理檢查</th>
                                             <td>身高、體重</td>
@@ -101,3 +129,12 @@
    
 
 </body>
+@section Scripts{
+<script>
+    const xhr = new XMLHttpRequest();
+        const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
+        const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
+        const url = "https://localhost:7078/api/PlanIntroductionProject";
+
+</script>
+}

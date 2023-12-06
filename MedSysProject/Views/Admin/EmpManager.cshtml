@@ -29,6 +29,56 @@
             </a>
         </p>
 
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+                      
+                    }
+
+                    else
+{
+                    int previous = ViewBag.page - 1;
+                    int next = ViewBag.page + 1;
+                    int current = ViewBag.page;
+                    if (ViewBag.page == 1){
+                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                    }
+                    else{
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                    }
+                    
+                    for (int i = 1; i <= ViewBag.maxpage; i++)
+                    {
+                        if (i == ViewBag.page)
+                        {
+                            <li class="page-item active"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                        }
+                    }
+
+                    if (ViewBag.page == ViewBag.maxpage)
+                    {
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                    }
+                    else
+                    {
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                    }
+
+                }
+                }
+            </ul>
+        </nav>
+
         @* ---新增彈窗開始--- *@
         <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -43,64 +93,65 @@
                     </div>
                     <!--Body-->
                     <div class="modal-body">
-
-                        <div class="row">
-                            <div class="col-md-10">
-                                <form asp-action="EmpCreate">
+                        <form id="myCreatedataform" novalidate class="needs-validation">
+                            <div class="row">
+                                <div class="col-md-10">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                                     <div class="form-group">
+                                        <input type="hidden" id="CinputId" value="" name="EmployeeId" />
                                         <label class="control-label">姓名</label>
-                                        <input class="form-control" />
-                                        <span class="text-danger"></span>
+                                        <input class="form-control" id="CinputName" name="EmployeeName" required />
+                                        <div class="invalid-feedback">請輸入姓名</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
-                                        <select class="form-control" value="醫生" id="inputClass" name="EmployeeClassId">
-                                            <option value="醫生">醫生</option>
-                                            <option value="護理師">護理師</option>
-                                            <option value="行政人員">行政人員</option>
+                                        <select class="form-control" id="CinputClass" name="EmployeeClassId" required>
+                                            <option value="1">醫生</option>
+                                            <option value="2">護理師</option>
+                                            <option value="3">行政人員</option>
                                         </select>
-                                        <span class="text-danger"></span>
+                                        <div class="invalid-feedback">請選擇類別</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="control-label">生日</label>
-                                        <input type="date" class="form-control" />
-                                        <span class="text-danger"></span>
+                                        <input type="date" class="form-control" id="CinputDate" name="employeeBirthDate" required />
+                                        <div class="invalid-feedback">請選擇生日</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="control-label">電話</label>
-                                        <input class="form-control" />
-                                        <span class="text-danger"></span>
+                                        <input class="form-control" id="CinputPhone" name="EmployeePhoneNum" required />
+                                        <div class="invalid-feedback">請輸入電話號碼</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="control-label">信箱</label>
-                                        <input class="form-control" />
-                                        <span class="text-danger"></span>
+                                        <input type="email" class="form-control" id="CinputEmail" name="EmployeeEmail" required />
+                                        <div class="invalid-feedback">請輸入有效的信箱地址</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="control-label">密碼</label>
-                                        <input class="form-control" />
-                                        <span class="text-danger"></span>
+                                        <input type="password" class="form-control" id="CinputPwd" name="EmployeePassWord" required />
+                                        <div class="invalid-feedback">請輸入密碼</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label for="formFile" class="form-label">圖片</label>
-                                        <input type="file" class="form-control" id="formFile" name="formFile" />
+                                        <input type="file" class="form-control" id="CformFile" name="formFile" required />
+                                        <div class="invalid-feedback">請選擇圖片檔案</div>
                                     </div>
-                                </form>
+
+                                </div>
                             </div>
-                        </div>
-                        @*
-                        @section Scripts {
-                        @{
-                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                        }
-                        } *@
-
-
-                        <!--Footer-->
+                        </form>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
-                            <button class="btn btn-success">確定新增</button>
+                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定新增</button>
+                            <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
                         </div>
                     </div>
                 </div>
@@ -112,9 +163,6 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>
-                        選取
-                    </th>
                     <th>
                         序
                     </th>
@@ -145,14 +193,14 @@
             <tbody id="go">
                 @{
                     int count = 0;
+                    if (ViewBag.page != null)
+                    {
+                        count = (ViewBag.page - 1) * ViewBag.pgsize;
+                    }
                     foreach (var item in Model)
                     {
                         count++;
                         <tr>
-                            <td>
-                                <input type="hidden" value=@item.EmployeeId>
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </td>
                             <td>
                                 @count
                             </td>
@@ -165,9 +213,10 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeClass.Class)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EmployeeBirthDate)
-                            </td>
+                            @{
+                                string date = item.EmployeeBirthDate.ToString().Split(" ")[0];
+                                <td>@date</td>
+                            }
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeePhoneNum)
                             </td>
@@ -225,9 +274,9 @@
                                     <div class="form-group">
                                         <label class="control-label">類別</label>
                                         <select class="form-control" value="醫生" id="inputClass" name="EmployeeClassId">
-                                            <option value="醫生">醫生</option>
-                                            <option value="護理師">護理師</option>
-                                            <option value="行政人員">行政人員</option>
+                                            <option value="1">醫生</option>
+                                            <option value="2">護理師</option>
+                                            <option value="3">行政人員</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -281,6 +330,7 @@
     </div>
 </div>
 
+<script src="/vendor/jquery/jquery.min.js"></script>
 <script>
     const delbtn = document.querySelector("#btnDDD")
     const id = document.querySelector("Empid");
@@ -295,29 +345,42 @@
     function updata(element) {
         showTogget(element)
     }
-    //修改員工資料
-    // async function putdata(){
-    //        let id = document.querySelector("#inputId").value;
-    //        let apiurl = `https://localhost:7078/api/Employees/${id}`
-    //        var myForm = document.querySelector("#myUpdataform");
-    //        var data = new FormData(myForm);
-    //        var jsonobj = {};
-    //        data.forEach((value, key) => {
-    //            jsonobj[key] = value;
-    //        })
-    //        const jsonstring = JSON.stringify(jsonobj);
 
-    //        const response = await fetch(apiurl,{
-    //            method: 'PUT',
-    //            headers: {
-    //                'Content-Type': 'application/json'
-    //            },
-    //            body: jsonstring
-    //        });
-    //    const state = await response.status;
-    //        console.log(jsonstring);
-    //        research()
-    //    }
+    //表單的確認
+    //????
+
+    async function postdata2() {
+
+        let apiurl = `https://localhost:7078/api/Employees`
+        var myForm = document.querySelector("#myCreatedataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'POST',
+            body: data
+        });
+        const state = await response.status;
+        if (response.ok) {
+
+            $('#modalCreate').modal('hide');
+
+            Swal.fire({
+                title: "新增成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            research();
+        }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
     async function putdata2() {
         let id = document.querySelector("#inputId").value;
         let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
@@ -328,7 +391,19 @@
             body: data
         });
         const state = await response.status;
-        research()
+        if (response.ok) {
+            $('#modalEdit').modal('hide');
+
+            Swal.fire({
+                title: "修改成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            research();
+        }
     }
     //把資料印到彈出來的視窗
     function showTogget(element) {
@@ -336,7 +411,17 @@
         let tds = par.getElementsByTagName("td");
         let tdName = tds[3].innerHTML;
         let tdClas = tds[4].innerHTML;
-        let tddate = tds[5].innerHTML;
+
+        let tddateA = tds[5].innerHTML; //這裡要把2000/01/01轉成2000-01-01
+        let tddateB = tddateA.replace('/', '-');
+        let tddateC = tddateB.replace('/', '-');
+        var tddateD = new Date(tddateC.trim());
+        var year = tddateD.getFullYear();
+        // getMonth() 返回的月份是從 0 開始的，所以需要加 1
+        var month = (tddateD.getMonth() + 1).toString().padStart(2, '0');
+        var day = tddateD.getDate().toString().padStart(2, '0');
+        var tddate = `${year}-${month}-${day}`;
+
         let tdphone = tds[6].innerHTML;
         let tdemail = tds[7].innerHTML;
         let tdpwd = tds[8].innerHTML;
@@ -357,6 +442,13 @@
 
     }
     async function research() {
+        $("#CinputName").val("");
+        $("#CinputClass").val("");
+        $("#CinputDate").val("");
+        $("#CinputPhone").val("");
+        $("#CinputEmail").val("");
+        $("#CinputPwd").val("");
+
         const response = await fetch(`https://localhost:7078/api/Employees`)
         const datas = await response.json();
         console.log(datas.$values)
@@ -365,55 +457,77 @@
             const id = emp.employeeId;
             const name = emp.employeeName;
             const date = emp.employeeBirthDate;
+            const valuedate = date.split("T")[0];
+            console.log(valuedate)
             const phone = emp.employeePhoneNum;
             const email = emp.employeeEmail;
             const pwd = emp.employeePassWord;
-            const cid = emp.employeeClassId;
-
+            const photo = emp.employeePhoto;
+            let binary = window.atob(photo);
+            let binarydata = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                binarydata[i] = binary.charCodeAt(i);
+            }
+            let blob = new Blob([binarydata], { type: 'image/jpg' });
+            let imgurl = URL.createObjectURL(blob);
+            console.log(blob);
+            console.log(imgurl);
+            let cid = emp.employeeClassId;
+            if (cid == 1) {
+                cid = "醫生";
+            } else if (cid == 2) {
+                cid = "護理師";
+            } else {
+                cid = "行政人員";
+            };
             let s =
                 `
-                                             <tr>
-                                                <td>
-                                                     <input type="hidden" value=${id}>
-                                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                </td>
-                                                <td>
-                                                      ${count}
-                                                 </td>
-                                                 <td>
-                                                     <img src="/Admin/GetImageByte/${id}" width="100">
-                                                  </td>
-                                                  <td>
-                                                       ${name}
-                                                  </td>
-                                                  <td>
-                                                       ${cid}
-                                                  </td>
-                                                  <td>
-                                                       ${date}
-                                                   </td>
-                                                   <td>
-                                                        ${phone}
-                                                   </td>
-                                                   <td>
-                                                        ${email}
-                                                    </td>
-                                                    <td>
-                                                        ${pwd}
-                                                    </td>
-                                                    <td>
-                                                         <a href="@Url.Action("Edit", new { id = 5 })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                         <i class="fas fa-user-edit"></i>
-                                                         </a>
-                                                         <a class="btn btn-danger" onclick="get(this)">
-                                                         <i class="fas fa-user-times"></i>
-                                                         </a>
-                                                      </td>
-                                                </tr>
-                                            `
+                                                                                     <tr>
+                                                                                        <td>
+                                                                                             <input type="hidden" value=${id}>
+                                                                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                                                        </td>
+                                                                                        <td>
+                                                                                              ${count}
+                                                                                         </td>
+                                                                                         <td>
+                                                                                                 <img src="${imgurl}" width="100">
+                                                                                          </td>
+                                                                                          <td>
+                                                                                               ${name}
+                                                                                          </td>
+                                                                                          <td>
+                                                                                               ${cid}
+                                                                                          </td>
+                                                                                          <td>
+                                                                                                           ${valuedate}
+                                                                                           </td>
+                                                                                           <td>
+                                                                                                ${phone}
+                                                                                           </td>
+                                                                                           <td>
+                                                                                                ${email}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${pwd}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                     <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                 <i class="fas fa-user-edit"></i>
+                                                                                                 </a>
+                                                                                                 <a class="btn btn-danger" onclick="get(this)">
+                                                                                                 <i class="fas fa-user-times"></i>
+                                                                                                 </a>
+                                                                                              </td>
+                                                                                        </tr>
+                                                                                    `
+            count++;
+            console.log(count);
             return s
+
         })
         document.querySelector("#go").innerHTML = value.join("");
+        window.location.reload();
     }
     async function del(id) {
         const result = await Swal.fire({
@@ -453,15 +567,25 @@
     }
 
 
-    // Swal.fire({
-    //     title: "確定要刪除嗎？",
-    //     text: "此步驟將無法復原！",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     cancelButtonText: "取消",
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "確定刪除"
-    // });
 
+
+
+    $("#demoEmpCreate").click(function () {
+        $("#CinputName").val("Tomori");
+        // $("#inputClass")
+        $("#CinputDate").val("1998-11-10");
+        $("#CinputPhone").val("0923232323");
+        $("#CinputEmail").val("tomori@gmail.com");
+        $("#CinputPwd").val("tomoriaaa");
+    });
+
+    $("#CancelEmpCreate").click(function () {
+        $("#CinputId").val("");
+        $("#CinputName").val("");
+        $("#CinputClass").val("");
+        $("#CinputDate").val("");
+        $("#CinputPhone").val("");
+        $("#CinputEmail").val("");
+        $("#CinputPwd").val("");
+    });
 </script>

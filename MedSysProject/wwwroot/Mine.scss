@@ -2,16 +2,24 @@
 }
 :root{scroll-behavior:smooth;}
 
-a{
-    color:red;
-  /*能否取用全域變數?可以，所以不需要在上面引用*/
-  color:var(--color-links);
-  text-decoration:none;
-  &:hover{
-      color:var(--color-links);
-      text-decoration:none;
-  }
+a {
+    color: red;
+    color: #d2ece9;
+    text-decoration: none;
+    &:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+    /*能否取用全域變數?可以，所以不需要在上面引用*/
+    /* color:var(--color-links);*/
+
+
+   /* &:hover {
+        color: var(--color-links);
+        text-decoration: none;
+    }*/
 }
+
 
 h1,h2,h3,h4,h5,h6{
     font-family:var(--font-primary);
@@ -41,56 +49,63 @@ section {
 }
 
 /*Header*/
-.header{
-    height:90px;
-    transition:all 0.5s;
-    z-index:997;
-    background:#f2f2f2;
-    &.sticked{
+.header {
+
+    height: 90px;
+    transition: all 0.5s;
+    z-index: 997;
+    background: #2d6760;
+
+    &.sticked {
         //當滑鼠滾動超過100px，加上
-        height:70px;
+        height: 70px;
+        background: #1d443f;
     }
 
-    .search-form-wrap{
-        position:absolute;
-        right:0;
-        top:0;
-        z-index:9;
-        transition:0.3s all ease;
-        visibility:hidden;
-        opacity:0;
+    .search-form-wrap {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 9;
+        transition: 0.3s all ease;
+        visibility: hidden;
+        opacity: 0;
 
-        .search-form{
-            position:relative;
-            .form-control{
-                width:300px;
-                border:none;
-                box-shadow:0 15px 20px -10px rgba(var(--color-black-rgb),0.5);
-                padding:0 40px;/*上下 左右*/
-                &:active,&:focus{
-                    outline:none;
-                    box-shadow:none;
+        .search-form {
+            position: relative;
+
+            .form-control {
+                width: 300px;
+                border: none;
+                box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb),0.5);
+                padding: 0 40px; /*上下 左右*/
+                &:active, &:focus {
+                    outline: none;
+                    box-shadow: none;
                 }
             }
-            .icon{
-                position:absolute;
-                left:0;//貼左邊
-                top:0px;
-                opacity:0.5;
-                left:10px;
+
+            .icon {
+                position: absolute;
+                left: 0; //貼左邊
+                top: 0px;
+                opacity: 0.5;
+                left: 10px;
             }
-            .btn{
-                position:absolute;
-                top:0px;
-                right:4px;
-                padding:0;
-                margin:0;
-                line-height:1;
-                font-size:25px;
-                opacity:0.5;
-                &:active,&:focus{
-                    outline:none;
-                    box-shadow:none;
+
+            .btn {
+                position: absolute;
+                top: 0px;
+                right: 4px;
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+                font-size: 25px;
+                opacity: 0.5;
+
+                &:active, &:focus {
+                    outline: none;
+                    box-shadow: none;
                 }
             }
         }
@@ -112,8 +127,12 @@ section {
             li {
                 position: relative;
 
+                a {
+                    color: #d2ece9;
+                }
+
                 &:hover > a {
-                    color: var(--color-default);
+                    color: #fff;
                 }
             }
 
@@ -122,11 +141,12 @@ section {
             }
 
             .dropdown {
-                &:hover>ul{
-                    opacity:1;
-                    top:100%;/*選到時往上移的效果*/
-                    visibility:visible;
+                &:hover > ul {
+                    opacity: 1;
+                    top: 100%; /*選到時往上移的效果*/
+                    visibility: visible;
                 }
+
                 ul { /*下層*/
                     display: block;
                     position: absolute;
@@ -141,23 +161,27 @@ section {
                     box-shadow: 0px 0px 30px rgba(127,137,161,0.25);
                     transition: 0.3s;
                     border-radius: 4px;
+
                     &.active:hover {
                         color: var(--color-primary);
                     }
                     /*會繼承樓上list-style:none*/
                     li {
                         min-width: 200px;
+
                         &:hover > a {
                             color: var(--color-primary);
                         }
+
                         a {
                             padding: 10px 20px;
                             font-size: 15px;
                             text-transform: none;
                             font-weight: 400;
+                            color: var(--color-primary);
 
                             &:hover {
-                                color: var(--color-primary);
+                                color: #d2ece9;
                             }
                         }
                     }
@@ -461,7 +485,7 @@ section {
         display:block;
     }
     .thumbnail{
-        flex:0 0 65%;
+        flex:0 0 45%;
     }
 }
 @media(max-width:960px){
@@ -700,6 +724,7 @@ section {
 
         &:hover {
             background: rgba(var(--color-black-rgb),0.9);
+            color: var(--color-white);
         }
 
         &.active {

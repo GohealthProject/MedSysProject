@@ -1,1 +1,175 @@
 ﻿<div>123456</div>
+<section class="text-center ">
+
+    <h4 class="mb-4 bg-green" style="background-color:aliceblue"><strong class="text-dark">方案比較</strong></h4>
+
+    <div class="row gx-lg-5">
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <!-- Card -->
+            <div class="card ">
+
+                <div class="card-header bg-white py-3">
+                    <p class="text-uppercase small mb-2 "><strong>樂活銀髮方案</strong></p>
+                    <h5 class="mb-0">NT$34450</h5>
+                </div>
+
+                <div class="card-body" id="oldplan">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var p in Model)
+                        {
+                            <li class="list-group-item">@p.ProjectName</li>
+                        }
+                        @*  <li class="list-group-item">尿液一般檢查</li>
+                        <li class="list-group-item">血液常規檢查</li>
+                        <li class="list-group-item">腎功能檢查</li>
+                        <li class="list-group-item">肝功能檢查</li>
+                        <li class="list-group-item">新陳代謝檢查</li>
+                        <li class="list-group-item">腹部超音波</li>
+                        <li class="list-group-item">頸動脈超音波</li>
+                        <li class="list-group-item">心臟超音波</li>
+                        <li class="list-group-item" hidden>女性超音波檢查 </li>
+                        <li class="list-group-item">男性超音波檢查 </li>
+                        <li class="list-group-item">眼部檢查</li>
+                        <li class="list-group-item">胸腔檢查</li>
+                        <li class="list-group-item">消化道大腸檢查</li>*@
+                    </ul>
+                </div>
+
+                <div class="card-footer bg-white py-3">
+                    <button type="button" class="btn btn-success btn-sm">確認方案</button>
+                </div>
+
+            </div>
+            <!-- Card -->
+
+
+
+
+        </div>
+        <!--Grid column-->
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <!-- Card -->
+
+            <div class="card ">
+
+                <div class="card-header bg-white py-3">
+                    <p class="text-uppercase small mb-2"><strong>活力青年方案</strong></p>
+                    <h5 class="mb-0">NT$244500</h5>
+                </div>
+
+                <div class="card-body" id="youngplan">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">一般生理檢查</li>
+                        <li class="list-group-item">尿液一般檢查</li>
+                        <li class="list-group-item">血液常規檢查</li>
+                        <li class="list-group-item">腎功能檢查</li>
+                        <li class="list-group-item">肝功能檢查</li>
+                        <li class="list-group-item">新陳代謝檢查</li>
+                        <li class="list-group-item">體脂肪檢查</li>
+                        <li class="list-group-item">腹部超音波</li>
+                        <li class="list-group-item">甲狀腺超音波</li>
+                        <li class="list-group-item" hidden>女性超音波檢查 </li>
+                        <li class="list-group-item">男性超音波檢查 </li>
+                        <li class="list-group-item">眼部檢查</li>
+                        <li class="list-group-item">胸腔檢查</li>
+                        <li class="list-group-item">消化道胃部胰臟檢查</li>
+                        <li class="list-group-item">自律神經壓力檢查</li>
+
+                    </ul>
+                </div>
+
+                <div class="card-footer bg-white py-3">
+                    <button type="button" class="btn btn-success btn-sm">確認方案</button>
+                </div>
+            </div>
+
+            <!-- Card -->
+
+        </div>
+        <!--Grid column-->
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <!-- Card -->
+
+            <div class="card">
+                @*性別限制，如果為男性，則無法選擇*@
+                <div class="card-header bg-white py-3">
+                    <p class="text-uppercase small mb-2"><strong>婦女安心方案</strong></p>
+                    <h5 class="mb-0">NT$25550</h5>
+                </div>
+
+                <div class="card-body" id="femaleplan">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">一般生理檢查</li>
+                        <li class="list-group-item">尿液一般檢查</li>
+                        <li class="list-group-item">血液常規檢查</li>
+                        <li class="list-group-item">腎功能檢查</li>
+                        <li class="list-group-item">肝功能檢查</li>
+                        <li class="list-group-item">新陳代謝檢查</li>
+                        <li class="list-group-item">女性內分泌檢查</li>
+                        <li class="list-group-item">女性癌症檢查</li>
+                        <li class="list-group-item">體脂肪檢查</li>
+                        <li class="list-group-item">腹部超音波</li>
+                        <li class="list-group-item">甲狀腺超音波</li>
+                        <li class="list-group-item">女性超音波檢查</li>
+                        <li class="list-group-item">眼部檢查</li>
+                        <li class="list-group-item">體脂肪檢查</li>
+                        <li class="list-group-item">胸腔檢查</li>
+                        <li class="list-group-item">自律神經壓力檢查</li>
+
+
+                    </ul>
+                </div>
+                <div class="card-footer bg-white py-3">
+                    <button type="button" class="btn btn-success btn-sm" disabled>確認方案</button>
+                </div>
+            </div>
+
+            <!-- Card -->
+        </div>
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <!-- Card -->
+
+            <div class="card ">
+                <div class="card-header bg-white py-3">
+                    <p class="text-uppercase small mb-2"><strong>男性保健方案</strong></p>
+                    <h5 class="mb-0">NT$20750</h5>
+                </div>
+                <div class="card-body" id="maleplan">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">一般生理檢查</li>
+                        <li class="list-group-item">尿液一般檢查</li>
+                        <li class="list-group-item">血液常規檢查</li>
+                        <li class="list-group-item">腎功能檢查</li>
+                        <li class="list-group-item">肝功能檢查</li>
+                        <li class="list-group-item">新陳代謝檢查</li>
+                        <li class="list-group-item">男性內分泌檢查</li>
+                        <li class="list-group-item">男性癌症檢查</li>
+                        <li class="list-group-item">體脂肪檢查</li>
+                        <li class="list-group-item">腹部超音波</li>
+                        <li class="list-group-item">頸動脈超音波</li>
+                        <li class="list-group-item">男性超音波檢查</li>
+                        <li class="list-group-item">眼部檢查</li>
+                        <li class="list-group-item">胸腔檢查</li>
+                        <li class="list-group-item">自律神經壓力檢查</li>
+
+                    </ul>
+                </div>
+                <div class="card-footer bg-white py-3">
+                    <button type="button" id="malePlanConfirm" class="btn btn-success btn-sm">確認方案</button>
+                </div>
+            </div>
+
+            <!-- Card -->
+        </div>
+        <!--Grid column-->
+    </div>
+</section>

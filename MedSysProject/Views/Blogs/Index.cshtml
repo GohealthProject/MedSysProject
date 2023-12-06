@@ -1,0 +1,1075 @@
+﻿@* @using MedSysProject.Controllers *@
+@model List<MedSysProject.Models.Blog>
+@{
+    ViewData["Title"] = "IndexOld";
+    Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
+}
+
+
+<main id="main">
+    <!-- ======= 播放牆 ======= -->
+    <section id="hero-slider" class="hero-slider">
+        <div class="container-md">
+            <div class="row">
+                <div class="col-12">
+                    <div class="swiper sliderFeaturedPosts">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <a href="single-post.html"
+                                   class="img-bg d-flex align-items-end"
+                                   style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                    <div class="img-bg-inner">
+                                        <h2>
+                                            The Best Homemade Masks for Face (keep the Pimples
+                                            Away)
+                                        </h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit. Quidem neque est mollitia! Beatae minima
+                                            assumenda repellat harum vero, officiis ipsam magnam
+                                            obcaecati cumque maxime inventore repudiandae quidem
+                                            necessitatibus rem atque.
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a href="single-post.html"
+                                   class="img-bg d-flex align-items-end"
+                                   style="
+                        background-image: url('/assets/img/post-slide-2.jpg');
+                      ">
+                                    <div class="img-bg-inner">
+                                        <h2>
+                                            17 Pictures of Medium Length Hair in Layers That Will
+                                            Inspire Your New Haircut
+                                        </h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit. Quidem neque est mollitia! Beatae minima
+                                            assumenda repellat harum vero, officiis ipsam magnam
+                                            obcaecati cumque maxime inventore repudiandae quidem
+                                            necessitatibus rem atque.
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a href="single-post.html"
+                                   class="img-bg d-flex align-items-end"
+                                   style="
+                        background-image: url('/assets/img/post-slide-3.jpg');
+                      ">
+                                    <div class="img-bg-inner">
+                                        <h2>
+                                            13 Amazing Poems from Shel Silverstein with Valuable
+                                            Life Lessons
+                                        </h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit. Quidem neque est mollitia! Beatae minima
+                                            assumenda repellat harum vero, officiis ipsam magnam
+                                            obcaecati cumque maxime inventore repudiandae quidem
+                                            necessitatibus rem atque.
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a href="single-post.html"
+                                   class="img-bg d-flex align-items-end"
+                                   style="
+                        background-image: url('/assets/img/post-slide-4.jpg');
+                      ">
+                                    <div class="img-bg-inner">
+                                        <h2>
+                                            9 Half-up/half-down Hairstyles for Long and Medium
+                                            Hair
+                                        </h2>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit. Quidem neque est mollitia! Beatae minima
+                                            assumenda repellat harum vero, officiis ipsam magnam
+                                            obcaecati cumque maxime inventore repudiandae quidem
+                                            necessitatibus rem atque.
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="custom-swiper-button-next">
+                            <span class="bi-chevron-right"></span>
+                        </div>
+                        <div class="custom-swiper-button-prev">
+                            <span class="bi-chevron-left"></span>
+                        </div>
+
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Slider Section -->
+    <!-- ======= Post Grid Section ======= -->
+    @{
+        #region 老方法
+        // List<string> postContent = new List<string>();
+        // for (int i = 0; i < Model.Count; i++)
+        // {//當沒有文章沒有p標籤
+        //     string htmlContent = Model[i].Content;
+        //     string pattern = @"<p\b[^>]*>(.*?)</p>";
+        //     System.Text.RegularExpressions.MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(htmlContent, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        //     // bool img = false;
+        //     string modifiedContent = htmlContent;
+        //     foreach (System.Text.RegularExpressions.Match match in matches)//整個Content的所有<p>標籤
+        //     {
+        //         string pTagContent = match.Value;//每個標籤的內容
+        //         if (!pTagContent.Contains("<img"))//當沒有圖片標籤，加入集合
+        //         {
+        //             if (postContent.Contains(pTagContent)) { continue; }
+        //             else
+        //             {
+        //                 postContent.Add(pTagContent);
+        //                 break;
+        //             }
+
+        //         }
+
+        //     }
+        // }
+        #endregion
+        Dictionary<string, string> postContent = new Dictionary<string, string>();
+        for (int i = 0; i < Model.Count; i++)
+        {
+            string title = Model[i].Title;//文章標題
+            string htmlContent = Model[i].Content;//文章內文
+            string pattern = @"<p\b[^>]*>(.*?)</p>";//在每個Content中要被檢查的模式
+            bool hasImage = false;
+            System.Text.RegularExpressions.MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(htmlContent, pattern,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (matches.Count != 0 && matches.Count > 0)
+            {
+                foreach (System.Text.RegularExpressions.Match match in matches)
+                {
+                    string pTagContent = match.Value;
+                    if (pTagContent.Contains("<img"))
+                    {
+                        hasImage = true;
+                        continue;
+                    }
+                    else
+                    {
+                        if (!postContent.ContainsKey(title))
+                        {
+                            postContent.Add(title, pTagContent);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (!postContent.ContainsKey(title))
+                {
+                    postContent.Add(title, Model[i].Content); 
+                }
+            }
+
+        }
+        <section id="posts" class="posts">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <div class="post-entry-1 lg">
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[0].BlogId">
+                                @if (Model[0].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
+                            </a>
+                            <div class="post-meta">
+                                <span class="date">@Model[0].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>@Model[0].CreatedAt</span>
+                            </div>
+                            <h2>
+                                <a href="single-post.html">@Model[0].Title</a>
+                            </h2>
+                            <p class="mb-4 d-block">
+                               <!--記得放文章 -->
+                            </p>
+
+                            <div class="d-flex align-items-center author">
+                                <div class="photo">
+                                    @if (Model[0].Employee.EmployeePhoto != null)
+                                    {//有沒有辦法將圖片壓縮
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].Employee.EmployeePhoto)"
+                                             alt=""
+                                             class="img-fluid" />
+                                    }
+
+                                </div>
+                                <div class="name">
+                                    <h3 class="m-0 p-0">@Model[0].Employee.EmployeeName</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="row g-5">
+                            <div class="col-lg-4 border-start custom-border">
+                                @for (int i = 1; i <= 3; i++)
+                                {
+                                    <div class="post-entry-1">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/assets/img/empty.png"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }
+
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>@Model[i].CreatedAt</span>
+                                        </div>
+                                        <h2>
+                                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                        </h2>
+                                    </div>
+
+                                }
+
+                            </div>
+
+
+
+                            <div class="col-lg-4 border-start custom-border">
+                                @for (int i = 4; i <= 6; i++)
+                                {
+                                    <div class="post-entry-1">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/assets/img/empty.png"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }
+
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>@Model[i].CreatedAt</span>
+                                        </div>
+                                        <h2>
+                                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                        </h2>
+                                    </div>
+
+                                }
+
+                            </div>
+
+                            <!-- Trending Section -->
+                            <div class="col-lg-4">
+                                <div class="trending">
+                                    <h3>Trending</h3>
+                                    <ul class="trending-post">
+                                        <li>
+                                            <a href="single-post.html">
+                                                <span class="number">1</span>
+                                                <h3>
+                                                    The Best Homemade Masks for Face (keep the Pimples
+                                                    Away)
+                                                </h3>
+                                                <span class="author">Jane Cooper</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="single-post.html">
+                                                <span class="number">2</span>
+                                                <h3>
+                                                    17 Pictures of Medium Length Hair in Layers That
+                                                    Will Inspire Your New Haircut
+                                                </h3>
+                                                <span class="author">Wade Warren</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="single-post.html">
+                                                <span class="number">3</span>
+                                                <h3>
+                                                    13 Amazing Poems from Shel Silverstein with Valuable
+                                                    Life Lessons
+                                                </h3>
+                                                <span class="author">Esther Howard</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="single-post.html">
+                                                <span class="number">4</span>
+                                                <h3>
+                                                    9 Half-up/half-down Hairstyles for Long and Medium
+                                                    Hair
+                                                </h3>
+                                                <span class="author">Cameron Williamson</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="single-post.html">
+                                                <span class="number">5</span>
+                                                <h3>
+                                                    Life Insurance And Pregnancy: A Working Mom’s Guide
+                                                </h3>
+                                                <span class="author">Jenny Wilson</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Trending Section -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End .row -->
+            </div>
+        </section>
+        <section class="category-section">
+            <div class="container" @* data-aos="fade-up" *@>
+                <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                    <h2>活動快訊</h2>
+                    <div><a href="category.html" class="more">查看所有活動</a></div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-9">
+                        <!--第一大格-->
+                        <div class="d-lg-flex post-entry-2">
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[7].BlogId"
+                               class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                                @if (Model[7].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[7].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
+                            </a>
+                            <div>
+                                <div class="post-meta">
+                                    <span class="date">@Model[7].ArticleClass.BlogCategory1</span>
+                                    <span class="mx-1">&bullet;</span> <span>@Model[7].CreatedAt</span>
+                                </div>
+                                <h3>
+                                    <a href="single-post.html">
+
+                                        @Model[7].Title
+                                    </a>
+                                </h3>
+                                <p>
+                                    <!--記得放文章-->
+                                    <!--Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Distinctio placeat exercitationem magni voluptates dolore.
+                                    Tenetur fugiat voluptates quas, nobis error deserunt aliquam
+                                    temporibus sapiente, laudantium dolorum itaque libero eos
+                                    deleniti?文章內文，如果是圖片怎辦?-->
+                                </p>
+                                <div class="d-flex align-items-center author">
+                                    <div class="photo">
+                                        @if (Model[7].Employee.EmployeePhoto != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[7].Employee.EmployeePhoto)"
+                                                 alt=""
+                                                 class="img-fluid" />
+
+                                        }
+
+                                    </div>
+                                    <div class="name">
+                                        <h3 class="m-0 p-0">@Model[7].Employee.EmployeeName</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!--左側帶圖小格-->
+                            <div class="col-lg-4">
+                                <div class="post-entry-1 border-bottom">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[8].BlogId">
+                                        @if (Model[8].BlogImage != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[8].BlogImage)"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/assets/img/empty.png"
+                                                 alt=""
+                                                 class="img-fluid" />
+
+                                        }
+
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">@Model[8].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[8].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">@Model[8].Title</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[8].Employee.EmployeeName</span>
+                                    <p class="mb-4 d-block">
+                                       <!-- 記得放文章-->
+                                        <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                        Vero temporibus repudiandae, inventore pariatur numquam
+                                        cumque possimus 如果第一個p標籤式圖片怎辦?-->
+                                    </p>
+                                </div>
+                                <!--左側不帶圖小格-->
+
+                                <div class="post-entry-1">
+                                    <div class="post-meta">
+                                        <span class="date">@Model[10].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[10].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[10].BlogId">@Model[10].Title</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[10].Employee.EmployeeName</span>
+                                </div>
+                            </div>
+                            <!--帶圖大格2-->
+                            <div class="col-lg-8">
+                                <div class="post-entry-1">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[9].BlogId">
+                                        @if (Model[9].BlogImage != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[9].BlogImage)"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/assets/img/empty.png"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">@Model[9].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[9].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            @Model[9].Title
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[9].Employee.EmployeeName</span>
+                                    <p class="mb-4 d-block">
+                                        <!--記得放文章-->
+                                        <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                                                                Vero temporibus repudiandae, inventore pariatur numquam
+                                                                                cumque possimus待處理-->
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">
+                                    How to Avoid Distraction and Stay Focused During Video
+                                    Calls?
+                                </a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">
+                                    17 Pictures of Medium Length Hair in Layers That Will
+                                    Inspire Your New Haircut
+                                </a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Culture</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+
+    }
+
+    @{
+
+        <section class="category-section">
+            <div class="container" @* data-aos="fade-up" *@>
+                <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                    <h2>醫療新知</h2>
+                    <div><a href="category.html" class="more">更多醫療資訊</a></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-9 order-md-2">
+                        <!--大塊一-->
+                        <div class="d-lg-flex post-entry-2">
+                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[11].BlogId"
+                               class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
+                                @if (Model[11].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[11].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
+                            </a>
+                            <div>
+                                <div class="post-meta">
+                                    <span class="date">@Model[11].ArticleClass.BlogCategory1</span>
+                                    <span class="mx-1">&bullet;</span> <span>@Model[11].CreatedAt</span>
+                                </div>
+                                <h3>
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[11].BlogId">
+                                        @Model[11].Title
+                                    </a>
+                                </h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Distinctio placeat exercitationem magni voluptates dolore.
+                                    Tenetur fugiat voluptates quas, nobis error deserunt aliquam
+                                    temporibus sapiente, laudantium dolorum itaque libero eos
+                                    deleniti?待修改
+                                </p>
+                                <div class="d-flex align-items-center author">
+                                    <div class="photo">
+                                        @if (Model[11].Employee.EmployeePhoto != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[11].Employee.EmployeePhoto)"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                    </div>
+                                    <div class="name">
+                                        <h3 class="m-0 p-0">@Model[11].Employee.EmployeeName</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <!--小塊有圖-->
+                                <div class="post-entry-1 border-bottom">
+                                    <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[12].BlogId">
+                                        @if (Model[12].BlogImage != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[12].BlogImage)"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/assets/img/empty.png"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">@Model[12].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[12].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[12].BlogId">@Model[12].Title</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[12].Employee.EmployeeName</span>
+                                    <p class="mb-4 d-block">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                        Vero temporibus repudiandae, inventore pariatur numquam
+                                        cumque possimus待修改
+                                    </p>
+                                </div>
+                                <!--小塊沒圖-->
+                                <div class="post-entry-1">
+                                    <div class="post-meta">
+                                        <span class="date">@Model[14].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[14].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[14].BlogId">@Model[14].Title</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[14].Employee.EmployeeName</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <!--下面大塊-->
+                                <div class="post-entry-1">
+                                    <a href="single-post.html">
+                                        @if (Model[13].BlogImage != null)
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[13].BlogImage)"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/assets/img/empty.png"
+                                                 alt=""
+                                                 class="img-fluid" />
+                                        }
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">@Model[13].ArticleClass.BlogCategory1</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>@Model[13].CreatedAt</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            @Model[13].Title
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">@Model[13].Employee.EmployeeName</span>
+                                    <p class="mb-4 d-block">
+                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                        Vero temporibus repudiandae, inventore pariatur numquam
+                                        cumque possimus待修改
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">
+                                    How to Avoid Distraction and Stay Focused During Video
+                                    Calls?
+                                </a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">
+                                    17 Pictures of Medium Length Hair in Layers That Will
+                                    Inspire Your New Haircut
+                                </a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">Business</span>
+                                <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
+                            </h2>
+                            <span class="author mb-3 d-block">Jenny Wilson</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @{
+        <section class="category-section">
+            <div class="container" @* data-aos="fade-up" *@>
+                <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                    <h2>名人分享會</h2>
+                    <div>
+                        <a href="category.html" class="more">更多名人分享</a>
+                    </div>
+                </div>
+
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <div class="post-entry-1 lg">
+                            <a href="single-post.html">
+                                @if (Model[15].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[15].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
+                            </a>
+                            <div class="post-meta">
+                                <span class="date">@Model[15].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span> <span>@Model[15].CreatedAt</span>
+                            </div>
+                            <h2>
+                                <a href="single-post.html">@Model[15].Title</a>
+                            </h2>
+                            <p class="mb-4 d-block">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                                temporibus repudiandae, inventore pariatur numquam cumque
+                                possimus exercitationem? Nihil tempore odit ab minus eveniet
+                                praesentium, similique blanditiis molestiae ut saepe
+                                perspiciatis officia nemo, eos quae cumque. Accusamus fugiat
+                                architecto rerum animi atque eveniet, quo, praesentium
+                                dignissimos待修改
+                            </p>
+
+                            <div class="d-flex align-items-center author">
+                                <div class="photo">
+                                    @if (Model[15].Employee.EmployeePhoto != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[15].Employee.EmployeePhoto)"
+                                             alt=""
+                                             class="img-fluid" />
+                                    }
+
+                                </div>
+                                <div class="name">
+                                    <h3 class="m-0 p-0">@Model[15].Employee.EmployeeName</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">@Model[16].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span> <span>@Model[16].CreatedAt</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">@Model[16].Title</a>
+                            </h2>
+                            <span class="author mb-3 d-block">@Model[16].Employee.EmployeeName</span>
+                        </div>
+
+                        <div class="post-entry-1">
+                            <div class="post-meta">
+                                <span class="date">@Model[17].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span> <span>@Model[17].CreatedAt</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="single-post.html">@Model[17].Title</a>
+                            </h2>
+                            <span class="author mb-3 d-block">@Model[17].CreatedAt</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="row g-5">
+                            <div class="col-lg-4 border-start custom-border">
+                                @for (int i = 18; i <= 19; i++)
+                                {
+                                    <div class="post-entry-1">
+                                        <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                            @if (Model[i].BlogImage != null)
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                     alt=""
+                                                     class="img-fluid" />
+                                            }
+
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>@Model[i].CreatedAt</span>
+                                        </div>
+                                        <h2>
+                                            <a href="@Url.Content("~/Test/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                        </h2>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-lg-4 border-start custom-border">
+                                <div class="post-entry-1">
+                                    <a href="single-post.html">
+                                        <img src="~/assets/img/post-landscape-3.jpg"
+                                             alt=""
+                                             class="img-fluid" />
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2>
+                                        <a href="single-post.html">
+                                            6 Easy Steps To Create Your Own Cute Merch For
+                                            Instagram
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="post-entry-1">
+                                    <a href="single-post.html">
+                                        <img src="~/assets/img/post-landscape-2.jpg"
+                                             alt=""
+                                             class="img-fluid" />
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Mar 1st '22</span>
+                                    </div>
+                                    <h2>
+                                        <a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
+                                    </h2>
+                                </div>
+                                <div class="post-entry-1">
+                                    <a href="single-post.html">
+                                        <img src="~/assets/img/post-landscape-1.jpg"
+                                             alt=""
+                                             class="img-fluid" />
+                                    </a>
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2>
+                                        <a href="single-post.html">5 Great Startup Tips for Female Founders</a>
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            How to Avoid Distraction and Stay Focused During Video
+                                            Calls?
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            17 Pictures of Medium Length Hair in Layers That Will
+                                            Inspire Your New Haircut
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            9 Half-up/half-down Hairstyles for Long and Medium
+                                            Hair
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">
+                                            The Best Homemade Masks for Face (keep the Pimples
+                                            Away)
+                                        </a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+
+                                <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">Lifestyle</span>
+                                        <span class="mx-1">&bullet;</span>
+                                        <span>Jul 5th '22</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                        <a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a>
+                                    </h2>
+                                    <span class="author mb-3 d-block">Jenny Wilson</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End .row -->
+            </div>
+        </section>
+    }
+
+</main>

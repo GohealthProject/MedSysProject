@@ -1,4 +1,5 @@
 ﻿@using System.Text.Json;
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Amoeba Bootstrap Template - Home</title>
+    <title>GO健康</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -16,13 +17,13 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Lato:400,300,700,900" rel="stylesheet">
-
+    
     <!-- Vendor CSS Files -->
     <link href="~/forevendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/forevendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
- @*    <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet"> *@
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
@@ -33,112 +34,127 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
-
-
+    @await RenderSectionAsync("LinkStyle", required: false)
+    <script src="@Url.Content("~/js-Shopping/LayoutShopping.js")"></script>
 </head>
 
 <body>
-
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
 
             <div class="logo me-auto">
-                <h1><a href="@Url.Content("~/home/Index")">GO健康購物中心</a></h1>
-
+                <h1><a href="~/Home/Index"><img src="~/img/gohealth-logo.png" alt="" class="img-fluid"> GO健康</a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
             </div>
 
             <nav id="navbar" class="navbar">
-
-
                 <!-- =======最上方欄位 ======= -->
-
                 <ul>
                     <li>
-                        <div class="input-group mb-3" style="padding-top:16px">
-                            <input type="text" class="form-control" placeholder="請輸入關鍵字" aria-label="請輸入關鍵字" aria-describedby="button-addon2" id="Key">
-                            <input type="button" class="btn btn-outline-secondary btn-light" value="搜尋" id="KeySearch" />
+                        <div class="input-group mb-3 mt-3">
+                            <input type="text" class="form-control" placeholder="輸入關鍵字" aria-label="輸入關鍵字" value="" id="SearchKey">
+                            <button class="btn btn-outline-secondary text-info" type="button" id="button-addon2" onclick="search()">搜尋</button>
                         </div>
                     </li>
-                    @{
-                        if (Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
-                        {
-                            string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                            Member? m = JsonSerializer.Deserialize<Member>(json);
-                            <li>@Html.ActionLink(m?.MemberName, "MemberCenter", "Accout", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
-                        }
-                        else
-                        {
-                            <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
-                            <li>@Html.ActionLink("註冊", "Login", "Accout", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
-                        }
+
+                    <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
+                    <li class="dropdown">
+                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            <li><a href="~/Home/planComeparison">方案比較</a></li>
+                            <li class="dropdown">
+                                <a href="#"><span>線上預約</span> <i class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="~/Home/xxx">個人健檢</a></li>
+                                    <li><a href="~/Home/testplan">企業健檢</a></li>
+                                    <li><a href="#">xx健檢</a></li>
+                                    <li><a href="#">xx健檢</a></li>
+                                    <li><a href="#">xx健檢</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="~/Home/live">現場狀況</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+                    </li>
+                    <li><a class="nav-link scrollto" asp-action="index"asp-controller="blogs">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li style="margin-left:20px">
+                        <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
+                        <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></a>
+                        
+                    </li>
+                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                    {
+                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
                     }
-                    <li>@Html.ActionLink("會員中心", "MemberCenter", "Accout", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
-                    <li>@Html.ActionLink("查訂單", "Login", "Accout", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
-                    <li>@Html.ActionLink("查看購物車", "CartList", "Shopping", null, new { Class = "nav-link scrollto", style = "font-size:20px" })</li>
+                    else
+                    {
+                        string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                        Member m = new Member();
+                        m = JsonSerializer.Deserialize<Member>(json);
+                        <li class="dropdown">
+                            <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
+                                <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
+                                <li><a asp-action="OrderList" asp-controller="Shopping">訂單管理</a></li>
+                                <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
+
         </div>
     </header><!-- End #header -->
-    <main id="main" style="background-color:#F2F9F8">
-        <div class="container">
-            <link rel="stylesheet" href="~/css/Shopping.css" />
-            <div class=" row align-items-center">
-                <div class="col text-center"><a style="margin:auto" asp-action="Search" asp-route-id="1">胃腸道</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="2">調節血脂</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="3">護肝</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="4">骨質保健</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="5">免疫調節</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="6">調整過敏</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="7">不形成體脂</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="8">調節血糖</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="9">調節血壓</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="10">抗疲勞</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="11">延緩衰老</a></div>
-                <div class="col text-center"><a asp-action="Search" asp-route-id="12">促進鐵利用</a></div>
-            </div>
-        </div>
-
+    <main id="main" style="background-color:#F2F9F8;">
         @RenderBody()
         <!-- ======= Footer ======= -->
-        <footer id="footer">
-            <div class="container">
-                <div class="copyright">
-                    &copy; Copyright <strong><span>Amoeba</span></strong>. All Rights Reserved
-                </div>
-                <div class="credits">
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
-            </div>
-        </footer><!-- End #footer -->
+        
     </main>
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                <strong><span>GO健康 版權所有</span></strong>
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+                <a href="~/">GO健康</a>
+            </div>
+        </div>
+    </footer><!-- End #footer -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
-     @*   <script src="~/forevendor/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="~/forevendor/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="~/forevendor/vendor/php-email-form/validate.js"></script> *@
-
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/forevendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="~/forevendor/swiper/swiper-bundle.min.js"></script>
+    <script src="~/forevendor/php-email-form/validate.js"></script>
     <!-- Template Main JS File -->
-    @* <script src="~/js/foremain.js"></script> *@
+    <script src="~/js/foremain.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
-        const KeySearch = document.querySelector('#KeySearch');
-
-        KeySearch.addEventListener('click', () => {
-            var Key = document.querySelector('#Key').value;
-            var Url = `https://localhost:7203/Shopping/KeySearch/${Key}`
-            window.location.href = Url;
+        async function getcartList() {
+            let url = "@Url.Content("~/Shopping/getcartList")";
+            const response = await fetch(url);
+            const count = await response.text();
+            document.querySelector("#cartlistcount").innerHTML = count;
+            
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            getcartList()
         })
     </script>
 </body>
 
 </html>
-
