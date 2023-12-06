@@ -22,8 +22,8 @@
     @*<button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
 </section>
 <style>
-/*    div,table{border:dashed 3px red}
-    table{
+    /*div,table{border:dashed 3px red}*/
+    /* table{
         align-content:center;
         text-align:center;
     }
@@ -56,21 +56,21 @@
 
     <div class="row">
     <div class="col-lg-12">
-
-                <ul id="portfolio-flters" class="row" style="margin-left:15%;" >
-                        <li data-filter="*" class="filter-active col-3">
-                        <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="" style="height:230px;">
+                
+                <ul id="portfolio-flters" class="row" style="margin-left:10%" >
+                    <li data-filter="*" class="filter-active col-3" style="width:150px;height:150px;">
+                        <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="" style="width:150px;height:110px;">
                             <div class=" portfolio-item filter-app">
                                 全部類別
                             </div>
                         </li>
 
-                    <li data-filter=".filter-app" class="col-3">
+                  @*  <li data-filter=".filter-app" class="col-3">
                         <img src="~/img/customcompare/p-01.jpg" class="img-fluid" alt="">
                             <div class="portfolio-item filter-app">
                             一般生理檢查
                             </div>
-                        </li>
+                        </li>*@
                    @* @{
                         List<Plan> list = new List<Plan>();
                         List<Item> listt = new List<Item>();
@@ -100,45 +100,57 @@
                         }
                     }*@
 
-                    @{
+                    
                         
+                 @*   //    List<Plan> list = new List<Plan>();
+                    //    foreach (var q in Model)
+                    //    {
+                    //        foreach (var g in q.PlanRefs)
+                    //        {
+                    //            list.Add(g.Plan);
+                    //        }
+                    //        foreach (var gg in q.Items)
+                    //        {
+                    //            //<div>@gg.ItemName</div>
+                    //            //<input type="text" value="@gg.ItemId">
+
+                    //        }
+                    //    }
+
+                    //    var qq = list.Distinct().Select(n => n);
+                    //    foreach (var pp in qq)
+                    //    {
+                    //        <div>@pp.PlanName</div>
+                    //        <input type="text" value="@pp.PlanId">
+                    //    }
+                    //*@
+
+                    @*plan匯入*@
+
+                  @*  @{
                         List<Plan> list = new List<Plan>();
-                        foreach (var q in Model)
-                        {
-                            foreach (var g in q.PlanRefs)
+                        @foreach(var s in Model)
+                    {
+                            foreach (var ss in s.PlanRefs)
                             {
-                                list.Add(g.Plan);
+                                list.Add(ss.Plan);
                             }
-                            foreach (var gg in q.Items)
-                            {
-                                //<div>@gg.ItemName</div>
-                                //<input type="text" value="@gg.ItemId">
-
-                            }
-                        }
-
-                        var qq = list.Distinct().Select(n => n);
-                        foreach (var pp in qq)
-                        {
-                            <div>@pp.PlanName</div>
-                            <input type="text" value="@pp.PlanId">
-                        }
+                        
                     }
-@*
+                    }*@
 
-                    @for(int i =0; )
-
+                    @*project匯入*@
                         @foreach (var items in Model)
                         {
-                        <li data-filter=".@Html.DisplayText(items.ProjectName)" class="col-3">
-                            <img src="~/img/customcompare/p-@{@Html.DisplayFor(m =>items.ProjectId)}.jpg" class="img-fluid" alt="">
+                        <li data-filter=".@items.ProjectName" class="col-3" style="width:150px;height:150px;">
+                            <img src="~/img/customcompare/p-@{@Html.DisplayFor(m =>items.ProjectId)}.jpg" class="img-fluid" alt="" style="width:150px;height:110px;">
                             <div>
                             </div>
                             <div class="portfolio-item">
                                 @items.ProjectName
                             </div>
                         </li>
-                        }*@
+                        }
                     
                     
                         
@@ -170,13 +182,24 @@
     </div>
     </div>
 
+
+        @*item導入*@
             <div class="row portfolio-container portfolio-flters p-5" id="btng">
             @foreach (var items in Model)
             {
-
-                @*<button class="portfolio-item @Html.DisplayText(items.Project.ProjectName) col-2 m-1 btn btn-success" id="ibtn">
-                    @Html.DisplayFor(m => items.Items[])*@
-           @* </button>*@
+                int i = 0;
+                @foreach (var s in items.Items)
+                {
+                    i++;
+                    <div>
+                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success ibtn"  value="@s.ItemName">
+                    @Html.DisplayFor(m => s.ItemName)
+                            <input type="text" class="zz" value="@s.ItemId">
+                    </button>
+                    
+                    </div>
+               }
+                
                 
 
             }
@@ -208,67 +231,6 @@
         </div>
         </section>
     
-
- @*   <div class="row">
-        <div class="col-lg-12">
-            篩選區
-            <ul id="portfolio-flters">
-                <li data-filter="*" class="filter-active">全部類別</li>
-                <li data-filter=".filter-p1">心血管相關</li>
-                <li data-filter=".filter-p2">新陳代謝相關</li>
-                <li data-filter=".filter-endocrine">內分泌疾病</li>
-                <li data-filter=".filter-dementia">失智症相關</li>
-                <li data-filter=".filter-AMA">高齡生育相關</li>
-                <li data-filter=".filter-order">自訂方案</li>
-            </ul>
-        </div>
-    </div>
-    <div class="row portfolio-container">
-
-        <div class="col-lg-4 col-md-6 portfolio-item filter-heart filter-dementia">
-            <div class="portfolio-wrap">
-              身高
-                </div>
-            </div>
-    </div>
-
-        
-
-
-        
-
-    <div class="row">
-        <div class="col-lg-12 row portfolio-container">
-                篩選區
-            <ul id="portfolio-flters portfolio-container">
-
-                <li class="portfolio-item filter-heart filter-dementia">身高</li>
-                <li class="portfolio-item filter-p1">體重</li>
-                <li class="portfolio-item filter-p1">體溫</li>
-                <li class="portfolio-item filter-p1">脈搏</li>
-                    <li class="portfolio-item filter-p1">血壓-收縮壓</li>
-                    <li class="portfolio-item filter-p1">血壓-舒張壓</li>
-                    <li class="portfolio-item filter-p1">腰圍</li>
-                    <li class="portfolio-item filter-p1">理學檢查</li>
-
-                <li class="filter-endocrine">尿液外觀</li>
-                <li class="filter-endocrine">尿比重</li>
-                    <li class="filter-p2">尿液酸鹼度</li>
-                    <li class="filter-p2">尿膽素原</li>
-                    <li class="filter-p2">尿蛋白</li>
-                    <li class="filter-p2">尿糖</li>
-                    <li class="filter-p2">酮尿</li>
-                    <li class="filter-p2">膽紅素</li>
-                    <li class="filter-p2">尿潛血</li>
-                    <li class="filter-p2">尿液白血球</li>
-                    <li class="filter-p2">亞硝酸鹽</li>
-                    <li class="filter-p2">尿沉渣</li>
-
-
-            </ul>
-        </div>
-    </div>*@
-
 
      
 
@@ -309,6 +271,7 @@
                         </td>
                         <td><img src="~/img/icon/x.png" /></td>
                   </tr>
+                 
                     <tr>
                         <td>
                             A
@@ -329,22 +292,89 @@
 
 @section Scripts{
     <script>
+        let btn = document.querySelectorAll(".ibtn");
+        let list = document.querySelector("#ilist");
+        for(var i =0 ; i<btn.length;i++){
+            btn[i].addEventListener('click',ck);
+        }
+        let img = document.querySelectorAll(".gg");
+        console.log(img);
+        for(var i=0; i<img.length;i++){
+            img[i].addEventListener('click',()=>{
+                console.log("hello");
+            });
+        };
+        function gg(){
+            console.log("ggg");
+        }
+        function ck (event){
+            console.log(event.target.value);
+            let d = event.target.parentNode.querySelector("input");
+            var s =
+            `
+                    <tr>
+                                    <td>
+                                    ${d.value}
+                                    </td>
+                                    <td>
+                                    ${event.target.value}
+                                    </td>
+                                    <td>
+                                       <img src="/img/icon/x.png" onclick="gg()"/>
+                                    </td>
+                     </tr>
+            `;
+            list.innerHTML +=s;
+            console.log(d);
+        }
+        //$("#btng:has(#ibtn)").click(()=>{
+        //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
+        //    //var suck = document.querySelector("event.target");
+        //    //console.log(event.currentTarget)
+        //    console.log(event.target.value)
+        //    event.target.addEventListener("click",()=>{
+        //        document.querySelector("#ilist").innerHTML +=
+        //            `<tr>
+        //                    <td>
+        //                    AA
+        //                    </td>
+        //                    <td>
+        //                           ${event.target.value}
+        //                    </td>
+        //                            <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //                 </tr>`
+        //    })
+            //document.querySelector("#ilist").innerHTML += 
+            //    `<tr>
+            //            <td>
+            //            ${this.itembtn}
+            //            </td>
+            //            <td>
+            //           BB
+            //            </td>
+            //                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+            //         </tr>`
+        //})
 
-        $("#btng:has(#ibtn)").click(() => {
-            //console(this)
-            document.querySelector("#ilist").innerHTML +=
-            `<tr>
-                <td>
-                ${"aa"}
-                </td>
-                <td>
-               BB
-                </td>
-                        <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
-             </tr>`
+
+        //const itembtn = document.querySelector("#btng:has(#ibtn)");
+        //itembtn.addEventListener('click',() => {
+        //    console.log(event.target)
+           
+        //    //console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
+        //    document.querySelector("#ilist").innerHTML +=
+        //    `<tr>
+        //        <td>
+        //        ${this.itembtn}
+        //        </td>
+        //        <td>
+        //       BB
+        //        </td>
+        //                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //     </tr>`
             
 
-        })
+        //})
     </script>
 }
 

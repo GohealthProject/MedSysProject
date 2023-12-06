@@ -1,4 +1,5 @@
-﻿@model List<COrderWarp>
+﻿@using System.Text.Json;
+@model List<COrderWarp>
 
 @{
     ViewData["Title"] = "OrderList";
@@ -9,9 +10,16 @@
 
 <div class="container">
     <div >
+        <form method="post">
         <div class=" p-3">
-            <span class="fs-2">訂單查詢</span><div><input type="text" /><button>查詢</button></div>
+                @{
+                    <span class="fs-2">訂單查詢</span>
+
+                    <div><input type="text" name="Key" /><input type="submit" value="查詢" /></div>
+            }
+            
         </div>
+        </form>
         <div class="fs-1 my-3">會員訂單管理</div>
     @{
         int count = 0;
@@ -60,7 +68,7 @@
                                         pcount++;
                                         <li class="list-group-item ">
                                         <div class="row">
-                                            <div class="col-3 ">@pcount. @item.Product.ProductName</div>
+                                            <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
                                             <div class="col-3 "></div>
                                             <div class="col-3 ">件數 : @item.Quantity</div>
                                             <div class="col-3  text-danger " style="text-align: right;">
@@ -93,12 +101,7 @@
             for(var i = 0 ; i<butons.length; i++){
                 butons[i].addEventListener("click",out);
             }
-            })
-       
-        let clicks =document.querySelectorAll(".click");
-        for(var i =0; i <clicks.length;i++){
-            clicks[i].addEventListener('click',out);
-        }
+            });
          function out(event){
             event.target.removeEventListener('click',out);
             let ps = event.target.parentNode.querySelector("#productList").querySelector("ul");
@@ -111,70 +114,22 @@
             ps.style.display= "none";
              event.target.addEventListener('click',out);
          }
-         const paylist = document.getElementsByClassName('pay');
-         const shiplist = document.getElementsByClassName('ship');
-         const statelist = document.getElementsByClassName('state');
-         document.addEventListener('DOMContentLoaded',()=>{
-            loadpayarray()
-            loadshiparray()
-            loadstatearray()
-         })
-         async function loadpayarray(){
-            let pay = [];
-            let apiurl = "https://localhost:7078/api/OrderPays/arrayBypay";
-            for (let i = 0; i < paylist.length; i++) {
-                pay.push(parseInt(paylist[i].innerText));
-            }
-            const response = await fetch(apiurl,{
-                body: JSON.stringify(pay),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method:"POST",
-            })
-            const value = await response.json();
-            console.log(value);
-            for(let i =0; i<paylist.length;i++){
-                paylist[i].innerHTML = value.$values[i];
-            }
+        
+         const inputKey = document.querySelector("#keyName");
+         const KeyButton = document.querySelector("#keyButton");
+         const mid = document.querySelector("#mid");
+        KeyButton.addEventListener('click', keySearch);
+         async function keySearch(){
+             let key = inputKey.value;
+             let id = mid.value;
+             console.log(key+id);
+            const response = await fetch(`https://localhost:7078/api/Products/Key/key=${key}&id=${id}`)
+            const data = await response.text();
+            console.log(data);
          }
-        async function loadshiparray() {
-            let ship = [];
-            let apiurl = "https://localhost:7078/api/OrderShips/arrayByship";
-            for (let i = 0; i < shiplist.length; i++) {
-                ship.push(parseInt(shiplist[i].innerText));
-            }
-            const response = await fetch(apiurl, {
-                body: JSON.stringify(ship),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-            })
-            const value = await response.json();
-            console.log(value);
-            for (let i = 0; i < shiplist.length; i++) {
-                shiplist[i].innerHTML = value.$values[i];
-            }
-        }
-        async function loadstatearray() {
-            let state = [];
-            let apiurl = "https://localhost:7078/api/OrderStates/arrayBystate";
-            for (let i = 0; i < statelist.length; i++) {
-                state.push(parseInt(statelist[i].innerText));
-            }
-            const response = await fetch(apiurl, {
-                body: JSON.stringify(state),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-            })
-            const value = await response.json();
-            console.log(value);
-            for (let i = 0; i < statelist.length; i++) {
-                statelist[i].innerHTML = value.$values[i];
-            }
-        } 
+
+
+
+
      </script>
 }
