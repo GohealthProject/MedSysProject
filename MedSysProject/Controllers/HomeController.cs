@@ -45,7 +45,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-      public IActionResult PlanIntroductionProject(/*int? id*/)
+      public IActionResult PlanIntroductionProject()
         { //放方案介紹
             //var project = _context.Plans.Where(p => p.PlanId == id);
          /*   var join = from p in*/ /*project*/ /*_context.Plans*/
@@ -64,12 +64,11 @@ namespace MedSysProject.Controllers
                        //    //it.ItemName,
 
                        //};
-            //_context.Plans.ToList();
-            //_context.Products.ToList();
+            
           
 
          
-            return View(/*join*/_context.Plans);
+            return View(_context.Plans);
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
