@@ -2,6 +2,8 @@
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Packaging.Signing;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -46,7 +48,9 @@ namespace MedSysProject.Controllers
         public IActionResult selectProduct(int id)
         {
             var q = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
-            if((bool)q.Discontinued)
+            if (q == null)
+                return RedirectToAction("index");
+            if((bool)q.Discontinued&& q!=null)
             {
                 return View(q);
             }
@@ -54,7 +58,6 @@ namespace MedSysProject.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
         }
         [HttpPost]
         public IActionResult AddToCart()
@@ -131,6 +134,42 @@ namespace MedSysProject.Controllers
             }
              
             return View(list);
+        }
+        [HttpPost]
+        public IActionResult OrderList(string key)
+        {
+            
+            List<COrderWarp> list = new List<COrderWarp>();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            if (string.IsNullOrEmpty(key))
+            {
+                var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n=>n.Pay).Include(n=>n.Ship).Include(n=>n.State);
+                foreach(var item in midFindOrder)
+                {
+                    COrderWarp o = new COrderWarp();
+                    o.order = item;
+                    list.Add(o);
+                }
+                return View(list);
+            }
+            else
+            {
+                List<int> pids = new List<int>();
+                List<int> oids = new List<int>();
+                pids = _db.Products.Where(n => n.ProductName.Contains(key)).Select(n=>n.ProductId).ToList();
+                oids = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).SelectMany(n => n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n=>n.OrderId)).ToList() ;
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
+                foreach (var o in q)
+                {
+                    COrderWarp od = new COrderWarp();
+                    od.order = o;
+                    list.Add(od);
+                }
+
+                return View(list);
+            }
+            
         }
     }
 }

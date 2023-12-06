@@ -7704,7 +7704,9 @@ function removeResizeListener(node) {
 }
 
 /**
- * Injects CSS styles inline if the styles are not already present.
+ * Injects CSS styles inline if the styles are not al
+ * 
+ *  present.
  * @param {HTMLDocument|ShadowRoot} rootNode - the node to contain the <style>.
  * @param {string} css - the CSS to be injected.
  */
