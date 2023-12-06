@@ -57,7 +57,7 @@
         var data = {
             address: address,
             subject: '【GO健康】帳號驗證通知信',
-            body: `https://localhost:7203/Accout/ver?key=${ver}`,
+            body: `<img src=\"https://i.imgur.com/l1mgvEG.png\"><br/>親愛的新會員您好<br/><br/>很榮幸你加入GO健康的會員，請點擊以下連結驗證您的GO健康帳號。<br/><br/> https://localhost:7203/Accout/ver?key=${ver}`,
         };
 
         const response = await fetch(apiUrl, {
