@@ -1,5 +1,7 @@
 using MedSysProject.Models;
 using Microsoft.EntityFrameworkCore;
+using OxyPlot.Series;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,12 @@ builder.Services.AddSession();
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("MedSysConnection")));
+
+////NewtonsoftJson ///
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,3 +41,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=index}/{id?}");
 
 app.Run();
+
+
+
