@@ -60,7 +60,7 @@
                                         pcount++;
                                         <li class="list-group-item ">
                                         <div class="row">
-                                            <div class="col-3 ">@pcount. @item.Product.ProductName</div>
+                                            <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
                                             <div class="col-3 "></div>
                                             <div class="col-3 ">件數 : @item.Quantity</div>
                                             <div class="col-3  text-danger " style="text-align: right;">
