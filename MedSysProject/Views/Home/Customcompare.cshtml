@@ -2,6 +2,8 @@
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+@*@model List<CProjectWarp>*@
+@model List<Project>?
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
@@ -43,12 +45,15 @@
 
 
 <section id="portfolio" class="portfolio">
-  
-    
+
+@*    @foreach (var items in Model)
+    {
+
+        @Html.DisplayFor(m => items.ItemName)
+
+    }*@
     <div class="container">
 
-       
-   
     <div class="row">
     <div class="col-lg-12">
 
@@ -59,15 +64,84 @@
                                 全部類別
                             </div>
                         </li>
-                    
-                        <li data-filter=".filter-app" class="col-3">
+
+                    <li data-filter=".filter-app" class="col-3">
                         <img src="~/img/customcompare/p-01.jpg" class="img-fluid" alt="">
                             <div class="portfolio-item filter-app">
                             一般生理檢查
                             </div>
                         </li>
-                   
-                        <li data-filter=".filter-card" class="col-3">
+                   @* @{
+                        List<Plan> list = new List<Plan>();
+                        List<Item> listt = new List<Item>();
+                        foreach(var q in Model[0].project.Items)
+                        {
+
+                        }
+                        foreach(var q in Model)
+                        {
+                            foreach(var g in q.project.PlanRefs)
+                            {
+                                list.Add(g.Plan);
+                            }
+                            foreach(var gg in q.project.Items)
+                            {
+                                <div>@gg.ItemName</div>
+                                <input type="text" value="@gg.ItemId">
+                                
+                            }
+                        }
+                        
+                        var qq = list.Distinct().Select(n => n);
+                        foreach(var pp in qq)
+                        {
+                            <div>@pp.PlanName</div>
+                            <input type="text" value="@pp.PlanId">
+                        }
+                    }*@
+
+                    
+                        
+                 @*   //    List<Plan> list = new List<Plan>();
+                    //    foreach (var q in Model)
+                    //    {
+                    //        foreach (var g in q.PlanRefs)
+                    //        {
+                    //            list.Add(g.Plan);
+                    //        }
+                    //        foreach (var gg in q.Items)
+                    //        {
+                    //            //<div>@gg.ItemName</div>
+                    //            //<input type="text" value="@gg.ItemId">
+
+                    //        }
+                    //    }
+
+                    //    var qq = list.Distinct().Select(n => n);
+                    //    foreach (var pp in qq)
+                    //    {
+                    //        <div>@pp.PlanName</div>
+                    //        <input type="text" value="@pp.PlanId">
+                    //    }
+                    //*@
+
+
+                    
+                        @foreach (var items in Model)
+                        {
+                        <li data-filter=".@items.ProjectName" class="col-3">
+                            <img src="~/img/customcompare/p-@{@Html.DisplayFor(m =>items.ProjectId)}.jpg" class="img-fluid" alt="">
+                            <div>
+                            </div>
+                            <div class="portfolio-item">
+                                @items.ProjectName
+                            </div>
+                        </li>
+                        }
+                    
+                    
+                        
+                 @*       <li data-filter=".filter-card" class="col-3">
                         <img src="~/img/customcompare/p-02.jpg" class="img-fluid" alt="">
                             <div class="portfolio-item filter-web">
                             尿液一般檢查
@@ -90,14 +164,27 @@
                         <div class="portfolio-item filter-web">
                             腎功能檢查
                         </div>
-                    </li>
+                    </li>*@
     </ul>
     </div>
     </div>
 
             <div class="row portfolio-container portfolio-flters p-5" id="btng">
-            
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">身高</button>
+            @foreach (var items in Model)
+            {
+                @foreach (var s in items.Items)
+                {
+                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success" id="ibtn">
+                    @Html.DisplayFor(m => s.ItemName)
+                    </button>
+               }
+                
+                
+
+            }
+           
+
+         @*   <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">身高</button>
             <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">體重</button>
             <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">脈搏</button>
             <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">血壓-收縮壓</button>
@@ -116,7 +203,7 @@
             <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿潛血</button>
             <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液白血球</button>
             <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">亞硝酸鹽</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿沉渣</button>
+            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿沉渣</button>*@
             
             </div>
 

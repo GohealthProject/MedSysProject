@@ -45,7 +45,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-      public IActionResult PlanIntroductionProject(/*int? id*/)
+      public IActionResult PlanIntroductionProject()
         { //放方案介紹
             //var project = _context.Plans.Where(p => p.PlanId == id);
          /*   var join = from p in*/ /*project*/ /*_context.Plans*/
@@ -64,12 +64,11 @@ namespace MedSysProject.Controllers
                        //    //it.ItemName,
 
                        //};
-            //_context.Plans.ToList();
-            //_context.Products.ToList();
+            
           
 
          
-            return View(/*join*/_context.Plans);
+            return View(_context.Plans);
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
@@ -134,10 +133,37 @@ namespace MedSysProject.Controllers
 
         public IActionResult Customcompare()
 
-        { 
-            return View();
-        }
+        {
+            //IEnumerable<Item> datas = null;
+             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
+             //            select s;
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs).ThenInclude(n=>n.Plan);
+
+            //List<CProjectWarp> list = new List<CProjectWarp>();
             
+            //foreach(var item in datass)
+            //{
+            //    CProjectWarp warp = new CProjectWarp();
+            //    warp.project = item;
+            //    list.Add(warp);
+            //    foreach(var items in item.PlanRefs)
+            //    {
+            //        var xx = items.Plan;
+            //    }
+            //}
+            return View(datass.ToList());
+        }
+
+        public IActionResult Customcompare2()
+
+        {
+            //IEnumerable<Item> datas = null;
+            var datas = from s in (_context.Items.Include(p => p.Project)).AsEnumerable()
+                        select s.Project.ProjectName;
+
+            return Ok(datas);
+        }
+
 
         public IQueryable<ReportDetail?> qureyReportDetailAll()
         {

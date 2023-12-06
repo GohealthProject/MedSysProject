@@ -16,7 +16,7 @@ namespace MedSysProject.Controllers
         /// </summary>
         /// <param name="db"></param>
         /// <param name="host"></param>
-        public Test(MedSysContext db,IWebHostEnvironment host) 
+        public Test(MedSysContext db, IWebHostEnvironment host)
         {
             _db = db;
             _host = host;
@@ -175,6 +175,40 @@ namespace MedSysProject.Controllers
             }
             return RedirectToAction("TestList");
         }
+        public IActionResult TestTiny2() 
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> TestTiny2(string Title, int ArticleClassId, string Content, IFormFile BlogImage, int EmployeeId)
+        {
+            try
+            {
+                Blog newBlog = new Blog();
+                newBlog.Title = Title;
+                newBlog.ArticleClassId = ArticleClassId;
+                newBlog.Views = 0;
+                newBlog.Content = Content;
+                newBlog.CreatedAt = DateTime.Now;
+                byte[] afterCompressed = null;
+                if (BlogImage != null && BlogImage.Length > 0)
+                {
+                    using (MemoryStream originalMs = new MemoryStream())
+                    {
+                        BlogImage.CopyTo(originalMs);
+                        var imageCompressionService = new ImageCompressionService("rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46");
+                        afterCompressed = await imageCompressionService.CompressImageAsync(originalMs.ToArray());
+                    }
+                }
+                newBlog.BlogImage = afterCompressed;
+                newBlog.EmployeeId= EmployeeId;
+                _db.Blogs.Add(newBlog);
+                await _db.SaveChangesAsync();
+
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return RedirectToAction("TestList");
+        }
 
         #endregion
 
@@ -208,4 +242,46 @@ namespace MedSysProject.Controllers
         #endregion
     }
 
+    internal class ImageCompressionService
+    {
+        private readonly string apiKey;
+        private readonly HttpClient client;
+
+        public ImageCompressionService(string apiKey)
+        {
+            this.apiKey = apiKey;
+            this.client = new HttpClient();
+            this.client.DefaultRequestHeaders.Add("Authorization",$"Bear{apiKey}");
+        }
+        public async Task<byte[]> CompressImageAsync(byte[] imageData)
+        {
+            try
+            {
+                using (var content = new ByteArrayContent(imageData)) 
+                {
+                    var response = await client.PostAsync("https://api.tinify.com/shrink", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var compressedStream = await response.Content.ReadAsStreamAsync();
+                        using (var ms = new MemoryStream())
+                        {
+                            await compressedStream.CopyToAsync(ms);
+                            return ms.ToArray();
+                        }
+                    }
+                    else 
+                    {
+                        Console.WriteLine($"Failed to compress image. Status code: {response.StatusCode}");
+                        return null;
+                    }
+                }
+
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"Error while compressing image: {ex.Message}");
+                return null;
+            }
+        }
+    }
 }
