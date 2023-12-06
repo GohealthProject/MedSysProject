@@ -105,6 +105,14 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult EmpJSON()
+        {
+            IEnumerable<Employee> datas = null;
+            datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+                    select t;
+            return Json(datas);
+        }
+
         public IActionResult EmpCreate()
         {
             return View();
