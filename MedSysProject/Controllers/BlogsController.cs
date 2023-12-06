@@ -23,7 +23,6 @@ namespace MedSysProject.Controllers
             //能不能裝在List當中
             //測試能不能傳送List
             //最近的文章
-            Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
             var post = (from blog in _db.Blogs
                        .Include(blog => blog.Employee)
                        .Include(blog => blog.ArticleClass)
@@ -55,7 +54,7 @@ namespace MedSysProject.Controllers
                             .Include(blog => blog.ArticleClass)
                             .Where(blog => blog.ArticleClass.BlogClassId == 3)
                             .OrderByDescending(blog => blog.BlogId)
-                            .Take(9)
+                            .Take(8)
                             select blog;
             foreach (var blog in celebrity) { post.Add(blog); }
 
