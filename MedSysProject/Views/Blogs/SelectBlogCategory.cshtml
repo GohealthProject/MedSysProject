@@ -7,12 +7,12 @@
 
 @section IndexCss
 {
-    <style>
+@*     <style>
         .custom-pagination a:hover {
             background: rgba(var(--color-black-rgb), 0.9);
             color: var(--color-white);
         }
-    </style>
+    </style> *@
 }
 <main id="main">
     <section>
@@ -29,7 +29,7 @@
 
                         <div class="d-md-flex post-entry-2 half">
                             <a href="single-post.html" class="me-4 thumbnail">
-                                <img src="/blogs/GetBlogImageByte/@item.BlogId" alt="" class="img-fluid" style="height:263px;">
+                                <img src="/blogs/GetBlogImageByte/@item.BlogId" alt="" class="img-fluid" style="width:483px; height:263px;">
                             </a>
                             <div>
                                 <div class="post-meta"><span class="date">@Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)</span> <span class="mx-1">&bullet;</span> <span>@Html.DisplayFor(modelItem => item.CreatedAt)</span></div>
