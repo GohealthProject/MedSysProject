@@ -107,8 +107,30 @@ namespace MedSysProject.Controllers
             }
             return RedirectToAction("Register");
         }
+        public IActionResult ver(string key)
+        {
+            if(key== null)
+                return RedirectToAction("Login");
+
+            string keys = HttpContext.Session.GetString(CDictionary.SK_MEMBER_VERIFY);
+
+            if(key == keys)
+            {
+                return RedirectToAction("UpdataMember");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
         public IActionResult Verifyemail()
         {
+            //寄信
+            Guid g = Guid.NewGuid();
+            string s = g.ToString().Replace("-","");
+
+            HttpContext.Session.SetString(CDictionary.SK_MEMBER_VERIFY,s);
+            ViewBag.ver = s;
             if(HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
             return View();
             return RedirectToAction("Login");
