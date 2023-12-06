@@ -59,11 +59,9 @@
                  @*  原位置在這裡 *@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-                            @foreach(var p in Model){
-                                <h3 style="color:#7045af" id="PlanName">@* 樂活銀髮方案 *@ @p.PlanName  </h3>
+                          
+                                <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
                                 
-                            }
-                            
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
@@ -95,7 +93,7 @@
                                             <th scope="col">女</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="ProjectDetail">
                                         <tr>
                                             <th scope="row">一般生理檢查</th>
                                             <td>身高、體重</td>
@@ -133,9 +131,10 @@
 </body>
 @section Scripts{
 <script>
-const PlanName = document.querySelector("#PlanName");
-
-
+    const xhr = new XMLHttpRequest();
+        const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
+        const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
+        const url = "https://localhost:7078/api/PlanIntroductionProject";
 
 </script>
 }
