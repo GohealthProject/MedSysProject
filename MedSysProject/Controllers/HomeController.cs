@@ -136,22 +136,22 @@ namespace MedSysProject.Controllers
 
         {
             //IEnumerable<Item> datas = null;
-             var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
-                         select s;
+             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
+             //            select s;
             var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs).ThenInclude(n=>n.Plan);
 
-            List<CProjectWarp> list = new List<CProjectWarp>();
+            //List<CProjectWarp> list = new List<CProjectWarp>();
             
-            foreach(var item in datass)
-            {
-                CProjectWarp warp = new CProjectWarp();
-                warp.project = item;
-                list.Add(warp);
-                foreach(var items in item.PlanRefs)
-                {
-                    var xx = items.Plan;
-                }
-            }
+            //foreach(var item in datass)
+            //{
+            //    CProjectWarp warp = new CProjectWarp();
+            //    warp.project = item;
+            //    list.Add(warp);
+            //    foreach(var items in item.PlanRefs)
+            //    {
+            //        var xx = items.Plan;
+            //    }
+            //}
             return View(datass.ToList());
         }
 

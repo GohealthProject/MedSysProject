@@ -100,37 +100,36 @@
                         }
                     }*@
 
-                    @{
+                    
                         
-                        List<Plan> list = new List<Plan>();
-                        foreach (var q in Model)
-                        {
-                            foreach (var g in q.PlanRefs)
-                            {
-                                list.Add(g.Plan);
-                            }
-                            foreach (var gg in q.Items)
-                            {
-                                //<div>@gg.ItemName</div>
-                                //<input type="text" value="@gg.ItemId">
+                 @*   //    List<Plan> list = new List<Plan>();
+                    //    foreach (var q in Model)
+                    //    {
+                    //        foreach (var g in q.PlanRefs)
+                    //        {
+                    //            list.Add(g.Plan);
+                    //        }
+                    //        foreach (var gg in q.Items)
+                    //        {
+                    //            //<div>@gg.ItemName</div>
+                    //            //<input type="text" value="@gg.ItemId">
 
-                            }
-                        }
+                    //        }
+                    //    }
 
-                        var qq = list.Distinct().Select(n => n);
-                        foreach (var pp in qq)
-                        {
-                            <div>@pp.PlanName</div>
-                            <input type="text" value="@pp.PlanId">
-                        }
-                    }
-@*
+                    //    var qq = list.Distinct().Select(n => n);
+                    //    foreach (var pp in qq)
+                    //    {
+                    //        <div>@pp.PlanName</div>
+                    //        <input type="text" value="@pp.PlanId">
+                    //    }
+                    //*@
 
-                    @for(int i =0; )
 
+                    
                         @foreach (var items in Model)
                         {
-                        <li data-filter=".@Html.DisplayText(items.ProjectName)" class="col-3">
+                        <li data-filter=".@items.ProjectName" class="col-3">
                             <img src="~/img/customcompare/p-@{@Html.DisplayFor(m =>items.ProjectId)}.jpg" class="img-fluid" alt="">
                             <div>
                             </div>
@@ -138,7 +137,7 @@
                                 @items.ProjectName
                             </div>
                         </li>
-                        }*@
+                        }
                     
                     
                         
@@ -173,10 +172,13 @@
             <div class="row portfolio-container portfolio-flters p-5" id="btng">
             @foreach (var items in Model)
             {
-
-                @*<button class="portfolio-item @Html.DisplayText(items.Project.ProjectName) col-2 m-1 btn btn-success" id="ibtn">
-                    @Html.DisplayFor(m => items.Items[])*@
-           @* </button>*@
+                @foreach (var s in items.Items)
+                {
+                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success" id="ibtn">
+                    @Html.DisplayFor(m => s.ItemName)
+                    </button>
+               }
+                
                 
 
             }
