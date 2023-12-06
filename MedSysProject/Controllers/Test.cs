@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TinifyAPI;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Primitives;
 using NuGet.Protocol.Plugins;
@@ -184,29 +185,58 @@ namespace MedSysProject.Controllers
         {
             try
             {
+                string before = "";
+                string after = "";
                 Blog newBlog = new Blog();
                 newBlog.Title = Title;
                 newBlog.ArticleClassId = ArticleClassId;
                 newBlog.Views = 0;
                 newBlog.Content = Content;
                 newBlog.CreatedAt = DateTime.Now;
-                byte[] afterCompressed = null;
+                Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
                 if (BlogImage != null && BlogImage.Length > 0)
                 {
                     using (MemoryStream originalMs = new MemoryStream())
                     {
                         BlogImage.CopyTo(originalMs);
-                        var imageCompressionService = new ImageCompressionService("rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46");
-                        afterCompressed = await imageCompressionService.CompressImageAsync(originalMs.ToArray());
+                        before = $"{originalMs.ToArray().Length}bytes";
+                        var source = Tinify.FromBuffer(originalMs.ToArray());
+                        var resize = await source.ToBuffer();
+                        after = $"{resize.Length}bytes";
+                        newBlog.BlogImage = resize;
                     }
                 }
-                newBlog.BlogImage = afterCompressed;
+                
                 newBlog.EmployeeId= EmployeeId;
                 _db.Blogs.Add(newBlog);
                 await _db.SaveChangesAsync();
 
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return RedirectToAction("TestList");
+        }
+
+        public async Task<IActionResult> CompressImage() 
+        {
+            var images = (from blog in _db.Blogs
+                         select blog).ToList();
+            Tinify.Key= "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
+            foreach (var image in images) 
+            {
+                if (image.BlogImage != null && image.BlogImage.Length > 0) 
+                {
+                    var source = Tinify.FromBuffer(image.BlogImage);
+                    var compressedImage = await source.ToBuffer();
+                    Blog iCompressed = _db.Blogs.FirstOrDefault(blog => blog.BlogId == image.BlogId);
+                    if (iCompressed != null) 
+                    {
+                        iCompressed.BlogImage = compressedImage;
+                    }
+                    
+                                
+                }
+            }
+            _db.SaveChanges();
             return RedirectToAction("TestList");
         }
 
@@ -242,46 +272,46 @@ namespace MedSysProject.Controllers
         #endregion
     }
 
-    internal class ImageCompressionService
-    {
-        private readonly string apiKey;
-        private readonly HttpClient client;
+    //internal class ImageCompressionService
+    //{
+    //    private readonly string apiKey;
+    //    private readonly HttpClient client;
 
-        public ImageCompressionService(string apiKey)
-        {
-            this.apiKey = apiKey;
-            this.client = new HttpClient();
-            this.client.DefaultRequestHeaders.Add("Authorization",$"Bear{apiKey}");
-        }
-        public async Task<byte[]> CompressImageAsync(byte[] imageData)
-        {
-            try
-            {
-                using (var content = new ByteArrayContent(imageData)) 
-                {
-                    var response = await client.PostAsync("https://api.tinify.com/shrink", content);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var compressedStream = await response.Content.ReadAsStreamAsync();
-                        using (var ms = new MemoryStream())
-                        {
-                            await compressedStream.CopyToAsync(ms);
-                            return ms.ToArray();
-                        }
-                    }
-                    else 
-                    {
-                        Console.WriteLine($"Failed to compress image. Status code: {response.StatusCode}");
-                        return null;
-                    }
-                }
+    //    public ImageCompressionService(string apiKey)
+    //    {
+    //        this.apiKey = apiKey;
+    //        this.client = new HttpClient();
+    //        this.client.DefaultRequestHeaders.Add("Authorization",$"Bear{apiKey}");
+    //    }
+    //    public async Task<byte[]> CompressImageAsync(byte[] imageData)
+    //    {
+    //        try
+    //        {
+    //            using (var content = new ByteArrayContent(imageData)) 
+    //            {
+    //                var response = await client.PostAsync("https://api.tinify.com/shrink", content);
+    //                if (response.IsSuccessStatusCode)
+    //                {
+    //                    var compressedStream = await response.Content.ReadAsStreamAsync();
+    //                    using (var ms = new MemoryStream())
+    //                    {
+    //                        await compressedStream.CopyToAsync(ms);
+    //                        return ms.ToArray();
+    //                    }
+    //                }
+    //                else 
+    //                {
+    //                    Console.WriteLine($"Failed to compress image. Status code: {response.StatusCode}");
+    //                    return null;
+    //                }
+    //            }
 
-            }
-            catch (Exception ex) 
-            {
-                Console.WriteLine($"Error while compressing image: {ex.Message}");
-                return null;
-            }
-        }
-    }
+    //        }
+    //        catch (Exception ex) 
+    //        {
+    //            Console.WriteLine($"Error while compressing image: {ex.Message}");
+    //            return null;
+    //        }
+    //    }
+    //}
 }

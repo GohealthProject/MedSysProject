@@ -6,11 +6,23 @@ namespace MedSysProject.Models
     public class CProductsWrap
 
     {
-        
-
+        // 都不寫
+        //public CProductsWrap()
+        //{
+        //}
         public CProductsWrap()
         {
             _product = new Product();
+        }
+
+        public CProductsWrap(Product product)
+        {
+            _product = product;
+        }
+        public CProductsWrap(Product product, IList<ProductsClassification> productsClassifications)
+        {
+            _product = product;
+            SelectedCategories = productsClassifications.Select(e => e.CategoriesId).ToList();
         }
 
         private Product _product;
@@ -42,7 +54,7 @@ namespace MedSysProject.Models
         public string? WrappedLicense
         {
             get { return _product.License; }
-            set { Product.License= value; }
+            set { Product.License = value; }
         }
         [DisplayName("有效成分")]
         public string? WrappedIngredient
@@ -60,7 +72,37 @@ namespace MedSysProject.Models
         public string ImagePath { get; set; }
 
         [DisplayName("圖片")]
-        public string FimagePath { get; set; }
+        public string FimagePath
+        {
+            get
+            {
+                if (FimagePaths.Count > 0)
+                {
+                    return string.Join(",", FimagePaths);
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+        public IList<string> FimagePaths
+        {
+            get
+            {
+
+                if (string.IsNullOrEmpty(_product.FimagePath))
+                {
+                    return new List<string>();
+                }
+                else
+                {
+                    return _product.FimagePath.Split(',').ToList();
+                }
+            }
+            set { _product.FimagePath = string.Join(",", value); }
+        }
 
 
         [DisplayName("庫存量")]
@@ -81,8 +123,9 @@ namespace MedSysProject.Models
         // 新增選擇的分類屬性
         public List<int> SelectedCategories { get; set; } = new List<int>();
 
+        public IList<ProductsCategory> ProductsCategories { get; set; }
 
         // 確保 SelectedCategories 不為 null
-      
+
     }
 }
