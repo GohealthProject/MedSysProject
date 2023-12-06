@@ -146,7 +146,7 @@ namespace MedSysProject.Controllers
             if (string.IsNullOrEmpty(key))
             {
                 
-                var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId);
+                var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n=>n.Pay).Include(n=>n.Ship).Include(n=>n.State);
                 foreach(var item in midFindOrder)
                 {
                     COrderWarp o = new COrderWarp();
@@ -160,16 +160,7 @@ namespace MedSysProject.Controllers
                 List<int> pids = new List<int>();
                 List<int> oids = new List<int>();
                 pids = _db.Products.Where(n => n.ProductName.Contains(key)).Select(n=>n.ProductId).ToList();
-
-
-                var pidsFindoid = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).Select(n => new
-                {
-                    oid = n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n => n)
-                }).ToList();
-                foreach (var o in pidsFindoid[0].oid)
-                {
-                    oids.Add(o.OrderId);
-                }
+                oids = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).SelectMany(n => n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n=>n.OrderId)).ToList() ;
                 var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
                 foreach (var o in q)
                 {
