@@ -1,0 +1,116 @@
+﻿@model MedSysProject.Models.Blog
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!--引用文字編輯器-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.tiny.cloud/1/b28bwm26rz9ry64nn5n351uce6944auxt8eorcif07y5uxa9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        function handleImageUpload(blob, success, failure) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var base64data = e.target.result;
+                success(base64data);
+            };
+            reader.onerror = failure;
+            console.log(blob);
+            reader.readAsDataURL(blob);
+        }
+        tinymce.init({
+            selector: '#mytextarea',
+            plugins: 'advlist link image lists',
+            toolbar: 'undo redo| image',
+            image_caption: true,
+            images_upload_handler: function (blobInfo, success, failure) { //todo需要理解一下在幹嘛
+                return new Promise(function (resolve, reject) {
+                    handleImageUpload(blobInfo.blob(), resolve, reject);
+                });
+            }
+
+        });
+    </script>
+    <title>TestTiny2</title>
+</head>
+<body>
+
+    <h4>測試新增部落格文章</h4>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="previewImage" style="margin-bottom:20px;">
+                    <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:500px; max-height:250px;">
+                </div>
+                <form asp-action="TestTinyMCE" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label for="titleInput" class="control-label">文章標題:</label>
+                        <input id="titleInput" asp-for="Title" class="form-control" required />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    @*文章類別下拉式選單，先寫死以後要新增文章類別再說*@
+                    <div style="margin-bottom:20px;">
+                        <label for="articleClass" class="control-label">文章類別:</label>
+                        <!--選項要包在select標籤裡面-->
+                        <select id="articleClass" asp-for="ArticleClassId" class="form-control" required>
+                            <option value="1">活動快訊</option>
+                            <option value="2">醫療新知</option>
+                            <option value="3">名人分享會</option>
+                            <option value="4">媒體報導</option>
+                            <option value="5">企業責任</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label for="mytextarea" class="control-label">文章內容:</label>
+                        <!--注意文字編輯器不要加required屬性，會炸掉-->
+                        <textarea id="mytextarea" asp-for="Content" class="form-control"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label for="mainPhoto" class="control-label">選擇主要相片:</label>
+                        <input id="mainPhoto" asp-for="BlogImage" class="form-control btn btn-primary" type="file" onchange="previewImage(event)" />
+                        <span asp-validation-for="BlogImage" class="text-danger"></span>
+                    </div>
+                    @*撰寫文章的作者員工編號，先寫死給一號*@
+                    <div class="form-group">
+                        @* <label asp-for="EmployeeId" class="control-label"></label> *@
+                        <input asp-for="EmployeeId" class="form-control" value="1" type="hidden" />
+                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="新增文章" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 創建FileReader物件
+                reader.onload = function (e) { // 正確拼寫onload
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+    </script>
+
+</body>
+</html>

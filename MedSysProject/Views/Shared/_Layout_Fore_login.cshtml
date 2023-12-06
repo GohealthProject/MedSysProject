@@ -95,7 +95,7 @@
                     <li>
                         <a asp-action="Index" asp-controller="Shopping">購健康商城</a>
                     </li>
-                    <li><a class="nav-link scrollto" href="/blogs/indexold">健康部落格</a>
+                    <li><a class="nav-link scrollto" href="~/blogs">健康部落格</a>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                     {
                         <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto" })</li>

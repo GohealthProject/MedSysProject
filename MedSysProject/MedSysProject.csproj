@@ -87,6 +87,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
     <PackageReference Include="SweetAlert" Version="1.0.0" />
+    <PackageReference Include="Tinify" Version="1.6.0" />
     <PackageReference Include="TinyMCE" Version="6.7.3" />
     <PackageReference Include="Wahid-SweetAlert2" Version="1.0.0" />
   </ItemGroup>

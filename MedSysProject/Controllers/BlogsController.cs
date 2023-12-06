@@ -17,7 +17,7 @@ namespace MedSysProject.Controllers
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
         /// <returns></returns>
-        public IActionResult IndexOld()
+        public IActionResult Index()
         {//要放什麼過去?
             //能不能裝在List當中
             //測試能不能傳送List
