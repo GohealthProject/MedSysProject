@@ -267,63 +267,7 @@ namespace MedSysProject.Controllers
             return View(q);
         }
 
-        public IActionResult Product(CKeywordViewModel vm)
-        {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
-
-            var datas = _db.Products.AsQueryable();
-
-            if (!string.IsNullOrEmpty(vm.txtKeyword))
-            {
-                var keyword = vm.txtKeyword.Trim();
-                datas = datas.Where(p =>
-                    p.ProductName.Contains(keyword) ||
-                    p.Ingredient.Contains(keyword) ||
-                    p.License.Contains(keyword) ||
-                    p.Description.Contains(keyword));
-
-                ViewBag.key = keyword;
-            }
-
-            var defaultImagePath = "/img-product/default-image.jpg";
-
-            if (vm.txtMinPrice.HasValue)
-            {
-                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
-            }
-
-            if (vm.txtMaxPrice.HasValue)
-            {
-                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
-            }
-
-
-            var viewModel = datas.Select(product => new CProductsWrap
-            {
-                Product = product,
-                ImagePath = product.FimagePath != null
-                    ? Path.Combine("/img-product", product.FimagePath)
-                    : defaultImagePath
-            }).ToList();
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
-        {
-            // 根據 productId 更新數據庫中的 discontinued 屬性
-            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
-            if (product != null)
-            {
-                product.Discontinued = discontinued;
-                _db.SaveChanges();
-            }
-
-            // 返回 JSON 物件，包含更新後的 discontinued 值
-            return Json(new { discontinued = product?.Discontinued });
-        }
+       
 
 
         public IActionResult Order()
@@ -405,6 +349,71 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Report");
         }
 
+
+
+        public async Task<IActionResult> Product(CKeywordViewModel vm)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
+            // 初始化 ViewBag.Categories
+            ViewBag.Categories = await _db.ProductsClassifications
+                .Include(pc => pc.Categories)
+                .Select(pc => pc.Categories)
+                .Distinct()
+                .ToListAsync();
+
+            var datas = _db.Products.AsQueryable();
+
+            var keyword = vm.txtKeyword?.Trim();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                datas = datas.Where(p =>
+                    p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.Ingredient.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.License.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    p.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+
+                ViewBag.key = keyword;
+            }
+
+            var defaultImagePath = "/img-product/default-image.jpg";
+
+            if (vm.txtMinPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
+            }
+
+            if (vm.txtMaxPrice.HasValue)
+            {
+                datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
+            }
+
+            var viewModel = await datas.Select(product => new CProductsWrap
+            {
+                Product = product,
+                ImagePath = product.FimagePath != null
+                    ? Path.Combine("/img-product", product.FimagePath)
+                    : defaultImagePath
+            }).ToListAsync();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult ToggleDiscontinued(int productId, bool discontinued)
+        {
+            // 根據 productId 更新數據庫中的 discontinued 屬性
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product != null)
+            {
+                product.Discontinued = discontinued;
+                _db.SaveChanges();
+            }
+
+            // 返回 JSON 物件，包含更新後的 discontinued 值
+            return Json(new { discontinued = product?.Discontinued });
+        }
 
         public IActionResult GetImage(int id)
         {
@@ -504,10 +513,16 @@ namespace MedSysProject.Controllers
         //    return Json(new { productId = product.ProductId });
         //}
 
-        public IActionResult Edit(int? id)
+        [HttpGet]
+        public IActionResult Edit(int? productId)
         {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
             var categories = _db.ProductsCategories.ToList();
-            Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
+            Product x = _db.Products.FirstOrDefault(p => p.ProductId == productId);
 
             if (x == null)
                 return RedirectToAction("Product");
@@ -526,98 +541,115 @@ namespace MedSysProject.Controllers
                 FimagePath = x.FimagePath
             };
 
-
+            // 初始化 ViewBag.Categories
             ViewBag.Categories = categories;
 
-
-            return View(productWrap);
+            // 回傳 JSON 格式的產品資訊
+            return Json(productWrap);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(CProductsWrap productId, IFormFile formFile, List<int> SelectedCategories)
+        public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
         {
-            Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
-            if (pDb != null)
+            try
             {
-                if (formFile != null)
+                // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
+                if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
-                    // 生成唯一的檔案名稱
-                    string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                    // 將圖片存放在 wwwroot/img-product 資料夾中
-                    string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                    // 將圖片路徑存入資料庫
-                    pDb.FimagePath = "/img-product/" + photoName;
-
-                    // 寫入圖片檔案
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(fileStream);
-                    }
-                }
-
-                pDb.ProductName = productId.WrappedProductName;
-                pDb.UnitsInStock = productId.WrappedUnitsInStock;
-                pDb.License = productId.WrappedLicense;
-                pDb.UnitPrice = productId.WrappedUnitPrice;
-                pDb.Ingredient = productId.WrappedIngredient;
-                pDb.Description = productId.WrappedDescription;
-                pDb.Discontinued = productId.WrappedDiscontinued;
-
-                _db.Products.Update(pDb);
-
-                // 處理 ProductsClassification 資料表
-                if (SelectedCategories != null && SelectedCategories.Any())
-                {
-                    // 移除所有現有的 CategoriesId 記錄
-                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
-
-                    // 新增選擇的 CategoriesId 記錄
-                    foreach (var categoryId in SelectedCategories)
-                    {
-                        var classification = new ProductsClassification
+                    var product = _db.Products
+                        .Where(p => p.ProductId == productId.WrappedProductId)
+                        .Select(p => new
                         {
-                            ProductId = productId.WrappedProductId,
-                            CategoriesId = categoryId
-                        };
+                            p.ProductId,
+                            p.ProductName,
+                            p.UnitPrice,
+                            p.License,
+                            p.Ingredient,
+                            p.Description,
+                            p.UnitsInStock,
+                            p.Discontinued,
+                        })
+                        .FirstOrDefault();
 
-                        _db.ProductsClassifications.Add(classification);
+                    return Json(new { success = true, product });
+                }
+
+                // 非 AJAX 請求，執行原有的編輯邏輯
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
+
+                if (pDb != null)
+                {
+                    if (productId.FormFile != null)
+                    {
+                        // 生成唯一的檔案名稱
+                        string photoName = Guid.NewGuid().ToString() + ".jpg";
+
+                        // 將圖片存放在 wwwroot/img-product 資料夾中
+                        string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
+
+                        // 將圖片路徑存入資料庫
+                        pDb.FimagePath = "/img-product/" + photoName;
+
+                        // 寫入圖片檔案
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await productId.FormFile.CopyToAsync(fileStream);
+                        }
+                    }
+
+                    pDb.ProductName = productId.WrappedProductName;
+                    pDb.UnitsInStock = productId.WrappedUnitsInStock;
+                    pDb.License = productId.WrappedLicense;
+                    pDb.UnitPrice = productId.WrappedUnitPrice;
+                    pDb.Ingredient = productId.WrappedIngredient;
+                    pDb.Description = productId.WrappedDescription;
+                    pDb.Discontinued = productId.WrappedDiscontinued;
+
+                    _db.Products.Update(pDb);
+
+                    // 處理 ProductsClassification 資料表
+                    if (productId.SelectedCategories != null && productId.SelectedCategories.Any())
+                    {
+                        // 移除所有現有的 CategoriesId 記錄
+                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+
+                        // 新增選擇的 CategoriesId 記錄
+                        foreach (var categoryId in productId.SelectedCategories)
+                        {
+                            var classification = new ProductsClassification
+                            {
+                                ProductId = productId.WrappedProductId,
+                                CategoriesId = categoryId
+                            };
+
+                            _db.ProductsClassifications.Add(classification);
+                        }
+                    }
+
+                    try
+                    {
+                        _db.SaveChanges();
+                        return RedirectToAction("Product");
+                    }
+                    catch (Exception ex)
+                    {
+                        // 處理異常，例如記錄日誌
+                        return Json(new { success = false, message = ex.Message });
                     }
                 }
 
-                try
-                {
-                    _db.SaveChanges();
-                    return RedirectToAction("Product");
-                }
-                catch (Exception ex)
-                {
-                    // 處理異常，或輸出到日誌
-                    Console.WriteLine(ex.Message);
-                }
-
-                CProductsWrap productWrap = new CProductsWrap
-                {
-                    WrappedProductId = productId.WrappedProductId,
-                    WrappedDescription = productId.WrappedDescription,
-                    WrappedDiscontinued = productId.WrappedDiscontinued,
-                    WrappedIngredient = productId.WrappedIngredient,
-                    WrappedLicense = productId.WrappedLicense,
-                    WrappedProductName = productId.WrappedProductName,
-                    WrappedUnitPrice = productId.WrappedUnitPrice,
-                    WrappedUnitsInStock = productId.WrappedUnitsInStock,
-                    FimagePath = productId.FimagePath,
-                    SelectedCategories = productId.SelectedCategories,
-                };
-
-                return View(productWrap); // 或者 return RedirectToAction("Edit", productWrap);
+                // 在這裡加上一個 return 陳述式
+                return View(productId);
             }
-
-            // 在這裡加上一個 return 陳述式
-            return View(productId);
+            catch (Exception ex)
+            {
+                // 處理異常，例如記錄日誌
+                return Json(new { success = false, message = ex.Message });
+            }
         }
+
+
 
 
 
@@ -664,6 +696,39 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-      
+        public IActionResult test(CKeywordViewModel vm)
+        {
+            IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails
+                        orderby s.ReportId
+                        select s;
+
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return View(datas);
+
+        }
+
+        public IActionResult test1(CKeywordViewModel vm)
+        {
+            IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+                datas = from s in _db.ReportDetails
+                        orderby s.ReportId
+                        select s;
+
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return Json(datas);
+
+        }
+
     }
 }

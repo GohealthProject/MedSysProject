@@ -76,20 +76,13 @@ namespace MedSysProject.Models
             set { Product.Discontinued = value; }
         }
 
+        public IFormFile FormFile { get; set; }
 
-        // 確保 SelectedCategories 不為 null
+        // 新增選擇的分類屬性
         public List<int> SelectedCategories { get; set; } = new List<int>();
 
-        //private TProp GetPropertyValue<TProp>(string propertyName)
-        //{
-        //    var propInfo = typeof(Products).GetProperty(propertyName);
-        //    return (TProp)propInfo?.GetValue(_product);
-        //}
 
-        //private void SetPropertyValue<TProp>(string propertyName, TProp value)
-        //{
-        //    var propInfo = typeof(Products).GetProperty(propertyName);
-        //    propInfo?.SetValue(_product, value);
-        //}
+        // 確保 SelectedCategories 不為 null
+      
     }
 }

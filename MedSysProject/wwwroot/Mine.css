@@ -5,12 +5,17 @@
 
 a {
   color: red;
-  /*能否取用全域變數?可以，所以不需要在上面引用*/
-  color: var(--color-links);
+  color: #d2ece9;
   text-decoration: none;
+  /*能否取用全域變數?可以，所以不需要在上面引用*/
+  /* color:var(--color-links);*/
+  /* &:hover {
+       color: var(--color-links);
+       text-decoration: none;
+   }*/
 }
 a:hover {
-  color: var(--color-links);
+  color: #fff;
   text-decoration: none;
 }
 
@@ -20,6 +25,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #main {
   margin-top: 90px;
+  background:#f2f9f8;
 }
 
 /*section*/
@@ -47,10 +53,11 @@ section .section-header p {
   height: 90px;
   transition: all 0.5s;
   z-index: 997;
-  background: #f2f2f2;
+  background: #2d6760;
 }
 .header.sticked {
   height: 70px;
+  background: #1d443f;
 }
 .header .search-form-wrap {
   position: absolute;
@@ -112,8 +119,11 @@ section .section-header p {
   .navbar ul li {
     position: relative;
   }
+  .navbar ul li a {
+    color: #d2ece9;
+  }
   .navbar ul li:hover > a {
-    color: var(--color-default);
+    color: #fff;
   }
   .navbar ul.active:hover {
     color: var(--color-primary);
@@ -153,9 +163,10 @@ section .section-header p {
     font-size: 15px;
     text-transform: none;
     font-weight: 400;
+    color: var(--color-primary);
   }
   .navbar ul .dropdown ul li a:hover {
-    color: var(--color-primary);
+    color: #d2ece9;
   }
   .navbar.active, .navbar.active:focus {
     color: var(--color-default);
@@ -648,6 +659,7 @@ section .section-header p {
 }
 .custom-pagination a:hover {
   background: rgba(var(--color-black-rgb), 0.9);
+  color: var(--color-white);
 }
 .custom-pagination a.active {
   background: var(--color-black);
