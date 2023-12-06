@@ -18,7 +18,7 @@ namespace MedSysProject.Controllers
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {//要放什麼過去?
             //能不能裝在List當中
             //測試能不能傳送List
@@ -156,6 +156,18 @@ namespace MedSysProject.Controllers
                 return File(img, "image/jpeg");
             }
             return NotFound();
+        }
+        /// <summary>
+        /// 測試partial View用
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Index2() 
+        {
+            return View();
+        }
+        public IActionResult Slider() 
+        {
+            return PartialView();
         }
 
     }
