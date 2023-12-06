@@ -2,19 +2,24 @@
 }
 :root{scroll-behavior:smooth;}
 
-a{
-    color:red;
-    &:hover{
-        color:#fff;
+a {
+    color: red;
+    color: #d2ece9;
+    text-decoration: none;
+    &:hover {
+        color: #fff;
+        text-decoration: none;
     }
-  /*能否取用全域變數?可以，所以不需要在上面引用*/
- /* color:var(--color-links);*/
-  text-decoration:none;
-  &:hover{
-      color:var(--color-links);
-      text-decoration:none;
-  }
+    /*能否取用全域變數?可以，所以不需要在上面引用*/
+    /* color:var(--color-links);*/
+
+
+   /* &:hover {
+        color: var(--color-links);
+        text-decoration: none;
+    }*/
 }
+
 
 h1,h2,h3,h4,h5,h6{
     font-family:var(--font-primary);
@@ -45,14 +50,6 @@ section {
 
 /*Header*/
 .header {
-    a.h1 .logo {
-        color: #d2ece9;
-        transition: 0.3s all ease;
-
-        &:hover {
-            color: #fff;
-        }
-    }
 
     height: 90px;
     transition: all 0.5s;
@@ -129,8 +126,9 @@ section {
 
             li {
                 position: relative;
-                a{
-                    color:#d2ece9;
+
+                a {
+                    color: #d2ece9;
                 }
 
                 &:hover > a {
@@ -143,11 +141,12 @@ section {
             }
 
             .dropdown {
-                &:hover>ul{
-                    opacity:1;
-                    top:100%;/*選到時往上移的效果*/
-                    visibility:visible;
+                &:hover > ul {
+                    opacity: 1;
+                    top: 100%; /*選到時往上移的效果*/
+                    visibility: visible;
                 }
+
                 ul { /*下層*/
                     display: block;
                     position: absolute;
@@ -162,24 +161,27 @@ section {
                     box-shadow: 0px 0px 30px rgba(127,137,161,0.25);
                     transition: 0.3s;
                     border-radius: 4px;
+
                     &.active:hover {
                         color: var(--color-primary);
                     }
                     /*會繼承樓上list-style:none*/
                     li {
                         min-width: 200px;
+
                         &:hover > a {
                             color: var(--color-primary);
                         }
+
                         a {
                             padding: 10px 20px;
                             font-size: 15px;
                             text-transform: none;
                             font-weight: 400;
-                            color:blue;
+                            color: var(--color-primary);
 
                             &:hover {
-                                color: var(--color-primary);
+                                color: #d2ece9;
                             }
                         }
                     }

@@ -5,15 +5,17 @@
 
 a {
   color: red;
+  color: #d2ece9;
+  text-decoration: none;
   /*能否取用全域變數?可以，所以不需要在上面引用*/
   /* color:var(--color-links);*/
-  text-decoration: none;
+  /* &:hover {
+       color: var(--color-links);
+       text-decoration: none;
+   }*/
 }
 a:hover {
   color: #fff;
-}
-a:hover {
-  color: var(--color-links);
   text-decoration: none;
 }
 
@@ -51,13 +53,6 @@ section .section-header p {
   transition: all 0.5s;
   z-index: 997;
   background: #2d6760;
-}
-.header a.h1 .logo {
-  color: #d2ece9;
-  transition: 0.3s all ease;
-}
-.header a.h1 .logo:hover {
-  color: #fff;
 }
 .header.sticked {
   height: 70px;
@@ -167,10 +162,10 @@ section .section-header p {
     font-size: 15px;
     text-transform: none;
     font-weight: 400;
-    color: blue;
+    color: var(--color-primary);
   }
   .navbar ul .dropdown ul li a:hover {
-    color: var(--color-primary);
+    color: #d2ece9;
   }
   .navbar.active, .navbar.active:focus {
     color: var(--color-default);
