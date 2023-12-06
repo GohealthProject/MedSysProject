@@ -115,7 +115,6 @@ namespace MedSysProject.Controllers
                 return View(cart);
             }
         }
-
         public IActionResult KeySearch(string Key)
         {
             var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
@@ -145,7 +144,6 @@ namespace MedSysProject.Controllers
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             if (string.IsNullOrEmpty(key))
             {
-                
                 var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n=>n.Pay).Include(n=>n.Ship).Include(n=>n.State);
                 foreach(var item in midFindOrder)
                 {
