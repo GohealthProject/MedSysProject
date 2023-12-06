@@ -9,5 +9,7 @@
         public static readonly string SK_ADDTOCART = "SK_ADDTOCART";
 
         public static readonly string SK_CARTLISTCOUNT = "SK_CARTLISTCOUNT";
+        public static readonly string SK_MEMBER_VERIFY = "SK_MEMBER_VERIFY";
+        
     }
 }
