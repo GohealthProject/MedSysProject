@@ -216,6 +216,30 @@ namespace MedSysProject.Controllers
             return RedirectToAction("TestList");
         }
 
+        public async Task<IActionResult> CompressImage() 
+        {
+            var images = (from blog in _db.Blogs
+                         select blog).ToList();
+            Tinify.Key= "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
+            foreach (var image in images) 
+            {
+                if (image.BlogImage != null && image.BlogImage.Length > 0) 
+                {
+                    var source = Tinify.FromBuffer(image.BlogImage);
+                    var compressedImage = await source.ToBuffer();
+                    Blog iCompressed = _db.Blogs.FirstOrDefault(blog => blog.BlogId == image.BlogId);
+                    if (iCompressed != null) 
+                    {
+                        iCompressed.BlogImage = compressedImage;
+                    }
+                    
+                                
+                }
+            }
+            _db.SaveChanges();
+            return RedirectToAction("TestList");
+        }
+
         #endregion
 
         #region 前台顯示
