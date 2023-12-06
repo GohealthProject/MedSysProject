@@ -46,7 +46,9 @@ namespace MedSysProject.Controllers
         public IActionResult selectProduct(int id)
         {
             var q = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
-            if((bool)q.Discontinued)
+            if (q == null)
+                return RedirectToAction("index");
+            if((bool)q.Discontinued&& q!=null)
             {
                 return View(q);
             }
@@ -54,7 +56,6 @@ namespace MedSysProject.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
         }
         [HttpPost]
         public IActionResult AddToCart()
