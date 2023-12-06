@@ -16,7 +16,7 @@ namespace MedSysProject.Controllers
         /// </summary>
         /// <param name="db"></param>
         /// <param name="host"></param>
-        public Test(MedSysContext db,IWebHostEnvironment host) 
+        public Test(MedSysContext db, IWebHostEnvironment host)
         {
             _db = db;
             _host = host;
@@ -180,32 +180,35 @@ namespace MedSysProject.Controllers
             return View();
         }
         [HttpPost]
-        //public async Task<IActionResult> TestTiny2(string Title, int ArticleClassId, string Content, IFormFile BlogImage, int EmployeeId) 
-        //{
-        //    try
-        //    {
-        //        Blog newBlog = new Blog();
-        //        newBlog.Title = Title;
-        //        newBlog.ArticleClassId = ArticleClassId;
-        //        newBlog.Views = 0;
-        //        newBlog.Content = Content;
-        //        newBlog.CreatedAt = DateTime.Now;
-        //        byte[] afterCompressed = null;
-        //        if (BlogImage != null && BlogImage.Length > 0) 
-        //        {
-        //            using (MemoryStream originalMs = new MemoryStream()) 
-        //            {
-        //                BlogImage.CopyTo(originalMs);
-        //                var imageCompressionService = new ImageCompressionService("");
-        //                afterCompressed = await ImageCompressionService.CompressImageAsync(originalMs.ToArray());
-        //            }
-                    
-        //        }
+        public async Task<IActionResult> TestTiny2(string Title, int ArticleClassId, string Content, IFormFile BlogImage, int EmployeeId)
+        {
+            try
+            {
+                Blog newBlog = new Blog();
+                newBlog.Title = Title;
+                newBlog.ArticleClassId = ArticleClassId;
+                newBlog.Views = 0;
+                newBlog.Content = Content;
+                newBlog.CreatedAt = DateTime.Now;
+                byte[] afterCompressed = null;
+                if (BlogImage != null && BlogImage.Length > 0)
+                {
+                    using (MemoryStream originalMs = new MemoryStream())
+                    {
+                        BlogImage.CopyTo(originalMs);
+                        var imageCompressionService = new ImageCompressionService("rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46");
+                        afterCompressed = await imageCompressionService.CompressImageAsync(originalMs.ToArray());
+                    }
+                }
+                newBlog.BlogImage = afterCompressed;
+                newBlog.EmployeeId= EmployeeId;
+                _db.Blogs.Add(newBlog);
+                await _db.SaveChangesAsync();
 
-        //    }
-        //    catch (Exception ex) { Console.WriteLine(ex.Message); }
-        //    return RedirectToAction("TestList");
-        //}
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return RedirectToAction("TestList");
+        }
 
         #endregion
 
