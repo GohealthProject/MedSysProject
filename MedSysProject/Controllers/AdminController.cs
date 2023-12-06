@@ -267,7 +267,7 @@ namespace MedSysProject.Controllers
             return View(q);
         }
 
-       
+
 
 
         public IActionResult Order()
@@ -317,7 +317,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult ReportDelete(int? id)
         {
-            ReportDetail rd = _db.ReportDetails.FirstOrDefault(p => p.ReportDetailId == id);
+            ReportDetail rd = _db.ReportDetails.First (p => p.ReportDetailId == id);
             if (rd != null)
             {
                 _db.ReportDetails.Remove(rd);
@@ -521,29 +521,38 @@ namespace MedSysProject.Controllers
                 return NotFound();
             }
 
-            var categories = _db.ProductsCategories.ToList();
-            Product x = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            Product? product = _db.Products.Where(e => e.ProductId == productId).FirstOrDefault();
 
-            if (x == null)
-                return RedirectToAction("Product");
+
+            if (product == null)
+                return NotFound();
 
             // 將 Product 對象包裝到 CProductsWrap 中
-            CProductsWrap productWrap = new CProductsWrap
-            {
-                WrappedProductId = x.ProductId,
-                WrappedProductName = x.ProductName,
-                WrappedUnitPrice = x.UnitPrice,
-                WrappedLicense = x.License,
-                WrappedIngredient = x.Ingredient,
-                WrappedDescription = x.Description,
-                WrappedUnitsInStock = x.UnitsInStock,
-                WrappedDiscontinued = x.Discontinued,
-                FimagePath = x.FimagePath
-            };
+
+            // 1
+            CProductsWrap productWrap = new CProductsWrap(product);
+            productWrap.SelectedCategories = _db.ProductsClassifications
+                 .Where(e => e.ProductId == productId)
+                 .Select(e => e.CategoriesId)
+                 .ToList();
+
+            // 2
+            var productsClassifications = _db.ProductsClassifications
+                .Where(e => e.ProductId == productId).ToList();
+            CProductsWrap test = new CProductsWrap(product, productsClassifications);
+
+            // 多檔示範
+            IList<string> aa = productWrap.FimagePaths;
+            aa.Add("testsdafasdf");
+            //productWrap.FimagePaths = aa;
+            //var bb = productWrap.FimagePaths;
+            //var c = productWrap.Product.FimagePath;
 
             // 初始化 ViewBag.Categories
+            var categories = _db.ProductsCategories.ToList();
             ViewBag.Categories = categories;
 
+            //return PartialView();
             return PartialView("_EditProductModal", productWrap);
         }
 
