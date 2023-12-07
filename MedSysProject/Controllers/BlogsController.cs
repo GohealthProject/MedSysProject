@@ -1,6 +1,8 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using TinifyAPI;
 
 namespace MedSysProject.Controllers
@@ -165,9 +167,23 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
-        public IActionResult Slider() 
+        public IActionResult Slider(int id) 
         {
-            return PartialView();
+            var b = _db.Blogs.Find(id);
+
+            return PartialView(b);
+        }
+        public IActionResult ad (int id)
+        {
+             var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
+            var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
+
+            List<int> ne = 最新的文章.ToList();
+            List<int> top5 = 最多觀看的.ToList();
+            ViewBag.new5Array = JsonSerializer.Serialize(ne);
+            ViewBag.View5 = JsonSerializer.Serialize(top5);
+
+            return View();
         }
 
     }

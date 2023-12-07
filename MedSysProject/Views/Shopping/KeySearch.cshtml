@@ -1,4 +1,4 @@
-﻿
+﻿@model List<CProductWarp>
 @{
     ViewData["Title"] = "KeySearch";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
@@ -54,7 +54,32 @@
                     </select>
                 </div>
                 <div class="mt-5">
-                    <div class="row mb-3">
+                    @{
+                        int count = 0;
+                        foreach(var item in Model)
+                        {
+                            if (count % 3 == 0)
+                            {
+                                @:<div class="mb-3">
+                            }
+                            if(count %3==0 && count !=0){
+                                @:</div>
+                            }
+
+                         <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title fs-2">@item.ProductName</h5>
+                                    <p class="card-text">5折</p>
+                                    <p class="card-text text-danger fs-3">$@item.UnitPrice</p>
+                                    <p class="card-text">三星</p>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    }
+                    @*<div class="row mb-3">
                         <div class="col">
                             <div class="card" style="width: 18rem;">
                                 <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
@@ -158,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <hr class="hr-dashed" />
                     <div style="text-align:center;">
                         <button class="fs-5 btn btn-outline-primary active">1</button>

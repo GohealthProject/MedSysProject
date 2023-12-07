@@ -3,7 +3,37 @@
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
 <main id="main">
-    @{
-        @await Html.PartialAsync("~/Views/Blogs/Slider.cshtml")
-    }
+
+    <div id="here">
+
+    </div>
 </main>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            load()
+        })
+        var myArray = [2, 3, 4, 5, 6];
+
+        console.log(myArray)
+        async function load (){
+            //const response = await fetch("@Url.Content("~/blogs/Slider")?id=52");
+            //const data = await response.text();
+            
+            //document.querySelector("#here").innerHTML=data;
+            //console.log(data)
+
+            for(var i = 0;  i<myArray.length;i++){
+
+                const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${myArray[i]}`);
+                const data = await response.text();
+
+                document.querySelector("#here").innerHTML+=data;
+            }
+
+
+        }
+        
+    </script>
+}

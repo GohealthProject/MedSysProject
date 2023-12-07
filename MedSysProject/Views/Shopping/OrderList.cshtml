@@ -14,13 +14,22 @@
         <div class=" p-3">
                 @{
                     <span class="fs-2">訂單查詢</span>
-
-                    <div><input type="text" name="Key" /><input type="submit" value="查詢" /></div>
+                    <div><input type="hidden" value="keyword" name="Key" /><input type="text" name="Keyword" /><input type="submit" value="查詢" /></div>
             }
-            
         </div>
         </form>
-        <div class="fs-1 my-3">會員訂單管理</div>
+        <form method="post">
+        @{
+           <input type="hidden" value="dateKey" name="key"/>
+            var q = Model.OrderBy(n=>n.order.OrderDate);
+            <div class="p-3">
+            <input type="date" name="dateMin" value="@q.First().order.OrderDate.ToString("yyyy-MM-dd")"/>-
+            <input type="date" name="dateMax" value="@q.Last().order.OrderDate.ToString("yyyy-MM-dd")"/>
+            <input type="submit" value="日期查詢" />
+        </div>
+        <div class="fs-1 ">會員訂單管理 @Model.Count()</div>
+        }
+        </form>
     @{
         int count = 0;
         for(int i =0; i < Model.Count; i++)
@@ -87,7 +96,7 @@
                     </div>
                 </div>
             </div>
-                <hr />
+                <hr class="mb-0"/>
         }
         
     }
@@ -114,20 +123,6 @@
             ps.style.display= "none";
              event.target.addEventListener('click',out);
          }
-        
-         const inputKey = document.querySelector("#keyName");
-         const KeyButton = document.querySelector("#keyButton");
-         const mid = document.querySelector("#mid");
-        KeyButton.addEventListener('click', keySearch);
-         async function keySearch(){
-             let key = inputKey.value;
-             let id = mid.value;
-             console.log(key+id);
-            const response = await fetch(`https://localhost:7078/api/Products/Key/key=${key}&id=${id}`)
-            const data = await response.text();
-            console.log(data);
-         }
-
 
 
 
