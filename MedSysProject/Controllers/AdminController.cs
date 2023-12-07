@@ -481,15 +481,15 @@ namespace MedSysProject.Controllers
         }
 
 
+
+        //public IActionResult _CreateProductModal()
+        //{
+        //    ViewBag.Categories = _db.ProductsCategories?.ToList() ?? new List<ProductsCategory>();
+        //    return PartialView("_CreateProductModal");
+        //}
+
+
         [HttpGet]
-        public IActionResult _CreateProductModal()
-        {
-            ViewBag.Categories = _db.ProductsCategories?.ToList() ?? new List<ProductsCategory>();
-            return PartialView("_CreateProductModal");
-        }
-
-
-
         public IActionResult Create()
         {
             ViewBag.Categories = _db.ProductsCategories.ToList();
@@ -499,7 +499,7 @@ namespace MedSysProject.Controllers
                 ProductsCategories = _db.ProductsCategories.ToList(),
             };
 
-            return View(cProductsWrap);
+            return PartialView("_CreateProductModal");
         }
 
         [HttpPost]
@@ -536,8 +536,12 @@ namespace MedSysProject.Controllers
                 }
             }
 
-            // 使用多個圖片路徑更新 productWrap
             productWrap.FimagePaths = imagePaths;
+
+            // 將產品的圖片檔名存儲到資料庫
+            productWrap.Product.FimagePath = string.Join(",", imagePaths);
+            _db.SaveChanges();
+
 
 
             // 儲存到資料庫

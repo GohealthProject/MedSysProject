@@ -1,15 +1,15 @@
 ﻿@model MedSysProject.Models.Blog
 <section id="hero-slider" class="hero-slider">
-    <div class="card" style="width: 18rem;">
+    @* <div class="card" style="width: 18rem;">
         <img class="card-img-top" src="..." alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title">@Model.Title</h5>
             <p class="card-text">@Model.ArticleClassId</p>
             <a href="#" class="btn btn-primary">@Model.BlogId</a>
         </div>
-    </div>
+    </div> *@
 
-    @*<div class="container-md">
+    <div class="container-md">
         <div class="row">
             <div class="col-12">
                 <div class="swiper sliderFeaturedPosts">
@@ -21,10 +21,36 @@
                                style="background-image: url('/assets/img/post-slide-1.jpg');">
                                 <div class="img-bg-inner">
                                     <h2>
-                                        @Model.Title
+                                        
                                     </h2>
                                     <p>
-                                        @Model.Content
+                                        
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="single-post.html"
+                               class="img-bg d-flex align-items-end"
+                               style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                <div class="img-bg-inner">
+                                    <h2>
+                                    </h2>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="single-post.html"
+                               class="img-bg d-flex align-items-end"
+                               style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                <div class="img-bg-inner">
+                                    <h2>
+                                    </h2>
+                                    <p>
+
                                     </p>
                                 </div>
                             </a>
@@ -43,6 +69,6 @@
                 </div>
             </div>
         </div>
-    </div>*@
+    </div>
 </section>
 

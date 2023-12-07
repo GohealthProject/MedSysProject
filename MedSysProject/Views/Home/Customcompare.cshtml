@@ -1,9 +1,10 @@
 ﻿@{
+    
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 @*@model List<CProjectWarp>*@
-@model List<Project>?
+@model IEnumerable<Project>?
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
@@ -46,10 +47,10 @@
 
 <section id="portfolio" class="portfolio">
 
-@*    @foreach (var items in Model)
+  @* @foreach (var item in Model)
     {
+        item.PlanRefs.First().Plan.PlanName;
 
-        @Html.DisplayFor(m => items.ItemName)
 
     }*@
     <div class="container">
@@ -57,7 +58,7 @@
     <div class="row">
     <div class="col-lg-12">
                 
-                <ul id="portfolio-flters" class="row" style="margin-left:10%" >
+                <ul id="portfolio-flters" class="row" style="margin-left:6%;" >
                     <li data-filter="*" class="filter-active col-3" style="width:150px;height:150px;">
                         <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="" style="width:150px;height:110px;">
                             <div class=" portfolio-item filter-app">
@@ -184,7 +185,7 @@
 
 
         @*item導入*@
-            <div class="row portfolio-container portfolio-flters p-5" id="btng">
+            <div class="row portfolio-container portfolio-flters p-5" id="btng" style="margin-left:5%;">
             @foreach (var items in Model)
             {
                 int i = 0;
@@ -193,8 +194,16 @@
                     i++;
                     <div>
                     <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success ibtn"  value="@s.ItemName">
-                    @Html.DisplayFor(m => s.ItemName)
-                            <input type="text" class="zz" value="@s.ItemId">
+                     
+                     @Html.DisplayFor(m => s.ItemName)
+                     <br>
+                     @Html.DisplayFor(m => s.ItemPrice)
+                     
+                   
+                    
+                   
+                            <p type="text" class="iprice" hidden>@s.ItemPrice</p>
+                            <p type="text" class="iid" hidden>@s.ItemId</p>
                     </button>
                     
                     </div>
@@ -205,29 +214,12 @@
             }
            
 
-         @*   <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">身高</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">體重</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">脈搏</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">血壓-收縮壓</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">血壓-舒張壓</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">腰圍</button>
-            <button class="portfolio-item filter-app col-2 m-1 btn btn-success" id="ibtn">理學檢查</button>
-
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液外觀</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿比重</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液酸鹼度</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿膽素原</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿蛋白</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿糖</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">酮尿</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">膽紅素</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿潛血</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿液白血球</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">亞硝酸鹽</button>
-            <button class="portfolio-item filter-card col-2 m-1 btn btn-success" id="ibtn">尿沉渣</button>*@
-            
             </div>
 
+            <form id="form" method="post" action="~/Home/Reserve">
+            <input type="text" value="" id="forminput" name="item">
+            <button id="formbtn" type="submit">btn</button>
+            </form>
         </div>
         </section>
     
@@ -249,12 +241,15 @@
             <table class="table table-hover">
               <thead>
                     <tr>
-                        <th class="col-3">
+                        <th class="col-2">
                             編號
                         </th>
 
-                        <th>
+                        <th class="col-5">
                             項目
+                        </th>
+                        <th class="col-3">
+                            價格
                         </th>
                         <th class="col-2">
                             移除
@@ -269,6 +264,9 @@
                         <td>
                             B
                         </td>
+                    <td>
+                        150
+                    </td>
                         <td><img src="~/img/icon/x.png" /></td>
                   </tr>
                  
@@ -279,6 +277,9 @@
                         <td>
                             B
                         </td>
+                    <td>
+                        100
+                    </td>
                         <td><img src="~/img/icon/x.png" /></td>
                         
                     </tr>
@@ -286,47 +287,76 @@
               </tbody>
             </table>
         
-        <button class="btn btn-primary  col-6" type="button" id="rsbtn"><a href="~/Home/Reserve">馬上預約</a></button>
+        @*<button class="btn btn-primary  col-6" type="button" id="rsbtn"><a href="~/Home/Reserve" onclick="submit()">馬上預約</a></button>*@
+        <button class="btn btn-primary  col-6" type="button" id="rsbtn" onclick="submit()">馬上預約</button>
         </div>
     </div>
 
 @section Scripts{
     <script>
+        //todo 選後enable
         let btn = document.querySelectorAll(".ibtn");
         let list = document.querySelector("#ilist");
         for(var i =0 ; i<btn.length;i++){
-            btn[i].addEventListener('click',ck);
+            btn[i].addEventListener('click',itemadd);
         }
-        let img = document.querySelectorAll(".gg");
-        console.log(img);
-        for(var i=0; i<img.length;i++){
-            img[i].addEventListener('click',()=>{
-                console.log("hello");
-            });
-        };
-        function gg(){
-            console.log("ggg");
+        //let img = document.querySelectorAll(".imgdelete");
+        //console.log(img);
+        //for(var i=0; i<img.length;i++){
+        //    img[i].addEventListener('click',()=>{
+        //        console.log("hello");
+        //    });
+        //};
+        function imgdelete() {
+            let img = document.querySelectorAll(".imgdelete");
+            var dtr = document.querySelectorAll("#dtr");
+            console.log(event.target.this);
+            //var t = dtr.removeChild(event.target.parentNode);
+            var del =list.removeChild(event.target.parentNode.parentNode);
+            //console.log(t.innerHTML)
         }
-        function ck (event){
-            console.log(event.target.value);
-            let d = event.target.parentNode.querySelector("input");
-            var s =
+        function itemadd (event){
+            console.log(event.target);
+            console.log()
+            let iid = event.target.parentNode.querySelector(".iid");
+            let iprice = event.target.parentNode.querySelector(".iprice");
+            //let iid = event.target.parentNode.querySelector(".iid");
+            var show =
             `
-                    <tr>
+                    <tr id="dtr">
                                     <td>
-                                    ${d.value}
+                                    ${iid.innerHTML}
                                     </td>
                                     <td>
                                     ${event.target.value}
                                     </td>
                                     <td>
-                                       <img src="/img/icon/x.png" onclick="gg()"/>
+                                    ${iprice.innerHTML}
+                                    </td>
+                                    <td>
+                                       <img src="/img/icon/x.png" onclick="imgdelete()"/>
                                     </td>
                      </tr>
             `;
-            list.innerHTML +=s;
-            console.log(d);
+            list.innerHTML +=show;
+            console.log(iid.innerHTML);
         }
+
+        function submit()
+        {
+            var total = document.querySelector("#ilist");
+            var form = document.querySelector("#form");
+            var forminput = document.querySelector("#forminput");
+            var sumbit = document.querySelector("#submit")
+            forminput.value= total.innerHTML;
+            console.log(form.value)
+            console.log(total.innerHTML)
+            form.submit();
+
+        }
+
+
+
         //$("#btng:has(#ibtn)").click(()=>{
         //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
         //    //var suck = document.querySelector("event.target");

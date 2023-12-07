@@ -45,15 +45,25 @@
                 // 在文件選擇時觸發事件
                 fileInput.addEventListener('change', function (e) {
                     var fileInput = e.target;
-                    var file = fileInput.files[0];
+                    var files = fileInput.files;
 
-                    // 檢查是否有選擇檔案
-                    if (file) {
+                    // 清空預覽區域
+                    var imagePreviewContainer = document.getElementById('imagePreview');
+                    imagePreviewContainer.innerHTML = '';
+
+                    // 遍歷所選的文件
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+
                         // 使用 FileReader 來讀取圖片內容
                         var reader = new FileReader();
                         reader.onload = function (e) {
-                            // 更新預覽圖片的 src
-                            document.getElementById('previewImage').src = e.target.result;
+                            // 創建圖片元素，並添加到預覽區域
+                            var imgElement = document.createElement('img');
+                            imgElement.src = e.target.result;
+                            imgElement.style.maxWidth = '100%';
+                            imgElement.style.maxHeight = '150px';
+                            imagePreviewContainer.appendChild(imgElement);
                         };
 
                         // 讀取圖片內容
@@ -76,7 +86,7 @@
                 <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
                     <div class="mb-3">
                         <label for="inputName" class="form-label">產品名稱</label>
-                        <input type="text" class="form-control" id="inputName" name="WrappedProductName" value="@Model?.WrappedProductName ?? string.Empty">
+                        <input type="text" class="form-control" id="inputName" name="WrappedProductName" value="@Model?.WrappedProductName">
                     </div>
                     <div class="mb-3">
                         <label for="inputPrice" class="form-label">單價</label>
@@ -103,11 +113,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="categories" class="form-label">產品分類</label>
-                        @foreach (var category in ViewBag.Categories)
+                        @foreach (var category in ViewBag.Categories ?? Enumerable.Empty<ProductsCategory>())
                         {
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId"
-                                @(Model?.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
+                                @(Model != null && Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
                                 <label class="form-check-label" for="category@(category.CategoriesId)">
                                     @category.CategoriesName
                                 </label>
@@ -116,13 +126,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">產品圖片上傳</label>
-                        <input class="form-control" type="file" id="formFile" name="formFile">
+                        <input class="form-control" type="file" id="formFile" name="formFiles" multiple>
                     </div>
                     <div id="imagePreviewContainer" class="mb-3">
                         <label for="inputDescription" class="form-label">圖片預覽</label>
-                        <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
+                        <div id="imagePreview" class="d-flex flex-wrap">
                     </div>
-                    <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉partial view內</button>
+                    <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增partial view內</button>
                 </form>
             </div>
             <div class="col-3"></div>

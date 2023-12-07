@@ -1,5 +1,5 @@
-﻿@model IQueryable<DateTime?>
-
+﻿@model IEnumerable<ReportDetail?>
+@*@model IQueryable<DateTime?>*@
 @{
     ViewData["Title"] = "Member";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -70,8 +70,16 @@
     }*/
 </style>
 
+@*@foreach (var item in Model)
+    {
+     
+
+
+        }*@
+
 <h1>會員中心</h1>
 @*@Html.DisplayNameFor(model => model)*@
+
 <div class="container-fluid ">
     <div class="row">
         <!-- List group -->
@@ -97,7 +105,7 @@
                                 foreach (var item in Model)
                                 {
                                     count++;
-                                    <option value="1">@item.Value.ToShortDateString()</option>
+                                    <option value="1">@item.Report.Reserve.ReserveDate.Value.ToShortDateString()</option>
                                     
                                 }
                             }
