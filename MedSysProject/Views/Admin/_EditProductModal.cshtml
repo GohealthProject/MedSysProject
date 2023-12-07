@@ -3,22 +3,27 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@if (ViewBag.Categories == null || Model.ProductsCategories == null)
+{
+    Console.WriteLine("ViewBag.Categories 或 Model.ProductsCategories 為空。");
+}
 
 
 <div class="container mt-5">
-
     <hr />
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <h1>修改產品作業</h1>
+            <h1>修改產品作業partial view</h1>
             <h4>請輸入欲修改的產品資訊</h4>
-            <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" id="ProductId" name="WrappedProductId" asp-for="WrappedProductId" value="@Model.WrappedProductId" />
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="FimagePaths" name="WrappedFimagePaths" asp-for="WrappedFimagePaths" value="@Model.WrappedFimagePaths" />
+
+
+
                 <div class="form-group">
                     <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
-                    <input asp-for="WrappedProductName" class="form-control" name="WrappedProductName" />
+                    <input asp-for="WrappedProductName" class="form-control" />
                     <span asp-validation-for="WrappedProductName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -60,171 +65,9 @@
                         <option value="false" selected="@(Model?.WrappedDiscontinued == false)">已下架</option>
                     </select>
                 </div>
-                @foreach (var category in ViewBag.Categories)
+                @foreach (var category in ViewBag.Categories ?? Enumerable.Empty<ProductsCategory>())
                 {
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="SelectedCategories" value="@category.CategoriesId" @(Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
-                        <label class="form-check-label" for="category@(category.CategoriesId)">
-                            @category.CategoriesName
-                        </label>
-                    </div>
-                }
-                <div class="mb-3">
-                    <label for="formFile" class="form-label">產品圖片上傳</label>
-                    <input class="form-control" type="file" id="formFile" name="formFile">
-                </div>
-
-                <div id="imagePreviewContainer" class="mb-3">
-                    <label for="inputDescription" class="form-label">圖片預覽</label>
-                    <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="修改並送出" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div>
-        <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
-    </div>
-
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
-</div>
-
-
-
-
-
-@* @model MedSysProject.Models.CProductsWrap
-
-@{
-    ViewData["Title"] = "Edit";
-}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <title>產品管理</title>
-    <style>
-        body {
-            background-color: #DFFFDF;
-        }
-
-        .table img {
-            background-color: transparent;
-            object-fit: cover;
-        }
-
-        .table th {
-            white-space: nowrap; /* 避免文字換行 */
-            overflow: hidden;
-            text-overflow: ellipsis; /* 在溢出時顯示省略號 */
-        }
-
-        h1 {
-            font-size: 3rem; /* 設定字體大小，可根據需要調整 */
-            font-weight: bold; /* 使用粗體字型 */
-            color: #333; /* 設定文字顏色，可根據需要調整 */
-            background: linear-gradient(45deg, #3498db, #2ecc71); /* 使用漸層背景色，可根據需要調整 */
-            -webkit-background-clip: text; /* 將文字內容限制在漸層範圍內 */
-            color: transparent; /* 隱藏文字顏色，以顯示漸層效果 */
-        }
-    </style>
-</head>
-<body>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var fileInput = document.getElementById('formFile');
-            if (fileInput) {
-                // 在文件選擇時觸發事件
-                fileInput.addEventListener('change', function (e) {
-                    var fileInput = e.target;
-                    var file = fileInput.files[0];
-
-                    // 檢查是否有選擇檔案
-                    if (file) {
-                        // 使用 FileReader 來讀取圖片內容
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            // 更新預覽圖片的 src
-                            document.getElementById('previewImage').src = e.target.result;
-                        };
-
-                        // 讀取圖片內容
-                        reader.readAsDataURL(file);
-                    }
-                });
-            } else {
-                console.error('找不到ID為 formFile 的文件輸入元素。');
-            }
-        });
-    </script>
-
-    <div class="container mt-5">
-
-        <hr />
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <h1>修改產品作業</h1>
-                <h4>請輸入欲修改的產品資訊</h4>
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" id="ProductId" name="WrappedProductId" asp-for="WrappedProductId" value="@Model.WrappedProductId" />
-                    <div class="form-group">
-                        <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
-                        <input asp-for="WrappedProductName" class="form-control" name="WrappedProductName" />
-                        <span asp-validation-for="WrappedProductName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="WrappedUnitPrice" class="control-label">單價</label>
-                        <input asp-for="WrappedUnitPrice" class="form-control" name="WrappedUnitPrice" />
-                        <span asp-validation-for="WrappedUnitPrice" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="WrappedLicense" class="control-label">核可證號</label>
-                        <input asp-for="WrappedLicense" class="form-control" name="WrappedLicense" />
-                        <span asp-validation-for="WrappedLicense" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="WrappedIngredient" class="control-label">有效成分</label>
-                        <input asp-for="WrappedIngredient" class="form-control" name="WrappedIngredient" />
-                        <span asp-validation-for="WrappedIngredient" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="WrappedDescription" class="control-label"></label>
-                        <textarea asp-for="WrappedDescription" class="form-control" name="WrappedDescription" rows="8"></textarea>
-                        <span asp-validation-for="WrappedDescription" class="text-danger"></span>
-                    </div>
-
-
-
-
-
-
-
-                    <div class="form-group">
-                        <label asp-for="WrappedUnitsInStock" class="control-label">庫存</label>
-                        <input asp-for="WrappedUnitsInStock" class="form-control" name="WrappedUnitsInStock" />
-                        <span asp-validation-for="WrappedUnitsInStock" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label for="inputDiscontinued" class="form-label">上架狀態</label>
-                        <select class="form-control" id="inputDiscontinued" name="WrappedDiscontinued">
-                            <option value="true" selected="@(Model?.WrappedDiscontinued == true)">上架中</option>
-                            <option value="false" selected="@(Model?.WrappedDiscontinued == false)">已下架</option>
-                        </select>
-                    </div>
-                    @foreach (var category in ViewBag.Categories)
+                    if (Model != null && Model.SelectedCategories != null && category != null && category.CategoriesId != null)
                     {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="SelectedCategories" value="@category.CategoriesId" @(Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
@@ -233,36 +76,65 @@
                             </label>
                         </div>
                     }
-                    <div class="mb-3">
-                        <label for="formFile" class="form-label">產品圖片上傳</label>
-                        <input class="form-control" type="file" id="formFile" name="formFile">
-                    </div>
+                    else
+                    {
+                        // 如果有空值，您可以在這裡輸出一條訊息到控制台或採取其他適當的處理方式。
+                        Console.WriteLine("檢測到空值");
+                    }
+                }
+                <div class="mb-3">
+                    <label for="formFiles" class="form-label">產品圖片上傳</label>
+                    <input class="form-control" type="file" id="formFiles" name="FormFiles" multiple>
+                </div>
 
-                    <div id="imagePreviewContainer" class="mb-3">
-                        <label for="inputDescription" class="form-label">圖片預覽</label>
-                        <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
+                <div id="imagePreviewContainer" class="mb-3">
+                    <label for="inputDescription" class="form-label">圖片預覽</label>
+                    <div id="imagePreview" class="d-flex flex-wrap">
+                        <!-- 預覽的圖片將在這裡顯示 -->
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="修改並送出" class="btn btn-primary" />
-                    </div>
-                </form>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="修改並送出" class="btn btn-primary" />
+                </div>
+            </form>
             </div>
-        </div>
+            </div>
 
-        <div>
-            <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
-        </div>
 
-        @section Scripts {
-            @{
-                await Html.RenderPartialAsync("_ValidationScriptsPartial");
-            }
-        }
+    <div>
+        <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
     </div>
 
-    <!-- 引入相應的JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html> *@
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var fileInput = document.getElementById('formFiles');
+                if (fileInput) {
+                    fileInput.addEventListener('change', function (e) {
+                        var fileInput = e.target;
+                        var files = fileInput.files;
+
+                        var imagePreviewContainer = document.getElementById('imagePreview');
+                        imagePreviewContainer.innerHTML = '';
+
+                        for (let i = 0; i < files.length; i++) {
+                            var file = files[i];
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var imgElement = document.createElement('img');
+                                imgElement.src = e.target.result;
+                                imgElement.style.maxWidth = '100px';
+                                imgElement.style.maxHeight = '100px';
+                                imagePreviewContainer.appendChild(imgElement);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                } else {
+                    console.error('找不到ID為 formFiles 的文件輸入元素。');
+                }
+            });
+        </script>
+    }
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+</div>

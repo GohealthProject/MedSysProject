@@ -3,6 +3,62 @@
 @{
     ViewData["Title"] = "Edit";
 }
+
+<div class="container mt-5">
+    <hr />
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h1>修改產品作業</h1>
+            <h4>請輸入欲修改的產品資訊</h4>
+            <!-- 這裡只需呼叫 PartialView -->
+            @await Html.PartialAsync("_EditProductModal", Model)
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
+    </div>
+
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var fileInput = document.getElementById('formFile');
+                if (fileInput) {
+                    // 在文件選擇時觸發事件
+                    fileInput.addEventListener('change', function (e) {
+                        var fileInput = e.target;
+                        var file = fileInput.files[0];
+
+                        // 檢查是否有選擇檔案
+                        if (file) {
+                            // 使用 FileReader 來讀取圖片內容
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                // 更新預覽圖片的 src
+                                document.getElementById('previewImage').src = e.target.result;
+                            };
+
+                            // 讀取圖片內容
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                } else {
+                    console.error('找不到ID為 formFile 的文件輸入元素。');
+                }
+            });
+        </script>
+    }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</div>
+
+@* @model MedSysProject.Models.CProductsWrap
+
+@{
+    ViewData["Title"] = "Edit";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,4 +220,4 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+</html> *@

@@ -568,7 +568,6 @@ namespace MedSysProject.Controllers
             return PartialView("_CreateProductModal", productWrap);
         }
 
-        
         [HttpGet]
         public IActionResult Edit(int? productId)
         {
@@ -579,39 +578,22 @@ namespace MedSysProject.Controllers
 
             Product? product = _db.Products.Where(e => e.ProductId == productId).FirstOrDefault();
 
-
             if (product == null)
                 return NotFound();
 
-            // 將 Product 對象包裝到 CProductsWrap 中
-
-            // 1
-            CProductsWrap productWrap = new CProductsWrap(product);
-            productWrap.SelectedCategories = _db.ProductsClassifications
-                 .Where(e => e.ProductId == productId)
-                 .Select(e => e.CategoriesId)
-                 .ToList();
-
-            // 2
-            var productsClassifications = _db.ProductsClassifications
-                .Where(e => e.ProductId == productId).ToList();
-            CProductsWrap test = new CProductsWrap(product, productsClassifications);
-
-            // 多檔示範
-            IList<string> aa = productWrap.FimagePaths;
-            aa.Add("testsdafasdf");
-            //productWrap.FimagePaths = aa;
-            //var bb = productWrap.FimagePaths;
-            //var c = productWrap.Product.FimagePath;
-
-            // 初始化 ViewBag.Categories
+            // 在這裡初始化 ViewBag.Categories
             var categories = _db.ProductsCategories.ToList();
             ViewBag.Categories = categories;
 
-            //return PartialView();
+            // 將 Product 對象包裝到 CProductsWrap 中
+            CProductsWrap productWrap = new CProductsWrap(product);
+            productWrap.SelectedCategories = _db.ProductsClassifications
+                .Where(e => e.ProductId == productId)
+                .Select(e => e.CategoriesId)
+                .ToList();
+
             return PartialView("_EditProductModal", productWrap);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
@@ -633,6 +615,7 @@ namespace MedSysProject.Controllers
                             p.Description,
                             p.UnitsInStock,
                             p.Discontinued,
+                            p.FimagePath
                         })
                         .FirstOrDefault();
 
@@ -644,24 +627,37 @@ namespace MedSysProject.Controllers
 
                 if (pDb != null)
                 {
-                    if (productId.FormFile != null)
+                    // 合併新上傳的圖片路徑和現有的圖片路徑
+                    var combinedImagePaths = new List<string>();
+                    if (productId.FimagePaths != null && productId.FimagePaths.Any())
                     {
-                        // 生成唯一的檔案名稱
-                        string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                        // 將圖片存放在 wwwroot/img-product 資料夾中
-                        string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                        // 將圖片路徑存入資料庫
-                        pDb.FimagePath = "/img-product/" + photoName;
-
-                        // 寫入圖片檔案
-                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                        combinedImagePaths.AddRange(productId.FimagePaths);
+                    }
+                    if (productId.FormFiles != null && productId.FormFiles.Count > 0)
+                    {
+                        foreach (var formFile in productId.FormFiles)
                         {
-                            await productId.FormFile.CopyToAsync(fileStream);
+                            // 生成唯一的檔案名稱
+                            string photoName = Guid.NewGuid().ToString() + ".jpg";
+
+                            // 將圖片存放在 wwwroot/img-product 資料夾中
+                            string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
+
+                            // 寫入圖片檔案
+                            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await formFile.CopyToAsync(fileStream);
+                            }
+
+                            // 將圖片路徑保存到集合中
+                            combinedImagePaths.Add("/img-product/" + photoName);
                         }
                     }
 
+                    // 更新 FimagePath，將多個圖片路徑以逗點隔開
+                    pDb.FimagePath = string.Join(",", combinedImagePaths);
+
+                    // 處理其他欄位
                     pDb.ProductName = productId.WrappedProductName;
                     pDb.UnitsInStock = productId.WrappedUnitsInStock;
                     pDb.License = productId.WrappedLicense;
@@ -704,7 +700,7 @@ namespace MedSysProject.Controllers
                 }
 
                 // 在這裡加上一個 return 陳述式
-                return View(productId);
+                return RedirectToAction("Product");
             }
             catch (Exception ex)
             {
@@ -712,6 +708,12 @@ namespace MedSysProject.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+
+
+
+
+
 
 
 
