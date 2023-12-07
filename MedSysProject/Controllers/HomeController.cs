@@ -43,11 +43,13 @@ namespace MedSysProject.Controllers
             //_context.Plans.Load();
             //調整planname個數
             var projectprice = from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
-                   .AsEnumerable()                
+                   .AsEnumerable()
+                               //from ppp in _context.Plans
                                group p by p.Plan.PlanName into g
                                //select p;
-            select  new
-            {
+                               select new
+                               {
+                                   //PlanId=g.Min(p => p.PlanId),
                 PlanName = g.Key,                
                 PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
 
