@@ -103,7 +103,25 @@
     
     </div>
 </div>
+
+@* 測試用 *@
+<!-- status elements -->
+<div class="scroller-status">
+    <div class="infinite-scroll-request loader-ellips">
+        ...
+    </div>
+    <p class="infinite-scroll-last">End of content</p>
+    <p class="infinite-scroll-error">No more pages to load</p>
+</div>
+
+<!-- pagination has path -->
+<p class="pagination">
+    <a class="pagination__next" href="page2.html">Next page</a>
+</p>
+
+
 @section Scripts{
+    <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
      <script>
          document.addEventListener("DOMContentLoaded",()=>{
             let butons = document.querySelectorAll(".dBtn");
@@ -124,7 +142,13 @@
              event.target.addEventListener('click',out);
          }
 
-
+        // init Infinite Scroll
+        $('.article-feed').infiniteScroll({
+            path: '.pagination__next',
+            append: '.article',
+            status: '.scroller-status',
+            hideNav: '.pagination',
+        });
 
      </script>
 }
