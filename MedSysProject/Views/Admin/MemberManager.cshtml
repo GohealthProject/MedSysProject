@@ -383,6 +383,10 @@
         // console.log(data);
     }
     async function research() {
+
+        await new Promise(resolve => setTimeout(resolve, 1600));
+        window.location.reload();
+
         const response = await fetch('https://localhost:7078/api/Members');
         const datas = await response.json();
         console.log(datas.$values)
@@ -463,6 +467,9 @@
             return s;
         })
         document.getElementById("go").innerHTML = value.join('');
+
+        //wait 2sec
+        await new Promise(resolve => setTimeout(resolve, 1500));
         window.location.reload();
     }
 
@@ -483,7 +490,11 @@
                 method: 'DELETE'
             });
             let data = await response.status
-            if (data == 200) {
+            if (data == 200 || 
+                data == 201 ||
+                data == 202 ||
+                data == 203 ||
+                data == 204) {
                 Swal.fire({
                     title: "刪除成功!",
                     text: data + ",您已經刪除此筆資料",
