@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -38,17 +39,48 @@ namespace MedSysProject.Controllers
        
         public IActionResult planComeparison()
         {////方案比較(設計filter篩選方案)
-            return View();
+            //_context.Projects.Load();
+            //_context.Plans.Load();
+            //調整planname個數
+            var projectprice = from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
+                   .AsEnumerable()
+                               //from ppp in _context.Plans
+                               group p by p.Plan.PlanName into g
+                               //select p;
+                               select new
+                               {
+                                   //PlanId=g.Min(p => p.PlanId),
+                PlanName = g.Key,                
+                PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
+
+            var total = from p in projectprice
+                        from pp in _context.Plans
+                        select new { 
+                        pp.PlanId,
+                        pp.PlanName,
+                        p.PlanPrice
+                        
+                        };
+            return View(total.ToList());
+            //return View(projectprice.ToList());
+            //return View(_context.Plans);
         }
         public IActionResult planComeparisonTotal()
         {////方案比較總計(總項+PDF產生)
             return View();
         }
 
-      public IActionResult PlanIntroductionProject()
+      public IActionResult PlanIntroductionProject(int? id)
         { //放方案介紹
-            var WholePlan = _context.Items.Include(p => p.ItemName).Include(p => p.ItemId).Include(p => p.Project).ThenInclude(p => p.ProjectId);
-            var join = from p in _context.Plans
+
+            //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
+            _context.Plans.Load();
+            _context.Projects.Load();
+            _context.Items.Load();
+            
+            var ID = _context.Plans.Where(i => i.PlanId == id);
+            var join =from i in ID
+                from p in _context.Plans
             from pj in _context.Projects
             from it in _context.Items
             select new
@@ -64,11 +96,11 @@ namespace MedSysProject.Controllers
                 it.ItemName,
 
             };
+           
 
 
 
-
-            return View(_context.Plans);
+            return View(join.ToList());
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
@@ -101,18 +133,23 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Reserve()
+        [HttpPost]
+        public IActionResult Reserve(IFormCollection item)
         { //預約總覽
 
             //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
             //             select s).Distinct();
 
-            var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
+            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
 
-                         select s).Distinct();
+            //             select s).Distinct();
 
-            return View(datas);
+            ViewBag.item = item["item"];
+            //ViewBag.test = "test123";
+            //ViewBag.item = item;
+
+            return View();
         }
         public IActionResult Member()
         { //會員專項
@@ -124,9 +161,10 @@ namespace MedSysProject.Controllers
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
 
-            var j = (from s in _context.ReportDetails
+            var j = (from s in _context.ReportDetails.Include(p=>p.Report).ThenInclude(p=>p.Reserve)
                      where s.Report.MemberId == 46
-                     select s.Report.Reserve.ReserveDate).Distinct();
+                     //select s.Report.Reserve.ReserveDate).Distinct();
+                     select s);
 
             return View(j);
         }
@@ -135,9 +173,11 @@ namespace MedSysProject.Controllers
 
         {
             //IEnumerable<Item> datas = null;
-             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
-             //            select s;
-            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs).ThenInclude(n=>n.Plan);
+            //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
+            //            select s;
+            _context.Plans.Load();
+
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
 
             //List<CProjectWarp> list = new List<CProjectWarp>();
             
@@ -151,6 +191,7 @@ namespace MedSysProject.Controllers
             //        var xx = items.Plan;
             //    }
             //}
+         
             return View(datass.ToList());
         }
 

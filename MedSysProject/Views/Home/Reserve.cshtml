@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Reserve";
+
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-@model IEnumerable<MedSysProject.Models.Plan>
+@*@model IEnumerable<MedSysProject.Models.Plan>*@
+@model IFormCollection
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
@@ -128,42 +130,22 @@
                     <table border="1" data-toggle="table" data-show-print="false" data-show-footer="true" id="table">
                         <thead>
                             <tr>
-                                <th data-field="id" data-falign="left" data-footer-formatter="idFormatter" class="col-1">
+                                <th data-field="id" data-falign="center" data-footer-formatter="idFormatter" class="col-1">
                                 編號
                             </th>
-                                <th data-field="name" data-falign="center" data-footer-formatter="nameFormatter" class="col-9">
+                                <th data-field="name" data-falign="center" data-footer-formatter="nameFormatter" class="col-8">
                                     項目
                                 </th>
-                                <th data-field="price" data-falign="right" data-footer-formatter="priceFormatter" class="col-2">
+                                <th data-field="price" data-falign="center" data-footer-formatter="priceFormatter" class="col-2">
                                     價格
+                                </th>
+                                <th data-field="del" class="col-1">
+                                    移除
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="show ">
-                            <tr>
-                                <td>1</td>
-                                <td>身高</td>
-                                <td>$100</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>體重</td>
-                                <td>$100</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>血壓-收縮壓</td>
-                                <td>$100</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>理學檢查</td>
-                                <td>$100</td>
-                            </tr>
-                          @*  <tr>
-                                <td colspan="3">共"4"項,總金額為"400"元新台幣</td>
-                                
-                            </tr>*@
+                        <tbody class="show " id="show">
+                     
                            
                         </tbody>
                         
@@ -181,92 +163,7 @@
             <div class="col-5"></div>
             <div class="col-5"></div>
 
-            @*<div class="container-fluid col-9">
 
-        <div class="accordion row" id="accordionExample">
-            <div class="accordion-item col-4 mr-5">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        方案
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
-                    <div class="accordion-body">
-                                <div class="list-group click">
-                                    
-                                    @{
-
-                                        foreach(var s in Model)
-                                        {
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="checkbox" value="">
-                                                @Html.DisplayFor(modelitem => s)
-                                            </label>
-                                         
-                                        }
-                                    }
-                                
-                                </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item col-4 mr-3">
-                <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        類別
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
-                    <div class="accordion-body">
-                                <div class="list-group ">
-                                    @{
-
-                                        foreach (var s in Model)
-                                        {
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="checkbox" value="">
-                                                @Html.DisplayFor(modelitem => s)
-                                            </label>
-
-                                        }
-                                    }
-                                  
-                                </div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item col-4 ">
-                <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        項目
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
-                    <div class="accordion-body">
-                               
-                                    <div class="list-group">
-                                    @{
-
-                                        foreach (var s in Model)
-                                        {
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="checkbox" value="">
-                                                @Html.DisplayFor(modelitem => s)
-                                            </label>
-
-                                        }
-                                    }
-                                   
-                                   
-                                </div>
-                            </div>
-                </div>
-             
-            </div>
-                   
-        </div>
-       
-        </div>*@
     </div>
 
         @*預約詳細*@
@@ -381,32 +278,44 @@
        
 
 </div>
- @* <div>
-  <div id="abc" style="left:50px">66666666666666</div>
-    <div id="acc">00000000000</div>
-    </div>*@
+  
+    <form id="form" method="post">
+            <input type="text" value="@ViewBag.item" id="forminput" name="item">
+    </form>
  
 </body>
 </html>
 
 <script>
-    ////total sum////
-   function idFormatter() {
-    return 'Total'
+
+    var forminput = document.querySelector("#forminput").value
+    
+    var table = document.querySelector("#show")
+    table.innerHTML = forminput;
+    console.log(forminput)
+    console.log(table.innerHTML)
+
+
+
+
+    //total sum////
+    
+   function idFormatter(data) {
+        return "";
   }
 
   function nameFormatter(data) {
-    return data.length
+    return `共${data.length}項`
   }
 
   function priceFormatter(data) {
     var field = this.field
-    return '$' + data.map(function (row) {
-      return +row[field].substring(1)
+    return '新台幣 ' + data.map(function (row) {
+      return +row[field].substring(0)
     }).reduce(function (sum, i) {
       return sum + i
             console(sum)
-    }, 0)
+    }, 0)+" 元"
   }
     ////////////
 
@@ -414,23 +323,39 @@
     var $table = $('#table')
 
     $(function () {
+
         $table.bootstrapTable()
     })
 
     ////////
-    var item = document.querySelector("#rsitem").innerHTML;
-    
-    var reserve = document.querySelector("#rsdiv").innerHTML.valueOf
-    $(".click").click(function () {
-        $(".show").removeClass("d-none")})
+    ////////
+    //imgdel//
+    function imgdelete() {
+        let img = document.querySelectorAll(".imgdelete");
+        var dtr = document.querySelectorAll("#dtr");
+        var body = document.querySelector("#show");
+        //var t = dtr.removeChild(event.target.parentNode);
+        body.removeChild(event.target.parentNode.parentNode);
+        //priceFormatter(1000);
+        //console.log(t.innerHTML)
+    }
 
-    $("#sbmbtn").click(()=>{
-        console.log(item)
+    //var item = document.querySelector("#rsitem").innerHTML;
+    
+    //var reserve = document.querySelector("#rsdiv").innerHTML.valueOf
+    //$(".click").click(function () {
+    //    $(".show").removeClass("d-none")})
+
+    //$("#sbmbtn").click(()=>{
+    //    console.log(item)
         
-    //reserve = "987";
-        document.querySelector("#rsdiv").innerHTML = `${item}`
-        console.log(reserve)
-    })
+    ////reserve = "987";
+    //    document.querySelector("#rsdiv").innerHTML = `${item}`
+    //    console.log(reserve)
+    //})
+
+    //var table = document.querySelector("#show")
+    //table.innerHTML = @ViewBag.item;
 
 
   
