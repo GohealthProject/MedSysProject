@@ -1,4 +1,5 @@
-﻿using MedSysProject.Models;
+﻿using Azure;
+using MedSysProject.Models;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -132,13 +133,29 @@ namespace MedSysProject.Controllers
             ViewBag.KeySearch = Key;
             return View(list);
         }
-        public IActionResult OrderList()
+        public IActionResult OrderList(int page=1)
         {
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             List<COrderWarp>list = new List<COrderWarp>();
-            var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n=>n.OrderDate);
-            foreach(var item in q)
+
+            //分頁
+            int pageSize = 5;
+            int total = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Count();
+            int totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+            if (page < 1)
+                page = 1;
+            if (page > totalPage)
+                page = totalPage;
+            ViewBag.Page = page;
+            ViewBag.Total = total;
+            ViewBag.TotalPage = totalPage;
+            ViewBag.PageSize = pageSize;
+
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n=>n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n=>n.OrderDate);
+            foreach (var item in q)
             {
                 COrderWarp od = new COrderWarp();
                 od.order = item;
@@ -148,8 +165,11 @@ namespace MedSysProject.Controllers
             return View(list);
         }
         [HttpPost]
-        public IActionResult OrderList(string key)
+        public IActionResult OrderList(string key,int page=1)
         {
+            
+
+
             if(key == "keyword")
             {
                 List<COrderWarp> list = new List<COrderWarp>();
@@ -158,7 +178,22 @@ namespace MedSysProject.Controllers
                 var qq = Request.Form["Keyword"];
                 if (qq=="")
                 {
-                    var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n=>n.OrderDetails).ThenInclude(n=>n.Product).OrderByDescending(n=>n.OrderDate);
+                    //分頁
+                    int pageSize = 5;
+                    int total = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Count();
+                    int totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+                    if (page < 1)
+                        page = 1;
+                    if (page > totalPage)
+                        page = totalPage;
+                    ViewBag.Page = page;
+                    ViewBag.Total = total;
+                    ViewBag.TotalPage = totalPage;
+                    ViewBag.PageSize = pageSize;
+
+                    var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).OrderByDescending(n => n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
+
+                    //var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n=>n.OrderDetails).ThenInclude(n=>n.Product).OrderByDescending(n=>n.OrderDate);
                     foreach (var item in midFindOrder)
                     {
                         COrderWarp o = new COrderWarp();
@@ -172,9 +207,26 @@ namespace MedSysProject.Controllers
                     string keyword = Request.Form["keyword"];
                     List<int> pids = new List<int>();
                     List<int> oids = new List<int>();
+
                     pids = _db.Products.Where(n => n.ProductName.Contains(keyword)).Select(n => n.ProductId).ToList();
                     oids = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).SelectMany(n => n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n => n.OrderId)).ToList();
-                    var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
+
+                    //分頁
+                    int pageSize = 5;
+                    int total = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Count();
+                    int totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+                    if (page < 1)
+                        page = 1;
+                    if (page > totalPage)
+                        page = totalPage;
+                    ViewBag.Page = page;
+                    ViewBag.Total = total;
+                    ViewBag.TotalPage = totalPage;
+                    ViewBag.PageSize = pageSize;
+
+                    var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId)).OrderByDescending(n => n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
+
+                    //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
                     foreach (var o in q)
                     {
                         COrderWarp od = new COrderWarp();
@@ -194,7 +246,22 @@ namespace MedSysProject.Controllers
                 string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                 MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
                 oids = _db.Orders.Where(n => n.MemberId == m.MemberId).Select(n=>n.OrderId).ToList();
-                var q  = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.OrderDate >= min && n.OrderDate <= max && oids.Contains(n.OrderId)).OrderByDescending(n=>n.OrderDate).ToList();
+
+                //分頁
+                int pageSize = 5;
+                int total = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Count();
+                int totalPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+                if (page < 1)
+                    page = 1;
+                if (page > totalPage)
+                    page = totalPage;
+                ViewBag.Page = page;
+                ViewBag.Total = total;
+                ViewBag.TotalPage = totalPage;
+                ViewBag.PageSize = pageSize;
+
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.OrderDate >= min && n.OrderDate <= max && oids.Contains(n.OrderId)).OrderByDescending(n => n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
+                //var q  = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.OrderDate >= min && n.OrderDate <= max && oids.Contains(n.OrderId)).OrderByDescending(n=>n.OrderDate).ToList();
                 foreach(var o in q)
                 {
                     COrderWarp od = new COrderWarp();
