@@ -78,6 +78,14 @@ namespace MedSysProject.Controllers
             Upm.MemberAddress= m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
             _db.SaveChanges();
+
+            string json =  HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? om = JsonSerializer.Deserialize<MemberWarp>(json);
+            var q = _db.Members.Where(n => n.MemberId == m.MemberId).FirstOrDefault();
+            om.member = q;
+            json = JsonSerializer.Serialize(om);
+            HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+
             return RedirectToAction("MemberCenter", "Accout");
         }
         public IActionResult Register()

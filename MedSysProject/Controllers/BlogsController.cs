@@ -76,6 +76,7 @@ namespace MedSysProject.Controllers
             return View(post);
         }
 
+        //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
             //singleBlogID = 37;
@@ -208,6 +209,15 @@ namespace MedSysProject.Controllers
             ViewBag.View5 = JsonSerializer.Serialize(top5);
 
             return View();
+        }
+
+        public IActionResult ShowComments(int BlogId) 
+        {//傳送到partial view的時候就要傳全部，然後在partialview中用razor去做分流
+            var mainComments = (_db.Comments.Include(comment=>comment.Member)
+                                            .Include(comment=>comment.Employee)
+                                            .Where(comment => comment.BlogId == BlogId)
+                                .Select(comment => comment)).ToList();
+            return PartialView(mainComments);
         }
 
     }
