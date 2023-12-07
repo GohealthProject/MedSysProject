@@ -118,6 +118,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult KeySearch(string Key)
         {
+            if (Key == null)
+                return RedirectToAction("index");
             List<CProductWarp> list =new List<CProductWarp>();
 
             var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
@@ -127,7 +129,7 @@ namespace MedSysProject.Controllers
                 cp.Product = item;
                 list.Add(cp);
             }
-
+            ViewBag.KeySearch = Key;
             return View(list);
         }
         public IActionResult OrderList()
