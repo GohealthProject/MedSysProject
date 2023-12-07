@@ -64,9 +64,12 @@
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitPrice)</td>
                             <td>@Html.DisplayFor(modelItem => item.WrappedLicense)</td>
                             <td>@Html.DisplayFor(modelItem => item.WrappedIngredient)</td>
+
+                            <td>
                             <td>
                                 <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
                             </td>
+
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitsInStock)</td>
                             <td>
                                 @if (item.WrappedDiscontinued == true)
@@ -107,10 +110,10 @@
                         <!-- 使用AJAX載入_CreateProductModal.cshtml的內容 -->
                         <div id="createProductModalContent"></div>
                     </div>
-                    <div class="modal-footer">
+@*                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                         <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>
@@ -245,7 +248,7 @@
 
         function loadCreateProductModal() {
             $.ajax({
-                url: '@Url.Action("_CreateProductModal", "Admin")',
+                url: '@Url.Action("Create", "Admin")',
                 type: 'GET',
                 success: function (data) {
                     $('#createProductModalContent').html(data);
@@ -257,21 +260,21 @@
             });
         }
 
-        $(document).ready(function () {
-            $('#modalCreate').on('show.bs.modal', function (e) {
-                // 使用AJAX載入_CreateProductModal.cshtml的內容
-                $.ajax({
-                    url: '@Url.Action("_CreateProductModal", "Admin")',
-                    type: 'GET',
-                    success: function (data) {
-                        $('#createProductModalContent').html(data);
-                    },
-                    error: function (error) {
-                        alert('載入_CreateProductModal 失敗：' + error.statusText);
-                    }
-                });
-            });
-        });
+        // $(document).ready(function () {
+        //     $('#modalCreate').on('show.bs.modal', function (e) {
+        //         // 使用AJAX載入_CreateProductModal.cshtml的內容
+        //         $.ajax({
+        //             url: '@Url.Action("Create", "Admin")',
+        //             type: 'GET',
+        //             success: function (data) {
+        //                 $('#createProductModalContent').html(data);
+        //             },
+        //             error: function (error) {
+        //                 alert('載入_CreateProductModal 失敗：' + error.statusText);
+        //             }
+        //         });
+        //     });
+        // });
 
                 function displayProductDetails(data) {
                     // 處理產品詳細信息的顯示
@@ -316,4 +319,5 @@
 
 
         </div>
+  
   

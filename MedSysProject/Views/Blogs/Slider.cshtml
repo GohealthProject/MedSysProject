@@ -1,33 +1,61 @@
-﻿@model List<MedSysProject.Models.Blog>
+﻿@model MedSysProject.Models.Blog
 <section id="hero-slider" class="hero-slider">
+    @* <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.ArticleClassId</p>
+            <a href="#" class="btn btn-primary">@Model.BlogId</a>
+        </div>
+    </div> *@
+
     <div class="container-md">
         <div class="row">
             <div class="col-12">
                 <div class="swiper sliderFeaturedPosts">
                     <div class="swiper-wrapper">
-                        <!--一單元-->
-                        @{
-                            foreach (var blog in Model)
-                            {
-                                <div class="swiper-slide">
-                                    <a href="single-post.html"
-                                       class="img-bg d-flex align-items-end"
-                                       style="background-image: url('/assets/img/post-slide-1.jpg');">
-                                        <div class="img-bg-inner">
-                                            <h2>
-                                                @blog.Title
-                                            </h2>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing
-                                                elit. Quidem neque est mollitia! Beatae minima
-                                                assumenda repellat harum vero, officiis ipsam magnam
-                                                obcaecati cumque maxime inventore repudiandae quidem
-                                                necessitatibus rem atque.
-                                            </p>
-                                        </div>
-                                    </a>
+                        <!--一個投影片單元-->
+                        <div class="swiper-slide">
+                            <a href="single-post.html"
+                               class="img-bg d-flex align-items-end"
+                               style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                <div class="img-bg-inner">
+                                    <h2>
+                                        
+                                    </h2>
+                                    <p>
+                                        
+                                    </p>
                                 </div>
-                            }
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="single-post.html"
+                               class="img-bg d-flex align-items-end"
+                               style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                <div class="img-bg-inner">
+                                    <h2>
+                                    </h2>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="single-post.html"
+                               class="img-bg d-flex align-items-end"
+                               style="background-image: url('/assets/img/post-slide-1.jpg');">
+                                <div class="img-bg-inner">
+                                    <h2>
+                                    </h2>
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+
 
                         }
                     </div>

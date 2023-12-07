@@ -65,6 +65,46 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
+        public IActionResult MemberManager(CKeywordViewModel? vm, int page = 1)
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
+            IEnumerable<Member> datas = null;
+
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+            {
+
+                int pgsize = 5;
+                int total = _db.Members.Count();
+                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+                if (page < 1) page = 1;
+                if (page > maxpage) page = maxpage;
+                datas = _db.Members.Skip((page - 1) * pgsize).Take(pgsize);
+                ViewBag.page = page;
+                ViewBag.maxpage = maxpage;
+                ViewBag.total = total;
+                ViewBag.pgsize = pgsize;
+
+
+                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+                //        select t;
+
+            }
+
+            else
+            {
+                datas = _db.Members.Where(p => p.MemberName.Contains(vm.txtKeyword) ||
+                p.MemberPhone.Contains(vm.txtKeyword) ||
+                p.MemberEmail.Contains(vm.txtKeyword));
+
+                ViewBag.key = vm.txtKeyword;
+            }
+
+            return View(datas);
+        }
+
         public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -441,15 +481,15 @@ namespace MedSysProject.Controllers
         }
 
 
+
+        //public IActionResult _CreateProductModal()
+        //{
+        //    ViewBag.Categories = _db.ProductsCategories?.ToList() ?? new List<ProductsCategory>();
+        //    return PartialView("_CreateProductModal");
+        //}
+
+
         [HttpGet]
-        public IActionResult _CreateProductModal()
-        {
-            ViewBag.Categories = _db.ProductsCategories?.ToList() ?? new List<ProductsCategory>();
-            return PartialView("_CreateProductModal");
-        }
-
-
-
         public IActionResult Create()
         {
             ViewBag.Categories = _db.ProductsCategories.ToList();
@@ -459,7 +499,7 @@ namespace MedSysProject.Controllers
                 ProductsCategories = _db.ProductsCategories.ToList(),
             };
 
-            return View(cProductsWrap);
+            return PartialView("_CreateProductModal");
         }
 
         [HttpPost]
@@ -496,8 +536,12 @@ namespace MedSysProject.Controllers
                 }
             }
 
-            // 使用多個圖片路徑更新 productWrap
             productWrap.FimagePaths = imagePaths;
+
+            // 將產品的圖片檔名存儲到資料庫
+            productWrap.Product.FimagePath = string.Join(",", imagePaths);
+            _db.SaveChanges();
+
 
 
             // 儲存到資料庫
@@ -524,7 +568,6 @@ namespace MedSysProject.Controllers
             return PartialView("_CreateProductModal", productWrap);
         }
 
-        
         [HttpGet]
         public IActionResult Edit(int? productId)
         {
@@ -535,39 +578,22 @@ namespace MedSysProject.Controllers
 
             Product? product = _db.Products.Where(e => e.ProductId == productId).FirstOrDefault();
 
-
             if (product == null)
                 return NotFound();
 
-            // 將 Product 對象包裝到 CProductsWrap 中
-
-            // 1
-            CProductsWrap productWrap = new CProductsWrap(product);
-            productWrap.SelectedCategories = _db.ProductsClassifications
-                 .Where(e => e.ProductId == productId)
-                 .Select(e => e.CategoriesId)
-                 .ToList();
-
-            // 2
-            var productsClassifications = _db.ProductsClassifications
-                .Where(e => e.ProductId == productId).ToList();
-            CProductsWrap test = new CProductsWrap(product, productsClassifications);
-
-            // 多檔示範
-            IList<string> aa = productWrap.FimagePaths;
-            aa.Add("testsdafasdf");
-            //productWrap.FimagePaths = aa;
-            //var bb = productWrap.FimagePaths;
-            //var c = productWrap.Product.FimagePath;
-
-            // 初始化 ViewBag.Categories
+            // 在這裡初始化 ViewBag.Categories
             var categories = _db.ProductsCategories.ToList();
             ViewBag.Categories = categories;
 
-            //return PartialView();
+            // 將 Product 對象包裝到 CProductsWrap 中
+            CProductsWrap productWrap = new CProductsWrap(product);
+            productWrap.SelectedCategories = _db.ProductsClassifications
+                .Where(e => e.ProductId == productId)
+                .Select(e => e.CategoriesId)
+                .ToList();
+
             return PartialView("_EditProductModal", productWrap);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
@@ -589,6 +615,7 @@ namespace MedSysProject.Controllers
                             p.Description,
                             p.UnitsInStock,
                             p.Discontinued,
+                            p.FimagePath
                         })
                         .FirstOrDefault();
 
@@ -600,24 +627,42 @@ namespace MedSysProject.Controllers
 
                 if (pDb != null)
                 {
-                    if (productId.FormFile != null)
+                    // 如果原有的圖片路徑不為空，則將其轉為集合
+                    var existingImagePaths = !string.IsNullOrEmpty(pDb.FimagePath)
+                        ? pDb.FimagePath.Split(',').ToList()
+                        : new List<string>();
+
+                    // 合併新上傳的圖片路徑和現有的圖片路徑
+                    var combinedImagePaths = new List<string>();
+                    if (productId.FimagePaths != null && productId.FimagePaths.Any())
                     {
-                        // 生成唯一的檔案名稱
-                        string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                        // 將圖片存放在 wwwroot/img-product 資料夾中
-                        string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                        // 將圖片路徑存入資料庫
-                        pDb.FimagePath = "/img-product/" + photoName;
-
-                        // 寫入圖片檔案
-                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                        combinedImagePaths.AddRange(productId.FimagePaths);
+                    }
+                    if (productId.FormFiles != null && productId.FormFiles.Count > 0)
+                    {
+                        foreach (var formFile in productId.FormFiles)
                         {
-                            await productId.FormFile.CopyToAsync(fileStream);
+                            // 生成唯一的檔案名稱
+                            string photoName = Guid.NewGuid().ToString() + ".jpg";
+
+                            // 將圖片存放在 wwwroot/img-product 資料夾中
+                            string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
+
+                            // 寫入圖片檔案
+                            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await formFile.CopyToAsync(fileStream);
+                            }
+
+                            // 將圖片路徑保存到集合中
+                            combinedImagePaths.Add("/img-product/" + photoName);
                         }
                     }
 
+                    // 將新的圖片路徑和現有的圖片路徑合併，用逗號隔開
+                    pDb.FimagePath = string.Join(",", existingImagePaths.Concat(combinedImagePaths));
+
+                    // 處理其他欄位
                     pDb.ProductName = productId.WrappedProductName;
                     pDb.UnitsInStock = productId.WrappedUnitsInStock;
                     pDb.License = productId.WrappedLicense;
@@ -625,8 +670,6 @@ namespace MedSysProject.Controllers
                     pDb.Ingredient = productId.WrappedIngredient;
                     pDb.Description = productId.WrappedDescription;
                     pDb.Discontinued = productId.WrappedDiscontinued;
-
-                    _db.Products.Update(pDb);
 
                     // 處理 ProductsClassification 資料表
                     if (productId.SelectedCategories != null && productId.SelectedCategories.Any())
@@ -660,7 +703,7 @@ namespace MedSysProject.Controllers
                 }
 
                 // 在這裡加上一個 return 陳述式
-                return View(productId);
+                return RedirectToAction("Product");
             }
             catch (Exception ex)
             {
@@ -668,6 +711,12 @@ namespace MedSysProject.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Image Upload and Preview</title>
+    <style>
+        #imagePreview {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            #imagePreview img {
+                max-width: 100px;
+                max-height: 100px;
+                margin: 5px;
+            }
+    </style>
+</head>
+<body>
+    <form id="imageUploadForm" enctype="multipart/form-data">
+        <label for="imageInput">Select Images:</label>
+        <input type="file" id="imageInput" name="images" accept="image/*" multiple>
+        <button type="button" onclick="uploadImages()">Upload Images</button>
+    </form>
+
+    <div id="imagePreview"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var fileInput = document.getElementById('imageInput');
+            if (fileInput) {
+                fileInput.addEventListener('change', function (e) {
+                    var files = e.target.files;
+
+                    var imagePreviewContainer = document.getElementById('imagePreview');
+                    imagePreviewContainer.innerHTML = '';
+
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var imgElement = document.createElement('img');
+                            imgElement.src = e.target.result;
+                            imagePreviewContainer.appendChild(imgElement);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                console.error('File input element not found.');
+            }
+        });
+
+        function uploadImages() {
+            // Implement your image upload logic here
+            var formData = new FormData(document.getElementById('imageUploadForm'));
+
+            // Add additional logic, e.g., using fetch or AJAX to send the FormData to the server
+            // Example using fetch:
+            /*
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Images uploaded:', data);
+            })
+            .catch(error => {
+                console.error('Error uploading images:', error);
+            });
+            */
+        }
+    </script>
+</body>
+</html>

@@ -152,6 +152,7 @@
          async function CatByProduct(id){
             const response = await fetch("https://localhost:7078/api/Products/category/"+id);
             const data = await response.json()
+            console.log(data);
             $("#divTitle").children().first().html(data[0].categoriesName+"("+data[0].productsClassifications.$values.length+")");
             document.querySelector("#more").href=`@Url.Content("~/Shopping/Search/")${id}`;
             const datas = data[0].productsClassifications.$values
@@ -173,7 +174,7 @@
                `
                return pro;
             })
-            
+            console.log(info);
             let s = "";
             for(var i =0 ; i<info.length;i++){
                 if(i%3===0||i===0){
@@ -190,7 +191,6 @@
         $(document).ready(()=>{
             $("#btnList>button").click((event) => {
                 CatByProduct($(event.target).val())
-
             })
         })
      </script>

@@ -53,10 +53,12 @@
                 <!-- =======最上方欄位 ======= -->
                 <ul>
                     <li>
+                        <form action="@Url.Content("~/Shopping/KeySearch")">
                         <div class="input-group mb-3 mt-3">
-                            <input type="text" class="form-control" placeholder="輸入關鍵字" aria-label="輸入關鍵字" value="" id="SearchKey">
-                            <button class="btn btn-outline-secondary text-info" type="button" id="button-addon2" onclick="search()">搜尋</button>
+                            <input type="text" class="form-control" placeholder="輸入關鍵字" aria-label="輸入關鍵字" value="" name="Key">
+                            <input type="submit" class="btn btn-outline-secondary text-info"  id="button-addon2" onclick="search()" value="搜尋"/>
                         </div>
+                        </form>
                     </li>
 
                     <li><a class="nav-link scrollto" href="#contact">意見反映與交通資訊</a></li>
