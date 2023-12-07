@@ -18,19 +18,19 @@
 
         console.log(myArray)
         async function load (){
-            //const response = await fetch("@Url.Content("~/blogs/Slider")?id=52");
-            //const data = await response.text();
+            const response = await fetch("@Url.Content("~/blogs/Slider")");
+            const data = await response.text();
             
-            //document.querySelector("#here").innerHTML=data;
-            //console.log(data)
+            document.querySelector("#main").innerHTML=data;
+            console.log(data)
 
-            for(var i = 0;  i<myArray.length;i++){
+            // for(var i = 0;  i<myArray.length;i++){
 
-                const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${myArray[i]}`);
-                const data = await response.text();
+            //     const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${myArray[i]}`);
+            //     const data = await response.text();
 
-                document.querySelector("#here").innerHTML+=data;
-            }
+            //     document.querySelector("#here").innerHTML+=data;
+            // }
 
 
         }
