@@ -76,9 +76,30 @@ namespace MedSysProject.Controllers
             return View(post);
         }
 
-        public IActionResult SinglePost(int? BlogID)
+        public IActionResult SinglePost(int? singleBlogID)
         {
-            return View();
+            //singleBlogID = 37;
+            IEnumerable<Blog> singlePost = null;
+            if (singleBlogID != null)
+            {
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                          .Include(blog => blog.Employee)
+                                          .Where(blog => blog.BlogId == singleBlogID)
+                              select blog).ToList();
+            }
+            else
+            {
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                                  .Include(blog => blog.Employee)
+                                                  .OrderByDescending(blog => blog.BlogId).Take(1)
+                              select blog).ToList();
+            }
+
+
+            return View(singlePost);
+
+
+
         }
         public IActionResult SelectBlogCategory(int? CategoryID, int page = 1)
         {//
@@ -167,11 +188,14 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
-        public IActionResult Slider(int id) 
+        public IActionResult Slider() 
         {
-            var b = _db.Blogs.Find(id);
+            //var sliderBlog = _db.Blogs.Include(blog => blog.Employee)
+            //                          .Include(blog => blog.ArticleClass)
+            //                          .OrderByDescending(blog => blog.BlogId)
+            //                          .Take(5).ToList();
 
-            return PartialView(b);
+            return PartialView();
         }
         public IActionResult ad (int id)
         {

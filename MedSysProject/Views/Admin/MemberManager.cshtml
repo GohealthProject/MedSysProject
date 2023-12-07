@@ -119,7 +119,17 @@
                                             <input type="hidden" value="@item.MemberId" />
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.MemberImage)
+                                        @{
+                                            if (item.MemberImage == null)
+                                            {
+                                                <img src="~/img/no_member_image.jpg" width="100px"/>
+                                    }
+                                        
+                                        else
+                                        {
+                                            <img src="~/img/MemberImg/@item.MemberImage" width="100px"/>
+                                    }
+                                            }
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.MemberName)
@@ -177,6 +187,7 @@
                 <div class="modal-content">
                     <!--Header-->
                     <div class="modal-header">
+                        
                         <h4 class="modal-title" id="myModalLabel">修改會員資料</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -311,7 +322,6 @@
         var hidd = par.querySelector('input[type="hidden"]');
         console.log(hidd.value);
         del(hidd.value);
-
     }
     //主畫面按下去要彈框框的事件
     function updata(element) {
@@ -320,6 +330,7 @@
 
     async function putdata2() {
         let id = document.getElementById("inputId").value;
+        console.log(id)
         let apiurl = `https://localhost:7078/api/Members/Up/${id}`;
         var myForm = document.getElementById("myUpdataform");
         var data = new FormData(myForm);
@@ -347,13 +358,19 @@
     function showTogget(element) {
         let par = element.closest("tr");
         let tds = par.getElementsByTagName("td");
+
+        
+
+
+
+
+
         let tdName = tds[2].innerHTML;
         let tdGender = tds[3].innerHTML;
 
         let tddateA = tds[4].innerHTML; //這裡要把2000/01/01轉成2000-01-01
         let tddateB = tddateA.replace('/', '-');
         let tddateC = tddateB.replace('/', '-');
-        console.log(tddateC.trim());
         var tddateD = new Date(tddateC.trim());
         var year = tddateD.getFullYear();
         // getMonth() 返回的月份是從 0 開始的，所以需要加 1
@@ -369,7 +386,7 @@
         let tdcontact = tds[9].innerHTML;
         let tdnick = tds[10].innerHTML;
         let tdid = tds[0].querySelector('input[type="hidden"]').value;
-        console.log(tdid);
+
         document.getElementById("inputName").value = tdName.trim();
         document.getElementById("inputGender").value = tdGender.trim();
         document.getElementById("inputDate").value = tddate.trim();
@@ -379,10 +396,15 @@
         document.getElementById("inputAddress").value = tdaddress.trim();
         document.getElementById("inputContact").value = tdcontact.trim();
         document.getElementById("inputNick").value = tdnick.trim();
-
+        document.getElementById("inputId").value = tdid;
+        console.log(document.getElementById("inputId").value);
         // console.log(data);
     }
     async function research() {
+
+        await new Promise(resolve => setTimeout(resolve, 1600));
+        window.location.reload();
+
         const response = await fetch('https://localhost:7078/api/Members');
         const datas = await response.json();
         console.log(datas.$values)
@@ -463,6 +485,9 @@
             return s;
         })
         document.getElementById("go").innerHTML = value.join('');
+
+        //wait 2sec
+        await new Promise(resolve => setTimeout(resolve, 1500));
         window.location.reload();
     }
 
@@ -483,7 +508,11 @@
                 method: 'DELETE'
             });
             let data = await response.status
-            if (data == 200) {
+            if (data == 200 || 
+                data == 201 ||
+                data == 202 ||
+                data == 203 ||
+                data == 204) {
                 Swal.fire({
                     title: "刪除成功!",
                     text: data + ",您已經刪除此筆資料",
