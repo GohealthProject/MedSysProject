@@ -9,146 +9,206 @@
 
 
 <div class="container">
-    <div >
+    <div class="article-feed">
         <form method="post">
-        <div class=" p-3">
+            <div class=" p-3">
                 @{
-                    <span class="fs-2">訂單查詢</span>
-                    <div><input type="hidden" value="keyword" name="Key" /><input type="text" name="Keyword" /><input type="submit" value="查詢" /></div>
-            }
-        </div>
+                    <div class="fs-1 ">購買清單</div>
+                    // <span class="fs-2">訂單查詢</span>
+                    <div class="row g-3">
+                        <input type="hidden" value="keyword" name="Key" />
+                        <div class="col-auto">
+                            <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." />
+                        </div>
+                        <div class="col-auto">
+                            <input class="btn btn-primary" type="submit" value="查詢" />
+                        </div>
+                    </div>
+                }
+            </div>
         </form>
         <form method="post">
-        @{
-           <input type="hidden" value="dateKey" name="key"/>
-            var q = Model.OrderBy(n=>n.order.OrderDate);
-            <div class="p-3">
-            <input type="date" name="dateMin" value="@q.First().order.OrderDate.ToString("yyyy-MM-dd")"/>-
-            <input type="date" name="dateMax" value="@q.Last().order.OrderDate.ToString("yyyy-MM-dd")"/>
-            <input type="submit" value="日期查詢" />
-        </div>
-        <div class="fs-1 ">會員訂單管理 @Model.Count()</div>
-        }
-        </form>
-    @{
-        int count = 0;
-        for(int i =0; i < Model.Count; i++)
-        {
-            count++;
-
-            <div class="card w-100 ">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <div class="row mb-3">
-                        <div class="col-2 border ">
-                            訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
-                        </div>
-                        <div class="col-2 border ">
-                            下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
-                        </div>
-                        <div class="col-1 border ">
-                             @Model[i].order.State.StateName
-                        </div>
-                        <div class="col-1 border ">
-                             @Model[i].order.Pay.PayName
-                        </div>
-                        <div class="col-1 border ">
-                            @Model[i].order.Ship.ShipName
-                        </div>
-                        <div class="col-1 border ">
-                            <a asp-action="" asp-controller="" asp-route-id="">發票</a>
-                        </div>
-                        <div class="col-3 border ">
-                            說明 : @Model[i].order.State.StateDetailed
-                        </div>
-                        <div class="col-1 border ">
-                            <a asp-action="" asp-controller="" asp-route-id="">退貨</a>
-                        </div>
-                        </div>
-                    <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
-                    <div id="productList">
-                        <ul class="list-group mt-3" style="display:none;">
-                                @{
-                                    int pcount = 0;
-                                    int total = 0;
-                                    foreach(var item in Model[i].order.OrderDetails)
-                                    {
-                                        total += (int)item.Quantity * (int)item.Product.UnitPrice;
-                                        pcount++;
-                                        <li class="list-group-item ">
-                                        <div class="row">
-                                            <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
-                                            <div class="col-3 "></div>
-                                            <div class="col-3 ">件數 : @item.Quantity</div>
-                                            <div class="col-3  text-danger " style="text-align: right;">
-                                            $@{
-                                                int pd = (int)item.Quantity * (int)item.Product.UnitPrice; string p = pd.ToString("N0");
-                                                @p
-                                                    }
-                                            </div>
-                                        </div>
-                                        </li>
-                                        
-                                }
-                                    <li class=" fs-3 d-flex justify-content-end">總金額 : $ @{@total.ToString("N0")}</li>
-                    }
-                        </ul>
+            @{
+                <input type="hidden" value="dateKey" name="key" />
+                var q = Model.OrderBy(n => n.order.OrderDate);
+                <div class="row p-3">
+                    <div class="col-auto">
+                        <input class="form-control" type="date" name="dateMin" value="@q.First().order.OrderDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    -
+                    <div class="col-auto">
+                        <input class="form-control" type="date" name="dateMax" value="@q.Last().order.OrderDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-auto">
+                        <input class="btn btn-primary" type="submit" value="日期查詢" />
                     </div>
                 </div>
-            </div>
-                <hr class="mb-0"/>
+            }
+        </form>
+        @{
+            int count = 0;
+            for (int i = 0; i < Model.Count; i++)
+            {
+                count++;
+
+                <div class="article">
+                    <div class="card w-100 shadow-sm" style="border:none">
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <div class="row mb-3">
+                                <div class="col-2 border ">
+                                    訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
+                                </div>
+                                <div class="col-2 border ">
+                                    下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
+                                </div>
+                                <div class="col-1 border ">
+                                    @Model[i].order.State.StateName
+                                </div>
+                                <div class="col-1 border ">
+                                    @Model[i].order.Pay.PayName
+                                </div>
+                                <div class="col-1 border ">
+                                    @Model[i].order.Ship.ShipName
+                                </div>
+                                <div class="col-1 border ">
+                                    <a class="btn btn-outline-secondary" asp-action="" asp-controller="" asp-route-id="">發票</a>
+                                </div>
+                                <div class="col-3 border ">
+                                    說明 : @Model[i].order.State.StateDetailed
+                                </div>
+                                <div class="col-1 border ">
+                                    <a class="btn btn-outline-danger" asp-action="" asp-controller="" asp-route-id="">退貨</a>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
+                            <div id="productList">
+                                <ul class="list-group mt-3" style="display:none;">
+                                    @{
+                                        int pcount = 0;
+                                        int total = 0;
+                                        foreach (var item in Model[i].order.OrderDetails)
+                                        {
+                                            total += (int)item.Quantity * (int)item.Product.UnitPrice;
+                                            pcount++;
+                                            <li class="list-group-item ">
+                                                <div class="row">
+                                                    <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
+                                                    <div class="col-3 "></div>
+                                                    <div class="col-3 ">件數 : @item.Quantity</div>
+                                                    <div class="col-3  text-danger " style="text-align: right;">
+                                                        $@{
+                                                            int pd = (int)item.Quantity * (int)item.Product.UnitPrice; string p = pd.ToString("N0");
+                                                            @p
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                        }
+                                        <li class=" fs-3 d-flex justify-content-end">
+                                            總金額 : $ @{
+                                                @total.ToString("N0")
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-0" style="border:none" />
+                </div>
+            }
+
         }
-        
-    }
-    
+
     </div>
 </div>
 
 @* 測試用 *@
 <!-- status elements -->
-<div class="scroller-status">
-    <div class="infinite-scroll-request loader-ellips">
-        ...
+<div class="page-load-status">
+    <div class="loader-ellips infinite-scroll-request">
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
+        <span class="loader-ellips__dot"></span>
     </div>
-    <p class="infinite-scroll-last">End of content</p>
-    <p class="infinite-scroll-error">No more pages to load</p>
+    @*     <p class="infinite-scroll-last">End of content</p>
+    <p class="infinite-scroll-error">No more pages to load</p> *@
 </div>
 
-<!-- pagination has path -->
-<p class="pagination">
-    <a class="pagination__next" href="page2.html">Next page</a>
+<p style="display: flex;justify-content: center;align-items: center;">
+    <button id="showmore" class="btn btn-success view-more-button" style="width:50%;height:50px;font-size:large;">顯示更多</button>
 </p>
 
 
-@section Scripts{
+@{
+    int nextPage = ViewBag.page + 1;
+    <!-- pagination has path -->
+    <p class="pagination">
+        <a class="pagination__next" href="@Url.Content("~/Shopping/OrderList?page=" + nextPage + "")">Next page</a>
+    </p>
+}
+
+
+@section Scripts {
     <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
-     <script>
-         document.addEventListener("DOMContentLoaded",()=>{
-            let butons = document.querySelectorAll(".dBtn");
-            for(var i = 0 ; i<butons.length; i++){
-                butons[i].addEventListener("click",out);
-            }
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            scrollevent()
+            const showmore = document.getElementById('showmore');
+            showmore.addEventListener('click', () => {
+                scrollevent()
             });
-         function out(event){
-            event.target.removeEventListener('click',out);
+        });
+
+        function scrollevent() {
+            //wait 2s
+            setTimeout(() => {
+                //add event
+                let butons = document.querySelectorAll(".dBtn");
+                for (var i = 0; i < butons.length; i++) {
+                    butons[i].addEventListener("click", out);
+                }
+            }, 200);
+
+        }
+
+        function out(event) {
+            event.target.removeEventListener('click', out);
             let ps = event.target.parentNode.querySelector("#productList").querySelector("ul");
-            ps.style.display ="";
+            ps.style.display = "";
             event.target.addEventListener('click', hide);
-         }
-         function hide(event){
-             event.target.removeEventListener('click',hide);
+        }
+        function hide(event) {
+            event.target.removeEventListener('click', hide);
             let ps = event.target.parentNode.querySelector("#productList").querySelector("ul");
-            ps.style.display= "none";
-             event.target.addEventListener('click',out);
-         }
+            ps.style.display = "none";
+            event.target.addEventListener('click', out);
+        }
 
         // init Infinite Scroll
         $('.article-feed').infiniteScroll({
-            path: '.pagination__next',
+            path: getPath,
             append: '.article',
-            status: '.scroller-status',
+            button: '.view-more-button',
+            scrollThreshold: false,
+            status: '.page-load-status',
             hideNav: '.pagination',
         });
 
-     </script>
+        function getPath() {
+            const nextSlugs = [];
+
+            for (let i = 1; i <= @ViewBag.TotalPage; i++) {
+                nextSlugs.push(i);
+            }
+
+            let url = `@Url.Content("~/Shopping/OrderList?page=")`
+            let slug = nextSlugs[this.loadCount];
+            if (slug) return url + slug;
+        }
+
+    </script>
 }

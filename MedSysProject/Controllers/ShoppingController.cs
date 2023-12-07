@@ -148,9 +148,11 @@ namespace MedSysProject.Controllers
             if (page > totalPage)
                 page = totalPage;
             ViewBag.Page = page;
+            ViewBag.NextPage = page + 1;
             ViewBag.Total = total;
             ViewBag.TotalPage = totalPage;
             ViewBag.PageSize = pageSize;
+            
 
             var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n=>n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
 
