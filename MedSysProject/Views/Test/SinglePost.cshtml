@@ -319,5 +319,13 @@
             figure.appendChild(image);//有待研究，javascripts真的太不熟了
         }
     }
+    document.addEventListener("keydown",key);
+        let input = document.querySelector("#comment-message");
+    function key(event){
+        if(event.key=="Enter"){
+            console.log(input.value);
+            
+        }
+    }
 </script>
 }
