@@ -1,4 +1,4 @@
-﻿@model MedSysProject.Models.Product
+﻿@model MedSysProject.Models.CProductsWrap
 
 @{
     ViewData["Title"] = "Create";
@@ -36,8 +36,6 @@
             color: transparent; /* 隱藏文字顏色，以顯示漸層效果 */
         }
     </style>
-
-
 </head>
 <body>
     <script>
@@ -66,46 +64,41 @@
                 console.error('找不到ID為 formFile 的文件輸入元素。');
             }
         });
-
-
     </script>
-
-
 
     <div class="container mt-5">
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <h1>新增產品作業 這不是Partial View</h1>
+                <h1>新增產品作業 PartailView</h1>
                 <h4>請輸入欲新增的產品資訊</h4>
 
                 <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
                     <div class="mb-3">
                         <label for="inputName" class="form-label">產品名稱</label>
-                        <input type="text" class="form-control" id="inputName" name="ProductName">
+                        <input type="text" class="form-control" id="inputName" name="WrappedProductName" value="@Model?.WrappedProductName ?? string.Empty">
                     </div>
                     <div class="mb-3">
                         <label for="inputPrice" class="form-label">單價</label>
-                        <input type="text" class="form-control" id="inputPrice" name="UnitPrice">
+                        <input type="text" class="form-control" id="inputPrice" name="WrappedUnitPrice" value="@Model?.WrappedUnitPrice">
                     </div>
                     <div class="mb-3">
                         <label for="inputLicense" class="form-label">認證字號</label>
-                        <input type="text" class="form-control" id="inputLicense" name="License">
+                        <input type="text" class="form-control" id="inputLicense" name="WrappedLicense" value="@Model?.WrappedLicense">
                     </div>
                     <div class="mb-3">
                         <label for="inputIngredient" class="form-label">有效成分</label>
-                        <input type="text" class="form-control" id="inputIngredient" name="Ingredient">
+                        <input type="text" class="form-control" id="inputIngredient" name="WrappedIngredient" value="@Model?.WrappedIngredient">
                     </div>
                     <div class="mb-3">
                         <label for="inputDescription" class="form-label">產品描述</label>
-                        <textarea class="form-control" id="inputDescription" name="Description" rows="4"></textarea>
+                        <textarea class="form-control" id="inputDescription" name="WrappedDescription" rows="4">@Model?.WrappedDescription</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="inputDiscontinued" class="form-label">上架狀態</label>
-                        <select class="form-control" id="inputDiscontinued" name="Discontinued">
-                            <option value="true" selected="@(Model?.Discontinued == true)">上架中</option>
-                            <option value="false" selected="@(Model?.Discontinued == false)">已下架</option>
+                        <select class="form-control" id="inputDiscontinued" name="WrappedDiscontinued">
+                            <option value="true" selected="@(Model?.WrappedDiscontinued == true)">上架中</option>
+                            <option value="false" selected="@(Model?.WrappedDiscontinued == false)">已下架</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -113,7 +106,8 @@
                         @foreach (var category in ViewBag.Categories)
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId">
+                                <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId"
+                                @(Model?.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoriesId) ? "checked" : "")>
                                 <label class="form-check-label" for="category@(category.CategoriesId)">
                                     @category.CategoriesName
                                 </label>
@@ -128,26 +122,18 @@
                         <label for="inputDescription" class="form-label">圖片預覽</label>
                         <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
                     </div>
-
-                      <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-
+                    <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增</button>
                 </form>
-
             </div>
             <div class="col-3"></div>
         </div>
-
-
-        @section Scripts {
-            @{
-                await Html.RenderPartialAsync("_ValidationScriptsPartial");
-            }
-        }
     </div>
-
-    <!-- 引入相應的JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 </body>
 </html>
+
+    

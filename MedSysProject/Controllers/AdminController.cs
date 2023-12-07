@@ -441,19 +441,36 @@ namespace MedSysProject.Controllers
         }
 
 
-
+        [HttpGet]
+        public IActionResult _CreateProductModal()
+        {
+            ViewBag.Categories = _db.ProductsCategories?.ToList() ?? new List<ProductsCategory>();
+            return PartialView("_CreateProductModal");
+        }
 
 
 
         public IActionResult Create()
         {
             ViewBag.Categories = _db.ProductsCategories.ToList();
-            return View();
+            var cProductsWrap = new CProductsWrap
+            {
+                // 在這裡初始化相關的屬性，例如 ProductsCategories 和其他相關數據
+                ProductsCategories = _db.ProductsCategories.ToList(),
+            };
+
+            return View(cProductsWrap);
         }
 
         [HttpPost]
-        public IActionResult Create(Product product, IFormFile formFile, int[] CategoriesIds)
+        public IActionResult Create(CProductsWrap productWrap, List<IFormFile> formFiles, int[] CategoriesIds)
         {
+            if (productWrap.Product == null)
+            {
+                // 初始化 productWrap.Product，例如：
+                productWrap.Product = new Product();
+            }
+
             // 檢查並創建目錄
             string imagePath = Path.Combine(_host.WebRootPath, "img-product");
             if (!Directory.Exists(imagePath))
@@ -461,26 +478,30 @@ namespace MedSysProject.Controllers
                 Directory.CreateDirectory(imagePath);
             }
 
-            if (formFile != null && formFile.Length > 0)
+            List<string> imagePaths = new List<string>();
+
+            foreach (var formFile in formFiles)
             {
-                // 生成唯一的檔案名稱
-                string photoName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
-
-                // 構建完整的檔案路徑
-                string filePath = Path.Combine(imagePath, photoName);
-
-                // 寫入檔案
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                if (formFile != null && formFile.Length > 0)
                 {
-                    formFile.CopyTo(fileStream);
-                }
+                    string photoName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+                    string filePath = Path.Combine(imagePath, photoName);
 
-                // 更新資料庫中的路徑
-                product.FimagePath = photoName;
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        formFile.CopyTo(fileStream);
+                    }
+
+                    imagePaths.Add(photoName);
+                }
             }
 
+            // 使用多個圖片路徑更新 productWrap
+            productWrap.FimagePaths = imagePaths;
+
+
             // 儲存到資料庫
-            _db.Products.Add(product);
+            _db.Products.Add(productWrap.Product);
             _db.SaveChanges();
 
             // 將產品與所選分類關聯
@@ -490,7 +511,7 @@ namespace MedSysProject.Controllers
                 {
                     var classification = new ProductsClassification
                     {
-                        ProductId = product.ProductId,
+                        ProductId = productWrap.Product.ProductId,
                         CategoriesId = categoryId
                     };
 
@@ -500,27 +521,10 @@ namespace MedSysProject.Controllers
                 _db.SaveChanges();
             }
 
-            return RedirectToAction("Product");
+            return PartialView("_CreateProductModal", productWrap);
         }
 
-        //ajax版本待補
-
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-
-        //[HttpPost]
-        //public IActionResult Create(Product product)
-        //{
-        //    // 假設你已經在前端將圖片上傳到伺服器的路徑存在 product.FimagePath 中
-        //    _db.Products.Add(product);
-        //    _db.SaveChanges();
-
-        //    return Json(new { productId = product.ProductId });
-        //}
-
+        
         [HttpGet]
         public IActionResult Edit(int? productId)
         {

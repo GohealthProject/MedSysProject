@@ -22,7 +22,7 @@
     @*<button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
 </section>
 <style>
-    div,table{border:dashed 3px red}
+    /*div,table{border:dashed 3px red}*/
     /* table{
         align-content:center;
         text-align:center;
@@ -187,12 +187,17 @@
             <div class="row portfolio-container portfolio-flters p-5" id="btng">
             @foreach (var items in Model)
             {
+                int i = 0;
                 @foreach (var s in items.Items)
                 {
-                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success" id="ibtn">
+                    i++;
+                    <div>
+                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success ibtn"  value="@s.ItemName">
                     @Html.DisplayFor(m => s.ItemName)
-                    <input type="text" value="@s.ItemId">
+                            <input type="text" class="zz" value="@s.ItemId">
                     </button>
+                    
+                    </div>
                }
                 
                 
@@ -287,24 +292,89 @@
 
 @section Scripts{
     <script>
-       
-        $("#btng:has(#ibtn)").click((A) => {
-            //console(this)
-            var itembtn = A.querySelector("#btng:has(#ibtn)").textContent;
-            console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
-            document.querySelector("#ilist").innerHTML +=
-            `<tr>
-                <td>
-                ${this.itembtn}
-                </td>
-                <td>
-               BB
-                </td>
-                        <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
-             </tr>`
+        let btn = document.querySelectorAll(".ibtn");
+        let list = document.querySelector("#ilist");
+        for(var i =0 ; i<btn.length;i++){
+            btn[i].addEventListener('click',ck);
+        }
+        let img = document.querySelectorAll(".gg");
+        console.log(img);
+        for(var i=0; i<img.length;i++){
+            img[i].addEventListener('click',()=>{
+                console.log("hello");
+            });
+        };
+        function gg(){
+            console.log("ggg");
+        }
+        function ck (event){
+            console.log(event.target.value);
+            let d = event.target.parentNode.querySelector("input");
+            var s =
+            `
+                    <tr>
+                                    <td>
+                                    ${d.value}
+                                    </td>
+                                    <td>
+                                    ${event.target.value}
+                                    </td>
+                                    <td>
+                                       <img src="/img/icon/x.png" onclick="gg()"/>
+                                    </td>
+                     </tr>
+            `;
+            list.innerHTML +=s;
+            console.log(d);
+        }
+        //$("#btng:has(#ibtn)").click(()=>{
+        //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
+        //    //var suck = document.querySelector("event.target");
+        //    //console.log(event.currentTarget)
+        //    console.log(event.target.value)
+        //    event.target.addEventListener("click",()=>{
+        //        document.querySelector("#ilist").innerHTML +=
+        //            `<tr>
+        //                    <td>
+        //                    AA
+        //                    </td>
+        //                    <td>
+        //                           ${event.target.value}
+        //                    </td>
+        //                            <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //                 </tr>`
+        //    })
+            //document.querySelector("#ilist").innerHTML += 
+            //    `<tr>
+            //            <td>
+            //            ${this.itembtn}
+            //            </td>
+            //            <td>
+            //           BB
+            //            </td>
+            //                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+            //         </tr>`
+        //})
+
+
+        //const itembtn = document.querySelector("#btng:has(#ibtn)");
+        //itembtn.addEventListener('click',() => {
+        //    console.log(event.target)
+           
+        //    //console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
+        //    document.querySelector("#ilist").innerHTML +=
+        //    `<tr>
+        //        <td>
+        //        ${this.itembtn}
+        //        </td>
+        //        <td>
+        //       BB
+        //        </td>
+        //                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //     </tr>`
             
 
-        })
+        //})
     </script>
 }
 

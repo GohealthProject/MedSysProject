@@ -59,8 +59,8 @@
                  @*  原位置在這裡 *@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-                          
-                                <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
+
+                            <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案<input id="PlanID" type="hidden"  name="PlanID" value="2"/> </h3>
                                 
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
@@ -134,7 +134,27 @@
     const xhr = new XMLHttpRequest();
         const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
         const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
-        const url = "https://localhost:7078/api/PlanIntroductionProject";
+        const url = "https://localhost:7078/api/PlanIntroductionProject/";
+
+    function load() { 
+        $.getJSON(url, function (datas) { 
+            const id = $("#PlanID").val();
+            if (id) {
+                const jsonData = JSON.stringify({
+                    planId: PlanID, planName: PlanName.val()
+                });
+                $.ajax({
+                    url: `${url}${id}`,
+                    type:'GET',
+                    contentType:'appliction/json',
+                        data: jsonData
+                })
+            }
+        })
+    
+    
+    }
+
 
 </script>
 }

@@ -47,27 +47,27 @@ namespace MedSysProject.Controllers
 
       public IActionResult PlanIntroductionProject()
         { //放方案介紹
-            //var project = _context.Plans.Where(p => p.PlanId == id);
-         /*   var join = from p in*/ /*project*/ /*_context.Plans*/
-                       //from pj in _context.Projects.DefaultIfEmpty()
-                       //from it in _context.Items.DefaultIfEmpty()
-                       //select new
-                       //{
-                       //    p.PlanId,
-                       //    p.PlanName,
-                       //    p.PlanDescription,
-                       //    //p.PlanRefs,
-                       //    //pj.ProjectId,
-                       //    //pj.ProjectName,
-                       //    //pj.ProjectPrice,
-                       //    //it.ItemId,
-                       //    //it.ItemName,
+            var WholePlan = _context.Items.Include(p => p.ItemName).Include(p => p.ItemId).Include(p => p.Project).ThenInclude(p => p.ProjectId);
+            var join = from p in _context.Plans
+            from pj in _context.Projects
+            from it in _context.Items
+            select new
+            {
+                p.PlanId,
+                p.PlanName,
+                p.PlanDescription,
+                p.PlanRefs,
+                pj.ProjectId,
+                pj.ProjectName,
+                pj.ProjectPrice,
+                it.ItemId,
+                it.ItemName,
 
-                       //};
-            
-          
+            };
 
-         
+
+
+
             return View(_context.Plans);
         }
        public IActionResult xxx()
