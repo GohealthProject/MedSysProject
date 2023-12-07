@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "ad";
+    Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
+}
+<div id="here"> </div>
+<h1>ad</h1>
+
+<div class="container">
+    <p>hello</p>
+    <p>留言者</p>
+    <p>>回覆者1</p>
+    <p>>回覆者2</p>
+    <input type="text" class="mt-0"/>
+
+
+</div>
+
+
+
+@section Scripts{
+       <script>
+        let new5 = "@ViewBag.gg";
+        let new5Array = JSON.parse(new5);
+        let View5 = "@ViewBag.View5";
+        let View5Array = JSON.parse(View5);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            load();
+        });
+
+        async function load() {
+
+            for (var i = 0; i < new5Array.length; i++) {
+
+                const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${new5Array[i]}`);
+                const data = await response.text();
+
+                document.querySelector("#here").innerHTML += data;
+            }
+        }
+       </script>
+}

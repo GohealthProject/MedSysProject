@@ -39,17 +39,48 @@ namespace MedSysProject.Controllers
        
         public IActionResult planComeparison()
         {////方案比較(設計filter篩選方案)
-            return View();
+            //_context.Projects.Load();
+            //_context.Plans.Load();
+            //調整planname個數
+            var projectprice = from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
+                   .AsEnumerable()
+                               //from ppp in _context.Plans
+                               group p by p.Plan.PlanName into g
+                               //select p;
+                               select new
+                               {
+                                   //PlanId=g.Min(p => p.PlanId),
+                PlanName = g.Key,                
+                PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
+
+            var total = from p in projectprice
+                        from pp in _context.Plans
+                        select new { 
+                        pp.PlanId,
+                        pp.PlanName,
+                        p.PlanPrice
+                        
+                        };
+            return View(total.ToList());
+            //return View(projectprice.ToList());
+            //return View(_context.Plans);
         }
         public IActionResult planComeparisonTotal()
         {////方案比較總計(總項+PDF產生)
             return View();
         }
 
-      public IActionResult PlanIntroductionProject()
+      public IActionResult PlanIntroductionProject(int? id)
         { //放方案介紹
-            var WholePlan = _context.Items.Include(p => p.ItemName).Include(p => p.ItemId).Include(p => p.Project).ThenInclude(p => p.ProjectId);
-            var join = from p in _context.Plans
+
+            //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
+            _context.Plans.Load();
+            _context.Projects.Load();
+            _context.Items.Load();
+            
+            var ID = _context.Plans.Where(i => i.PlanId == id);
+            var join =from i in ID
+                from p in _context.Plans
             from pj in _context.Projects
             from it in _context.Items
             select new
@@ -65,11 +96,11 @@ namespace MedSysProject.Controllers
                 it.ItemName,
 
             };
+           
 
 
 
-
-            return View(_context.Plans);
+            return View(join.ToList());
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
