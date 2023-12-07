@@ -142,14 +142,52 @@
         //     }
         // }
         #endregion
-        Dictionary<string, string> postContent = new Dictionary<string, string>();
-        for (int i = 0; i < Model.Count; i++)
+        #region 方法二
+        // Dictionary<string, string> postContent = new Dictionary<string, string>();
+        // for (int i = 0; i < Model.Count; i++)
+        // {
+        //     string title = Model[i].Title;//文章標題
+        //     string htmlContent = Model[i].Content;//文章內文
+        //     string pattern = @"<p\b[^>]*>(.*?)</p>";//在每個Content中要被檢查的模式
+        //     bool hasImage = false;
+        //     System.Text.RegularExpressions.MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(htmlContent, pattern,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        //     if (matches.Count != 0 && matches.Count > 0)
+        //     {
+        //         foreach (System.Text.RegularExpressions.Match match in matches)
+        //         {
+        //             string pTagContent = match.Value;
+        //             if (pTagContent.Contains("<img"))
+        //             {
+        //                 hasImage = true;
+        //                 continue;
+        //             }
+        //             else
+        //             {
+        //                 if (!postContent.ContainsKey(title))
+        //                 {
+        //                     postContent.Add(title, pTagContent);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         if (!postContent.ContainsKey(title))
+        //         {
+        //             postContent.Add(title, Model[i].Content);
+        //         }
+        //     }
+
+        // }
+        // Dictionary<string, string> postContent = new Dictionary<string, string>();
+        List<string> postContent = new List<string>();
+        foreach (var blog in Model)
         {
-            string title = Model[i].Title;//文章標題
-            string htmlContent = Model[i].Content;//文章內文
+            string blogId = blog.BlogId.ToString();//文章標題
+            string htmlContent = blog.Content;
             string pattern = @"<p\b[^>]*>(.*?)</p>";//在每個Content中要被檢查的模式
             bool hasImage = false;
-            System.Text.RegularExpressions.MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(htmlContent, pattern,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            System.Text.RegularExpressions.MatchCollection matches = System.Text.RegularExpressions.Regex.Matches(htmlContent, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             if (matches.Count != 0 && matches.Count > 0)
             {
                 foreach (System.Text.RegularExpressions.Match match in matches)
@@ -162,22 +200,24 @@
                     }
                     else
                     {
-                        if (!postContent.ContainsKey(title))
-                        {
-                            postContent.Add(title, pTagContent);
-                        }
+                        postContent.Add(pTagContent);
+                        break;
                     }
                 }
             }
+            else if (matches.Count == 0)
+            {
+                postContent.Add(blog.Content);
+                continue;
+            }
             else
             {
-                if (!postContent.ContainsKey(title))
-                {
-                    postContent.Add(title, Model[i].Content); 
-                }
+                postContent.Add(blog.Content);
+                continue;
             }
-
         }
+        #endregion
+
         <section id="posts" class="posts">
             <div class="container">
                 <div class="row g-5">
@@ -207,7 +247,8 @@
                                 <a href="single-post.html">@Model[0].Title</a>
                             </h2>
                             <p class="mb-4 d-block">
-                               <!--記得放文章 -->
+                            @Html.Raw(postContent[0])
+                                <!--記得放文章 -->
                             </p>
 
                             <div class="d-flex align-items-center author">
@@ -401,6 +442,7 @@
                                     </a>
                                 </h3>
                                 <p>
+                                 @Html.Raw(postContent[7])
                                     <!--記得放文章-->
                                     <!--Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                     Distinctio placeat exercitationem magni voluptates dolore.
@@ -456,7 +498,8 @@
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[8].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
-                                       <!-- 記得放文章-->
+                                    @Html.Raw(postContent[8])
+                                        <!-- 記得放文章-->
                                         <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                                         Vero temporibus repudiandae, inventore pariatur numquam
                                         cumque possimus 如果第一個p標籤式圖片怎辦?-->
@@ -506,6 +549,7 @@
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[9].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
+                                    @Html.Raw(postContent[9]);
                                         <!--記得放文章-->
                                         <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                                                                                 Vero temporibus repudiandae, inventore pariatur numquam
@@ -637,11 +681,12 @@
                                     </a>
                                 </h3>
                                 <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    @Html.Raw(postContent[11])
+                                    <!--Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                     Distinctio placeat exercitationem magni voluptates dolore.
                                     Tenetur fugiat voluptates quas, nobis error deserunt aliquam
                                     temporibus sapiente, laudantium dolorum itaque libero eos
-                                    deleniti?待修改
+                                    deleniti?待修改-->
                                 </p>
                                 <div class="d-flex align-items-center author">
                                     <div class="photo">
@@ -687,9 +732,10 @@
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[12].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                        @Html.Raw(postContent[12])
+                                        <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                                         Vero temporibus repudiandae, inventore pariatur numquam
-                                        cumque possimus待修改
+                                        cumque possimus待修改-->
                                     </p>
                                 </div>
                                 <!--小塊沒圖-->
@@ -734,9 +780,10 @@
                                     </h2>
                                     <span class="author mb-3 d-block">@Model[13].Employee.EmployeeName</span>
                                     <p class="mb-4 d-block">
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                        @Html.Raw(postContent[14]);
+                                        <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                                         Vero temporibus repudiandae, inventore pariatur numquam
-                                        cumque possimus待修改
+                                        cumque possimus待修改-->
                                     </p>
                                 </div>
                             </div>
@@ -855,13 +902,14 @@
                                 <a href="single-post.html">@Model[15].Title</a>
                             </h2>
                             <p class="mb-4 d-block">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
+                                @Html.Raw(postContent[15])
+                                <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero
                                 temporibus repudiandae, inventore pariatur numquam cumque
                                 possimus exercitationem? Nihil tempore odit ab minus eveniet
                                 praesentium, similique blanditiis molestiae ut saepe
                                 perspiciatis officia nemo, eos quae cumque. Accusamus fugiat
                                 architecto rerum animi atque eveniet, quo, praesentium
-                                dignissimos待修改
+                                dignissimos待修改-->
                             </p>
 
                             <div class="d-flex align-items-center author">

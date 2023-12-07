@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TinifyAPI;
 
 namespace MedSysProject.Controllers
 {
@@ -53,9 +54,23 @@ namespace MedSysProject.Controllers
                             .Include(blog => blog.ArticleClass)
                             .Where(blog => blog.ArticleClass.BlogClassId == 3)
                             .OrderByDescending(blog => blog.BlogId)
-                            .Take(9)
+                            .Take(8)
                             select blog;
             foreach (var blog in celebrity) { post.Add(blog); }
+
+            #region 把圖片縮小反而比較久
+            //foreach (var blog in post)
+            //{
+            //    var source = Tinify.FromBuffer(blog.BlogImage);
+            //    var resized = await source.Resize(new
+            //    {
+            //        method = "fit",
+            //        width = 545,
+            //        height = 342,
+            //    });
+            //    blog.BlogImage = await resized.ToBuffer();
+            //}
+            #endregion
             return View(post);
         }
 
@@ -141,6 +156,18 @@ namespace MedSysProject.Controllers
                 return File(img, "image/jpeg");
             }
             return NotFound();
+        }
+        /// <summary>
+        /// 測試partial View用
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Index2() 
+        {
+            return View();
+        }
+        public IActionResult Slider() 
+        {
+            return PartialView();
         }
 
     }
