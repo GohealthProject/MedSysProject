@@ -627,6 +627,11 @@ namespace MedSysProject.Controllers
 
                 if (pDb != null)
                 {
+                    // 如果原有的圖片路徑不為空，則將其轉為集合
+                    var existingImagePaths = !string.IsNullOrEmpty(pDb.FimagePath)
+                        ? pDb.FimagePath.Split(',').ToList()
+                        : new List<string>();
+
                     // 合併新上傳的圖片路徑和現有的圖片路徑
                     var combinedImagePaths = new List<string>();
                     if (productId.FimagePaths != null && productId.FimagePaths.Any())
@@ -654,8 +659,8 @@ namespace MedSysProject.Controllers
                         }
                     }
 
-                    // 更新 FimagePath，將多個圖片路徑以逗點隔開
-                    pDb.FimagePath = string.Join(",", combinedImagePaths);
+                    // 將新的圖片路徑和現有的圖片路徑合併，用逗號隔開
+                    pDb.FimagePath = string.Join(",", existingImagePaths.Concat(combinedImagePaths));
 
                     // 處理其他欄位
                     pDb.ProductName = productId.WrappedProductName;
@@ -665,8 +670,6 @@ namespace MedSysProject.Controllers
                     pDb.Ingredient = productId.WrappedIngredient;
                     pDb.Description = productId.WrappedDescription;
                     pDb.Discontinued = productId.WrappedDiscontinued;
-
-                    _db.Products.Update(pDb);
 
                     // 處理 ProductsClassification 資料表
                     if (productId.SelectedCategories != null && productId.SelectedCategories.Any())

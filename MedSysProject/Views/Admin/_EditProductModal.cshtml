@@ -23,7 +23,7 @@
 
                 <div class="form-group">
                     <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
-                    <input asp-for="WrappedProductName" class="form-control" />
+                    <input asp-for="WrappedProductName" class="form-control" name="WrappedProductName" />
                     <span asp-validation-for="WrappedProductName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="修改並送出" class="btn btn-primary" />
+                    <input type="submit" value="修改並送出" class="btn btn-primary" name="submitBtn" />
                 </div>
             </form>
             </div>
