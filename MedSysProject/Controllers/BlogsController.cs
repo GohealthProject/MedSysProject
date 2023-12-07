@@ -212,10 +212,10 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult ShowComments(int BlogId) 
-        {
+        {//傳送到partial view的時候就要傳全部，然後在partialview中用razor去做分流
             var mainComments = (_db.Comments.Include(comment=>comment.Member)
                                             .Include(comment=>comment.Employee)
-                                            .Where(comment => comment.BlogId == BlogId && comment.ParentComment == null)
+                                            .Where(comment => comment.BlogId == BlogId)
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
         }

@@ -64,9 +64,12 @@
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitPrice)</td>
                             <td>@Html.DisplayFor(modelItem => item.WrappedLicense)</td>
                             <td>@Html.DisplayFor(modelItem => item.WrappedIngredient)</td>
+
+                            <td>
                             <td>
                                 <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
                             </td>
+
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitsInStock)</td>
                             <td>
                                 @if (item.WrappedDiscontinued == true)

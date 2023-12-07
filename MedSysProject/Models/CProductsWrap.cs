@@ -104,6 +104,14 @@ namespace MedSysProject.Models
             set { _product.FimagePath = string.Join(",", value); }
         }
 
+        public string WrappedFimagePaths
+        {
+            get { return string.Join(",", FimagePaths); }
+            set { FimagePaths = value.Split(',').ToList(); }
+        }
+
+        [DisplayName("產品圖片")]
+        public List<IFormFile> FormFiles { get; set; }
 
         [DisplayName("庫存量")]
         public int? WrappedUnitsInStock

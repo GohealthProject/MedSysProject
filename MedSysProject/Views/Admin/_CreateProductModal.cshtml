@@ -52,22 +52,18 @@
                     imagePreviewContainer.innerHTML = '';
 
                     // 遍歷所選的文件
-                    for (var i = 0; i < files.length; i++) {
+                    for (let i = 0; i < files.length; i++) {
                         var file = files[i];
 
-                        // 使用 FileReader 來讀取圖片內容
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            // 創建圖片元素，並添加到預覽區域
-                            var imgElement = document.createElement('img');
-                            imgElement.src = e.target.result;
-                            imgElement.style.maxWidth = '100%';
-                            imgElement.style.maxHeight = '150px';
-                            imagePreviewContainer.appendChild(imgElement);
-                        };
+                        // 創建圖片元素，並添加到預覽區域
+                        var imgElement = document.createElement('img');
+                        imgElement.style.maxWidth = '100%';
+                        imgElement.style.maxHeight = '150px';
 
-                        // 讀取圖片內容
-                        reader.readAsDataURL(file);
+                        // 使用 URL.createObjectURL 創建圖片預覽 URL
+                        imgElement.src = URL.createObjectURL(file);
+
+                        imagePreviewContainer.appendChild(imgElement);
                     }
                 });
             } else {
@@ -80,8 +76,8 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <h1>新增產品作業 PartailView</h1>
-                <h4>請輸入欲新增的產品資訊</h4>
+                <h1>新增產品</h1>
+                <h4>請輸入資訊</h4>
 
                 <form id="productForm" method="post" enctype="multipart/form-data" action="@Url.Action("Create", "Admin")">
                     <div class="mb-3">
@@ -132,8 +128,9 @@
                         <label for="inputDescription" class="form-label">圖片預覽</label>
                         <div id="imagePreview" class="d-flex flex-wrap">
                     </div>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉partial view內</button>
-                    <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增partial view內</button>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                    <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增</button>
                 </form>
             </div>
             <div class="col-3"></div>
