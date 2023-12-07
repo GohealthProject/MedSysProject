@@ -167,7 +167,14 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Slider() 
         {
-            return PartialView();
+            var post = (from blog in _db.Blogs
+                      .Include(blog => blog.Employee)
+                      .Include(blog => blog.ArticleClass)
+                      .OrderByDescending(blog => blog.BlogId)
+                      .Take(7)
+                        select blog).ToList();//全部文章類別 新->舊
+
+            return PartialView(post);
         }
 
     }
