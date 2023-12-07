@@ -2,9 +2,11 @@
 @{
     ViewData["Title"] = "KeySearch";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    
 }
 
 <div class="container" >
+    <input type="hidden" value="@ViewBag.KeySearch" id="key"/>
     <div class="row">
         <div class="col-3" style="padding:20px">
             <div>
@@ -55,148 +57,71 @@
                 </div>
                 <div class="mt-5">
                     @{
-                        int count = 0;
-                        foreach(var item in Model)
+                        string PName = "";
+                        int Price = 0;
+                        double PriceT = 0;
+                        int count = Model.Count();
+                        for(int i=0;i<9;i++)
                         {
-                            if (count % 3 == 0)
+                            Price = (int)Model[i].UnitPrice;
+                            PriceT = Price * 0.8;
+                            if (i % 3 == 0)
                             {
-                                @:<div class="mb-3">
+                                @:<div class="row mb-3">
                             }
-                            if(count %3==0 && count !=0){
+                            if(i %3==0 && i !=0){
                                 @:</div>
                             }
-
-                         <div class="col">
+                            if (Model[i].ProductName.Length > 6)
+                            {
+                                PName=Model[i].ProductName.Substring(0, 6);
+                            }
+                            else
+                            {
+                                PName = Model[i].ProductName;
+                            }
+                            
+                            <div class="col ">
                             <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
+                                <img src="@Url.Content("~"+Model[i].FimagePath)" class="card-img-top" alt="..." style="width:285px;height:201px">
                                 <div class="card-body">
-                                    <h5 class="card-title fs-2">@item.ProductName</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$@item.UnitPrice</p>
+                                    <a class="fs-2"asp-action="selectProduct" asp-route-id="@Model[i].Product.ProductId">@PName</a>
+                                    <p class="card-text fs-3 text-info">8折</p>
+                                    <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">$@Price.ToString("N0")</span><span class="card-text text-danger fs-3">$@PriceT.ToString("N0")</span></div>
                                     <p class="card-text">三星</p>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                         }
-                    }
-                    @*<div class="row mb-3">
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-5">
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~/img/Login1.jpg")" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-2">商品名稱</h5>
-                                    <p class="card-text">5折</p>
-                                    <p class="card-text text-danger fs-3">$4,400</p>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
+                        count = count / 9;
+                        
                     <hr class="hr-dashed" />
-                    <div style="text-align:center;">
-                        <button class="fs-5 btn btn-outline-primary active">1</button>
-                        <button class="fs-5 btn btn-outline-primary">2</button>
-                        <button class="fs-5 btn btn-outline-primary">3</button>
-                        <button class="fs-5 btn btn-outline-primary">4</button>
-                        <button class="fs-5 btn btn-outline-primary">5</button>
-                        <button class="fs-5 btn btn-outline-primary">6</button>
-                        <button class="fs-5 btn btn-outline-primary">7</button>
+                    <div style="text-align:center;" id="btnList">
+                        @for(int i=1; i <= count + 1; i++)
+                        {
+                            <button class="fs-5 btn btn-outline-primary active" value="@i">@i</button>
+                        }
                     </div>
-                    
+                    }
             </div>    
+            </div>
         </div>
     </div>
-    </div>
 </div>
+
+@section Scripts{
+<script>
+    let key = document.querySelector("#key")
+    document.addEventListener("DOMContentLoaded",()=>{
+    let btn = document.querySelector("#btnList").querySelectorAll("button");
+        for(var i =0; i<btn.length;i++){
+            btn[i].addEventListener("click",loadSearch);
+        }
+    })
+
+    async function loadSearch(event){
+        console.log(event.target.value)
+        const response = await fetch(`https://localhost:7078/api/Products/55&${event.target.value}`)
+    }
+</script>
+}
