@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -101,18 +102,23 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Reserve()
+        [HttpPost]
+        public IActionResult Reserve(IFormCollection item)
         { //預約總覽
 
             //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
             //             select s).Distinct();
 
-            var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
+            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
 
-                         select s).Distinct();
+            //             select s).Distinct();
 
-            return View(datas);
+            ViewBag.item = item["item"];
+            //ViewBag.test = "test123";
+            //ViewBag.item = item;
+
+            return View();
         }
         public IActionResult Member()
         { //會員專項
@@ -124,9 +130,10 @@ namespace MedSysProject.Controllers
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
 
-            var j = (from s in _context.ReportDetails
+            var j = (from s in _context.ReportDetails.Include(p=>p.Report).ThenInclude(p=>p.Reserve)
                      where s.Report.MemberId == 46
-                     select s.Report.Reserve.ReserveDate).Distinct();
+                     //select s.Report.Reserve.ReserveDate).Distinct();
+                     select s);
 
             return View(j);
         }
@@ -135,9 +142,11 @@ namespace MedSysProject.Controllers
 
         {
             //IEnumerable<Item> datas = null;
-             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
-             //            select s;
-            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs).ThenInclude(n=>n.Plan);
+            //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
+            //            select s;
+            _context.Plans.Load();
+
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
 
             //List<CProjectWarp> list = new List<CProjectWarp>();
             
@@ -151,6 +160,7 @@ namespace MedSysProject.Controllers
             //        var xx = items.Plan;
             //    }
             //}
+         
             return View(datass.ToList());
         }
 
