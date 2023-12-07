@@ -3,6 +3,7 @@ using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using NuGet.Packaging.Signing;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -117,15 +118,26 @@ namespace MedSysProject.Controllers
         }
         public IActionResult KeySearch(string Key)
         {
+            if (Key == null)
+                return RedirectToAction("index");
+            List<CProductWarp> list =new List<CProductWarp>();
+
             var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
-            return View(q);
+            foreach(var item in q)
+            {
+                CProductWarp cp = new CProductWarp();
+                cp.Product = item;
+                list.Add(cp);
+            }
+            ViewBag.KeySearch = Key;
+            return View(list);
         }
         public IActionResult OrderList()
         {
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             List<COrderWarp>list = new List<COrderWarp>();
-            var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId);
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n=>n.OrderDate);
             foreach(var item in q)
             {
                 COrderWarp od = new COrderWarp();
@@ -138,38 +150,64 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult OrderList(string key)
         {
-            
-            List<COrderWarp> list = new List<COrderWarp>();
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
-            if (string.IsNullOrEmpty(key))
+            if(key == "keyword")
             {
-                var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n=>n.Pay).Include(n=>n.Ship).Include(n=>n.State);
-                foreach(var item in midFindOrder)
+                List<COrderWarp> list = new List<COrderWarp>();
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+                var qq = Request.Form["Keyword"];
+                if (qq=="")
                 {
-                    COrderWarp o = new COrderWarp();
-                    o.order = item;
-                    list.Add(o);
+                    var midFindOrder = _db.Orders.Where(n => n.MemberId == m.member.MemberId).Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n=>n.OrderDetails).ThenInclude(n=>n.Product).OrderByDescending(n=>n.OrderDate);
+                    foreach (var item in midFindOrder)
+                    {
+                        COrderWarp o = new COrderWarp();
+                        o.order = item;
+                        list.Add(o);
+                    }
+                    return View(list);
                 }
-                return View(list);
-            }
-            else
+                else
+                {
+                    string keyword = Request.Form["keyword"];
+                    List<int> pids = new List<int>();
+                    List<int> oids = new List<int>();
+                    pids = _db.Products.Where(n => n.ProductName.Contains(keyword)).Select(n => n.ProductId).ToList();
+                    oids = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).SelectMany(n => n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n => n.OrderId)).ToList();
+                    var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
+                    foreach (var o in q)
+                    {
+                        COrderWarp od = new COrderWarp();
+                        od.order = o;
+                        list.Add(od);
+                    }
+
+                    return View(list);
+                }
+            }else if(key == "dateKey")
             {
-                List<int> pids = new List<int>();
+                var form = Request.Form;
+                List<COrderWarp> list = new List<COrderWarp>();
+                DateTime min = DateTime.Parse(form["dateMin"]);
+                DateTime max =DateTime.Parse(form["dateMax"]);
                 List<int> oids = new List<int>();
-                pids = _db.Products.Where(n => n.ProductName.Contains(key)).Select(n=>n.ProductId).ToList();
-                oids = _db.Members.Where(n => n.MemberId == m.MemberId).Include(n => n.Orders).ThenInclude(n => n.OrderDetails).SelectMany(n => n.Orders.Where(n => n.OrderDetails.Any(n => pids.Contains((int)n.ProductId))).Select(n=>n.OrderId)).ToList() ;
-                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => oids.Contains(n.OrderId));
-                foreach (var o in q)
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+                oids = _db.Orders.Where(n => n.MemberId == m.MemberId).Select(n=>n.OrderId).ToList();
+                var q  = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.OrderDate >= min && n.OrderDate <= max && oids.Contains(n.OrderId)).OrderByDescending(n=>n.OrderDate).ToList();
+                foreach(var o in q)
                 {
                     COrderWarp od = new COrderWarp();
                     od.order = o;
                     list.Add(od);
                 }
-
                 return View(list);
             }
-            
+            else
+            {
+                return Content("ok");
+            }
         }
+        
     }
 }

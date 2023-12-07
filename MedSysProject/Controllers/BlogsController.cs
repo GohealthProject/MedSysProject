@@ -1,6 +1,8 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using TinifyAPI;
 
 namespace MedSysProject.Controllers
@@ -74,9 +76,30 @@ namespace MedSysProject.Controllers
             return View(post);
         }
 
-        public IActionResult SinglePost(int? BlogID)
+        public IActionResult SinglePost(int? singleBlogID)
         {
-            return View();
+            //singleBlogID = 37;
+            IEnumerable<Blog> singlePost = null;
+            if (singleBlogID != null)
+            {
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                          .Include(blog => blog.Employee)
+                                          .Where(blog => blog.BlogId == singleBlogID)
+                              select blog).ToList();
+            }
+            else
+            {
+                singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
+                                                  .Include(blog => blog.Employee)
+                                                  .OrderByDescending(blog => blog.BlogId).Take(1)
+                              select blog).ToList();
+            }
+
+
+            return View(singlePost);
+
+
+
         }
         public IActionResult SelectBlogCategory(int? CategoryID, int page = 1)
         {//
@@ -167,7 +190,24 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Slider() 
         {
+            //var sliderBlog = _db.Blogs.Include(blog => blog.Employee)
+            //                          .Include(blog => blog.ArticleClass)
+            //                          .OrderByDescending(blog => blog.BlogId)
+            //                          .Take(5).ToList();
+
             return PartialView();
+        }
+        public IActionResult ad (int id)
+        {
+             var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
+            var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
+
+            List<int> ne = 最新的文章.ToList();
+            List<int> top5 = 最多觀看的.ToList();
+            ViewBag.new5Array = JsonSerializer.Serialize(ne);
+            ViewBag.View5 = JsonSerializer.Serialize(top5);
+
+            return View();
         }
 
     }
