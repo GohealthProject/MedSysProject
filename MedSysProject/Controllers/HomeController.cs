@@ -76,7 +76,7 @@ namespace MedSysProject.Controllers
         { //放方案介紹
 
             //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
-            _context.Plans.Load();
+            //_context.Plans.Load();
             _context.Projects.Load();
             _context.Items.Load();
             
