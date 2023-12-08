@@ -568,6 +568,7 @@ namespace MedSysProject.Controllers
             return PartialView("_CreateProductModal", productWrap);
         }
 
+
         [HttpGet]
         public IActionResult Edit(int? productId)
         {
@@ -576,7 +577,16 @@ namespace MedSysProject.Controllers
                 return NotFound();
             }
 
-            Product? product = _db.Products.Where(e => e.ProductId == productId).FirstOrDefault();
+            // 將查詢結果轉換為 List
+            List<Product> products = _db.Products.Where(e => e.ProductId == productId).ToList();
+
+            if (products.Count == 0)
+            {
+                return NotFound();
+            }
+
+            // 取第一筆資料
+            Product product = products.FirstOrDefault();
 
             if (product == null)
                 return NotFound();
@@ -595,16 +605,38 @@ namespace MedSysProject.Controllers
             return PartialView("_EditProductModal", productWrap);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
+        public async Task<IActionResult> Edit([FromForm] CProductsWrap model, int wrappedProductId)
         {
             try
             {
+                // 移除不需要進行模型驗證的屬性
+                ModelState.Remove("FormFiles");
+                ModelState.Remove("ImagePath");
+
+                if (!ModelState.IsValid)
+                {
+                    // 記錄或處理錯誤...
+
+                    // 輸出所有錯誤信息到控制台
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var errors = ModelState[key].Errors;
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+                        }
+                    }
+
+                    return PartialView("_EditProductModal"); // 或者重新顯示表單
+                }
+
                 // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
                 if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     var product = _db.Products
-                        .Where(p => p.ProductId == productId.WrappedProductId)
+                        .Where(p => p.ProductId == model.WrappedProductId)
                         .Select(p => new
                         {
                             p.ProductId,
@@ -623,7 +655,8 @@ namespace MedSysProject.Controllers
                 }
 
                 // 非 AJAX 請求，執行原有的編輯邏輯
-                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
+               
 
                 if (pDb != null)
                 {
@@ -634,13 +667,13 @@ namespace MedSysProject.Controllers
 
                     // 合併新上傳的圖片路徑和現有的圖片路徑
                     var combinedImagePaths = new List<string>();
-                    if (productId.FimagePaths != null && productId.FimagePaths.Any())
+                    if (model.FimagePaths != null && model.FimagePaths.Any())
                     {
-                        combinedImagePaths.AddRange(productId.FimagePaths);
+                        combinedImagePaths.AddRange(model.FimagePaths);
                     }
-                    if (productId.FormFiles != null && productId.FormFiles.Count > 0)
+                    if (model.FormFiles != null && model.FormFiles.Count > 0)
                     {
-                        foreach (var formFile in productId.FormFiles)
+                        foreach (var formFile in model.FormFiles)
                         {
                             // 生成唯一的檔案名稱
                             string photoName = Guid.NewGuid().ToString() + ".jpg";
@@ -663,26 +696,26 @@ namespace MedSysProject.Controllers
                     pDb.FimagePath = string.Join(",", existingImagePaths.Concat(combinedImagePaths));
 
                     // 處理其他欄位
-                    pDb.ProductName = productId.WrappedProductName;
-                    pDb.UnitsInStock = productId.WrappedUnitsInStock;
-                    pDb.License = productId.WrappedLicense;
-                    pDb.UnitPrice = productId.WrappedUnitPrice;
-                    pDb.Ingredient = productId.WrappedIngredient;
-                    pDb.Description = productId.WrappedDescription;
-                    pDb.Discontinued = productId.WrappedDiscontinued;
+                    pDb.ProductName = model.WrappedProductName;
+                    pDb.UnitsInStock = model.WrappedUnitsInStock;
+                    pDb.License = model.WrappedLicense;
+                    pDb.UnitPrice = model.WrappedUnitPrice;
+                    pDb.Ingredient = model.WrappedIngredient;
+                    pDb.Description = model.WrappedDescription;
+                    pDb.Discontinued = model.WrappedDiscontinued;
 
                     // 處理 ProductsClassification 資料表
-                    if (productId.SelectedCategories != null && productId.SelectedCategories.Any())
+                    if (model.SelectedCategories != null && model.SelectedCategories.Any())
                     {
                         // 移除所有現有的 CategoriesId 記錄
-                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
 
                         // 新增選擇的 CategoriesId 記錄
-                        foreach (var categoryId in productId.SelectedCategories)
+                        foreach (var categoryId in model.SelectedCategories)
                         {
                             var classification = new ProductsClassification
                             {
-                                ProductId = productId.WrappedProductId,
+                                ProductId = model.WrappedProductId,
                                 CategoriesId = categoryId
                             };
 
@@ -711,6 +744,9 @@ namespace MedSysProject.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+
+
 
 
 
