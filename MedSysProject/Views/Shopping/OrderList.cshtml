@@ -14,7 +14,7 @@
         <form method="post">
             <div class=" p-3">
                 @{
-                    <div class="fs-1 ">購買清單(@count) </div>
+                    <div class="fs-1 ">購買清單(本頁有 @count 筆資料，共 @ViewBag.Total 筆資料)</div>
                     // <span class="fs-2">訂單查詢</span>
                     <div class="row g-3">
                         <input type="hidden" value="keyword" name="Key" id="go" />
@@ -46,6 +46,63 @@
                     </div>
                 </div>
             }
+
+            <nav aria-label="Page navigation example" style="display: flex;justify-content: center;align-items: center;">
+                <ul class="pagination pagination">
+                    @{
+                        if (ViewBag.page == null)
+                        {
+
+                        }
+
+                        else
+                        {
+                            string PPath = "~/Shopping/OrderList?Key=&page=";
+
+                            int previous = ViewBag.page - 1;
+                            int next = ViewBag.page + 1;
+                            int current = ViewBag.page;
+                            int Home = 1;
+                            int Total = ViewBag.TotalPage;
+                            if (ViewBag.page == 1)
+                            {
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            }
+
+                            for (int i = 1; i <= ViewBag.TotalPage; i++)
+                            {
+                                if (i == ViewBag.page)
+                                {
+                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                }
+                            }
+
+                            if (ViewBag.page == ViewBag.TotalPage)
+                            {
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            }
+
+                        }
+                    }
+                </ul>
+            </nav>
+
         </form>
         @{
             for (int i = 0; i < Model.Count; i++)
@@ -139,9 +196,61 @@
     <p class="infinite-scroll-error">No more pages to load</p> *@
 </div>
 
-<p style="display: flex;justify-content: center;align-items: center;">
-    <button id="showmore" class="btn btn-success view-more-button" style="width:50%;height:50px;font-size:large;">顯示更多</button>
-</p>
+<nav aria-label="Page navigation example" style="display: flex;justify-content: center;align-items: center;">
+    <ul class="pagination pagination">
+        @{
+            if (ViewBag.page == null)
+            {
+
+            }
+
+            else
+            {
+                string PPath = "~/Shopping/OrderList?Key=&page=";
+
+                int previous = ViewBag.page - 1;
+                int next = ViewBag.page + 1;
+                int current = ViewBag.page;
+                int Home = 1;
+int Total = ViewBag.TotalPage;
+                if (ViewBag.page == 1)
+                {
+                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                }
+
+                for (int i = 1; i <= ViewBag.TotalPage; i++)
+                {
+                    if (i == ViewBag.page)
+                    {
+                        <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                    }
+                }
+
+                if (ViewBag.page == ViewBag.TotalPage)
+                {
+                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                }
+
+            }
+        }
+    </ul>
+</nav>
 
 
 @{
