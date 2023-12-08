@@ -7,33 +7,39 @@
 
 <main id="main">
     @{
-        <section class="single-post-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+                                        <section class="single-post-content">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
 
-                        <!-- ======= Single Post Content ======= -->
-                        <div class="single-post">
-                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
-                            <h1 class="mb-5">@Model[0].Title</h1>
-                            @Html.Raw(Model[0].Content)
-                        </div><!-- End Single Post Content -->
-                        <!-- ======= Comments ======= -->
-                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
+                                                        <!-- ======= Single Post Content ======= -->
+                                                        <div class="single-post">
+                                                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                                                            <h1 class="mb-5">@Model[0].Title</h1>
+                                                            @Html.Raw(Model[0].Content)
+                                                        </div><!-- End Single Post Content -->
+                                                        <!-- ======= Comments ======= -->
+                                                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
 
+                                                        <div class="Comments" id="here">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <!-- ======= 側面欄位丟這 ======= -->
 
-                    </div>
-                    <div class="col-md-3">
-                        <!-- ======= 側面欄位丟這 ======= -->
-
-                    </div>
-                </div>
-            </div>
-        </section>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
     }
 </main><!-- End #main -->
 @section Scripts {
     <script>
+
+        let comid = "@ViewBag.CommentId";
+        let comidd = JSON.parse(comid);
+        console.log(comid)
+        
         //為了不要跑版，使用者輸入的圖片會自動被包上figure以限制版面
         var postContentElements = document.getElementsByClassName('single-post');
         for (var i = 0; i < postContentElements.length; i++) {
@@ -49,25 +55,25 @@
         let input = document.querySelector("#comment-message");
         function key(event) {
             if (event.key == "Enter") {
-                console.log(input.value);
 
             }
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadComments();
-            
+            //對每個留言做遞迴檢查
+            // let mainComment = document.querySelectorAll('.mainComment');
+            // console.log(mainComment.length);
         })
         //載入主留言
-        let blogId = @Model[0].BlogId;
-        async function loadComments() {
-            const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
-            const data = await response.text();
-            let putIn = document.querySelector('.post-content');
-            console.log(putIn);
-            putIn.innerHTML += data;
-            //對每個留言做遞迴檢查
-            let mainComment = document.querySelectorAll('.mainComment');
-            console.log(mainComment.length);//抓到所有主留言
+        
+        async function loadComments(){
+            for (var i = 0; i < comidd.length; i++) {
+                const url = `https://localhost:7203/Blogs/ad?id=${comidd[i]}`;
+                console.log(url);
+                const response = await fetch(url);
+                const html =await response.text();
+                document.querySelector("#here").innerHTML += html;
+            }
         }
     </script>
 }

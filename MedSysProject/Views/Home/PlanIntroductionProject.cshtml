@@ -40,15 +40,7 @@
 
                                 <div class="swiper-slide">
                                     <img src="~/img/PersonalPlan/heart.jpg" alt="" >
-                                </div>
-
-                               @* <div class="swiper-slide">
-                                    <img src="assets/img/portfolio/portfolio-2.jpg" alt="">
-                                </div>
-
-                                <div class="swiper-slide">
-                                    <img src="assets/img/portfolio/portfolio-3.jpg" alt="">
-                                </div>*@
+                                </div>                                                            
 
                             </div>
 
@@ -94,12 +86,31 @@
                                         </tr>
                                     </thead>
                                     <tbody id="ProjectDetail">
-                                        <tr>
-                                            <th scope="row">一般生理檢查</th>
-                                            <td>身高、體重</td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                        @foreach(var project in Model)
+                                        {
+
+                                            <tr>
+                                              
+                                                    @if (project.ProjectId ==1)
+                                                    {
+                                                    <th scope="row" id="project">@project.ProjectName </th>
+                                                    <td id="item">
+                                                        身高、體重 、@foreach (var item in project.ItemName)
+                                                        {
+                                                            @item.GetType()
+                                                        }
+                                                        </td>
+                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                    continue;
+                                                }
+                                               
+                                              
                                         </tr>
+                                        
+                                        
+                                        }
+                                        
                                         <tr>
                                             <th scope="row">尿液一般檢查</th>
                                             <td>尿酸鹼度</td>
@@ -119,7 +130,7 @@
                            
                         </div>
                     </div>
-                    @*  原位置在這裡 *@
+                  
                 </div>
 
             </div>
@@ -135,25 +146,27 @@
         const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
         const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
         const url = "https://localhost:7078/api/PlanIntroductionProject/";
-
-    function load() { 
-        $.getJSON(url, function (datas) { 
-            const id = $("#PlanID").val();
-            if (id) {
-                const jsonData = JSON.stringify({
-                    planId: PlanID, planName: PlanName.val()
-                });
-                $.ajax({
-                    url: `${url}${id}`,
-                    type:'GET',
-                    contentType:'appliction/json',
-                        data: jsonData
-                })
-            }
-        })
+        const id = document.querySelectorAll("#item");
+        const project= document.querySelectorAll("#project");
+        console.log(project);
+    //function load() { 
+    //    $.getJSON(url, function (datas) { 
+    //        const id = $("#PlanID").val();
+    //        if (id) {
+    //            const jsonData = JSON.stringify({
+    //                planId: PlanID, planName: PlanName.val()
+    //            });
+    //            $.ajax({
+    //                url: `${url}${id}`,
+    //                type:'GET',
+    //                contentType:'appliction/json',
+    //                    data: jsonData
+    //            })
+    //        }
+    //    })
     
     
-    }
+    //}
 
 
 </script>

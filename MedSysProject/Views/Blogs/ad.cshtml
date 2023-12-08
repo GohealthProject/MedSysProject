@@ -1,43 +1,129 @@
-﻿
+﻿@model Comment
 @{
     ViewData["Title"] = "ad";
-    Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
+
+    string s = "";
+
+    if (Model.MemberId == null)
+    {
+        s = Model.Employee.EmployeeName;
+    }
+    else
+    {
+        s = Model.Member.MemberName;
+    }
 }
-<div id="here"> </div>
-<h1>ad</h1>
-
-<div class="container">
-    <p>hello</p>
-    <p>留言者</p>
-    <p>>回覆者1</p>
-    <p>>回覆者2</p>
-    <input type="text" class="mt-0"/>
 
 
+<div class="comment d-flex mb-4  container" style="margin-top:300px">
+    <div class="flex-shrink-0 ">
+        <div class="avatar avatar-sm rounded-circle">
+            <img class="avatar-img" src="~/img/shopping-cart.png" alt="">
+        </div>
+    </div>
+    <div class="flex-grow-1 ms-2 ms-sm-3">
+        <div class="comment-meta d-flex align-items-baseline">
+            <h6 class="me-2"></h6>
+            <span class="text-muted">@s</span>
+        </div>
+        <div class="comment-body">
+            @Model.Content
+        </div>
+
+        <div class="comment-replies bg-light p-3 mt-3 rounded" id="here">
+            <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+
+            <div class="reply d-flex mb-4">
+                <div class="flex-shrink-0">
+                    <div class="avatar avatar-sm rounded-circle">
+                        <img class="avatar-img" src="assets/img/person-4.jpg" alt="">
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-2 ms-sm-3">
+                    <div class="reply-meta d-flex align-items-baseline">
+                        <h6 class="mb-0 me-2">Brandon Smith</h6>
+                        <span class="text-muted">2d</span>
+                    </div>
+                    <div class="reply-body">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    </div>
+                </div>
+            </div>
+            <div class="reply d-flex">
+                <div class="flex-shrink-0">
+                    <div class="avatar avatar-sm rounded-circle">
+                        <img class="avatar-img" src="assets/img/person-3.jpg" alt="">
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-2 ms-sm-3">
+                    <div class="reply-meta d-flex align-items-baseline">
+                        <h6 class="mb-0 me-2">James Parsons</h6>
+                        <span class="text-muted">1d</span>
+                    </div>
+                    <div class="reply-body">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio dolore sed eos sapiente, praesentium.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
+
+<!-- 留言區段 -->
+
 @section Scripts{
        <script>
-        let new5 = "@ViewBag.gg";
-        let new5Array = JSON.parse(new5);
-        let View5 = "@ViewBag.View5";
-        let View5Array = JSON.parse(View5);
-
+        
+           let id = @Model.CommentId;
         document.addEventListener('DOMContentLoaded', () => {
+            console.log("GG");
             load();
         });
-
+           var html = "";
         async function load() {
 
-            for (var i = 0; i < new5Array.length; i++) {
+                let url = `https://localhost:7078/api/Comments/comment?id=${id}`
+                const response = await fetch(url);
+                const data = await response.json();
+            console.log(data);
+            let ad = "";
+            const value = data.map(rp => {
+                const content = rp.content
+                let ad = "";
+                if (rp.employee == null) {
+                    ad = rp.member.memberName;
+                } else {
+                    ad = rp.employee.employeeName;
+                }
+                console.log(ad);
+                var s = 
+                `
+                            <div class="reply d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="avatar avatar-sm rounded-circle">
+                                        <img class="avatar-img" src="/img/shopping-cart.png" alt="">
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-2 ms-sm-3">
+                            <div class="reply-meta d-flex align-items-baseline">
+                                <h6 class="mb-0 me-2">${ad}</h6>
+                                <span class="text-muted">2d</span>
+                            </div>
+                            <div class="reply-body">
+                                        ${content};
+                            </div>
+                        </div>
+                    </div>
+                `
 
-                const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${new5Array[i]}`);
-                const data = await response.text();
+                return s;
+            })
+            console.log(value.join(""));
+            document.querySelector("#here").innerHTML= value.join("");
 
-                document.querySelector("#here").innerHTML += data;
-            }
         }
        </script>
 }

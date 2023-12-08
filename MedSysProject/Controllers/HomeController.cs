@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth;
 using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
@@ -49,15 +50,17 @@ namespace MedSysProject.Controllers
                                //select p;
                                select new
                                {
-                                   //PlanId=g.Min(p => p.PlanId),
+                                   
                 PlanName = g.Key,                
                 PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
 
             var total = from p in projectprice
                         from pp in _context.Plans
                         select new { 
-                        pp.PlanId,
                         pp.PlanName,
+                        pp.PlanId,
+                        
+                           //p.PlanName,
                         p.PlanPrice
                         
                         };
@@ -71,36 +74,31 @@ namespace MedSysProject.Controllers
         }
 
       public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹
+        { //放方案介紹  篩對應project和item
 
             //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
-            _context.Plans.Load();
-            _context.Projects.Load();
-            _context.Items.Load();
-            
-            var ID = _context.Plans.Where(i => i.PlanId == id);
-            var join =from i in ID
-                from p in _context.Plans
-            from pj in _context.Projects
-            from it in _context.Items
-            select new
-            {
-                p.PlanId,
-                p.PlanName,
-                p.PlanDescription,
-                p.PlanRefs,
-                pj.ProjectId,
-                pj.ProjectName,
-                pj.ProjectPrice,
-                it.ItemId,
-                it.ItemName,
-
-            };
            
+            
+            //var ID = .Where(i => i.PlanId == id);
+            var joins = from i in _context.Plans.Where(i => i.PlanId == id).Include(pj=>pj.PlanRefs).ThenInclude(pj=>pj.Project)                       
+                       
+                        from it in _context.Items
+                        select new
+                        {
+                            i.PlanId,
+                            i.PlanName,
+                            i.PlanDescription,
+                            i.PlanRefs,
+                            //pj.ProjectId,
+                            //pj.ProjectName,
+                            //pj.ProjectPrice,
+                            it.ItemId,
+                            it.ItemName,
+                        };
+            
 
 
-
-            return View(join.ToList());
+            return View(joins.ToList());
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
@@ -156,13 +154,14 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult report(Member id)
+        public IActionResult report(int id)
         {
+            ViewData["id"] = 55;
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
-
-            var j = (from s in _context.ReportDetails.Include(p=>p.Report).ThenInclude(p=>p.Reserve)
-                     where s.Report.MemberId == 46
+            _context.Members.Load();
+            var j = (from s in _context.ReportDetails.Include(p=>p.Item).Include(p=>p.Report).ThenInclude(p=>p.Reserve)
+                     where s.Report.MemberId == 7
                      //select s.Report.Reserve.ReserveDate).Distinct();
                      select s);
 

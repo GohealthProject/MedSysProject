@@ -69,14 +69,47 @@
         border: 1px solid #333;
     }*/
 </style>
+@{
+    List<string> rd = new List<string>();
+    List<int> reportid = new List<int>();
+    List<string>dd=new List<string>();
+    string[] sArray={};
+}
+<div class="col-2 title">
+    <select class="form-select" aria-label="Default select example" id="import">
+        <option selected>選擇健檢報告</option>
 
+        @{
+
+
+            foreach (var item in Model)
+            {
+                rd.Add(item.Report.Reserve.ReserveDate.Value.ToShortDateString() +"--"+ item.Report.ReportId);
+               
+
+
+
+            }
+            
+        foreach (var s in rd.Distinct())
+            {
+                <option value="1">@s</option>
+                string[] cc =s.Split("-");
+                sArray = cc;
+            }
+
+        }
+
+
+    </select>
+</div>
 @*@foreach (var item in Model)
     {
      
 
 
         }*@
-
+       
 <h1>會員中心</h1>
 @*@Html.DisplayNameFor(model => model)*@
 
@@ -101,37 +134,54 @@
                             <option selected>選擇健檢報告</option>
 
                             @{
-                                int count = 0;
-                                foreach (var item in Model)
-                                {
-                                    count++;
-                                    <option value="1">@item.Report.Reserve.ReserveDate.Value.ToShortDateString()</option>
+                                
+                                //foreach (var item in Model)
+                                //{
+                                //    rd.Add(item.Report.ReportId+"---"+item.Report.Reserve.ReserveDate.Value.ToShortDateString());
+                                //    reportid.Add(item.Report.ReportId);
                                     
+                                       
+
+                                //}
+                                //@sArray[1]
+                                foreach(var s in rd.Distinct())
+                                {
+                                    <option value="1">
+
+                                        @s.Split("-")[0]
+                                        
+                                       
+                                    </option>
+
                                 }
+                                
+
                             }
                             
                             
                         </select>
                     </div>
                     <div class="col-2 title">
-                        <select class="form-select" aria-label="Default select example" id="chose1">
+                        <select class="form-select" aria-label="Default select example" id="chose2">
                             <option selected>選擇健檢報告</option>
-
+                            
                             @{
-                                int count1 = 0;
-                                foreach (var item in Model)
+
+                                foreach (var s in rd.Distinct())
                                 {
-                                    count1++;
-                                    <option value="1">@item</option>
+                                    <option value="1">
+
+                                        @s.Split("-")[2]
+                                    </option>
 
                                 }
                             }
-
+                            ////s.Split("-")[0]
 
                         </select>
                     </div>
-                   <div class="col-4"></div>
-                  @*  <div class="col-6 title">
+                    <div class="col-4"></div>
+                    @*  <div class="col-6 title">
                         <select class="form-select" aria-label="Default select example" id="chose2">
                             <option selected>選擇健檢報告</option>
                             <option value="1">2023/09/30</option>
@@ -149,7 +199,7 @@
                                     <th class="col-3">
                                         XX年度檢驗結果
                                     </th>
-                                    <th class="col-3">
+                                    <th class="col-3" >
                                         XX年度檢驗結果
                                     </th>
                                     <th class="col-3">
@@ -157,7 +207,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id ="reportshow1" @*class="d-none"*@>
+                            <tbody id ="reportshow1" >
                                 <tr>
                                     <td>
                                         白血球總數
@@ -178,7 +228,7 @@
 
                                     </td>
                                     <td class="color-red">80</td>
-                                    
+
                                     <td>
                                         39-74
                                         (%)
@@ -190,8 +240,8 @@
                                     </td>
                                 </tr>
                                 <tr >
-                                   
-                                   
+
+
                                     <td>
                                         白血球分類-淋巴球
 
@@ -206,7 +256,7 @@
                                         3.25~9.16 (10^3/uL)
 
                                     </td>
-                                
+
                                 </tr>
                                 <tr>
                                     <td>
@@ -246,8 +296,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                   
-                                    
+
+
                                     <td>
                                         白血球分類-嗜鹼性球
 
@@ -272,54 +322,11 @@
                         </table>
                     </div>
 
-                   @* <div class="col-6">
-                        <table border="1" class="col-12">
-                            <thead>
-                                <tr>
-                                    <th class="col-4">
-                                        項目
-                                    </th>
-                                    <th class="col-4">
-                                        檢驗結果
-                                    </th>
-                                    <th class="col-4">
-                                        標準值
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="reportshow2" class="d-none">
-                                <tr>
-                                    <td class="col-4">
-                                        身高
-                                    </td>
-                                    <td class="col-4">180</td>
-                                    <td class="col-4">無</td>
-                                </tr>
-                                <tr>
-                                    <td class="col-4">
-                                        體重
-                                    </td>
-                                    <td class="col-4">100</td>
-                                    <td class="col-4">無</td>
-                                    
-                                </tr>
-                                <tr>
-                                    <td class="col-4"> 
-                                        體溫
-                                    </td>
-                                     
-                                    <td class="col-4">37.5</td>
-                                    <td class="col-4"><38度</td>
 
-                                </tr>
-                            </tbody>
-                            
-                        </table>
-                    </div>*@
 
                 </div>
             </div>
- @*           <div class="tab-pane fade" id="tab4">
+            @*           <div class="tab-pane fade" id="tab4">
                 <!-- Tab panes -->
 
                 <ul class="nav nav-tabs mb-2" id="myTab">
@@ -329,14 +336,14 @@
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#profile">回覆</a>
                     </li>
-                 
+
                 </ul>
                 <!--content zone-->
                 <div class="tab-content ">
                     <div class="tab-pane fade show active" id="home">
                         <form>
                             <div class="mb-3">
-                                
+
                             <label for="exampleFormControlInput1" class="form-label">電子信箱</label>
                             <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
                         </div>
@@ -397,17 +404,174 @@
                             </div>
                         </div>
                     </div>
-                  
-             
+
+
             </div>*@
 
-            
+
         </div>
     </div>
+    @ViewData["id"]
 </div>
 
+
 <script>
-  
+    var ch1 = document.querySelector("#chose1");
+    var ch2 = document.querySelector("#chose2");
+    var table = document.querySelector("#reportshow1");
+    //var val = document.all['#chose2'].value;
+    var index = ch1.selectedIndex;
+
+    function rp2Display() {
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        //let rp2 = document.querySelector("#tr").children[2]
+        let rp3 =document.querySelectorAll('#rp2')
+        let tr = document.querySelector("#tr")
+        
+        td1.innerHTML = "ABC"
+        console.log(rp3[0])
+        let length = tr.length
+
+        for (var i = 0; i < 80; i++) {
+            let j = document.createElement("td");
+            //j.innerHTML ="FUCK"
+            rp3[i].parentNode.replaceChild(td1,rp3[i]);
+        }
+    }
+      
+
+        const endpoint = '';
+        $.ajax({
+            type: "GET",
+            url: endpoint,
+            dataType: "json",
+            success: function (response) {
+                const charge = [];
+                charge.push(...response);
+                createDomElement(charge);
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+        function createDomElement(charge) {
+            const domElements = charge.map(place => {
+                return `
+            <li>
+              <p class="location">位置： ${place.Location}</p>
+              <p class="address">地址：${place.Address}</p>
+            </li>
+          `;
+            }).join("");
+
+            const chargeList = document.querySelector('.charge-list');
+            chargeList.innerHTML = domElements;
+        }
+    
+
+    ch1.addEventListener("change", () => {
+        console.log(ch2.value)
+        index = ch1.selectedIndex;
+        ch2.selectedIndex = index;
+        rp2Display();
+
+    })
+    //var td1 = document.createElement("td");
+    //var td2 = document.createElement("td");
+    //var td3 = document.createElement("td");
+    //var td4 = document.createElement("td");
+
+    //var tr = document.createElement("tr");
+
+    //td1.innerHTML = "項目";
+    //tr.appendChild(td1);
+    //td2.innerHTML = "報告1"
+    //tr.appendChild(td2);
+    //td3.innerHTML = "報告2"
+    //tr.appendChild(td3);
+    //td4.innerHTML = "標準"
+    //tr.appendChild(td4);
+    //table.appendChild(tr);
+
+
+    //var report= foreach(var items in Model)
+    //     {
+    //     var tr = document.createElement("tr");
+    //     td1.innerHTML = "項目";
+    //     tr.appendChild(td1);
+    //     td2.innerHTML = "報告1"
+    //     tr.appendChild(td2);
+    //     td3.innerHTML = "報告2"
+    //     tr.appendChild(td3);
+    //     td4.innerHTML = "標準"
+    //     tr.appendChild(td4);
+    //     table.appendChild(tr);
+    //     }
+
+    @{
+        var report = from s in Model
+                     where s.Report.Reserve.ReserveDate.Value.ToShortDateString() == "2023/10/10" &&
+                     s.Report.ReportId == 30
+                     select s;
+    }
+
+        table.innerHTML =
+    `
+
+    @foreach (var items in report)
+    {
+        @Html.Raw("<tr id='tr'>")
+        @Html.Raw("<td>")
+        @items.Item.ItemName
+        @Html.Raw("</td>")
+        @Html.Raw("<td>")
+        @items.Result
+        @Html.Raw("</td>")
+        @Html.Raw("<td id='rp2'>")
+        @Html.Raw("none")
+        @Html.Raw("</td>")
+        @Html.Raw("<td>")
+
+        if (@items.Item.ItemRange != null)
+        {
+            @items.Item.ItemRange
+        }
+        else
+        {
+            if (@items.Item.ItemRangeMin != null)
+            {
+                @items.Item.ItemRangeMin
+                @Html.DisplayName("~")
+                @items.Item.ItemRangeMax
+            }
+            else
+            {
+                if (@items.Report.Member.MemberGender == "男         ")
+                {
+                    @items.Item.Mmin
+                    @Html.DisplayName("~")
+                    @items.Item.Mmax
+                }
+                else
+                {
+                    @items.Item.Fmin
+                    @Html.DisplayName("~")
+                    @items.Item.Fmax
+                }
+            }
+
+
+
+            @Html.Raw("</td>")
+            @Html.Raw("</tr>")
+
+        }
+    }`
+
+   
+
     //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
     //    console.log(datas);
     //    const docFrag = $(document.createDocumentFragment());
@@ -431,22 +595,26 @@
     //        $("#reportshow1").html(docFrag);
     //        })
     //})
+
+
     $("#chose1").change(function () {
         $("#reportshow1").removeClass("d-none")
-        
-    
+
+
     })
     $("#chose2").change(function () {
         $("#reportshow2").removeClass("d-none")
 
 
     })
-
+    ///////////
+    ///print///
+    ///////////
     var $table = $('#table1')
 
     $(function () {
         $table.bootstrapTable()
     })
-   
+
 </script>
    
