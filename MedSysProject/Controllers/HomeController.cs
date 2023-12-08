@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth;
 using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
@@ -73,32 +74,28 @@ namespace MedSysProject.Controllers
         }
 
       public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹
+        { //放方案介紹  篩對應project和item
 
             //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
-            //_context.Plans.Load();
-            _context.Projects.Load();
-            _context.Items.Load();
+           
             
-            var ID = _context.Plans.Where(i => i.PlanId == id);
-            var joins =from i in ID
-                from p in _context.Plans
-            from pj in _context.Projects
-            from it in _context.Items            
-            select new
-            {
-                p.PlanId,
-                p.PlanName,
-                p.PlanDescription,
-                p.PlanRefs,
-                pj.ProjectId,
-                pj.ProjectName,
-                pj.ProjectPrice,
-                it.ItemId,
-                it.ItemName,
-            };
+            //var ID = .Where(i => i.PlanId == id);
+            var joins = from i in _context.Plans.Where(i => i.PlanId == id).Include(pj=>pj.PlanRefs).ThenInclude(pj=>pj.Project)                       
+                       
+                        from it in _context.Items
+                        select new
+                        {
+                            i.PlanId,
+                            i.PlanName,
+                            i.PlanDescription,
+                            i.PlanRefs,
+                            //pj.ProjectId,
+                            //pj.ProjectName,
+                            //pj.ProjectPrice,
+                            it.ItemId,
+                            it.ItemName,
+                        };
             
-
 
 
             return View(joins.ToList());

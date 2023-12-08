@@ -1,0 +1,51 @@
+﻿@model Comment
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+<div>
+    <h2>
+       
+    </h2>
+    <h1>@Model.Content</h1>
+    <input type="hidden" value="@Model.CommentId" id="cid" />
+</div>
+
+<div>
+    <ul id="here">
+        <li>1</li>
+        <li>1</li>
+        <li>1</li>
+        <li>1</li>
+        <li>1</li>
+    </ul>
+</div>
+
+<script>
+    let id = document.querySelector("#cid").value;
+    document.addEventListener("DOMContentLoaded", load);
+    async function load() {
+        let url = `https://localhost:7078/api/Comments/comment?id=${id}`
+        const response = await fetch(url);
+        const data =await response.json();
+        console.log(data);
+        for (var i = 0; i < data.length; i++) {
+            console.log(data[i].content);
+        }
+
+        const value = data.map(item => {
+            const content = item.content;
+            const blogid = item.blogId;
+            console.log(`內容是 ${content} 文章是 ${blogid}`)
+            var s  =
+            `
+                <li>${content}</li>
+            `
+            return s;
+        })
+        console.log(value);
+document.querySelector("#here").innerHTML = value.join("");
+    }
+</script>
