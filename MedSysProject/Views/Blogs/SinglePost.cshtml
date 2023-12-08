@@ -55,9 +55,7 @@
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadComments();
-            //對每個留言做遞迴檢查
-            let mainComment = document.querySelectorAll('.mainComment');
-            console.log(mainComment.length);
+            
         })
         //載入主留言
         let blogId = @Model[0].BlogId;
@@ -67,6 +65,9 @@
             let putIn = document.querySelector('.post-content');
             console.log(putIn);
             putIn.innerHTML += data;
+            //對每個留言做遞迴檢查
+            let mainComment = document.querySelectorAll('.mainComment');
+            console.log(mainComment.length);//抓到所有主留言
         }
     </script>
 }

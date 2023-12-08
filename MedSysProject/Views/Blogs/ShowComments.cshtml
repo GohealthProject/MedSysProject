@@ -64,7 +64,12 @@
                         <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
                     </div>
                     @{
-                        // var replies = comments.Where(reply => reply.ParentCommentId == comment.CommentId).OrderBy(reply => reply.CommentId);
+                        var subComment = from sub in Model
+                                         join main in Model
+                                         on sub.ParentCommentId equals main.CommentId
+                                         where sub.BlogId == 2
+                                         select new { sub.CommentId, sub.Content, sub.ParentCommentId, MID = main.CommentId, MCONTENT = main.Content };
+                                         // var replies = comments.Where(reply => reply.ParentCommentId == comment.CommentId).OrderBy(reply => reply.CommentId);
                         // if (replies.Any())
                         // {
                         //     <div class="comment-replies bg-light p-3 mt-3 rounded">
