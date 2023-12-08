@@ -156,13 +156,14 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult report(Member id)
+        public IActionResult report(int id)
         {
+            ViewData["id"] = 55;
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
-
-            var j = (from s in _context.ReportDetails.Include(p=>p.Report).ThenInclude(p=>p.Reserve)
-                     where s.Report.MemberId == 46
+            _context.Members.Load();
+            var j = (from s in _context.ReportDetails.Include(p=>p.Item).Include(p=>p.Report).ThenInclude(p=>p.Reserve)
+                     where s.Report.MemberId == 7
                      //select s.Report.Reserve.ReserveDate).Distinct();
                      select s);
 
