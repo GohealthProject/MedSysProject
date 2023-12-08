@@ -134,6 +134,7 @@ namespace MedSysProject.Controllers
             {
                 CProductWarp cp = new CProductWarp();
                 cp.Product = item;
+                cp.Path = item.FimagePath.Split(",");
                 list.Add(cp);
             }
             ViewBag.KeySearch = Key;
