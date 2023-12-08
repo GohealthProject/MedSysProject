@@ -38,17 +38,17 @@
                 <hr class="hr-dashed" />
                 <input type="text" style="width:100px" placeholder="金額最小" /> ----- <input type="text" style="width:100px" placeholder="金額最大" />
             </div>
-            <div style="height:600px"></div>
+            <div ></div>
         </div>
         <div class="col-9" style="padding:20px" >
-            <div style="height:300px;">
+            <div ">
                 <span class="fs-2 text-info">"搜尋字元"搜尋結果</span>
                 <hr class="hr-dashed" />
-                <div >
-                    <span class="fs-5 me-3">篩選</span>
-                    <button class="btn btn-outline-primary me-1 active">綜合排名</button>
-                    <button class="btn btn-outline-primary me-1">最新</button>
-                    <button class="btn btn-outline-primary me-1">最熱銷</button>
+                <div id="selectBtnList">
+                    <span class="fs-5 me-3 ">篩選</span>
+                    <button class="btn btn-outline-primary me-1 active" id="top">綜合排名</button>
+                    <button class="btn btn-outline-primary me-1" id="news">最新</button>
+                    <button class="btn btn-outline-primary me-1" id="hots">最熱銷</button>
                     <select class="form-select form-select-sm" style="display:inline;width:200px">
                         <option selected>價格</option>
                         <option>價格 從低至高</option>
@@ -60,18 +60,28 @@
                         string PName = "";
                         int Price = 0;
                         double PriceT = 0;
-                        int count = Model.Count();
-                        for(int i=0;i<9;i++)
+
+                        int count =0;
+                        if (Model.Count() > 9)
+                        {
+                            count = 9;
+                        }
+                        else
+                        {
+                            count = Model.Count();
+                        }
+                        for(int i=0;i<count;i++)
                         {
                             Price = (int)Model[i].UnitPrice;
                             PriceT = Price * 0.8;
+                            if(i %3==0 && i !=0){
+                                                        @:</div>
+                            }
                             if (i % 3 == 0)
                             {
-                                @:<div class="row mb-3">
+                                                        @:<div class="row mb-3">
                             }
-                            if(i %3==0 && i !=0){
-                                @:</div>
-                            }
+                            
                             if (Model[i].ProductName.Length > 6)
                             {
                                 PName=Model[i].ProductName.Substring(0, 6);
@@ -82,28 +92,28 @@
                             }
                             
 
-                            <div class="col ">
-                            <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~")" class="card-img-top" alt="..." style="width:285px;height:201px">
-                                <div class="card-body">
-                                    <a class="fs-2"asp-action="selectProduct" asp-route-id="@Model[i].Product.ProductId">@PName</a>
-                                    <p class="card-text fs-3 text-info">8折</p>
-                                    <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">$@Price.ToString("N0")</span><span class="card-text text-danger fs-3">$@PriceT.ToString("N0")</span></div>
-                                    <p class="card-text">三星</p>
-                                </div>
-                            </div>
-                            </div>
+                                                    <div class="col ">
+                                                    <div class="card" style="width: 18rem;">
+                                                        <img src="@Url.Content("~")@Model[i].Path[0]" class="card-img-top" alt="..." style="width:285px;height:201px">
+                                                        <div class="card-body">
+                                                            <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct/")@Model[i].ProductId">@PName</a>
+                                                            <p class="card-text fs-3 text-info">8折</p>
+                                                            <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">$@Price.ToString("N0")</span><span class="card-text text-danger fs-3">$@PriceT.ToString("N0")</span></div>
+                                                            <p class="card-text">三星</p>
+                                                        </div>
+                                                    </div>
+                                                    </div>
                         }
                         count = count / 9;
-                        
-                    <hr class="hr-dashed" />
-                    
-                   }
-            </div>    
-            
+                    }
+                </div>    
+                <div>@{
+                        int pae = (Model.Count()+1) / 9;
+                    }
+                    </div>
             </div>
             <div style="text-align:center;" id="btnList">
-                        @for(int i=1; i <= count + 1; i++)
+                        @for(int i=1; i <= pae + 1; i++)
                         {
                             <button class="fs-5 btn btn-outline-primary active" value="@i">@i</button>
                         }
@@ -116,6 +126,11 @@
 <script>
     let key = document.querySelector("#key").value;
     document.addEventListener("DOMContentLoaded",()=>{
+        document.querySelector("#hots").addEventListener('click',loadhots);
+        document.querySelector("#news").addEventListener('click', loadnews);
+        document.querySelector("#top").addEventListener('click', () => {
+            window.location.href = `@Url.Content("~/Shopping/KeySearch?Key=")${key}`
+        });
     let btn = document.querySelector("#btnList").querySelectorAll("button");
         for(var i =0; i<btn.length;i++){
             btn[i].addEventListener("click",loadSearch);
@@ -125,12 +140,41 @@
     async function loadSearch(event){
         console.log(event.target.value)
         console.log(key);
-        var count = 0;
+        var count =0;
         var s ="";
         var url = `https://localhost:7078/api/Products/${key}&${event.target.value}`;
         console.log(url)
         const response = await fetch(`https://localhost:7078/api/Products/${key}&${event.target.value}`)
         const data = await response.json();
+        push (data);
+    }
+    
+    async function loadhots(event){
+        let url = `https://localhost:7078/api/Products/hot/key=${key}`
+        const response = await fetch(url);
+        const data = await response.json();
+        push(data);
+        document.querySelector("#btnList").innerHTML = "";
+        document.querySelector("#selectBtnList").querySelectorAll("button").forEach(btn => {
+            btn.classList.remove("active");
+        })
+        event.target.classList.add("active");
+    }
+    async function loadnews(event){
+        let url=`https://localhost:7078/api/Products/news/key=${key}`
+        const response = await fetch(url);
+        const data =await response.json();
+        console.log(data);
+        push(data);
+        document.querySelector("#btnList").innerHTML = "";
+        document.querySelector("#selectBtnList").querySelectorAll("button").forEach(btn => {
+            btn.classList.remove("active");
+        })
+        event.target.classList.add("active");
+    }
+    function push (data){
+        var count= 0;
+        console.log(data)
         const datas = data.$values;
         console.log(datas)
         const value = datas.map(product=>{
@@ -142,6 +186,7 @@
             const price=parseInt(product.unitPrice);
             const id= product.productId;
             const img = product.fimagePath;
+            const path = img.split(",")[0];
             const prices =price*0.8 ;
             console.log(`產品ID ${id} 名字是 ${name} 它的價格 ${price}`)
           
@@ -153,9 +198,9 @@
             `
                 <div class="col ">
                        <div class="card" style="width: 18rem;">
-                            <img src="@Url.Content("~")${img}" class="card-img-top" alt="..." style="width:285px;height:201px">
+                            <img src="@Url.Content("~")${path}" class="card-img-top" alt="..." style="width:285px;height:201px">
                               <div class="card-body">
-                                  <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct?")${id}">${name}</a>
+                                  <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct/")${id}">${name}</a>
                                   <p class="card-text fs-3 text-info">8折</p>
                                   <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">$${price}</span><span class="card-text text-danger fs-3">$${prices}</span></div>
                                   <p class="card-text">三星</p>

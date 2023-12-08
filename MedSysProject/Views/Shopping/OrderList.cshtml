@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "OrderList";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    int count = Model.Count();
 }
 
 
@@ -13,13 +14,14 @@
         <form method="post">
             <div class=" p-3">
                 @{
-                    <div class="fs-1 ">購買清單</div>
+                    <div class="fs-1 ">購買清單(@count) </div>
                     // <span class="fs-2">訂單查詢</span>
                     <div class="row g-3">
-                        <input type="hidden" value="keyword" name="Key" />
+                        <input type="hidden" value="keyword" name="Key" id="go" />
                         <div class="col-auto">
                             <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." />
                         </div>
+
                         <div class="col-auto">
                             <input class="btn btn-primary" type="submit" value="查詢" />
                         </div>
@@ -46,7 +48,6 @@
             }
         </form>
         @{
-            int count = 0;
             for (int i = 0; i < Model.Count; i++)
             {
                 count++;
@@ -56,29 +57,29 @@
                         <div class="card-body">
                             <h5 class="card-title"></h5>
                             <div class="row mb-3">
-                                <div class="col-2 border ">
+                                <div class="col-2 border fs-5" >
                                     訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
                                 </div>
-                                <div class="col-2 border ">
+                                <div class="col-2 border fs-5">
                                     下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.State.StateName
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.Pay.PayName
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.Ship.ShipName
                                 </div>
-                                <div class="col-1 border ">
-                                    <a class="btn btn-outline-secondary" asp-action="" asp-controller="" asp-route-id="">發票</a>
+                                <div class="col-1 border fs-5">
+                                    <a class="btn btn-outline-secondary fs-4" asp-action="" asp-controller="" asp-route-id="">發票</a>
                                 </div>
-                                <div class="col-3 border ">
+                                <div class="col-3 border fs-5">
                                     說明 : @Model[i].order.State.StateDetailed
                                 </div>
-                                <div class="col-1 border ">
-                                    <a class="btn btn-outline-danger" asp-action="" asp-controller="" asp-route-id="">退貨</a>
+                                <div class="col-1 border fs-3">
+                                    <a class="btn btn-outline-danger fs-4" asp-action="" asp-controller="" asp-route-id="">退貨</a>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
@@ -144,36 +145,41 @@
 
 
 @{
-    int nextPage = ViewBag.page + 1;
+    //int nextPage = ViewBag.page + 1;
     <!-- pagination has path -->
-    <p class="pagination">
-        <a class="pagination__next" href="@Url.Content("~/Shopping/OrderList?page=" + nextPage + "")">Next page</a>
-    </p>
+    //<p class="pagination">
+    //    <a class="pagination__next" href="@Url.Content("~/Shopping/OrderList?page=" + nextPage + "")">Next page</a>
+    //</p>
 }
 
 
 @section Scripts {
-    <script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            scrollevent()
-            const showmore = document.getElementById('showmore');
-            showmore.addEventListener('click', () => {
-                scrollevent()
-            });
+            let btns =document.querySelectorAll(".dBtn");
+            console.log(btns);
+            for(var i =0; i<btns.length;i++){
+                btns[i].addEventListener('click',out);
+            }
+            //scrollevent()
+            //const showmore = document.getElementById('showmore');
+            //showmore.addEventListener('click', () => {
+            //    scrollevent()
+            //});
         });
 
-        function scrollevent() {
-            //wait 2s
-            setTimeout(() => {
-                //add event
-                let butons = document.querySelectorAll(".dBtn");
-                for (var i = 0; i < butons.length; i++) {
-                    butons[i].addEventListener("click", out);
-                }
-            }, 200);
+        //function scrollevent() {
+        //    //wait 2s
+        //    setTimeout(() => {
+        //        //add event
+        //        let butons = document.querySelectorAll(".dBtn");
+        //        for (var i = 0; i < butons.length; i++) {
+        //            butons[i].addEventListener("click", out);
+        //        }
+        //    }, 200);
 
-        }
+        //}
 
         function out(event) {
             event.target.removeEventListener('click', out);
@@ -188,27 +194,30 @@
             event.target.addEventListener('click', out);
         }
 
-        // init Infinite Scroll
-        $('.article-feed').infiniteScroll({
-            path: getPath,
-            append: '.article',
-            button: '.view-more-button',
-            scrollThreshold: false,
-            status: '.page-load-status',
-            hideNav: '.pagination',
-        });
+         //init Infinite Scroll
+        //$('.article-feed').infiniteScroll({
+        //    path: getPath,
+        //    append: '.article',
+        //    button: '.view-more-button',
+        //    scrollThreshold: false,
+        //    status: '.page-load-status',
+        //    hideNav: '.pagination',
+        //});
 
-        function getPath() {
-            const nextSlugs = [];
+        //function getPath() {
+        //    const nextSlugs = [];
+        //    let key = document.querySelector("#go").value;
+        //    let p = document.querySelector("#Keyword").value;
+        //    for (let i = 1; i <= @ViewBag.TotalPage; i++) {
+        //        nextSlugs.push(i);
+        //    }
 
-            for (let i = 1; i <= @ViewBag.TotalPage; i++) {
-                nextSlugs.push(i);
-            }
-
-            let url = `@Url.Content("~/Shopping/OrderList?page=")`
-            let slug = nextSlugs[this.loadCount];
-            if (slug) return url + slug;
-        }
+        //    //let url = `@Url.Content("~/Shopping/OrderList?key=")${key}&page=`
+        //    let url = `/Shopping/OrderList?Key=${key}&page=`
+        //    let slug = nextSlugs[this.loadCount];
+        //    url+= `&p=${p}`
+        //    if (slug) return url + slug;
+        //}
 
     </script>
 }

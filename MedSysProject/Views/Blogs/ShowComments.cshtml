@@ -8,71 +8,6 @@
     <!--一個h5顯示共幾則留言，可能要加一個div並在右邊放收折按鈕(顯示所有留言)-->
     <h5 class="comment-title py-4">2 Comments</h5>
     <!--一個主要留言-->
-    <div class="comment d-flex mb-4">
-        <div class="flex-shrink-0">
-            <div class="avatar avatar-sm rounded-circle">
-                <img class="avatar-img" src="~/assets/img/person-5.jpg" alt="" class="img-fluid">
-            </div>
-        </div>
-        <div class="flex-grow-1 ms-2 ms-sm-3">
-            <div class="comment-meta d-flex align-item-center">
-                <h6 class="me-2">Jordan Singer</h6>
-                <span class="text-muted">2d</span>
-            </div>
-            <div class="comment-body">
-                 quibusdam nobis esse accusantium.
-            </div>
-            <div class="d-flex">
-                <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-            </div>
-
-            <div class="comment-replies bg-light p-3 mt-3 rounded">
-                <!--總共幾筆子留言-->
-                <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
-
-                <div class="reply d-flex mb-4">
-                    <div class="flex-shrink-0">
-                        <div class="avatar avatar-sm rounded-circle">
-                            <img class="avatar-img" src="~/assets/img/person-4.jpg" alt="" class="img-fluid">
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2 ms-sm-3">
-                        <div class="reply-meta d-flex align-item-center">
-                            <h6 class="mb-0 me-2">Brandon Smith</h6>
-                            <span class="text-muted">2d</span>
-                        </div>
-                        <div class="reply-body">
-                            Lorem ipsum dolor sit
-                        </div>
-                        <div class="d-flex">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="reply d-flex">
-                    <div class="flex-shrink-0">
-                        <div class="avatar avatar-sm rounded-circle">
-                            <img class="avatar-img" src="~/assets/img/person-3.jpg" alt="" class="img-fluid">
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2 ms-sm-3">
-                        <div class="reply-meta d-flex align-item-center">
-                            <h6 class="mb-0 me-2">James Parsons</h6>
-                            <span class="text-muted">1d</span>
-                        </div>
-                        <div class="reply-body">
-                            Lorem ipsum dolor sit
-                        </div>
-                        <div class="d-flex">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--一個主要留言-->
-    <!--轉成d-flex排列子元素-->
     @{
         //所有留言用id做排序
         var comments = from comment in Model
@@ -83,7 +18,7 @@
     {
         if (comment.ParentComment == null)
         {
-            <div class="comment d-flex mb-4">
+            <div class="comment d-flex mb-4 mainComment">
                 <!--放使用者照片的位置-->
                 <div class="flex-shrink-0">
                     <div class="avatar avatar-sm rounded-circle">
@@ -100,7 +35,8 @@
                     </div>
                 </div>
                 <!--放使用者名字、留言-->
-                <div class="flex-shrink-1 ms-2 ms-sm-3">
+                <!--上班做的-->
+                <div class="flex-grow-1 ms-2 ms-sm-3">
                     <div class="comment-meta d-flex  align-item-center">
                         @{
                             if (comment.EmployeeId == null)
@@ -115,49 +51,52 @@
                         }
                         <!--留言時間，幾天前-->
                         <span class="text-muted">4d</span>
-                        <!--<a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small"> reply</span></a>-->
                     </div>
                     <div class="comment-body">
                         @comment.Content
-                        @* Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto laborum in corrupti dolorum, quas delectus nobis porro accusantium molestias sequi. *@
                     </div>
                     <div class="d-flex">
                         <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
                     </div>
+                    <!--沒有連言display none 有的話顯示-->
+                    <div class="comment-replies bg-light p-3 mt-3 rounded">
+                        <!--總共幾筆子留言-->
+                        <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+                    </div>
                     @{
-                        var replies = comments.Where(reply => reply.ParentCommentId == comment.CommentId).OrderBy(reply => reply.CommentId);
-                        if (replies.Any())
-                        {
-                            <div class="comment-replies bg-light p-3 mt-3 rounded">
-                                <!--總共幾筆子留言-->
-                                <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+                        // var replies = comments.Where(reply => reply.ParentCommentId == comment.CommentId).OrderBy(reply => reply.CommentId);
+                        // if (replies.Any())
+                        // {
+                        //     <div class="comment-replies bg-light p-3 mt-3 rounded">
+                        //         <!--總共幾筆子留言-->
+                        //         <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
 
-                                @foreach (var reply in replies)
-                                {
-                                    <!-- 次留言的 HTML 结构 -->
-                                    <div class="reply d-flex mb-4">
-                                        <div class="flex-shrink-0">
-                                            <div class="avatar avatar-sm rounded-circle">
-                                                <img class="avatar-img" src="~/assets/img/person-4.jpg" alt="" class="img-fluid">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-2 ms-sm-3">
-                                            <div class="reply-meta d-flex align-item-center">
-                                                <h6 class="mb-0 me-2">作者</h6>
-                                                <span class="text-muted">留言時間</span>
-                                            </div>
-                                            <div class="reply-body">
-                                                @reply.Content
-                                            </div>
-                                            <div class="d-flex">
-                                                <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                        //         @foreach (var reply in replies)
+                        //         {
+                        //             <!-- 次留言的 HTML 结构 -->
+                        //             <div class="reply d-flex mb-4">
+                        //                 <div class="flex-shrink-0">
+                        //                     <div class="avatar avatar-sm rounded-circle">
+                        //                         <img class="avatar-img" src="~/assets/img/person-4.jpg" alt="" class="img-fluid">
+                        //                     </div>
+                        //                 </div>
+                        //                 <div class="flex-grow-1 ms-2 ms-sm-3">
+                        //                     <div class="reply-meta d-flex align-item-center">
+                        //                         <h6 class="mb-0 me-2">作者</h6>
+                        //                         <span class="text-muted">留言時間</span>
+                        //                     </div>
+                        //                     <div class="reply-body">
+                        //                         @reply.Content
+                        //                     </div>
+                        //                     <div class="d-flex">
+                        //                         <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                        //                     </div>
+                        //                 </div>
+                        //             </div>
+                        //         }
                                
-                            </div>
-                        }
+                        //     </div>
+                        // }
                     }
                 </div>
             </div>
@@ -172,21 +111,16 @@
     <div class="col-lg-12">
         <h5 class="comment-title">留言</h5>
         <div class="row">
-            <!--<div class="col-lg-6 mb-3">
-                <label for="comment-name">Name</label>
-                <input type="text" class="form-control" id="comment-name" placeholder="Enter your name">
-            </div>
-            <div class="col-lg-6 mb-3">
-                <label for="comment-email">Email</label>
-                <input type="text" class="form-control" id="comment-email" placeholder="Enter your email">
-            </div>-->
             <div class="col-12 mb-3">
-                <!--<label for="comment-message">Message</label>-->
                 <textarea class="form-control" id="comment-message" placeholder="Enter your name" cols="30" rows="1"></textarea>
             </div>
-            <!--<div class="col-12">
-                <input type="submit" class="btn btn-primary" value="Post comment">
-            </div>-->
         </div>
     </div>
-</div><!-- End Comments Form -->
+</div>
+<!-- 留言區段 -->
+@section Comments
+{
+    <script>
+        console.log("HI");
+    </script>
+}
