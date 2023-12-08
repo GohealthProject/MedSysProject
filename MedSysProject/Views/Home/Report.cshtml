@@ -466,10 +466,13 @@
                            s.Report.ReportId == 30
                      select s;
     }
-
+    var count = 0;
     table.innerHTML =
-        `@foreach(var items in report)
-        {
+    `
+    @{  var count = 0;
+        foreach (var items in report)
+       
+    {
                             @Html.Raw("<tr>")
                             @Html.Raw("<td>")
                                 @items.Item.ItemName
@@ -477,8 +480,9 @@
                             @Html.Raw("<td>")                     
                                  @items.Result
                             @Html.Raw("</td>")
-                            @Html.Raw("<td>")
+                            @Html.Raw("<td id="">")
                                  @Html.Raw("SAD")
+                                 
                             @Html.Raw("</td>")
                             @Html.Raw("<td>")
             if (@items.Item.ItemRange!= null)
@@ -516,7 +520,7 @@
                             @Html.Raw("</tr>")
                                          
          }
-         `
+         }`
 
   
 
