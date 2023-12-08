@@ -51,12 +51,16 @@ namespace MedSysProject.Controllers
         }
         public IActionResult selectProduct(int id)
         {
-            var q = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
-            if (q == null)
+            var product = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
+            
+            if (product == null)
                 return RedirectToAction("index");
-            if((bool)q.Discontinued&& q!=null)
+            if((bool)product.Discontinued&& product != null)
             {
-                return View(q);
+                CProductWarp cp =  new CProductWarp();
+                cp.Product = product;
+                cp.Path = product.FimagePath.Split(",");
+                return View(cp);
             }
             else
             {

@@ -56,29 +56,29 @@
                         <div class="card-body">
                             <h5 class="card-title"></h5>
                             <div class="row mb-3">
-                                <div class="col-2 border ">
+                                <div class="col-2 border fs-5" >
                                     訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
                                 </div>
-                                <div class="col-2 border ">
+                                <div class="col-2 border fs-5">
                                     下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.State.StateName
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.Pay.PayName
                                 </div>
-                                <div class="col-1 border ">
+                                <div class="col-1 border fs-5">
                                     @Model[i].order.Ship.ShipName
                                 </div>
-                                <div class="col-1 border ">
-                                    <a class="btn btn-outline-secondary" asp-action="" asp-controller="" asp-route-id="">發票</a>
+                                <div class="col-1 border fs-5">
+                                    <a class="btn btn-outline-secondary fs-4" asp-action="" asp-controller="" asp-route-id="">發票</a>
                                 </div>
-                                <div class="col-3 border ">
+                                <div class="col-3 border fs-5">
                                     說明 : @Model[i].order.State.StateDetailed
                                 </div>
-                                <div class="col-1 border ">
-                                    <a class="btn btn-outline-danger" asp-action="" asp-controller="" asp-route-id="">退貨</a>
+                                <div class="col-1 border fs-3">
+                                    <a class="btn btn-outline-danger fs-4" asp-action="" asp-controller="" asp-route-id="">退貨</a>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
