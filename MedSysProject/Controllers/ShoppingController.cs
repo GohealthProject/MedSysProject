@@ -13,7 +13,7 @@ namespace MedSysProject.Controllers
 {
     public class ShoppingController : Controller
     {
-        MedSysContext _db = null;
+        MedSysContext? _db = null;
         public ShoppingController(MedSysContext db)
         {
             _db = db;
@@ -30,8 +30,10 @@ namespace MedSysProject.Controllers
                 {
                     item.ProductName = item.ProductName.Substring(0, 9);
                 }
+                item.Path = item.FimagePath.Split(',');
                 list.Add(item);
             }
+
             return View(list);
         }
         public IActionResult Search(int id)
@@ -65,10 +67,10 @@ namespace MedSysProject.Controllers
         public IActionResult AddToCart()
         {
             var data = Request.Form;
-            List<CCartItem> cart = null;
+            List<CCartItem>? cart = null;
             var q = _db.Products.Find(Int32.Parse(data["id"]));
-            string json = "";
-            string count = "";
+            string? json = "";
+            string? count = "";
             if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) != null)
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
@@ -112,8 +114,8 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                string json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                List<CCartItem> cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
+                string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+                List<CCartItem>? cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
                 return View(cart);
             }
         }
@@ -206,7 +208,7 @@ namespace MedSysProject.Controllers
                 }
                 else
                 {
-                    string keyword = Request.Form["keyword"];
+                    string? keyword = Request.Form["keyword"];
                     List<int> pids = new List<int>();
                     List<int> oids = new List<int>();
 

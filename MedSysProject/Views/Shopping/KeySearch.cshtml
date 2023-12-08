@@ -81,9 +81,10 @@
                                 PName = Model[i].ProductName;
                             }
                             
+
                             <div class="col ">
                             <div class="card" style="width: 18rem;">
-                                <img src="@Url.Content("~"+Model[i].FimagePath)" class="card-img-top" alt="..." style="width:285px;height:201px">
+                                <img src="@Url.Content("~")" class="card-img-top" alt="..." style="width:285px;height:201px">
                                 <div class="card-body">
                                     <a class="fs-2"asp-action="selectProduct" asp-route-id="@Model[i].Product.ProductId">@PName</a>
                                     <p class="card-text fs-3 text-info">8折</p>
@@ -156,7 +157,7 @@
                               <div class="card-body">
                                   <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct?")${id}">${name}</a>
                                   <p class="card-text fs-3 text-info">8折</p>
-                                  <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">${price}</span><span class="card-text text-danger fs-3">${prices}</span></div>
+                                  <div class="d-flex justify-content-between"><span class="card-text text-danger fs-3"style="text-decoration:line-through">$${price}</span><span class="card-text text-danger fs-3">$${prices}</span></div>
                                   <p class="card-text">三星</p>
                               </div>
                         </div>
