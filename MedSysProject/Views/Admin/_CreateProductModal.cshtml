@@ -101,6 +101,10 @@
                         <textarea class="form-control" id="inputDescription" name="WrappedDescription" rows="4">@Model?.WrappedDescription</textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="inputUnitsInStock" class="form-label">庫存量</label>
+                        <input type="text" class="form-control" id="inputUnitsInStock" name="WrappedUnitsInStock" value="@Model?.WrappedUnitsInStock">
+                    </div>
+                    <div class="mb-3">
                         <label for="inputDiscontinued" class="form-label">上架狀態</label>
                         <select class="form-control" id="inputDiscontinued" name="WrappedDiscontinued">
                             <option value="true" selected="@(Model?.WrappedDiscontinued == true)">上架中</option>
