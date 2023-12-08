@@ -219,6 +219,7 @@
                     </div> *@
                 </div>
             </div>
+</div>
             @* ---修改彈窗結束--- *@
 
             <!-- 載入 Bootstrap 的 JavaScript -->
@@ -262,25 +263,7 @@
                 }
             });
         }
-
-        // $(document).ready(function () {
-        //     $('#modalCreate').on('show.bs.modal', function (e) {
-        //         // 使用AJAX載入_CreateProductModal.cshtml的內容
-        //         $.ajax({
-        //             url: '@Url.Action("Create", "Admin")',
-        //             type: 'GET',
-        //             success: function (data) {
-        //                 $('#createProductModalContent').html(data);
-        //             },
-        //             error: function (error) {
-        //                 alert('載入_CreateProductModal 失敗：' + error.statusText);
-        //             }
-        //         });
-        //     });
-        // });
-
                 function displayProductDetails(data) {
-                    // 處理產品詳細信息的顯示
                     $('#editProductName').val(data.WrappedProductName);
                     $('#inputPrice').val(data.WrappedUnitPrice);
                     $('#inputLicense').val(data.WrappedLicense);
@@ -317,10 +300,31 @@
                         }
                     });
                 }
-            </script>
+           
+   
+        function deleteProduct(productId) {
+            // 確認是否真的要刪除
+            if (confirm("確定要刪除此產品嗎？")) {
+                // 使用 AJAX 向伺服器發送刪除請求
+                $.ajax({
+                    url: '@Url.Action("Delete", "Admin")', 
+                    type: 'POST',
+                    data: { id: productId },
+                    success: function (data) {
+                        // 刪除成功，重新載入頁面
+                        location.reload();
+                    },
+                    error: function (error) {
+                        // 處理 AJAX 請求失敗的情況
+                        alert('刪除失敗：' + error.statusText);
+                    }
+                });
+            }
+        }
+    </script>
 
 
 
-        </div>
+       
   
   
