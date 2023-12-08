@@ -629,7 +629,7 @@ namespace MedSysProject.Controllers
                         }
                     }
 
-                    return PartialView("_EditProductModal"); // 或者重新顯示表單
+                    return RedirectToAction("Product");
                 }
 
                 // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
@@ -656,7 +656,7 @@ namespace MedSysProject.Controllers
 
                 // 非 AJAX 請求，執行原有的編輯邏輯
                 Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
-               
+
 
                 if (pDb != null)
                 {
@@ -744,18 +744,6 @@ namespace MedSysProject.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
