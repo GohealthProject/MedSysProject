@@ -26,6 +26,7 @@ namespace MedSysProject.Models
         public bool? Discontinued { get { return _Product.Discontinued; } set { _Product.Discontinued = value; } }
 
         public string FimagePath { get { return _Product.FimagePath; } set { _Product.FimagePath = value; } }
+        public string[] Path { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 

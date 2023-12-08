@@ -55,8 +55,11 @@
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadComments();
+            //對每個留言做遞迴檢查
+            let mainComment = document.querySelectorAll('.mainComment');
+            console.log(mainComment.length);
         })
-        //載入留言
+        //載入主留言
         let blogId = @Model[0].BlogId;
         async function loadComments() {
             const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
