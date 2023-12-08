@@ -88,14 +88,24 @@
                                     <tbody id="ProjectDetail">
                                         @foreach(var project in Model)
                                         {
-                                            
+
                                             <tr>
-                                                <th scope="row">一般生理檢查 
-                                                
-                                                </th>
-                                                <td>身高、體重 、</td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                              
+                                                    @if (project.ProjectId ==1)
+                                                    {
+                                                    <th scope="row" id="project">@project.ProjectName </th>
+                                                    <td id="item">
+                                                        身高、體重 、@foreach (var item in project.ItemName)
+                                                        {
+                                                            @item.GetType()
+                                                        }
+                                                        </td>
+                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                    continue;
+                                                }
+                                               
+                                              
                                         </tr>
                                         
                                         
@@ -136,7 +146,9 @@
         const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
         const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
         const url = "https://localhost:7078/api/PlanIntroductionProject/";
-
+        const id = document.querySelectorAll("#item");
+        const project= document.querySelectorAll("#project");
+        console.log(project);
     //function load() { 
     //    $.getJSON(url, function (datas) { 
     //        const id = $("#PlanID").val();
