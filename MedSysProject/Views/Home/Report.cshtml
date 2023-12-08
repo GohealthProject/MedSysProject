@@ -411,30 +411,80 @@
 
         </div>
     </div>
+    @ViewData["id"]
 </div>
 
-@ViewData["id"]
+
 <script>
     var ch1 = document.querySelector("#chose1");
     var ch2 = document.querySelector("#chose2");
     var table = document.querySelector("#reportshow1");
     //var val = document.all['#chose2'].value;
     var index = ch1.selectedIndex;
+
+    function rp2Display() {
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        //let rp2 = document.querySelector("#tr").children[2]
+        let rp3 =document.querySelectorAll('#rp2')
+        let tr = document.querySelector("#tr")
+        
+        td1.innerHTML = "ABC"
+        console.log(rp3[0])
+        let length = tr.length
+
+        for (var i = 0; i < 80; i++) {
+            let j = document.createElement("td");
+            //j.innerHTML ="FUCK"
+            rp3[i].parentNode.replaceChild(td1,rp3[i]);
+        }
+    }
+      
+
+        const endpoint = '';
+        $.ajax({
+            type: "GET",
+            url: endpoint,
+            dataType: "json",
+            success: function (response) {
+                const charge = [];
+                charge.push(...response);
+                createDomElement(charge);
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+        function createDomElement(charge) {
+            const domElements = charge.map(place => {
+                return `
+            <li>
+              <p class="location">位置： ${place.Location}</p>
+              <p class="address">地址：${place.Address}</p>
+            </li>
+          `;
+            }).join("");
+
+            const chargeList = document.querySelector('.charge-list');
+            chargeList.innerHTML = domElements;
+        }
     
 
-    ch1.addEventListener("change",() => {
-            console.log(ch2.value)
+    ch1.addEventListener("change", () => {
+        console.log(ch2.value)
         index = ch1.selectedIndex;
         ch2.selectedIndex = index;
+        rp2Display();
 
     })
-    var td1 = document.createElement("td");
-    var td2 = document.createElement("td");
-    var td3 = document.createElement("td");
-    var td4 = document.createElement("td");
+    //var td1 = document.createElement("td");
+    //var td2 = document.createElement("td");
+    //var td3 = document.createElement("td");
+    //var td4 = document.createElement("td");
 
-    var tr = document.createElement("tr");
-    
+    //var tr = document.createElement("tr");
+
     //td1.innerHTML = "項目";
     //tr.appendChild(td1);
     //td2.innerHTML = "報告1"
@@ -446,83 +496,81 @@
     //table.appendChild(tr);
 
 
-   //var report= foreach(var items in Model)
-   //     {
-   //     var tr = document.createElement("tr");
-   //     td1.innerHTML = "項目";
-   //     tr.appendChild(td1);
-   //     td2.innerHTML = "報告1"
-   //     tr.appendChild(td2);
-   //     td3.innerHTML = "報告2"
-   //     tr.appendChild(td3);
-   //     td4.innerHTML = "標準"
-   //     tr.appendChild(td4);
-   //     table.appendChild(tr);
-   //     }               
-    
+    //var report= foreach(var items in Model)
+    //     {
+    //     var tr = document.createElement("tr");
+    //     td1.innerHTML = "項目";
+    //     tr.appendChild(td1);
+    //     td2.innerHTML = "報告1"
+    //     tr.appendChild(td2);
+    //     td3.innerHTML = "報告2"
+    //     tr.appendChild(td3);
+    //     td4.innerHTML = "標準"
+    //     tr.appendChild(td4);
+    //     table.appendChild(tr);
+    //     }
+
     @{
         var report = from s in Model
                      where s.Report.Reserve.ReserveDate.Value.ToShortDateString() == "2023/10/10" &&
-                           s.Report.ReportId == 30
+                     s.Report.ReportId == 30
                      select s;
     }
-    var count = 0;
-    table.innerHTML =
+
+        table.innerHTML =
     `
-    @{  var count = 0;
-        foreach (var items in report)
-       
+
+    @foreach (var items in report)
     {
-                            @Html.Raw("<tr>")
-                            @Html.Raw("<td>")
-                                @items.Item.ItemName
-                            @Html.Raw("</td>")
-                            @Html.Raw("<td>")                     
-                                 @items.Result
-                            @Html.Raw("</td>")
-                            @Html.Raw("<td>")
-                                 @Html.Raw("SAD")
-                                 
-                            @Html.Raw("</td>")
-                            @Html.Raw("<td>")
-            if (@items.Item.ItemRange!= null)
+        @Html.Raw("<tr id='tr'>")
+        @Html.Raw("<td>")
+        @items.Item.ItemName
+        @Html.Raw("</td>")
+        @Html.Raw("<td>")
+        @items.Result
+        @Html.Raw("</td>")
+        @Html.Raw("<td id='rp2'>")
+        @Html.Raw("none")
+        @Html.Raw("</td>")
+        @Html.Raw("<td>")
+
+        if (@items.Item.ItemRange != null)
+        {
+            @items.Item.ItemRange
+        }
+        else
+        {
+            if (@items.Item.ItemRangeMin != null)
             {
-                @items.Item.ItemRange
+                @items.Item.ItemRangeMin
+                @Html.DisplayName("~")
+                @items.Item.ItemRangeMax
             }
             else
             {
-            
-        
-                if (@items.Item.ItemRangeMin != null)
+                if (@items.Report.Member.MemberGender == "男         ")
                 {
-                                 @items.Item.ItemRangeMin
-                                 @Html.DisplayName("~")
-                                 @items.Item.ItemRangeMax
+                    @items.Item.Mmin
+                    @Html.DisplayName("~")
+                    @items.Item.Mmax
                 }
                 else
                 {
-                    if (@items.Report.Member.MemberGender == "男         ")
-                    {
-                        @items.Item.Mmin
-                        @Html.DisplayName("~")
-                        @items.Item.Mmax
-                    }
-                    else
-                    {
-                         @items.Item.Fmin
-                        @Html.DisplayName("~")
-                         @items.Item.Fmax
-                    }
+                    @items.Item.Fmin
+                    @Html.DisplayName("~")
+                    @items.Item.Fmax
                 }
-        }
-        
-        @Html.Raw("</td>")
-                            @Html.Raw("</tr>")
-                                         
-         }
-         }`
+            }
 
-  
+
+
+            @Html.Raw("</td>")
+            @Html.Raw("</tr>")
+
+        }
+    }`
+
+   
 
     //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
     //    console.log(datas);
@@ -551,8 +599,8 @@
 
     $("#chose1").change(function () {
         $("#reportshow1").removeClass("d-none")
-        
-    
+
+
     })
     $("#chose2").change(function () {
         $("#reportshow2").removeClass("d-none")
@@ -567,6 +615,6 @@
     $(function () {
         $table.bootstrapTable()
     })
-   
+
 </script>
    
