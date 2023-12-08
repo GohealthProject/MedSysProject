@@ -96,9 +96,16 @@ namespace MedSysProject.Controllers
                               select blog).ToList();
             }
 
+            var q = _db.Comments.Where(n => n.BlogId ==singleBlogID&&n.ParentCommentId==null).Select(n => n.CommentId);
+            ViewBag.CommentId = JsonSerializer.Serialize(q.ToList());
+
+            
+
+
+
+
 
             return View(singlePost);
-
 
 
         }
@@ -200,24 +207,33 @@ namespace MedSysProject.Controllers
         }
         public IActionResult ad (int id)
         {
-             var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
-            var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
+            // var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
+            //var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
 
-            List<int> ne = 最新的文章.ToList();
-            List<int> top5 = 最多觀看的.ToList();
-            ViewBag.new5Array = JsonSerializer.Serialize(ne);
-            ViewBag.View5 = JsonSerializer.Serialize(top5);
-
-            return View();
+            //List<int> ne = 最新的文章.ToList();
+            //List<int> top5 = 最多觀看的.ToList();
+            var q = _db.Comments.Where(n=>n.CommentId==id).Include(n=>n.Member).Include(n=>n.Employee).FirstOrDefault();
+            Comment com = new Comment();
+            com = q;
+            
+            return View(com);
         }
 
-        public IActionResult ShowComments(int BlogId) 
-        {//傳送到partial view的時候就要傳全部，然後在partialview中用razor去做分流
-            var mainComments = (_db.Comments.Include(comment=>comment.Member)
-                                            .Include(comment=>comment.Employee)
-                                            .Where(comment => comment.BlogId == BlogId)
-                                .Select(comment => comment)).ToList();
-            return PartialView(mainComments);
+
+        public IActionResult Show2 (int id)
+        {
+            var q = _db.Comments.Find(id);
+
+            return PartialView(q);
+        }
+
+        public IActionResult ShowComments(int blogs) 
+        {
+
+            return View();
+
+
+
         }
 
     }
