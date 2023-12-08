@@ -49,15 +49,17 @@ namespace MedSysProject.Controllers
                                //select p;
                                select new
                                {
-                                   //PlanId=g.Min(p => p.PlanId),
+                                   
                 PlanName = g.Key,                
                 PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
 
             var total = from p in projectprice
                         from pp in _context.Plans
                         select new { 
-                        pp.PlanId,
                         pp.PlanName,
+                        pp.PlanId,
+                        
+                           //p.PlanName,
                         p.PlanPrice
                         
                         };
@@ -79,10 +81,10 @@ namespace MedSysProject.Controllers
             _context.Items.Load();
             
             var ID = _context.Plans.Where(i => i.PlanId == id);
-            var join =from i in ID
+            var joins =from i in ID
                 from p in _context.Plans
             from pj in _context.Projects
-            from it in _context.Items
+            from it in _context.Items            
             select new
             {
                 p.PlanId,
@@ -94,13 +96,12 @@ namespace MedSysProject.Controllers
                 pj.ProjectPrice,
                 it.ItemId,
                 it.ItemName,
-
             };
-           
+            
 
 
 
-            return View(join.ToList());
+            return View(joins.ToList());
         }
        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用

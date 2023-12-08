@@ -40,15 +40,7 @@
 
                                 <div class="swiper-slide">
                                     <img src="~/img/PersonalPlan/heart.jpg" alt="" >
-                                </div>
-
-                               @* <div class="swiper-slide">
-                                    <img src="assets/img/portfolio/portfolio-2.jpg" alt="">
-                                </div>
-
-                                <div class="swiper-slide">
-                                    <img src="assets/img/portfolio/portfolio-3.jpg" alt="">
-                                </div>*@
+                                </div>                                                            
 
                             </div>
 
@@ -94,12 +86,21 @@
                                         </tr>
                                     </thead>
                                     <tbody id="ProjectDetail">
-                                        <tr>
-                                            <th scope="row">一般生理檢查</th>
-                                            <td>身高、體重</td>
+                                        @foreach(var project in Model)
+                                        {
+                                            
+                                            <tr>
+                                                <th scope="row">一般生理檢查 
+                                                
+                                                </th>
+                                                <td>身高、體重 、</td>
                                             <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
                                             <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
                                         </tr>
+                                        
+                                        
+                                        }
+                                        
                                         <tr>
                                             <th scope="row">尿液一般檢查</th>
                                             <td>尿酸鹼度</td>
@@ -119,7 +120,7 @@
                            
                         </div>
                     </div>
-                    @*  原位置在這裡 *@
+                  
                 </div>
 
             </div>
@@ -136,24 +137,24 @@
         const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
         const url = "https://localhost:7078/api/PlanIntroductionProject/";
 
-    function load() { 
-        $.getJSON(url, function (datas) { 
-            const id = $("#PlanID").val();
-            if (id) {
-                const jsonData = JSON.stringify({
-                    planId: PlanID, planName: PlanName.val()
-                });
-                $.ajax({
-                    url: `${url}${id}`,
-                    type:'GET',
-                    contentType:'appliction/json',
-                        data: jsonData
-                })
-            }
-        })
+    //function load() { 
+    //    $.getJSON(url, function (datas) { 
+    //        const id = $("#PlanID").val();
+    //        if (id) {
+    //            const jsonData = JSON.stringify({
+    //                planId: PlanID, planName: PlanName.val()
+    //            });
+    //            $.ajax({
+    //                url: `${url}${id}`,
+    //                type:'GET',
+    //                contentType:'appliction/json',
+    //                    data: jsonData
+    //            })
+    //        }
+    //    })
     
     
-    }
+    //}
 
 
 </script>
