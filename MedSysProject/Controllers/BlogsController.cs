@@ -230,6 +230,7 @@ namespace MedSysProject.Controllers
         {
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
+                                            .Include(comment=>comment.Employee.EmployeeClass)
                                             .Where(comment => comment.BlogId == BlogId&&comment.ParentCommentId==null)
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
@@ -251,8 +252,10 @@ namespace MedSysProject.Controllers
         {
             var subReplies = _db.Comments.Include(reply => reply.Member)
                                          .Include(reply => reply.Employee)
+                                         .Include(reply=>reply.Employee.EmployeeClass)
                                          .Include(reply => reply.ParentComment)
                                          .Include(reply => reply.ParentComment.Employee)
+                                         .Include(reply=>reply.ParentComment.Employee.EmployeeClass)
                                          .Include(reply => reply.ParentComment.Member)
                                          .Where(reply => reply.ParentCommentId == parentCommentId).ToList();
             foreach (var reply in subReplies) 

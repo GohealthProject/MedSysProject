@@ -19,7 +19,7 @@
                 <div class="avatar avatar-sm rounded-circle">
                     @if (comment.EmployeeId == null)
                     {
-                        <img class="avatar-img" src="@comment.Member.MemberImage" alt="" class="img-fluid">
+                        <img class="avatar-img" src="~/img/MemberImg/@comment.Member.MemberImage" alt="" class="img-fluid" />
                     }
                     else
                     {
@@ -36,26 +36,27 @@
                     @{
                         if (comment.EmployeeId == null)
                         {
-                            <h6 class="me-2">@comment.Member.MemberName</h6>
+                            <h6 class="me-2">(會員)@comment.Member.MemberName</h6>
                         }
                         else
                         {
-                            <h6 class="me-2">@comment.Employee.EmployeeName</h6>
+                            <h6 class="me-2">(@comment.Employee.EmployeeClass.Class)@comment.Employee.EmployeeName</h6>
                         }
 
                     }
                     <!--留言時間，幾天前-->
-                    <span class="text-muted">4d</span>
+                    <span class="text-muted">@comment.CreatedAt</span>
                 </div>
                 <div class="comment-body">
                     @comment.Content
                 </div>
+                <!--回覆按鈕-->
                 <div class="d-flex">
                     <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
                 </div>
                 <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">
                     <!--總共幾筆子留言-->
-                    <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+                    
                 </div>
             </div>
         </div>
