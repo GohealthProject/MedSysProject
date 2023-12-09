@@ -605,7 +605,6 @@ namespace MedSysProject.Controllers
             return PartialView("_EditProductModal", productWrap);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm] CProductsWrap model, int wrappedProductId)
         {
@@ -618,7 +617,6 @@ namespace MedSysProject.Controllers
                 if (!ModelState.IsValid)
                 {
                     // 記錄或處理錯誤...
-
                     // 輸出所有錯誤信息到控制台
                     foreach (var key in ModelState.Keys)
                     {
@@ -657,43 +655,32 @@ namespace MedSysProject.Controllers
                 // 非 AJAX 請求，執行原有的編輯邏輯
                 Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
 
-
                 if (pDb != null)
                 {
-                    // 如果原有的圖片路徑不為空，則將其轉為集合
-                    var existingImagePaths = !string.IsNullOrEmpty(pDb.FimagePath)
-                        ? pDb.FimagePath.Split(',').ToList()
-                        : new List<string>();
+                    
+                    pDb.FimagePath = string.Empty;
 
-                    // 合併新上傳的圖片路徑和現有的圖片路徑
-                    var combinedImagePaths = new List<string>();
-                    if (model.FimagePaths != null && model.FimagePaths.Any())
-                    {
-                        combinedImagePaths.AddRange(model.FimagePaths);
-                    }
+                    var newImagePaths = new List<string>();
+
+                
                     if (model.FormFiles != null && model.FormFiles.Count > 0)
                     {
                         foreach (var formFile in model.FormFiles)
                         {
-                            // 生成唯一的檔案名稱
                             string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                            // 將圖片存放在 wwwroot/img-product 資料夾中
                             string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
 
-                            // 寫入圖片檔案
                             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                             {
                                 await formFile.CopyToAsync(fileStream);
                             }
 
-                            // 將圖片路徑保存到集合中
-                            combinedImagePaths.Add("/img-product/" + photoName);
+                            newImagePaths.Add(photoName);
                         }
                     }
 
-                    // 將新的圖片路徑和現有的圖片路徑合併，用逗號隔開
-                    pDb.FimagePath = string.Join(",", existingImagePaths.Concat(combinedImagePaths));
+
+                    pDb.FimagePath = string.Join(",", newImagePaths);
 
                     // 處理其他欄位
                     pDb.ProductName = model.WrappedProductName;
@@ -735,15 +722,16 @@ namespace MedSysProject.Controllers
                     }
                 }
 
-                // 在這裡加上一個 return 陳述式
                 return RedirectToAction("Product");
             }
             catch (Exception ex)
-            {
-                // 處理異常，例如記錄日誌
+            {  // 處理異常，例如記錄日誌
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+
+
 
 
 
