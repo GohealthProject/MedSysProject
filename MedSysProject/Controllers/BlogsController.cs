@@ -234,12 +234,33 @@ namespace MedSysProject.Controllers
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
         }
-
-        public IActionResult ShowReplies(int CommentId) 
+        #region 遞迴
+        public IActionResult ShowReplies(int mainCommentId) 
         {
+            List<Comment> allReplies = new List<Comment>();
+            howManyExactly(mainCommentId, ref allReplies);
 
-            return PartialView();
+            return PartialView("ShowReplies",allReplies);
         }
-
+        /// <summary>
+        /// 執行遞迴檢查的方法
+        /// </summary>
+        /// <param name="parentCommentId"></param>
+        /// <param name="allReplies"></param>
+        private void howManyExactly(int parentCommentId,ref List<Comment> allReplies) 
+        {
+            var subReplies = _db.Comments.Include(reply => reply.Member)
+                                         .Include(reply => reply.Employee)
+                                         .Include(reply => reply.ParentComment)
+                                         .Include(reply => reply.ParentComment.Employee)
+                                         .Include(reply => reply.ParentComment.Member)
+                                         .Where(reply => reply.ParentCommentId == parentCommentId).ToList();
+            foreach (var reply in subReplies) 
+            { 
+                allReplies.Add(reply);
+                howManyExactly(reply.CommentId, ref allReplies);
+            }             
+        }
+        #endregion
     }
 }

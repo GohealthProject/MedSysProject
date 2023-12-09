@@ -7,30 +7,30 @@
 
 <main id="main">
     @{
-        <section class="single-post-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+            <section class="single-post-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
 
-                        <!-- ======= Single Post Content ======= -->
-                        <div class="single-post">
-                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
-                            <h1 class="mb-5">@Model[0].Title</h1>
-                            @Html.Raw(Model[0].Content)
-                        </div><!-- End Single Post Content -->
-                        <!-- ======= Comments ======= -->
-                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
+                            <!-- ======= Single Post Content ======= -->
+                            <div class="single-post">
+                                <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                                <h1 class="mb-5">@Model[0].Title</h1>
+                                @Html.Raw(Model[0].Content)
+                            </div><!-- End Single Post Content -->
+                            <!-- ======= Comments ======= -->
+                            <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
 
-                        <div class="Comments" id="putIn">
+                            <div class="Comments" id="putIn">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <!-- ======= 側面欄位丟這 ======= -->
+
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <!-- ======= 側面欄位丟這 ======= -->
-
-                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
     }
 </main><!-- End #main -->
 @section Scripts {
@@ -55,9 +55,6 @@
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadComments();
-            //對每個留言做遞迴檢查
-            // let mainComment = document.querySelectorAll('.mainComment');
-            // console.log(mainComment.length);
         })
 
         let blogId = @Model[0].BlogId;
@@ -67,16 +64,27 @@
             let putIn = document.querySelector('.post-content');
             console.log(putIn);
             putIn.innerHTML += data;
-                //載入主留言
+            let mainComment = document.querySelectorAll('.mainComment');
+            console.log(mainComment);
+            mainComment.forEach( async comment => {
+                let commentId = comment.getAttribute('data-comment-id');
+                const subResponse = await fetch(`@Url.Content("~/Blogs/ShowReplies")?mainCommentId=${commentId}`);
+                const subData = await subResponse.text();
+                let subPutIn = comment.querySelector('.subPutIn');
+                subPutIn.innerHTML += subData;
+            })
 
-                // async function loadComments(){
-                //     for (var i = 0; i < comidd.length; i++) {
-                //         const url = `https://localhost:7203/Blogs/ad?id=${comidd[i]}`;
-                //         console.log(url);
-                //         const response = await fetch(url);
-                //         const html =await response.text();
-                //         document.querySelector("#here").innerHTML += html;
-                    }
-                
+            //載入主留言
+
+            // async function loadComments(){
+            //     for (var i = 0; i < comidd.length; i++) {
+            //         const url = `https://localhost:7203/Blogs/ad?id=${comidd[i]}`;
+            //         console.log(url);
+            //         const response = await fetch(url);
+            //         const html =await response.text();
+            //         document.querySelector("#here").innerHTML += html;
+        }
+
+
     </script>
 }
