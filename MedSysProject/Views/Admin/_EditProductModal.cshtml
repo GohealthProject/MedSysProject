@@ -18,7 +18,7 @@
             <h4>請輸入欲修改的產品資訊</h4>
             <form asp-action="Edit" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="WrappedProductId" value="@((Model != null) ? Model.WrappedProductId : 0)" />
-                <input type="hidden" id="FimagePaths" name="WrappedFimagePaths" asp-for="WrappedFimagePaths" value="@(Model != null ? Model.WrappedFimagePaths : string.Empty)" />
+              @*   <input type="hidden" id="FimagePaths" name="WrappedFimagePaths" asp-for="WrappedFimagePaths" value="@(Model != null ? Model.WrappedFimagePaths : string.Empty)" /> *@
 
                 <div class="form-group">
                     <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
@@ -83,7 +83,7 @@
                 }
                 <div class="mb-3">
                     <label for="formFiles" class="form-label">產品圖片上傳</label>
-                    <input class="form-control" type="file" id="formFiles" name="FormFile" multiple>
+                    <input class="form-control" type="file" id="formFiles" name="FormFiles" multiple>
                 </div>
 
                 <div id="imagePreviewContainer" class="mb-3">
