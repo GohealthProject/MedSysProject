@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<MedSysProject.Models.Order>
+@using System.Text.Json;
+@using static List<MedSysProject.Models.COrderWarp>;
+@using MedSysProject.Models;
 
 @{
     ViewData["Title"] = "訂單管理";
@@ -20,97 +23,276 @@
         <h6 class="m-0 font-weight-bold text-primary">訂單管理</h6>
     </div>
     <div class="card-body">
-        <p style="width: 10%;">
-            <select class="form-control" id="selectState" name="selectState">
-                <option value="0">全部</option>
-                <option value="1">順利送達</option>
-                <option value="2">轉運中</option>
-                <option value="3">配送中</option>
-                <option value="4">配送中(當日)</option>
-                <option value="5">取件中</option>
-                <option value="6">已集貨</option>
-                <option value="7">取消取件</option>
-                <option value="8">未順利取件</option>
-                <option value="9">暫置營業所</option>
-                <option value="10">調查處理中</option>
-                <option value="11">不在家</option>
-                <option value="12">公司行號休息</option>
-            </select>
-        </p>
+
+        <div id="choost" class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" id="choosebtn">
+                所有篩選
+            </button>
+        </div>
+
+        <div class="card" id="choose" style="margin:1em 1em 1em 1em;padding:1em 1em 1em 1em; display:none">
+            <form method="post">
+                @{
+                    <input type="hidden" value="dateKey" name="key" />
+                    <div class="row p-3">
+                        <div class="col-auto">下訂日期：</div>
+                        <div class="col-auto">
+                            <input class="form-control" type="date" name="txtMinDate" value="@ViewBag.mindate" />
+                        </div>
+                        -
+                        <div class="col-auto">
+                            <input class="form-control" type="date" name="txtMaxDate" value="@ViewBag.maxdate" />
+                        </div>
+
+                    </div>
+
+                }
+                <p style="width: 10%;">
+
+                    <div class="d-flex">
+                        <div class="col-auto">
+                            目前狀態：
+                            <div class="ml-1">
+                                @{
+                                    foreach (var item in ViewBag.State)
+                                    {
+                                        if (ViewBag.Checked != null)
+                                        {
+                                            if (ViewBag.Checked.Contains((int)item.StateId))
+                                            {
+                                                <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                    <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId" checked>
+                                                    <label class="form-check-label" for="@item.StateId">
+                                                        @item.StateName
+                                                    </label>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                    <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
+                                                    <label class="form-check-label" for="@item.StateId">
+                                                        @item.StateName
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
+                                                <label class="form-check-label" for="@item.StateId">
+                                                    @item.StateName
+                                                </label>
+                                            </div>
+                                        }
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </p>
+
+                <input class="btn btn-primary" type="submit" value="篩選" />
+                <a class="btn btn-secondary" href="@Url.Content("~/Admin/Order")">重設</a>
+            </form>
+        </div>
+
+        <nav aria-label="Page navigation example" style="margin-top:1em;">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+
+                    }
+
+                    else
+                    {
+                        string PPath = "~/Admin/Order?page=";
+
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        int Home = 1;
+                        int Total = ViewBag.TotalPage;
+                        if (ViewBag.page == 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+
+                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.TotalPage)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+
+                    }
+                }
+            </ul>
+        </nav>
+
+
         <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>
-                訂單編號
-            </th>
-            <th>
-                下訂日期
-            </th>
-            <th>
-                @* @Html.DisplayNameFor(model => model.MemberId) *@訂購人
-            </th>
-@*             <th>
-                @Html.DisplayNameFor(model => model.ShipId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PayId)
-            </th> *@
-            <th>
-                @* @Html.DisplayNameFor(model => model.StateId) *@目前狀態
-            </th>
-@*             <th>
-                @Html.DisplayNameFor(model => model.ShipDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeliveryDate)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.MemberName)
-            </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.ShipId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayId)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.State.StateName)
-            </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.ShipDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryDate)
-            </td> *@
-            <td>
-                            <a href="@Url.Action("Details", new { id = item.OrderId })" class="btn btn-info" data-toggle="modal" data-target="#modalEdit">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                            <a class="btn btn-danger" id="btnDel">
-                                @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-@*                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-</div>
+            <thead>
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        @* @Html.DisplayNameFor(model => model.MemberId) *@訂購人
+                    </th>
+                    <th>
+                        下訂日期
+                    </th>
+                    @*             <th>
+                    @Html.DisplayNameFor(model => model.ShipId)
+                    </th>
+                    <th>
+                    @Html.DisplayNameFor(model => model.PayId)
+                    </th> *@
+                    <th>
+                        @* @Html.DisplayNameFor(model => model.StateId) *@目前狀態
+                    </th>
+                    @*             <th>
+                    @Html.DisplayNameFor(model => model.ShipDate)
+                    </th>
+                    <th>
+                    @Html.DisplayNameFor(model => model.DeliveryDate)
+                    </th> *@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Member.MemberName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrderDate)
+                            </td>
+                            @*             <td>
+                    @Html.DisplayFor(modelItem => item.ShipId)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.PayId)
+                    </td> *@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.State.StateName)
+                            </td>
+                            @*             <td>
+                    @Html.DisplayFor(modelItem => item.ShipDate)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryDate)
+                    </td> *@
+                            <td>
+                                <a href="@Url.Action("Details", new { id = item.OrderId })" class="btn btn-info" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                                <a class="btn btn-danger" id="btnDel">
+                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                @*                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+
+                    }
+
+                    else
+                    {
+                        string PPath = "~/Admin/Order?page=";
+
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        int Home = 1;
+                        int Total = ViewBag.TotalPage;
+                        if (ViewBag.page == 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+
+                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.TotalPage)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+
+                    }
+                }
+            </ul>
+        </nav>
+
+    </div>
 </div>
 
 @* ---詳細彈窗開始--- *@
@@ -130,9 +312,14 @@
 
                 @*訂單詳細窗口*@
                 <ul>
+                    <li>訂單編號</li>
+                    <li>下訂日期</li>
+                    <li>訂購人</li>
+                    <li>訂單狀態</li>
+                    <li>配送地址</li>
                     <li>配送方式</li>
                     <li>付款方式</li>
-                    <li>預計到達日期等等</li>
+                    <li>預計到達日期</li>
                 </ul>
 
                 <!--Footer-->
@@ -146,6 +333,24 @@
 @* ---詳細彈窗結束--- *@
 
 <script>
+    const choose = document.getElementById("choosebtn");
+    const choost = document.getElementById("choost");
+    choose.addEventListener("click", () => {
+        const choose = document.getElementById("choose");
+        if (choose.style.display == "none") {
+            choose.style.display = "block";
+            choost.classList.add('dropup');
+        }
+        else {
+            choose.style.display = "none";
+            choost.classList.remove('dropup');
+        }
+    });
+
+
+
+
+
     const delbtn = document.getElementById("btnDel");
 
     delbtn.addEventListener("click", () => {

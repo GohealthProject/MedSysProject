@@ -180,6 +180,58 @@
             </tbody>
         </table>
 
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+
+                    }
+
+                    else
+                    {
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        if (ViewBag.page == 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
+                        }
+
+                        for (int i = 1; i <= ViewBag.maxpage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.maxpage)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
+                        }
+
+                    }
+                }
+            </ul>
+        </nav>
+
         @* ---修改彈窗開始--- *@
         <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
