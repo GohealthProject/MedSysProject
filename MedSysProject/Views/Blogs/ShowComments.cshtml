@@ -45,50 +45,17 @@
                     }
                     <!--留言時間，幾天前-->
                     <span class="text-muted">4d</span>
-                    <!--<a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small"> reply</span></a>-->
                 </div>
                 <div class="comment-body">
                     @comment.Content
-                    @* Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto laborum in corrupti dolorum, quas delectus nobis porro accusantium molestias sequi. *@
                 </div>
                 <div class="d-flex">
                     <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
                 </div>
-                @{
-                    var replies = comments.Where(reply => reply.ParentCommentId == comment.CommentId).OrderBy(reply => reply.CommentId);
-                    if (replies.Any())
-                    {
-                        <div class="comment-replies bg-light p-3 mt-3 rounded">
-                            <!--總共幾筆子留言-->
-                            <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
-
-                            @foreach (var reply in replies)
-                            {
-                                <!-- 次留言的 HTML 结构 -->
-                                <div class="reply d-flex mb-4">
-                                    <div class="flex-shrink-0">
-                                        <div class="avatar avatar-sm rounded-circle">
-                                            <img class="avatar-img" src="~/assets/img/person-4.jpg" alt="" class="img-fluid">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-2 ms-sm-3">
-                                        <div class="reply-meta d-flex align-item-center">
-                                            <h6 class="mb-0 me-2">作者</h6>
-                                            <span class="text-muted">留言時間</span>
-                                        </div>
-                                        <div class="reply-body">
-                                            @reply.Content
-                                        </div>
-                                        <div class="d-flex">
-                                            <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-                    }
-                }
+                <div class="comment-replies bg-light p-3 mt-3 rounded">
+                    <!--總共幾筆子留言-->
+                    <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+                </div>
             </div>
         </div>
     }

@@ -235,5 +235,11 @@ namespace MedSysProject.Controllers
             return PartialView(mainComments);
         }
 
+        public IActionResult ShowReplies(int CommentId) 
+        {
+
+            return PartialView();
+        }
+
     }
 }
