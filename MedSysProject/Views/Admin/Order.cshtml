@@ -164,6 +164,9 @@
                         序
                     </th>
                     <th>
+                        訂單編號
+                    </th>
+                    <th>
                         @* @Html.DisplayNameFor(model => model.MemberId) *@訂購人
                     </th>
                     <th>
@@ -190,6 +193,10 @@
             <tbody>
                 @{
                     int count = 0;
+                    if (ViewBag.page != null)
+                    {
+                        count = (ViewBag.page - 1) * ViewBag.pgsize;
+                    }
                     foreach (var item in Model)
                     {
                         count++;
@@ -198,28 +205,34 @@
                                 @count
                             </td>
                             <td>
+                                
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Member.MemberName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.OrderDate)
                             </td>
-                            @*             <td>
-                    @Html.DisplayFor(modelItem => item.ShipId)
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.PayId)
-                    </td> *@
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Ship.ShipName)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Pay.PayName)
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.State.StateName)
                             </td>
                             @*             <td>
                     @Html.DisplayFor(modelItem => item.ShipDate)
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.DeliveryDate)
-                    </td> *@
+                    </td>*@
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Member.MemberAddress)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.DeliveryDate)
+                            </td>
                             <td>
-                                <a href="@Url.Action("Details", new { id = item.OrderId })" class="btn btn-info" data-toggle="modal" data-target="#modalEdit">
+                                <a onclick="DetailTogget(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
                                     <i class="fas fa-info-circle"></i>
                                 </a>
                                 <a class="btn btn-danger" id="btnDel">
@@ -296,7 +309,7 @@
 </div>
 
 @* ---詳細彈窗開始--- *@
-<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -347,6 +360,36 @@
         }
     });
 
+    //主畫面按下去要彈框框的事件
+    function DetailTogget(element) {
+        showTogget(element)
+    }
+
+    //把資料印到彈出來的視窗，分別是訂單編號、訂購人、下訂日期、配送方式、配送地址、付款方式、預計到達日期、訂單狀態
+function showTogget(element) {
+        var tr = element.parentNode.parentNode;
+        var td = tr.getElementsByTagName("td");
+        var OrderId = td[1].innerHTML;
+        var OrderDate = td[3].innerHTML;
+        var MemberName = td[2].innerHTML;
+        var ShipName = td[4].innerHTML;
+        var MemberAddress = td[7].innerHTML;
+        var PayName = td[5].innerHTML;
+        var DeliveryDate = td[8].innerHTML;
+        var StateName = td[6].innerHTML;
+
+        var modal = document.getElementById("modalDetail");
+        var ul = modal.getElementsByTagName("ul");
+        var li = ul[0].getElementsByTagName("li");
+        li[0].innerHTML = "訂單編號：" + OrderId;
+        li[1].innerHTML = "訂購人：" + MemberName;
+        li[2].innerHTML = "下訂日期：" + OrderDate;
+        li[3].innerHTML = "配送地址：" + MemberAddress;
+        li[4].innerHTML = "付款方式：" + PayName;
+        li[5].innerHTML = "配送方式：" + ShipName;
+        li[6].innerHTML = "預計到達日期：" + DeliveryDate;
+        li[7].innerHTML = "訂單目前狀態：" + StateName;
+    }
 
 
 
