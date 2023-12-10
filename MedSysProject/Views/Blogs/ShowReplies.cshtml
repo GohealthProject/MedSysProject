@@ -8,7 +8,8 @@
     foreach (var reply in Model)
     {
         <!-- 次留言的 HTML 结构 -->
-        <div class="reply d-flex mb-4">
+        <!--data-comment-id自訂義屬性-->
+        <div class="reply d-flex mb-4" data-comment-id="@reply.CommentId">
             <div class="flex-shrink-0">
                 <div class="avatar avatar-sm rounded-circle">
                     @{
