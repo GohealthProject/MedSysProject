@@ -85,22 +85,22 @@ namespace MedSysProject.Controllers
            
             
             //var ID = .Where(i => i.PlanId == id);
-            var joins = from i in _context.Plans.Where(i => i.PlanId == id).Include(i=>i.PlanRefs.Where(i=>i.PlanId==id))
-                            //from bg in _context.Items.Include(b=>b.Project).Where(b=>b.ProjectId==_context.Projects.)
-                        from pj in _context.Projects.Include(i => i.PlanRefs.Where(j => j.PlanId == id))
-                        from it in _context.Items
-                        select new
-                        {
-                            i.PlanId,
-                            i.PlanName,
-                            i.PlanDescription,
-                            //i.PlanRefs,
-                            pj.ProjectId,
-                            pj.ProjectName,
-                            pj.ProjectPrice,
-                            it.ItemId,
-                            it.ItemName,
-                        };
+            //var joins = from i in _context.Plans.Where(i => i.PlanId == id).Include(i=>i.PlanRefs.Where(i=>i.PlanId==id))
+            //                //from bg in _context.Items.Include(b=>b.Project).Where(b=>b.ProjectId==_context.Projects.)
+            //            from pj in _context.Projects.Include(i => i.PlanRefs.Where(j => j.PlanId == id))
+            //            from it in _context.Items
+            //            select new
+            //            {
+            //                i.PlanId,
+            //                i.PlanName,
+            //                i.PlanDescription,
+            //                //i.PlanRefs,
+            //                pj.ProjectId,
+            //                pj.ProjectName,
+            //                pj.ProjectPrice,
+            //                it.ItemId,
+            //                it.ItemName,
+            //            };
             //dynamic方法================
             //vm方法
             List<CPlanViewModel>data= new List<CPlanViewModel>();
