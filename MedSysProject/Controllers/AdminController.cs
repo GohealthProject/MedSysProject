@@ -393,7 +393,7 @@ namespace MedSysProject.Controllers
                     ViewBag.maxdate = vmD.txtMaxDate.Value.ToString("yyyy-MM-dd");
                     ViewBag.Checked = vmS.statechk;
                 }
-                else
+                else if (vmD.txtMinDate.HasValue && vmD.txtMaxDate.HasValue && vmS.statechk != null)
                 {
                     datas = _db.Orders
                         //find p.StateID equal to List all numbers in vmS.statechk and p.OrderDate between vmD.txtMinDate and vmD.txtMaxDate
@@ -410,6 +410,34 @@ namespace MedSysProject.Controllers
                     ViewBag.maxdate = vmD.txtMaxDate.Value.ToString("yyyy-MM-dd");
                     ViewBag.Checked = vmS.statechk;
                 }
+                else
+                {
+                    int pgsize = 10; //每頁顯示幾筆資料
+                    int total = _db.Orders.Count(); //資料總筆數
+                    int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1); //總頁數
+                    if (page < 1) page = 1; //如果頁數小於1，就顯示第1頁
+                    if (page > maxpage) page = maxpage; //如果頁數大於總頁數，就顯示最後一頁
+
+                    datas = _db.Orders
+                            .Include(m => m.Member)
+                            .Include(s => s.State)
+                            .Include(h => h.Ship)
+                            .Include(p => p.Pay)
+                            .Include(n => n.OrderDetails)
+                            .ThenInclude(n => n.Product)
+                            .OrderByDescending(d => d.OrderDate)
+                            .Skip((page - 1) * pgsize)
+                            .Take(pgsize);
+
+                    ViewBag.page = page; //目前頁數
+                    ViewBag.TotalPage = maxpage; //總頁數
+                    ViewBag.total = total; //資料總筆數
+                    ViewBag.pgsize = pgsize; //每頁顯示幾筆資料
+
+                    ViewBag.mindate = datas.IsNullOrEmpty() ? "" : datas.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
+                    ViewBag.maxdate = datas.IsNullOrEmpty() ? "" : datas.Max(p => p.OrderDate).ToString("yyyy-MM-dd");
+                    ViewBag.key = vmK.txtKeyword;
+                }
             }
             else
             {
@@ -421,8 +449,8 @@ namespace MedSysProject.Controllers
                     .Include(n => n.OrderDetails)
                     .ThenInclude(n => n.Product)
                     .Where(p => p.OrderId.ToString().Contains(vmK.txtKeyword) ||
-                     p.Member.MemberName.Contains(vmK.txtKeyword) ||
-                p.State.StateName.Contains(vmK.txtKeyword))
+                    p.Member.MemberName.Contains(vmK.txtKeyword) ||
+                    p.State.StateName.Contains(vmK.txtKeyword))
                     .OrderByDescending(d => d.OrderDate);
 
                 ViewBag.mindate = datas.IsNullOrEmpty() ? "" : datas.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
