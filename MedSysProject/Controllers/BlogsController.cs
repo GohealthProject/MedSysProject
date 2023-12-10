@@ -240,8 +240,7 @@ namespace MedSysProject.Controllers
         {
             List<Comment> allReplies = new List<Comment>();
             howManyExactly(mainCommentId, ref allReplies);
-
-            return PartialView("ShowReplies",allReplies);
+            return PartialView("ShowReplies", allReplies);
         }
         /// <summary>
         /// 執行遞迴檢查的方法
