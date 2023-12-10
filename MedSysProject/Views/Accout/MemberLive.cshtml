@@ -2,33 +2,11 @@
     ViewData["Title"] = "個人檢查項目及現場情形";
     Layout = "_Layout_Fore";
     var healthCheckStatus = ViewBag.HealthCheckStatus as List<string>;
-    var healthCheckItems = ViewBag.HealthCheckItems as List<string>;
-    var waitStatus = ViewBag.WaitStatus as List<string>;
-
-    if (waitStatus == null || !waitStatus.Any())
-    {
-        <text>Wait status data is not available.</text>
-    }
-
-    for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
-    {
-        var healthStatus = healthCheckStatus.Count > i ? healthCheckStatus[i] : "unknown";
-        var currentWaitStatus = waitStatus.Count > i ? waitStatus[i] : "unknown";
-        // 使用 healthStatus 和 currentWaitStatus
-    }
-    <text>Health Check Items Count: @healthCheckItems?.Count</text>
-    <br />
-    <text>Health Check Status Count: @healthCheckStatus?.Count</text>
-    <br />
-    <text>Wait Status Count: @waitStatus?.Count</text>
-    <br />
-
-
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-    
+
     .list-group-item-container {
         display: flex;
         align-items: center;
@@ -51,26 +29,22 @@
         position: relative;
     }
 
-    .item-details .form-check {
+        .item-details .form-check {
             margin-right: 20px;
-            
-    }
+        }
 
     .form-check-label {
         position: absolute;
-        left: 35%; 
+        left: 35%;
     }
 
     .collapse-button {
         cursor: pointer;
         position: absolute;
-        left: 70%; 
-        top: 50%; 
-        transform: translate(-50%, -50%); 
+        left: 70%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
-   
-
-
 </style>
 
 <div>
@@ -108,16 +82,16 @@
                     <div class="offcanvas-body">
                         <ul class="list-group list-group-flush" style="margin-bottom: 100px">
                             @{
-                                if (ViewBag.HealthCheckItems != null && healthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
+                                if (ViewBag.HealthCheckStatus != null && ViewBag.HealthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
                                 {
                                     for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
                                     {
-                                        var healthStatus = healthCheckStatus[i];
-                                        var currentWaitStatus = waitStatus[i];
+                                        var status = ViewBag.HealthCheckStatus[i];
+                                        var isDone = new Random().Next(2) == 0;
                                         <li class="list-group-item-container">
                                             <div class="item-check">
                                                 <div class="form-check">
-                                                    @if (healthStatus == "done")
+                                                    @if (isDone)
                                                     {
                                                         <i class="fas fa-check-circle text-success"></i>
                                                     }
@@ -134,18 +108,18 @@
                                                 <div class="collapse-button" onclick="toggleDetails(@i)">
                                                     <i class="fas fa-plus-circle"></i>
                                                 </div>
-                                                
+
                                             </div>
                                             <div class="wait-status">
                                                 <span class="wait-status">
                                                     @{
-                                                        if (currentWaitStatus == "high")
+                                                        if (status == "high")
                                                         {
                                                             <i class="fas fa-user-nurse text-danger"></i>
                                                             <i class="fas fa-user-nurse text-danger"></i>
                                                             <i class="fas fa-user-nurse text-danger"></i>
                                                         }
-                                                        else if (currentWaitStatus == "medium")
+                                                        else if (status == "medium")
                                                         {
                                                             <i class="fas fa-user-nurse text-warning"></i>
                                                             <i class="fas fa-user-nurse text-warning"></i>
@@ -196,6 +170,7 @@
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
         <div style="width: 30%;">

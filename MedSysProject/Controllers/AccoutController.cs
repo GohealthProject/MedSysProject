@@ -283,6 +283,12 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+
+
+        public IActionResult MemberLive()
+        {
+            return View();
+        }
     }
 
 }

@@ -227,13 +227,42 @@ namespace MedSysProject.Controllers
             return PartialView(q);
         }
         public IActionResult ShowComments(int BlogId)
-        {//傳送到partial view的時候就要傳全部，然後在partialview中用razor去做分流
+        {
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
-                                            .Where(comment => comment.BlogId == BlogId)
+                                            .Include(comment=>comment.Employee.EmployeeClass)
+                                            .Where(comment => comment.BlogId == BlogId&&comment.ParentCommentId==null)
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
         }
-
+        #region 遞迴
+        public IActionResult ShowReplies(int mainCommentId) 
+        {
+            List<Comment> allReplies = new List<Comment>();
+            howManyExactly(mainCommentId, ref allReplies);
+            return PartialView("ShowReplies", allReplies);
+        }
+        /// <summary>
+        /// 執行遞迴檢查的方法
+        /// </summary>
+        /// <param name="parentCommentId"></param>
+        /// <param name="allReplies"></param>
+        private void howManyExactly(int parentCommentId,ref List<Comment> allReplies) 
+        {
+            var subReplies = _db.Comments.Include(reply => reply.Member)
+                                         .Include(reply => reply.Employee)
+                                         .Include(reply=>reply.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment)
+                                         .Include(reply => reply.ParentComment.Employee)
+                                         .Include(reply=>reply.ParentComment.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment.Member)
+                                         .Where(reply => reply.ParentCommentId == parentCommentId).ToList();
+            foreach (var reply in subReplies) 
+            { 
+                allReplies.Add(reply);
+                howManyExactly(reply.CommentId, ref allReplies);
+            }             
+        }
+        #endregion
     }
 }

@@ -53,30 +53,51 @@
 
             }
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            loadComments();
-            //對每個留言做遞迴檢查
-            // let mainComment = document.querySelectorAll('.mainComment');
-            // console.log(mainComment.length);
+        //async await必須要在一起
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadPrimeComments();
+            //可以取到.mainComment了
+            await processReplies();
         })
 
-        let blogId = @Model[0].BlogId;
-        async function loadComments() {
+
+        let blogId = @Model[0].BlogId;//可以直接塞razor?
+        async function loadPrimeComments() {
             const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
             const data = await response.text();
             let putIn = document.querySelector('.post-content');
             console.log(putIn);
             putIn.innerHTML += data;
-                //載入主留言
+        }
+        async function processReplies() {
+            let mainComment = document.querySelectorAll('.mainComment');
+            console.log(`主留言數量${mainComment.length}則`);
+            for (const comment of mainComment) {
+                await processReply(comment);
+            }
+        }
+        /*在 JavaScript 中，函数的参数类型不是像一些静态类型语言（如 Java 或 C#）那样进行声明和显式定义的。
+        JavaScript 是一种动态类型的语言，函数参数的类型通常是在运行时根据传递的实际参数值确定的。 */
+        async function processReply(comment) {
+            let commentId = comment.getAttribute('data-comment-id');
+            const subResponse = await fetch(`@Url.Content("~/Blogs/ShowReplies")?mainCommentId=${commentId}`);
+            const subData = await subResponse.text();
+            let subPutIn = comment.querySelector('.subPutIn');
+            subPutIn.innerHTML += subData;
 
-                // async function loadComments(){
-                //     for (var i = 0; i < comidd.length; i++) {
-                //         const url = `https://localhost:7203/Blogs/ad?id=${comidd[i]}`;
-                //         console.log(url);
-                //         const response = await fetch(url);
-                //         const html =await response.text();
-                //         document.querySelector("#here").innerHTML += html;
-                    }
-                
+            //如何取得?<h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
+            let replyCountElement = subPutIn.querySelector('.comment-replies-title');
+            if (replyCountElement) {
+                let replyCount = replyCountElement.getAttribute('data-reply-count');
+                console.log(`次要留言數目為:${replyCount}`);
+                console.log(typeof replyCount);
+                if (parseInt(replyCount) === 0) {
+                    ///parseInt會自動將string轉型
+                    subPutIn.style.display = 'none';
+                }
+            }
+        }
+
+
     </script>
 }

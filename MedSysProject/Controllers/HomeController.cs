@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Web;
 
 namespace MedSysProject.Controllers
@@ -265,30 +266,42 @@ namespace MedSysProject.Controllers
 
         public IActionResult Live()
         {
-            // 使用 DbContext 取得檢查項目名稱列表
             var healthCheckItems = _context.Projects.Select(p => p.ProjectName).ToList();
-
-            // 模擬每個檢查項目的等待情形
-            // 使用隨機生成的資料
-            var random = new Random();
             var healthCheckStatus = new List<string>();
+            var waitStatus = new List<string>();
 
-            string[] possibleStatus = { "high", "medium", "low" };
-
-            for (int i = 0; i < healthCheckItems.Count; i++)
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
             {
-                int index = random.Next(possibleStatus.Length);
-                healthCheckStatus.Add(possibleStatus[index]);
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                Member? currentMember = JsonSerializer.Deserialize<Member>(json);
+                int currentMemberId = currentMember?.MemberId ?? -1;
+
+                foreach (var itemName in healthCheckItems)
+                {
+                    var healthReport = _context.HealthReports
+                        .FirstOrDefault(hr => hr.MemberId == currentMemberId && hr.PlanId.HasValue);
+                    healthCheckStatus.Add(healthReport != null ? "done" : "not done");
+                }
+            }
+            else
+            {
+                var random = new Random();
+                foreach (var itemName in healthCheckItems)
+                {
+                    healthCheckStatus.Add(random.Next(2) == 0 ? "done" : "not done");
+                }
             }
 
-            // 將檢查項目和等待情形傳遞到 View
+            var randomWaitStatus = new Random();
+            string[] possibleStatus = { "high", "medium", "low" };
+            waitStatus.AddRange(healthCheckItems.Select(_ => possibleStatus[randomWaitStatus.Next(possibleStatus.Length)]));
+
             ViewBag.HealthCheckItems = healthCheckItems;
             ViewBag.HealthCheckStatus = healthCheckStatus;
+            ViewBag.WaitStatus = waitStatus;
 
             // 取得每個 ProjectId 對應的 ItemName 列表
             var itemNamesByProjectId = new Dictionary<int, List<string>>();
-
-            // 使用 ToList() 將 _context.Projects 查詢的結果讀取到內存中
             var projects = _context.Projects.ToList();
 
             foreach (var project in projects)
@@ -303,8 +316,13 @@ namespace MedSysProject.Controllers
 
             ViewBag.ItemNamesByProjectId = itemNamesByProjectId;
 
+            Console.WriteLine($"HealthCheckItems count: {healthCheckItems.Count}");
+            Console.WriteLine($"HealthCheckStatus count: {healthCheckStatus.Count}");
+            Console.WriteLine($"WaitStatus count: {waitStatus.Count}");
+
             return View();
         }
+
 
 
 
