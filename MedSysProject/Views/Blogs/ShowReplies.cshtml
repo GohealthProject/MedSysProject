@@ -7,9 +7,10 @@
     </div>
     foreach (var reply in Model)
     {
+        string id = "c" + reply.CommentId;
         <!-- 次留言的 HTML 结构 -->
         <!--data-comment-id自訂義屬性-->
-        <div class="reply d-flex mb-4" data-comment-id="@reply.CommentId">
+        <div id="@id" class="reply d-flex mb-4" data-comment-id="@reply.CommentId">
             <div class="flex-shrink-0">
                 <div class="avatar avatar-sm rounded-circle">
                     @{
@@ -46,11 +47,13 @@
                     @{
                         if (reply.ParentComment.EmployeeId == null)
                         {//可以在inline style設計hover嗎
-                            <a href="#" style="color:blue;">(會員)@reply.ParentComment.Member.MemberNickname</a> @reply.Content
+                            string rid =  @reply.ParentCommentId.ToString() ;
+                            <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(會員)@reply.ParentComment.Member.MemberNickname</a> @reply.Content
                         }
                         else
                         {
-                            <a href="#" style="color:blue;">(@reply.ParentComment.Employee.EmployeeClass.Class)@reply.ParentComment.Employee.EmployeeName</a> @reply.Content
+                            string rid =  @reply.ParentCommentId.ToString() ;
+                            <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(@reply.ParentComment.Employee.EmployeeClass.Class)@reply.ParentComment.Employee.EmployeeName</a> @reply.Content
                         }
                     }
 

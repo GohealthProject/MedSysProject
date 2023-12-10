@@ -12,8 +12,9 @@
     }
     @foreach (var comment in comments)
     {
+        string id ="c"+comment.CommentId ;
         <!--data-comment-id自訂義屬性-->
-        <div class="comment d-flex mb-4 mainComment" data-comment-id="@comment.CommentId">
+        <div id="@id" class="comment d-flex mb-4 mainComment" data-comment-id="@comment.CommentId">
             <!--放使用者照片的位置-->
             <div class="flex-shrink-0">
                 <div class="avatar avatar-sm rounded-circle">
