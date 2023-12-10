@@ -1,6 +1,6 @@
 ﻿@model List<MedSysProject.Models.Comment>
-@{
-    <h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
+@{//測試h6外面包div樣式會不會跑掉??
+    <div><h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6></div>
     foreach (var reply in Model)
     {
         <!-- 次留言的 HTML 结构 -->
