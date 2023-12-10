@@ -39,36 +39,36 @@
                         int current = ViewBag.page;
                         if (ViewBag.page == 1)
                         {
-                                        <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
-                                        <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
                         }
                         else
                         {
-                                        <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
-                                        <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=1">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@previous">上一頁</a></li>
                         }
 
                         for (int i = 1; i <= ViewBag.maxpage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                            <li class="page-item active"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
                             }
                             else
                             {
-                                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@i">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.maxpage)
                         {
-                                        <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
-                                        <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
                         }
                         else
                         {
-                                        <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
-                                        <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@next">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/MemberManager?page=@ViewBag.maxpage">末頁</a></li>
                         }
 
                     }
@@ -113,68 +113,68 @@
                     foreach (var item in Model)
                     {
                         count++;
-                                    <tr>
-                                        <td>
-                                            @count
-                                            <input type="hidden" value="@item.MemberId" />
-                                        </td>
-                                        <td>
-                                        @{
-                                            if (item.MemberImage == null)
-                                            {
-                                                <img src="~/img/no_member_image.jpg" width="100px"/>
+                        <tr>
+                            <td>
+                                @count
+                                <input type="hidden" value="@item.MemberId" />
+                            </td>
+                            <td>
+                                @{
+                                    if (item.MemberImage == null)
+                                    {
+                                        <img src="~/img/no_member_image.jpg" width="100px" />
                                     }
-                                        
-                                        else
-                                        {
-                                            <img src="~/img/MemberImg/@item.MemberImage" width="100px"/>
+
+                                    else
+                                    {
+                                        <img src="~/img/MemberImg/@item.MemberImage" width="100px" />
                                     }
-                                            }
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.MemberName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.MemberGender)
-                                        </td>
-                                            @{
-                                                string date  = item.MemberBirthdate.ToString().Split(" ")[0];
-                                                <td>@date</td>
-                                            }
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.MemberPhone)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.MemberEmail)
-                                        </td>
-                                        <td style="display:none;">
-                                            @Html.DisplayFor(modelItem => item.MemberPassword)
-                                        </td>
-                                        <td style="display:none;">
-                                            @Html.DisplayFor(modelItem => item.MemberAddress)
-                                        </td>
-                                        <td style="display:none;">
-                                            @Html.DisplayFor(modelItem => item.MemberContactNumber)
-                                        </td>
-                                        <td style="display:none;">
-                                            @Html.DisplayFor(modelItem => item.MemberNickname)
-                                        </td>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MemberName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MemberGender)
+                            </td>
+                            @{
+                                string date = item.MemberBirthdate.ToString().Split(" ")[0];
+                                <td>@date</td>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MemberPhone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MemberEmail)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.MemberPassword)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.MemberAddress)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.MemberContactNumber)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.MemberNickname)
+                            </td>
 
-                                        <td>
-                                            <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                <i class="fas fa-user-edit"></i>
-                                            </a>
+                            <td>
+                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
 
-                                            <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
+                                <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
 
-                                            <a class="btn btn-danger" onclick="get(this)">
-                                                @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                                <i class="fas fa-user-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <a class="btn btn-danger" onclick="get(this)">
+                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
+                                    <i class="fas fa-user-times"></i>
+                                </a>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
@@ -239,7 +239,7 @@
                 <div class="modal-content">
                     <!--Header-->
                     <div class="modal-header">
-                        
+
                         <h4 class="modal-title" id="myModalLabel">修改會員資料</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -381,6 +381,12 @@
         showTogget(element)
     }
 
+    //詳細資料彈窗的事件
+    function detail(element) {
+        showDetailTogget(element)
+    }
+
+    //修改資料
     async function putdata2() {
         let id = document.getElementById("inputId").value;
         console.log(id)
@@ -411,12 +417,6 @@
     function showTogget(element) {
         let par = element.closest("tr");
         let tds = par.getElementsByTagName("td");
-
-        
-
-
-
-
 
         let tdName = tds[2].innerHTML;
         let tdGender = tds[3].innerHTML;
@@ -453,6 +453,54 @@
         console.log(document.getElementById("inputId").value);
         // console.log(data);
     }
+
+    //把詳細資料印到彈出來的詳細資料視窗(modalDetail)，分別是編號、姓名、性別、生日、手機、信箱、地址、連絡電話、暱稱、密碼、照片，用<li>包起來
+    function showDetailTogget(element) {
+        let par = element.closest("tr");
+        let tds = par.getElementsByTagName("td");
+
+        let tdName = tds[2].innerHTML;
+        let tdGender = tds[3].innerHTML;
+
+        let tddateA = tds[4].innerHTML; //這裡要把2000/01/01轉成2000-01-01
+        let tddateB = tddateA.replace('/', '-');
+        let tddateC = tddateB.replace('/', '-');
+        var tddateD = new Date(tddateC.trim());
+        var year = tddateD.getFullYear();
+        // getMonth() 返回的月份是從 0 開始的，所以需要加 1
+        var month = (tddateD.getMonth() + 1).toString().padStart(2, '0');
+        var day = tddateD.getDate().toString().padStart(2, '0');
+        var tddate = `${year}-${month}-${day}`;
+
+        let tdphone = tds[5].innerHTML;
+        let tdemail = tds[6].innerHTML;
+
+        let tdpwd = tds[7].innerHTML;
+        let tdaddress = tds[8].innerHTML;
+        let tdcontact = tds[9].innerHTML;
+        let tdnick = tds[10].innerHTML;
+        let tdimage = tds[1].innerHTML;
+        let tdid = tds[0].querySelector('input[type="hidden"]').value;
+
+        var modal = document.getElementById("modalDetail");
+        var ul = modal.getElementsByTagName("ul");
+        var li = ul[0].getElementsByTagName("li");
+
+        li[0].innerHTML = `照片：${tdimage}`;
+        li[1].innerHTML = `編號：${tdid}`;
+        li[2].innerHTML = `姓名：${tdName}`;
+        li[3].innerHTML = `性別：${tdGender}`;
+        li[4].innerHTML = `生日：${tddate}`;
+        li[5].innerHTML = `手機：${tdphone}`;
+        li[6].innerHTML = `信箱：${tdemail}`;
+        li[7].innerHTML = `地址：${tdaddress}`;
+        li[8].innerHTML = `連絡電話：${tdcontact}`;
+        li[9].innerHTML = `暱稱：${tdnick}`;
+        li[10].innerHTML = `密碼：${tdpwd}`;
+    }
+
+
+
     async function research() {
 
         await new Promise(resolve => setTimeout(resolve, 1600));
@@ -477,62 +525,62 @@
             const nick = mem.memberNickname;
             //const image = mem.memberImage;
 
-            let s = 
-            `
-    <tr>
-        <td>
-            ${count}
-            <input type="hidden" value=${id} />
-        </td>
-        <td>
+            let s =
+                `
+        <tr>
+            <td>
+                ${count}
+                <input type="hidden" value=${id} />
+            </td>
+            <td>
     @*image*@
-        </td>
-        <td>
-            ${name}
-        </td>
-        <td>
-            ${gender}
-        </td>
-        <td>
-            ${date}
-        </td>
-        <td>
-            ${phone}
-        </td>
-        <td>
-            ${email}
-        </td>
-        <td style="display:none;">
-            ${pwd}
-        </td>
-        <td style="display:none;">
-            ${address}
-        </td>
-        <td style="display:none;">
-            ${contact}
-        </td>
-        <td style="display:none;">
-            ${nick}
-        </td>
+            </td>
+            <td>
+                ${name}
+            </td>
+            <td>
+                ${gender}
+            </td>
+            <td>
+                ${date}
+            </td>
+            <td>
+                ${phone}
+            </td>
+            <td>
+                ${email}
+            </td>
+            <td style="display:none;">
+                ${pwd}
+            </td>
+            <td style="display:none;">
+                ${address}
+            </td>
+            <td style="display:none;">
+                ${contact}
+            </td>
+            <td style="display:none;">
+                ${nick}
+            </td>
 
-        <td>
-            <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal"
-                data-target="#modalEdit">
-                <i class="fas fa-user-edit"></i>
-            </a>
+            <td>
+                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal"
+                    data-target="#modalEdit">
+                    <i class="fas fa-user-edit"></i>
+                </a>
 
-            <a onclick="detail(this)" class="btn btn-info" data-toggle="modal"
-                data-target="#modalDetail">
-                <i class="fas fa-info-circle"></i>
-            </a>
+                <a onclick="detail(this)" class="btn btn-info" data-toggle="modal"
+                    data-target="#modalDetail">
+                    <i class="fas fa-info-circle"></i>
+                </a>
 
-            <a class="btn btn-danger" onclick="get(this)">
+                <a class="btn btn-danger" onclick="get(this)">
     @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                <i class="fas fa-user-times"></i>
-            </a>
-        </td>
-    </tr>
-            `
+                    <i class="fas fa-user-times"></i>
+                </a>
+            </td>
+        </tr>
+                `
             count++;
             console.log(count);
             return s;
@@ -561,7 +609,7 @@
                 method: 'DELETE'
             });
             let data = await response.status
-            if (data == 200 || 
+            if (data == 200 ||
                 data == 201 ||
                 data == 202 ||
                 data == 203 ||
@@ -582,7 +630,7 @@
                     timer: 1500
                 });
             }
-                research();
+            research();
         }
     }
 
