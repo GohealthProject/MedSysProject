@@ -7,30 +7,30 @@
 
 <main id="main">
     @{
-                        <section class="single-post-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+                                                                        <section class="single-post-content">
+                                                                            <div class="container">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
 
-                                        <!-- ======= Single Post Content ======= -->
-                                        <div class="single-post">
-                                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
-                                            <h1 class="mb-5">@Model[0].Title</h1>
-                                            @Html.Raw(Model[0].Content)
-                                        </div><!-- End Single Post Content -->
-                                        <!-- ======= Comments ======= -->
-                                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
+                                                                                        <!-- ======= Single Post Content ======= -->
+                                                                                        <div class="single-post">
+                                                                                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                                                                                            <h1 class="mb-5">@Model[0].Title</h1>
+                                                                                            @Html.Raw(Model[0].Content)
+                                                                                        </div><!-- End Single Post Content -->
+                                                                                        <!-- ======= Comments ======= -->
+                                                                                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
 
-                                        <div class="Comments" id="putIn">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <!-- ======= 側面欄位丟這 ======= -->
+                                                                                        <div class="Comments" id="putIn">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <!-- ======= 側面欄位丟這 ======= -->
 
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </section>
     }
 </main><!-- End #main -->
 @section Scripts {
@@ -58,6 +58,7 @@
             await loadPrimeComments();
             //可以取到.mainComment了
             await processReplies();
+            toggleLinkEvent();
         })
 
 
@@ -66,15 +67,16 @@
             const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
             const data = await response.text();
             let putIn = document.querySelector('.post-content');
-            console.log(putIn);
+            //console.log(putIn);
             putIn.innerHTML += data;
         }
         async function processReplies() {
             let mainComment = document.querySelectorAll('.mainComment');
-            console.log(`主留言數量${mainComment.length}則`);
+            //console.log(`主留言數量${mainComment.length}則`);
             for (const comment of mainComment) {
                 await processReply(comment);
             }
+
         }
         /*在 JavaScript 中，函数的参数类型不是像一些静态类型语言（如 Java 或 C#）那样进行声明和显式定义的。
         JavaScript 是一种动态类型的语言，函数参数的类型通常是在运行时根据传递的实际参数值确定的。 */
@@ -89,14 +91,62 @@
             let replyCountElement = subPutIn.querySelector('.comment-replies-title');
             if (replyCountElement) {
                 let replyCount = replyCountElement.getAttribute('data-reply-count');
-                console.log(`次要留言數目為:${replyCount}`);
-                console.log(typeof replyCount);
+                //console.log(`次要留言數目為:${replyCount}`);
+                //console.log(typeof replyCount);
                 if (parseInt(replyCount) === 0) {
                     ///parseInt會自動將string轉型
                     subPutIn.style.display = 'none';
                 }
             }
         }
+        function toggleLinkEvent() 
+        {
+            var toggleLinks = document.querySelectorAll('.toggleLink');
+            //console.log(toggleLinks);
+
+            toggleLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var icon = link.querySelector('.bi');
+                    var parentDiv = icon.parentNode.parentNode;
+                    var repliesSection = parentDiv.parentNode;
+                    //console.log(repliesSection);
+                    //console.log(repliesSection.length);
+                    var replySections = repliesSection.querySelectorAll('.reply');
+                    console.log(replySections);
+                    replySections.forEach(function (reply) {
+                        reply.style.display = 'none!';
+                        reply.setAttribute('style', 'display: none !important');
+
+                    });
+                    if (icon.classList.contains('bi-chevron-down')) {
+                        icon.classList.remove('bi-chevron-down');
+                        icon.classList.add('bi-chevron-up');
+                        replySections.forEach(function (reply) {
+                            reply.style.display = 'block';
+                            reply.setAttribute('style', 'display: block !important');
+                        });
+
+                    } else {
+                        icon.classList.remove('bi-chevron-up');
+                        icon.classList.add('bi-chevron-down');
+                        replySections.forEach(function (reply) {
+                            reply.style.display = 'none!important';
+                            reply.setAttribute('style', 'display: none !important');
+                        });
+                    }
+                   
+
+                });
+            });
+               
+               
+               
+               
+                
+                
+        }
+        //沒屁用
         function scrollToElement(elementId) 
         {
             let selector = '#c' + elementId;

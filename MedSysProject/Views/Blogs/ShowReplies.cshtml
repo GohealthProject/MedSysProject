@@ -3,14 +3,14 @@
             //測試h6外面包div樣式會不會跑掉??
     <div class="d-flex justify-content-between align-item-center">
         <h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
-        <a href="#" style="color:black">查看所有回覆<i class="bi bi-chevron-down dropdown-indicator"></i></a>
+        <a href="#" style="color:black" class="toggleLink">查看所有回覆<i class="bi bi-chevron-down dropdown-indicator"></i></a>
     </div>
     foreach (var reply in Model)
     {
         string id = "c" + reply.CommentId;
         <!-- 次留言的 HTML 结构 -->
         <!--data-comment-id自訂義屬性-->
-        <div id="@id" class="reply d-flex mb-4" data-comment-id="@reply.CommentId">
+        <div id="@id" class="reply d-flex mb-4" data-comment-id="@reply.CommentId" style="display:none !important;">
             <div class="flex-shrink-0">
                 <div class="avatar avatar-sm rounded-circle">
                     @{
