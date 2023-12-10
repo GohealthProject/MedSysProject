@@ -161,7 +161,7 @@
 
 
         <table class="table table-hover">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th>
                         序
@@ -200,7 +200,7 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        <tr>
+                        <tr class="table-secondary">
                             <td>
                                 @count
                                 <input type="hidden" value="@item.EmployeeId" />
