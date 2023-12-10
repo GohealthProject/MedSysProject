@@ -53,9 +53,12 @@
 
             }
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            loadComments();
+        document.addEventListener('DOMContentLoaded', async() => {
+            await loadComments();
+            let main = document.querySelectorAll('.mainComment');
+            console.log(`測試非同步${main.length}`);
         })
+
 
         let blogId = @Model[0].BlogId;
         async function loadComments() {
