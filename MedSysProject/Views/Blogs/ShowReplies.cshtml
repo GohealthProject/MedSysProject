@@ -1,6 +1,10 @@
 ﻿@model List<MedSysProject.Models.Comment>
-@{//測試h6外面包div樣式會不會跑掉??
-    <div><h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6></div>
+@{
+            //測試h6外面包div樣式會不會跑掉??
+    <div class="d-flex justify-content-between align-item-center">
+        <h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
+        <a href="#" style="color:black">查看所有回覆<i class="bi bi-chevron-down dropdown-indicator"></i></a>
+    </div>
     foreach (var reply in Model)
     {
         <!-- 次留言的 HTML 结构 -->
@@ -19,7 +23,7 @@
                                  class="img-fluid" />
                         }
 
-                }
+                    }
                 </div>
             </div>
             <div class="flex-grow-1 ms-2 ms-sm-3">
@@ -47,8 +51,8 @@
                         {
                             <a href="#" style="color:blue;">(@reply.ParentComment.Employee.EmployeeClass.Class)@reply.ParentComment.Employee.EmployeeName</a> @reply.Content
                         }
-                }
-                    
+                    }
+
                 </div>
                 <div class="d-flex">
                     <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
