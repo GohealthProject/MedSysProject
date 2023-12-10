@@ -3,7 +3,7 @@
     ViewData["Title"] = "PlanIntroductionProject";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-
+@model List<MedSysProject.ViewModels.CPlanViewModel> 
 
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
@@ -75,12 +75,35 @@
                                 </button>
                             </h2>
                         
-                            <div class="table-responsive-lg ">
+                            <div class="table-responsive-lg  table-dialog table-dialog-scrollable">
+                                <div >
                                 <table class="table ">
                                     <thead>
                                         <tr class="">
                                             <th scope="col" disable></th>
                                             <th scope="col" >項目內容</th>
+                                            @foreach (var project in Model)
+                                            {
+
+                                                    @if (project.ProjectId == 1)
+                                                    {
+                                                        <th id="item" class="text-nowrap">
+
+                                                            @if (project.ItemId > 0)
+                                                            {
+                                                                @for (int i = 0; i < project.ItemName.Count(); i++)
+                                                                {
+                                                                    @Html.DisplayFor(p => project.ItemName[i])
+                                                                }
+                                                            }
+                                                    </th>
+                                                   
+                                                        continue;
+                                                    }
+                                            }
+                                            <th scope="col" disable>                                          
+                                                
+                                          </th>
                                             <th scope="col">男</th>
                                             <th scope="col">女</th>
                                         </tr>
@@ -91,19 +114,25 @@
 
                                             <tr>
                                               
-                                                    @if (project.ProjectId ==1)
-                                                    {
+                                                    @if (project.ProjectId >1)
+                                                {
                                                     <th scope="row" id="project">@project.ProjectName </th>
-                                                    <td id="item">
-                                                        身高、體重 、@foreach (var item in project.ItemName)
+                                                        <th id="item" class="text-nowrap">
+                                                        
+                                                        @if (project.ItemId > 0)
                                                         {
-                                                            @item.GetType()
+                                                            @for (int i = 0; i < project.ItemName.Count(); i++)
+                                                            {
+                                                                @Html.DisplayFor(p => project.ItemName[i])
+                                                            }
                                                         }
-                                                        </td>
+                                                    </th>
+                                                 
                                                     <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
                                                     <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                                    continue;
-                                                }
+                                                      continue;
+                                                } 
+                                                
                                                
                                               
                                         </tr>
@@ -126,6 +155,7 @@
 
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                            
                         </div>
