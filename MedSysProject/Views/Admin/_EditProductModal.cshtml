@@ -82,13 +82,13 @@
                     }
                 }
                 <div class="mb-3">
-                    <label for="formFiles" class="form-label">產品圖片上傳</label>
-                    <input class="form-control" type="file" id="formFiles" name="FormFiles" multiple>
+                    <label for="formFileForEdit" class="form-label">產品圖片上傳</label>
+                    <input class="form-control" type="file" id="formFileForEdit" name="FormFiles" multiple>
                 </div>
 
                 <div id="imagePreviewContainer" class="mb-3">
                     <label for="inputDescription" class="form-label">圖片預覽</label>
-                    <div id="imagePreview" class="d-flex flex-wrap">
+                    <div id="imagePreviewForEdit" class="d-flex flex-wrap">
                         <!-- 預覽的圖片將在這裡顯示 -->
                     </div>
                 </div>
@@ -105,43 +105,40 @@
         </div>
     </div>
 
-
-    <div>
-        <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
-    </div>
-
     @section Scripts {
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var fileInput = document.getElementById('formFiles');
-                if (fileInput) {
-                    fileInput.addEventListener('change', function (e) {
-                        var fileInput = e.target;
-                        var files = fileInput.files;
-
-                        var imagePreviewContainer = document.getElementById('imagePreview');
-                        imagePreviewContainer.innerHTML = '';
-
-                        for (let i = 0; i < files.length; i++) {
-                            var file = files[i];
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                var imgElement = document.createElement('img');
-                                imgElement.src = e.target.result;
-                                imgElement.style.maxWidth = '100px';
-                                imgElement.style.maxHeight = '100px';
-                                imagePreviewContainer.appendChild(imgElement);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-                } else {
-                    console.error('找不到ID為 formFiles 的文件輸入元素。');
-                }
-            });
-        </script>
+       
     }
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+
+        var fileInput = document.getElementById('formFileForEdit');
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                var fileInput = e.target;
+                var files = fileInput.files;
+
+                var imagePreviewContainer = document.getElementById('imagePreviewForEdit');
+                imagePreviewContainer.innerHTML = '';
+
+                for (let i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = '100px';
+                        imgElement.style.maxHeight = '100px';
+                        imagePreviewContainer.appendChild(imgElement);
+                    };
+                    reader.readAsDataURL(file);
+                }; 
+            });
+        } else {
+            console.error('找不到ID為 formFileForEdit 的文件輸入元素。');
+        }
+    </script>
 </div>

@@ -273,11 +273,11 @@
         });
     }
     function bindImageUploadEvent() {
-        var fileInput = document.getElementById('formFile');
+        var fileInput = document.getElementById('formFileForCreate');
         if (fileInput) {
             fileInput.addEventListener('change', function (e) {
                 var files = e.target.files;
-                var imagePreviewContainer = document.getElementById('imagePreview');
+                var imagePreviewContainer = document.getElementById('imagePreviewForCreate');
                 imagePreviewContainer.innerHTML = '';
 
                 for (let i = 0; i < files.length; i++) {
@@ -297,10 +297,56 @@
                 }
             });
         } else {
-            console.error('找不到ID為 formFile 的文件輸入元素。');
+            console.error('找不到ID為 formFileForCreate 的文件輸入元素。');
         }
     }
   
+    // 加載編輯產品模態的函數
+    function getProductDetails(productId) {
+        $.ajax({
+            url: '@Url.Action("Edit", "Admin")',
+            type: 'GET',
+            data: { productId: productId },
+            success: function (data) {
+                $('#category_div').html(data);
+                // 呼叫綁定圖像上傳事件的函數
+                bindImageUploadEventForEdit();
+            },
+            error: function (error) {
+                alert('獲取產品資訊失敗：' + error.statusText);
+            }
+        });
+    }
+
+    // 綁定圖像上傳事件的函數
+    function bindImageUploadEventForEdit() {
+        var fileInput = document.getElementById('formFileForEdit');
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                var files = e.target.files;
+                var imagePreviewContainer = document.getElementById('imagePreviewForEdit');
+                imagePreviewContainer.innerHTML = ''; // 清空現有預覽
+
+                for (let i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = '100px';
+                        imgElement.style.maxHeight = '100px';
+                        imagePreviewContainer.appendChild(imgElement);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        } else {
+            console.error('找不到ID為 formFileForEdit 的檔案輸入元素。');
+        }
+    }
+
     
     function displayProductDetails(data) {
         $('#editProductName').val(data.WrappedProductName);
