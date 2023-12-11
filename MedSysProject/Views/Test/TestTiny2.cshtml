@@ -86,7 +86,7 @@
                         <span asp-validation-for="EmployeeId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="新增文章" class="btn btn-primary" />
+                        <button value="新增文章" class="btn btn-primary" onclick="FFF()" />
                     </div>
                 </form>
             </div>
@@ -98,6 +98,18 @@
         <a asp-action="Index">Back to List</a>
     </div>
     <script>
+        function FFF() {
+            //取得form的資料
+            var form = document.querySelector('form');
+            var formData = new FormData(form);
+            //取得所有的資料
+            for (var value of formData.values()) {
+                console.log(value);
+            }
+        }
+
+
+
         function previewImage(event) {
             const input = event.target;
             if (input.files && input.files[0]) {

@@ -128,7 +128,7 @@ namespace MedSysProject.Controllers
         }
 
       public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  篩對應project和item(以viewModel解決)
+        { //放方案介紹  
 
             //vm方法
             List<CPlanViewModel>data= new List<CPlanViewModel>();
@@ -213,7 +213,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        [HttpPost]
+        //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
         { //預約總覽
 
