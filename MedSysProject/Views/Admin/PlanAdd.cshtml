@@ -413,7 +413,7 @@
                 method: 'DELETE'
             });
             let data = await response.status
-            if (data = 200) {
+            if (response.ok) {
                 Swal.fire({
                     title: "刪除成功!",
                     text: data,
