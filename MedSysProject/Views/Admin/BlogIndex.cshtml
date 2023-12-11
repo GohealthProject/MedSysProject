@@ -288,6 +288,7 @@
         }
 
     }
+
     function selectPost(element) {
         let grandpa = element.parentNode.parentNode;
         var hideId = grandpa.querySelector('input[type="hidden"]').value;
@@ -295,43 +296,40 @@
         deletePost(hideId);
     }
     function deletePost(hideId) {
-        const result = Swal.fire({
-            title: '確定要刪除嗎?',
-            text: "刪除後將無法復原!",
-            icon: 'warning',
+        const result = await Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: '確定刪除',
-            cancelButtonText: '取消'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let apiUrl = `https://localhost:7078/api/Blogs/${hideId}`;
-                fetch(apiUrl, {
-                    method: 'DELETE',
-                }).then(response => {
-                    let state = response.status;
-                    if (response.ok) {
-                        Swal.fire({
-                            title: "刪除成功!",
-                            text: state,
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        research();
-                    }
-                    else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "有錯誤發生!"
-                        });
-                    }
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        });
+
+        if (result.isConfirmed) {
+
+            const response = await fetch(`https://localhost:7078/api/Blogs/${id}`, {
+                method: 'DELETE'
+            });
+            let data = await response.status
+            if (response.ok) {
+                Swal.fire({
+                    title: "刪除成功!",
+                    text: data,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
                 });
             }
-        })
-
+            research()
+        }
     }
 
     async function research() {
