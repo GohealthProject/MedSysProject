@@ -368,5 +368,41 @@ namespace MedSysProject.Controllers
             }
         }
         
+        public IActionResult ProductTracking(int Pid,string heart)
+        {
+                var q = _db.Products.Find(Pid);
+            List<CProductWarp>? list;
+            string json = "";
+                if (HttpContext.Request.Cookies.ContainsKey(CDictionary.SK_PRODUCT_TRACK))
+                {
+                    json = HttpContext.Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
+                    list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
+                }
+                else
+                list = new List<CProductWarp>();
+                
+            if (heart == "heart.png")
+            {
+                return Content("刪除追蹤清單");
+            }
+            else
+            {
+                CProductWarp cp = new CProductWarp();
+                cp.Product = q;
+                cp.Path = q.FimagePath.Split(",");
+                list.Add(cp);
+                
+                json = JsonSerializer.Serialize(list);
+                HttpContext.Response.Cookies.Append(CDictionary.SK_PRODUCT_TRACK, json);
+
+
+                
+                return Content("加入追蹤清單成功");
+            }
+
+                
+            
+          
+        }
     }
 }

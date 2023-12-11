@@ -1,4 +1,5 @@
-﻿@model CProductWarp
+﻿@using System.Text.Json
+@model CProductWarp
 @{
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
@@ -11,7 +12,7 @@
             <h2>產品規格</h2>
             <ol>
                 <li><a asp-action="index">主頁</a></li>
-                <li><a asp-action="Search" asp-route-id="@Model.Product.ProductsClassifications.FirstOrDefault().Categories.CategoriesId">@Model.Product.ProductsClassifications.FirstOrDefault().Categories.CategoriesName</a></li>
+                <li><a asp-action="CatProduct" asp-route-id="@Model.Product.ProductsClassifications.FirstOrDefault().Categories.CategoriesId">@Model.Product.ProductsClassifications.FirstOrDefault().Categories.CategoriesName</a></li>
                 <li>產品規格</li>
             </ol>
         </div>
@@ -31,9 +32,9 @@
                             int count = 0;
                             foreach(var img in Model.Path)
                             {
-                                <div class="swiper-slide">
-                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
-                                </div>
+                                                <div class="swiper-slide">
+                                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
+                                                </div>
                                 count++;
                             }
                         } 
@@ -64,18 +65,41 @@
                                 @{
                                     for(int i = 1; i <= Model.UnitsInStock; i++)
                                     {
-                                        <option value="@i">@i</option>
+                                                        <option value="@i">@i</option>
                                         if (i >= 50)
                                         {
-                                            <option>...</option>
+                                                            <option>...</option>
                                             break;
                                         }
                                     }
                                 }
                                 }
                         </select>
-                        <input type="hidden" value="@Model.ProductId" name="id"/>
-                        <input type="checkbox" />
+                        <input type="hidden" value="@Model.ProductId" name="id" />
+                            @{
+                                if(Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK] == null)
+                                {
+                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                }
+                                else
+                                {
+                                    string json = Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
+                                    List<CProductWarp> list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
+                                    foreach (var item in list)
+                                    {
+                                        if (Model.ProductId == item.ProductId)
+                                        {
+                                            <img src="~/img/heart.png" id="ProductTracking" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/Noheart.png" id="ProductTracking" />
+                                        }
+                                    }
+                                }
+
+                                
+                            }
                         <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
                         </form>
                     </p>
@@ -89,8 +113,11 @@
 @section Scripts{
     <script>
         const item = document.querySelector("#datas");
+        const id = @Model.ProductId;
+        console.log(id);
         var data = new FormData(item);
-        
+        let heart = document.querySelector("#ProductTracking");
+        heart.addEventListener("click", ProductTracking);
         async function addToCart(event){
             event.preventDefault()
             var data = new FormData(item);
@@ -102,7 +129,26 @@
             getcartList()
             alert("加入購物車成功");
         }
-        
+        async function ProductTracking(event){
+            event.preventDefault()
+            let imgPath = event.target.src;
+            let img = imgPath.lastIndexOf("/");
+            let imgName = imgPath.substring(img + 1);
+
+            if (imgName === "Noheart.png") {
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                const response = await fetch(url)
+                const data = await response.text();
+                console.log(data);
+                event.target.src= "/img/heart.png";
+            } else if(imgName === "heart.png") {
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                const response = await fetch(url)
+                const data = await response.text();
+                console.log(data);
+                event.target.src = "/img/Noheart.png";
+            }
+        }
         function changeImg(imgElement) {
             $("#imgList>img").css("border", "");
             const src = imgElement.src;
