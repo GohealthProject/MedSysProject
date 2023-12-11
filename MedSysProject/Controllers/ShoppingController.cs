@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using NuGet.Packaging.Signing;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text.Json;
 
 namespace MedSysProject.Controllers
@@ -37,17 +38,34 @@ namespace MedSysProject.Controllers
 
             return View(list);
         }
-        public IActionResult Search(int id)
+        public IActionResult CatProduct(int id)
         {
-            var q = _db.ProductsCategories.Where(n => n.CategoriesId == id).Include(n => n.ProductsClassifications).ThenInclude(n => n.Product).SelectMany(n => n.ProductsClassifications.Select(n => n.Product));
+            var q = _db.Products.Include(n=>n.ProductsClassifications).ThenInclude(n=>n.Categories).Where(n=>n.ProductsClassifications.Any(n => n.CategoriesId == id));
             List<CProductWarp> ps = new List<CProductWarp>();
             foreach(var p in q)
             {
                 CProductWarp c = new CProductWarp();
                 c.Product = p;
+                c.Path = p.FimagePath.Split(",");
                 ps.Add(c);
             }
-            
+            List<int> hot6 = new List<int>();
+            var qq = _db.OrderDetails
+                .Include(n => n.Product)
+                .ThenInclude(n => n.ProductsClassifications)
+                .ThenInclude(n => n.Categories)
+                .Where(n => n.Product.ProductsClassifications.Any(n => n.CategoriesId == id))
+                .GroupBy(n => n.ProductId)
+                .Select(n => new { 
+                    n.Key,
+                    sum = n.Sum(n => n.Quantity) 
+                })
+                .OrderByDescending(n => n.sum);
+            foreach(var item in qq)
+            {
+                hot6.Add((int)item.Key);
+            }
+            ViewBag.hot = hot6;
             return View(ps);
         }
         public IActionResult selectProduct(int id)
@@ -98,6 +116,26 @@ namespace MedSysProject.Controllers
             HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
             return Ok();
         }
+        public IActionResult removeCart(int id)
+        {
+            string json = "";
+            List<CCartItem>? cart = null;
+            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
+            foreach (var item in cart)
+            {
+                if(item.Product.ProductId== id)
+                {
+                    cart.Remove(item);
+                    break;
+                }
+            }
+            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
+            string count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
+            count = (Int32.Parse(count) - 1).ToString();
+            HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
+            return RedirectToAction("CartList");
+        }
         public IActionResult getcartList()
         {
             if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
@@ -123,6 +161,46 @@ namespace MedSysProject.Controllers
                 List<CCartItem>? cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
                 return View(cart);
             }
+        }
+        [HttpPost]
+        public IActionResult CartLIst()
+        {
+            int count = 0;
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            var data = Request.Form;
+            var pid = data["ProductID"];
+            var qta = data["ProductQta"];
+            var pay = data["odPay"];
+            var ship = data["odShip"];
+            Order o = new Order();
+            o.MemberId = m.MemberId;
+            o.OrderDate = System.DateTime.Now;
+            o.PayId = Int32.Parse(pay);
+            o.ShipId = Int32.Parse(ship);
+            o.StateId = 2;
+            o.ShipDate= System.DateTime.Now.AddDays(2);
+            o.DeliveryDate = System.DateTime.Now.AddDays(3);
+            _db.Orders.Add(o);
+            _db.SaveChanges();
+            var lastOrder = _db.Orders.OrderByDescending(n=>n.OrderId).FirstOrDefault().OrderId;
+            foreach (var id in pid)
+            {
+                var q = _db.Products.Find(Int32.Parse(id));
+                q.UnitsInStock -= int.Parse(qta[count]);
+                OrderDetail od = new OrderDetail();
+                od.ProductId = Int32.Parse(id);
+                od.Quantity = int.Parse(qta[count]);
+                od.OrderId = lastOrder;
+                od.UnitPrice = q.UnitPrice;
+                _db.OrderDetails.Add(od);
+                count++;
+            }
+            _db.SaveChanges();
+
+            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+            return RedirectToAction("index");
         }
         public IActionResult KeySearch(string Key)
         {
@@ -162,7 +240,7 @@ namespace MedSysProject.Controllers
             ViewBag.PageSize = pageSize;
 
 
-            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate).Skip((page - 1) * pageSize).Take(pageSize);
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
 
             //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
             foreach (var item in q)
@@ -171,6 +249,7 @@ namespace MedSysProject.Controllers
                 od.order = item;
                 list.Add(od);
             }
+
              
             return View(list);
         }

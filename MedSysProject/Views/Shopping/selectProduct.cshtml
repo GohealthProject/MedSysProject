@@ -28,11 +28,13 @@
                 <div class="portfolio-details-slider swiper">
                     <div class="swiper-wrapper align-items-center">
                         @{
+                            int count = 0;
                             foreach(var img in Model.Path)
                             {
                                 <div class="swiper-slide">
-                                    <img src="@Url.Content("~/img-product/")@Model.Path[0]" alt="">
+                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
                                 </div>
+                                count++;
                             }
                         } 
                     </div>
@@ -47,12 +49,12 @@
                         <li class="fs-4"><strong>分類</strong>: Web design</li>
                         <li class="fs-4"><strong>出貨商</strong>: ASU Company</li>
                         <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s.TrimEnd('0').TrimEnd('.')</span></li>
-                        <li class="fs-4"><strong>證號</strong>: <a href="#">@Model.License</a></lic>
+                        <li class="fs-4"><strong>證號</strong>: <a href="#">@Model.License</a></li>
                     </ul>
                 </div>
                 <div class="portfolio-description">
                     <h2>@Model.License</h2>
-                    <p class="fs-3">
+                    <p class="fs-3 scrollable-content" style="max-height: 400px; overflow-y: auto;">
                         @Model.Description
                     </p>
                     

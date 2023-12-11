@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 builder.Services.AddSession();
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(

@@ -609,11 +609,7 @@
                 method: 'DELETE'
             });
             let data = await response.status
-            if (data == 200 ||
-                data == 201 ||
-                data == 202 ||
-                data == 203 ||
-                data == 204) {
+            if (response.ok) {
                 Swal.fire({
                     title: "刪除成功!",
                     text: data + ",您已經刪除此筆資料",
