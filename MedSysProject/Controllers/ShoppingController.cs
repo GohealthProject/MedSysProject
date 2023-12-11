@@ -99,6 +99,26 @@ namespace MedSysProject.Controllers
             HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
             return Ok();
         }
+        public IActionResult removeCart(int id)
+        {
+            string json = "";
+            List<CCartItem>? cart = null;
+            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
+            foreach (var item in cart)
+            {
+                if(item.Product.ProductId== id)
+                {
+                    cart.Remove(item);
+                    break;
+                }
+            }
+            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
+            string count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
+            count = (Int32.Parse(count) - 1).ToString();
+            HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
+            return RedirectToAction("CartList");
+        }
         public IActionResult getcartList()
         {
             if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
@@ -160,7 +180,7 @@ namespace MedSysProject.Controllers
                 count++;
             }
             _db.SaveChanges();
-            
+
             HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
             HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
             return RedirectToAction("index");

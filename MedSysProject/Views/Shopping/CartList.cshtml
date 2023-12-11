@@ -32,44 +32,45 @@
             foreach (var item in Model)
             {
                 總計 += item.小計;
-                <tr>
-                    <td>
-                        <input type="hidden" value="@item.Product.ProductId" name="ProductID"/>
-                        @Html.DisplayFor(modelItem => item.ProductName)
-                    </td>
-                    <td>
-                        
-                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                    </td>
-                    <td>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
+                                                                        @Html.DisplayFor(modelItem => item.ProductName)
+                                                                    </td>
+                                                                    <td>
+                                                                        
+                                                                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                                                                    </td>
+                                                                    <td>
 
-                        @Html.DisplayFor(modelItem => item.小計)
-                    </td>
-                    <td>
-                        <input type="hidden" value="@item.count" name="ProductQta" />
-                        @Html.DisplayFor(modelItem => item.count)
-                    </td>
-                    <td>
-                    </td>
-                </tr>
+                                                                        @Html.DisplayFor(modelItem => item.小計)
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="hidden" value="@item.count" name="ProductQta" />
+                                                                        @Html.DisplayFor(modelItem => item.count)
+                                                                    </td>
+                                                                    <td>
+                                                                            <img src="~/img/trash.png" class="trash"/>
+                                                                    </td>
+                                                                </tr>
             }
             稅 = (int)(總計 * 0.05);
             應付金額 = 總計 + 稅;
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                    訂單總計:@總計
-                </td>
-                <td>
-                    稅額:@稅
-                </td>
-                <td>
-                應付金額:@應付金額
-                </td>
-            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                </td>
+                                                                <td>
+                                                                </td>
+                                                                <td>
+                                                                    訂單總計:@總計
+                                                                </td>
+                                                                <td>
+                                                                    稅額:@稅
+                                                                </td>
+                                                                <td>
+                                                                應付金額:@應付金額
+                                                                </td>
+                                                            </tr>
         }
             </table>
       
@@ -101,6 +102,26 @@
 
    @section Scripts {
         <script>
+            let del = document.querySelectorAll(".trash");
+            document.addEventListener("DOMContentLoaded", () => {
+                del.forEach((item) => {
+                    item.addEventListener("click", () => {
+                        var userConfirmed = window.confirm("確定要刪除這個項目嗎？");
+                        if (userConfirmed) {
+                            let id = item.parentElement.parentElement.querySelector(".Pid").value;
+                            delCart(id);
+                        }
+                    })
+                })
+            })
             
+            async function delCart(id) {
+            const response = await fetch(`/Shopping/removeCart/${id}`)
+                
+                if(response.ok){
+                window.location.href= "/Shopping/CartList";
+                }
+                
+            }
         </script>
         }
