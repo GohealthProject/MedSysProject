@@ -37,30 +37,31 @@
                     @{
                         for(int i = 0; i < Model.Count; i++)
                         {
-                            @if (Model[i].Path[0] == null)
+                                @if (Model[i].Path[0] == null)
                             {
                                 
                             }
-                            @if (i % 3 == 0)
+                                @if (i % 3 == 0)
                         {
                             if (i != 0)
                             {
-                                @:</div>
+                                    @:</div>
                             }
-                            @:<div class='row'>
+                                @:<div class='row'>
                             }
-                            string? max = (Model[i].UnitPrice + 200).ToString();
-                            string? s = Model[i].UnitPrice.ToString();
-                            
-                            <div class=" col " style="height:300px;width:300px">
-                            <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:150px; width:300px;"  />
-                            <div class="mt-3">
-                                <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                <span class="fs-3 text-danger" style="text-decoration:line-through">$@max.TrimEnd('0').TrimEnd('.')</span><span class="fs-3 text-danger ms-5">$@s.TrimEnd('0').TrimEnd('.')</span>
+                            int maxPrice = ((int)Model[i].UnitPrice + 200);
+                            string? max =maxPrice.ToString("N0");
+                            int price = (int)Model[i].UnitPrice;
+                            string s = price.ToString("N0");
+                                <div class=" col " style="height:300px;width:300px">
+                                <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:150px; width:300px;"  />
+                                <div class="mt-3">
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                    <span class="fs-3 text-danger" style="text-decoration:line-through">$@max</span><span class="fs-3 text-danger ms-5">$@s</span>
+                                </div>
                             </div>
-                        </div>
-                        @if(i!=0&&i+i%3==0||i==Model.Count-1){
-                            @:</div>
+                            @if(i!=0&&i+i%3==0||i==Model.Count-1){
+                                @:</div>
                         }
                     }
                 }
@@ -79,11 +80,11 @@
                         for(int i = 0; i<5; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                            <div class="col p-3  ">
-                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:200px;"><hr>
-                                <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                            </div>
+                                <div class="col p-3  ">
+                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:200px;"><hr>
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                </div>
                         }
                     }     
                         </div>
@@ -101,11 +102,11 @@
                         for(int i = 0; i<5; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                            <div class="col p-3  ">
-                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:200px;"><hr>
-                                <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                            </div>
+                                <div class="col p-3  ">
+                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].FimagePath))" style="height:150px; width:200px;"><hr>
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                </div>
                         }
                     }     
                         </div>
@@ -123,11 +124,11 @@
                         for(int i = 0; i<5; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                            <div class="col p-3 " style="border:solid 1px">
-                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;" class="mb-3"><hr>
-                                <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                            </div>
+                                <div class="col p-3 " style="border:solid 1px">
+                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;" class="mb-3"><hr>
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                </div>
                         }
                     }     
                         </div>
@@ -161,12 +162,12 @@
             const data = await response.json()
             console.log(data);
             $("#divTitle").children().first().html(data[0].categoriesName+"("+data[0].productsClassifications.$values.length+")");
-            document.querySelector("#more").href=`@Url.Content("~/Shopping/Search/")${id}`;
+            document.querySelector("#more").href=`@Url.Content("~/Shopping/CatProduct/")${id}`;
             const datas = data[0].productsClassifications.$values
             const info = datas.map(product=>{
                 const Name = product.product.productName.substring(0,9);
-                const maxPrice = (product.product.unitPrice+200);
-                const Price = product.product.unitPrice;
+                const maxPrice = (product.product.unitPrice + 200).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                const Price = product.product.unitPrice.toLocaleString('en-US', {minimumFractionDigits: 0}, {maximumFractionDigits: 0});
                 const Path = product.product.fimagePath;
                 const id = product.product.productId;
                 const pro =
