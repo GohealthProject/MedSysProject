@@ -69,7 +69,14 @@
                             <td>@Html.DisplayFor(modelItem => item.WrappedIngredient)</td>
 
                             <td>
-                                <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                @{
+                                    // 分割圖片路徑
+                                    var imagePaths = item.FimagePath.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                    foreach (var imagePath in imagePaths)
+                                    {
+                                        <img src="@Url.Content("~/img-product/" + imagePath.Trim())" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                    }
+                                }
                             </td>
 
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitsInStock)</td>
