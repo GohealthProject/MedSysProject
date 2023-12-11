@@ -94,7 +94,7 @@
 
                                                     <div class="col ">
                                                     <div class="card" style="width: 18rem;">
-                                                        <img src="@Url.Content("~")@Model[i].Path[0]" class="card-img-top" alt="..." style="width:285px;height:201px">
+                                                        <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" class="card-img-top" alt="..." style="width:285px;height:201px">
                                                         <div class="card-body">
                                                             <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct/")@Model[i].ProductId">@PName</a>
                                                             <p class="card-text fs-3 text-info">8折</p>
@@ -150,6 +150,7 @@
     }
     
     async function loadhots(event){
+        debugger;
         let url = `https://localhost:7078/api/Products/hot/key=${key}`
         const response = await fetch(url);
         const data = await response.json();
@@ -198,7 +199,7 @@
             `
                 <div class="col ">
                        <div class="card" style="width: 18rem;">
-                            <img src="@Url.Content("~")${path}" class="card-img-top" alt="..." style="width:285px;height:201px">
+                            <img src="@Url.Content("~/img-product/")${path}" class="card-img-top" alt="..." style="width:285px;height:201px">
                               <div class="card-body">
                                   <a class="fs-2" href="@Url.Content("~/Shopping/selectProduct/")${id}">${name}</a>
                                   <p class="card-text fs-3 text-info">8折</p>
