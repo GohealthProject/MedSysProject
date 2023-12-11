@@ -295,7 +295,7 @@
         console.log(hideId);
         deletePost(hideId);
     }
-    function deletePost(hideId) {
+    async function deletePost(hideId) {
         const result = await Swal.fire({
             title: "確定要刪除嗎？",
             text: "此步驟將無法復原！",
@@ -309,7 +309,7 @@
 
         if (result.isConfirmed) {
 
-            const response = await fetch(`https://localhost:7078/api/Blogs/${id}`, {
+            const response = await fetch(`https://localhost:7078/api/Blogs/${hideId}`, {
                 method: 'DELETE'
             });
             let data = await response.status
