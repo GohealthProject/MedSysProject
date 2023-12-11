@@ -354,6 +354,8 @@ namespace MedSysProject.Controllers
             var cc = _db.OrderStates.ToList();
             ViewBag.State = cc;
 
+            //
+            
             IEnumerable<Order> datas = null;
 
             if (string.IsNullOrEmpty(vmK.txtKeyword))
@@ -451,7 +453,8 @@ namespace MedSysProject.Controllers
                     .ThenInclude(n => n.Product)
                     .Where(p => p.OrderId.ToString().Contains(vmK.txtKeyword) ||
                     p.Member.MemberName.Contains(vmK.txtKeyword) ||
-                    p.State.StateName.Contains(vmK.txtKeyword))
+                    p.State.StateName.Contains(vmK.txtKeyword)
+                    )
                     .OrderByDescending(d => d.OrderDate);
 
                 ViewBag.mindate = datas.IsNullOrEmpty() ? "" : datas.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
