@@ -239,24 +239,27 @@
     //     for (var value of data.values()) {
     //         console.log(value);
     //     }
+
+    //     var contenttt = tinymce.get('mytextarea').getContent();
+    //     console.log(contenttt);
     // }
 
 
     async function newPost() {
-        const state = document.querySelector('#myCreatedataform');
-        console.log(state);
-        alert("dsadas");
-
 
         let apiUrl = `https://localhost:7078/api/Blogs`;
         var myform = document.querySelector('#myCreatedataform');
+        var contentt = tinymce.get('mytextarea').getContent();
+
+        //把contentt放進textarea裡面
+        document.querySelector('#mytextarea').value = contentt;
 
         var data = new FormData(myform);
         const response = await fetch(apiUrl, {
             method: 'POST',
             body: data,
         });
-        const result = await response.status;
+        const state = await response.status;
         if (response.ok) {
 
             $('#modalCreate').modal('hide');
