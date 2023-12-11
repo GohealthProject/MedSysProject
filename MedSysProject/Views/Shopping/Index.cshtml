@@ -162,7 +162,7 @@
             const data = await response.json()
             console.log(data);
             $("#divTitle").children().first().html(data[0].categoriesName+"("+data[0].productsClassifications.$values.length+")");
-            document.querySelector("#more").href=`@Url.Content("~/Shopping/Search/")${id}`;
+            document.querySelector("#more").href=`@Url.Content("~/Shopping/CatProduct/")${id}`;
             const datas = data[0].productsClassifications.$values
             const info = datas.map(product=>{
                 const Name = product.product.productName.substring(0,9);

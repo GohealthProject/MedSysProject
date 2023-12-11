@@ -38,17 +38,24 @@ namespace MedSysProject.Controllers
 
             return View(list);
         }
-        public IActionResult Search(int id)
+        public IActionResult CatProduct(int id)
         {
-            var q = _db.ProductsCategories.Where(n => n.CategoriesId == id).Include(n => n.ProductsClassifications).ThenInclude(n => n.Product).SelectMany(n => n.ProductsClassifications.Select(n => n.Product));
+            var q = _db.Products.Include(n=>n.ProductsClassifications).ThenInclude(n=>n.Categories).Where(n=>n.ProductsClassifications.Any(n => n.CategoriesId == id));
             List<CProductWarp> ps = new List<CProductWarp>();
             foreach(var p in q)
             {
                 CProductWarp c = new CProductWarp();
                 c.Product = p;
+                c.Path = p.FimagePath.Split(",");
                 ps.Add(c);
             }
-            
+            List<int> hot6 = new List<int>();
+            var qq = _db.OrderDetails.Include(n => n.Product).ThenInclude(n => n.ProductsClassifications).ThenInclude(n => n.Categories).Where(n => n.Product.ProductsClassifications.Any(n => n.CategoriesId == id)).GroupBy(n => n.ProductId).Select(n => new { n.Key, sum = n.Sum(n => n.Quantity) }).OrderByDescending(n => n.sum);
+            foreach(var item in qq)
+            {
+                hot6.Add((int)item.Key);
+            }
+            ViewBag.hot = hot6;
             return View(ps);
         }
         public IActionResult selectProduct(int id)
