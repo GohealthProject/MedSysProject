@@ -1,3 +1,79 @@
-﻿@{
-Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
-}
+﻿@model List<MedSysProject.Models.Comment>
+<!--部分檢視，哪裡沒對到?-->
+<h1>哈囉</h1>
+<div class="comments">
+    <!--一個h5顯示共幾則留言，可能要加一個div並在右邊放收折按鈕(顯示所有留言)-->
+    <h5 class="comment-title py-4">2 Comments</h5>
+    @{
+        //所有留言用id做排序
+        var comments = from comment in Model
+                       orderby comment.CommentId
+                       select comment;
+    }
+    @foreach (var comment in comments)
+    {
+        string id ="c"+comment.CommentId ;
+        <!--data-comment-id自訂義屬性-->
+        <div id="@id" class="comment d-flex mb-4 mainComment" data-comment-id="@comment.CommentId">
+            <!--放使用者照片的位置-->
+            <div class="flex-shrink-0">
+                <div class="avatar avatar-sm rounded-circle">
+                    @if (comment.EmployeeId == null)
+                    {
+                        <img class="avatar-img" src="~/img/MemberImg/@comment.Member.MemberImage" alt="" class="img-fluid" />
+                    }
+                    else
+                    {
+                        <img class="avatar-img" src="data:image/jpeg;base64,@Convert.ToBase64String(comment.Employee.EmployeePhoto)"
+                             alt=""
+                             class="img-fluid" />
+                    }
+                </div>
+            </div>
+
+            <!--放使用者名字、留言-->
+            <div class="flex-grow-1 ms-2 ms-sm-3">
+                <div class="comment-meta d-flex  align-item-center">
+                    @{
+                        if (comment.EmployeeId == null)
+                        {
+                            <h6 class="me-2">(會員)@comment.Member.MemberName</h6>
+                        }
+                        else
+                        {
+                            <h6 class="me-2">(@comment.Employee.EmployeeClass.Class)@comment.Employee.EmployeeName</h6>
+                        }
+
+                    }
+                    <!--留言時間，幾天前-->
+                    <span class="text-muted">@comment.CreatedAt</span>
+                </div>
+                <div class="comment-body">
+                    @comment.Content
+                </div>
+                <!--回覆按鈕-->
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                </div>
+                <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">
+                    <!--總共幾筆子留言-->
+
+                </div>
+            </div>
+        </div>
+    }
+
+ 
+<!-- End Comments -->
+<!-- ======= Comments Form ======= -->
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-12">
+        <h5 class="comment-title">留言</h5>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <textarea class="form-control" id="comment-message" placeholder="Enter your name" cols="30" rows="1"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Comments Form -->

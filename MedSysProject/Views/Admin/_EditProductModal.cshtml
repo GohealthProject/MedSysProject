@@ -14,11 +14,11 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <h1>修改產品作業partial view</h1>
+            <h1>修改產品作業</h1>
             <h4>請輸入欲修改的產品資訊</h4>
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="WrappedProductId" value="@Model.WrappedProductId" />
-                <input type="hidden" id="FimagePaths" name="WrappedFimagePaths" asp-for="WrappedFimagePaths" value="@(Model != null ? Model.WrappedFimagePaths : string.Empty)" />
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="WrappedProductId" value="@((Model != null) ? Model.WrappedProductId : 0)" />
+              @*   <input type="hidden" id="FimagePaths" name="WrappedFimagePaths" asp-for="WrappedFimagePaths" value="@(Model != null ? Model.WrappedFimagePaths : string.Empty)" /> *@
 
                 <div class="form-group">
                     <label asp-for="WrappedProductName" class="control-label">產品名稱</label>
@@ -60,8 +60,8 @@
                 <div class="mb-3">
                     <label for="inputDiscontinued" class="form-label">上架狀態</label>
                     <select class="form-control" id="inputDiscontinued" name="WrappedDiscontinued">
-                        <option value="true" selected="@(Model?.WrappedDiscontinued == true)">上架中</option>
-                        <option value="false" selected="@(Model?.WrappedDiscontinued == false)">已下架</option>
+                        <option value="true" selected="@(Model != null && Model.WrappedDiscontinued == true ? "selected" : "")">上架中</option>
+                        <option value="false" selected="@(Model != null && Model.WrappedDiscontinued == false ? "selected" : "")">已下架</option>
                     </select>
                 </div>
                 @foreach (var category in ViewBag.Categories ?? Enumerable.Empty<ProductsCategory>())
@@ -82,13 +82,13 @@
                     }
                 }
                 <div class="mb-3">
-                    <label for="formFiles" class="form-label">產品圖片上傳</label>
-                    <input class="form-control" type="file" id="formFiles" name="FormFile" multiple>
+                    <label for="formFileForEdit" class="form-label">產品圖片上傳</label>
+                    <input class="form-control" type="file" id="formFileForEdit" name="FormFiles" multiple>
                 </div>
 
                 <div id="imagePreviewContainer" class="mb-3">
                     <label for="inputDescription" class="form-label">圖片預覽</label>
-                    <div id="imagePreview" class="d-flex flex-wrap">
+                    <div id="imagePreviewForEdit" class="d-flex flex-wrap">
                         <!-- 預覽的圖片將在這裡顯示 -->
                     </div>
                 </div>
@@ -102,44 +102,43 @@
                     <input type="submit" value="修改並送出" class="btn btn-primary" name="submitBtn" />
                 </div>
             </form>
-            </div>
-            </div>
-
-
-    <div>
-        <a asp-action="Admin" asp-action="product">回到產品管理一覽表</a>
+        </div>
     </div>
 
     @section Scripts {
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var fileInput = document.getElementById('formFiles');
-                if (fileInput) {
-                    fileInput.addEventListener('change', function (e) {
-                        var fileInput = e.target;
-                        var files = fileInput.files;
-
-                        var imagePreviewContainer = document.getElementById('imagePreview');
-                        imagePreviewContainer.innerHTML = '';
-
-                        for (let i = 0; i < files.length; i++) {
-                            var file = files[i];
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                var imgElement = document.createElement('img');
-                                imgElement.src = e.target.result;
-                                imgElement.style.maxWidth = '100px';
-                                imgElement.style.maxHeight = '100px';
-                                imagePreviewContainer.appendChild(imgElement);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-                } else {
-                    console.error('找不到ID為 formFiles 的文件輸入元素。');
-                }
-            });
-        </script>
+       
     }
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        var fileInput = document.getElementById('formFileForEdit');
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                var fileInput = e.target;
+                var files = fileInput.files;
+
+                var imagePreviewContainer = document.getElementById('imagePreviewForEdit');
+                imagePreviewContainer.innerHTML = '';
+
+                for (let i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = '100px';
+                        imgElement.style.maxHeight = '100px';
+                        imagePreviewContainer.appendChild(imgElement);
+                    };
+                    reader.readAsDataURL(file);
+                }; 
+            });
+        } else {
+            console.error('找不到ID為 formFileForEdit 的文件輸入元素。');
+        }
+    </script>
 </div>

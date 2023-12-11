@@ -24,16 +24,86 @@
             int empID = 0;
             if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
             {
-                
+
                 string Json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
                 Employee emp = JsonSerializer.Deserialize<Employee>(Json);
                 empID = emp.EmployeeId;
             }
 
             <p>
-                @Html.ActionLink("我的貼文","BlogList","Admin",new{id=empID},new{@class="btn btn-primary",style="margin-left:10px"})
-                <a href="@Url.Content("~/Admin/BlogList")" class="btn btn-primary" style="margin-left:10px">全部貼文</a>
+                <!--@Html.ActionLink("我的貼文", "BlogList", "Admin", new { id = empID }, new { @class = "btn btn-primary", style = "margin-left:10px" })-->
+                <a href="@Url.Content("~/Admin/BlogIndex")?id=@empID" class="btn btn-primary" style="margin-left:10px">我的貼文</a>
+                <a href="@Url.Content("~/Admin/BlogIndex")" class="btn btn-primary" style="margin-left:10px">貼文總表</a>
+                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" style="margin-left:1200px">
+                    <i class="fas fa-plus">新貼文</i>
+                </a>
             </p>
+            @* ---新增彈窗開始--- *@
+            <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">新增文章</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <!--Body-->
+                        <div class="modal-body">
+                            <form id="myCreatedataform" novalidate class="needs-validation">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="previewImage" style="margin-bottom:20px;">
+                                            <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:500px; max-height:250px;">
+                                        </div>
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                        <div class="form-group" style="margin-bottom:20px;">
+                                            <label for="titleInput" class="control-label">文章標題:</label>
+                                            <input id="titleInput" class="form-control" name="Title" required />
+
+                                        </div>
+
+                                        <div style="margin-bottom:20px;">
+                                            <label for="articleClass" class="control-label">文章類別:</label>
+                                            <!--選項要包在select標籤裡面-->
+                                            <select id="articleClass" class="form-control" name="ArticleClassId" required>
+                                                <option value="1">活動快訊</option>
+                                                <option value="2">醫療新知</option>
+                                                <option value="3">名人分享會</option>
+                                                <option value="4">媒體報導</option>
+                                                <option value="5">企業責任</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group" style="margin-bottom:20px;">
+                                            <label for="mytextarea" class="control-label">文章內容:</label>
+                                            <!--注意文字編輯器不要加required屬性，會炸掉-->
+                                            <textarea id="mytextarea" class="form-control" name="Content"></textarea>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom:20px;">
+                                            <label for="mainPhoto" class="control-label">選擇主題相片:</label>
+                                            <input id="mainPhoto" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImage(event)" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" value="@empID" type="hidden" name="EmployeeId" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-success" onclick="newPost()" id="Cbtn">確定新增</button>
+                                <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* ---新增彈窗結束--- *@
             <table class="table">
                 <thead>
                     <tr>
@@ -53,9 +123,6 @@
                             建立時間
                         </th>
                         <th>
-                            文章圖片
-                        </th>
-                        <th>
                             作者
                         </th>
                         <th></th>
@@ -70,6 +137,7 @@
                             <tr>
                                 <td>
                                     @count
+                                    <input type="hidden" value="@item.BlogId" />
                                 </td>
                                 <td style="width:250px;">
                                     @Html.DisplayFor(modelItem => item.Title)
@@ -84,26 +152,21 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CreatedAt)
                                 </td>
-
-                                <td>
-                                    @if (item.BlogImage != null && item.BlogImage.Length > 0)
-                                    {
-                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.BlogImage)" alt="Image" width="100" />
-                                    }
-                                </td>
-
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
                                 </td>
                                 <td>
+                                    @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
+                                    @if (item.EmployeeId == empID)
+                                    {
+                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEdit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
 
-                                    <a href="@Url.Action("Details", new { id = item.BlogId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    <a class="btn btn-danger" id="btnDel">
-                                        @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -114,10 +177,11 @@
     </div>
 </div>
 
+
 @* ---修改彈窗開始--- *@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <!--Header-->
             <div class="modal-header">
@@ -166,13 +230,67 @@
         </div>
     </div>
 </div>
-@* ---修改彈窗結束--- *@
 
 <script>
-    const delbtn = document.getElementById("btnDel");
+    // function newPostt() {
+    //     var myform = document.querySelector('#myCreatedataform');
+    //     var data = new FormData(myform);
+    //     //確認資料有沒有傳進來
+    //     for (var value of data.values()) {
+    //         console.log(value);
+    //     }
 
-    delbtn.addEventListener("click", () => {
-        Swal.fire({
+    //     var contenttt = tinymce.get('mytextarea').getContent();
+    //     console.log(contenttt);
+    // }
+
+
+    async function newPost() {
+
+        let apiUrl = `https://localhost:7078/api/Blogs`;
+        var myform = document.querySelector('#myCreatedataform');
+        var contentt = tinymce.get('mytextarea').getContent();
+
+        //把contentt放進textarea裡面
+        document.querySelector('#mytextarea').value = contentt;
+
+        var data = new FormData(myform);
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            body: data,
+        });
+        const state = await response.status;
+        if (response.ok) {
+
+            $('#modalCreate').modal('hide');
+
+            Swal.fire({
+                title: "新增成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            research();
+        }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+
+    }
+
+    function selectPost(element) {
+        let grandpa = element.parentNode.parentNode;
+        var hideId = grandpa.querySelector('input[type="hidden"]').value;
+        console.log(hideId);
+        deletePost(hideId);
+    }
+    async function deletePost(hideId) {
+        const result = await Swal.fire({
             title: "確定要刪除嗎？",
             text: "此步驟將無法復原！",
             icon: "warning",
@@ -181,18 +299,48 @@
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "確定刪除"
-        })
-    });
-</script>
-<script src="~/lib/tinymce/tinymce.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        inymce.init({
-            selector: '#myTextarea',
-            plugins: 'advlist autolink lists link image charmap print preview anchor',
-            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-            menubar: false
         });
-    })
-</script>
 
+        if (result.isConfirmed) {
+
+            const response = await fetch(`https://localhost:7078/api/Blogs/${hideId}`, {
+                method: 'DELETE'
+            });
+            let data = await response.status
+            if (response.ok) {
+                Swal.fire({
+                    title: "刪除成功!",
+                    text: data,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
+                });
+            }
+            research()
+        }
+    }
+
+    async function research() {
+        await new Promise(resolve => setTimeout(resolve, 1600));
+        window.location.reload();
+    }
+
+    function previewImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader(); // 創建FileReader物件
+            reader.onload = function (e) { // 正確拼寫onload
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+</script>

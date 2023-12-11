@@ -1,5 +1,6 @@
 using MedSysProject.Models;
 using Microsoft.EntityFrameworkCore;
+using SignalRChat.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 builder.Services.AddSession();
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
@@ -33,6 +35,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
+app.MapHub<ChatHub>("/chatHub");
 
 
 

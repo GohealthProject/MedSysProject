@@ -1,0 +1,71 @@
+﻿@model List<MedSysProject.Models.Comment>
+@{
+            //測試h6外面包div樣式會不會跑掉??
+    <div class="d-flex justify-content-between align-item-center">
+        <h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
+        <a href="#" style="color:black" class="toggleLink">查看所有回覆<i class="bi bi-chevron-down dropdown-indicator"></i></a>
+    </div>
+    foreach (var reply in Model)
+    {
+        string id = "c" + reply.CommentId;
+        <!-- 次留言的 HTML 结构 -->
+        <!--data-comment-id自訂義屬性-->
+        <div id="@id" class="reply d-flex mb-4" data-comment-id="@reply.CommentId" style="display:none !important;">
+            <div class="flex-shrink-0">
+                <div class="avatar avatar-sm rounded-circle">
+                    @{
+                        if (reply.EmployeeId == null)
+                        {
+                            <img class="avatar-img" src="~/img/MemberImg/@reply.Member.MemberImage" alt="" class="img-fluid" />
+                        }
+                        else
+                        {
+                            <img class="avatar-img" src="data:image/jpeg;base64,@Convert.ToBase64String(reply.Employee.EmployeePhoto)"
+                                 alt=""
+                                 class="img-fluid" />
+                        }
+
+                    }
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-2 ms-sm-3">
+                <div class="reply-meta d-flex align-item-center">
+                    @{
+                        if (reply.EmployeeId == null)
+                        {
+                            <h6 class="mb-0 me-2">@reply.Member.MemberNickname</h6>
+                        }
+                        else
+                        {
+                            <h6 class="mb-0 me-2">@reply.Employee.EmployeeName</h6>
+                        }
+
+                    }
+                    <span class="text-muted">@reply.CreatedAt</span>
+                </div>
+                <div class="reply-body">
+                    @{
+                        if (reply.ParentComment.EmployeeId == null)
+                        {//可以在inline style設計hover嗎
+                            string rid =  @reply.ParentCommentId.ToString() ;
+                            <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(會員)@reply.ParentComment.Member.MemberNickname</a> @reply.Content
+                        }
+                        else
+                        {
+                            string rid =  @reply.ParentCommentId.ToString() ;
+                            <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(@reply.ParentComment.Employee.EmployeeClass.Class)@reply.ParentComment.Employee.EmployeeName</a> @reply.Content
+                        }
+                    }
+
+                </div>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+
+
+

@@ -752,31 +752,35 @@ section {
 }
 
 /*單篇貼文相關*/
-.post-content{
-    p{
-        word-break:break-all;//break-all長度到了換行
+.post-content {
+    p {
+        word-break: break-all; //break-all長度到了換行
     }
     /*img{
         max-width:900px;
         height:auto;*/
-        /*上傳一張小於990px看看*/
+    /*上傳一張小於990px看看*/
     /*}*/
-   /* padding-left:10%;*/
-    padding-right:10%;
-    figure{
+    /* padding-left:10%;*/
+    padding-right: 10%;
+
+    figure {
         //這邊不加看起來比較自然，後續再評估
         /*position:relative;
         left:52%;
         min-width:990px;
         transform:translateX(-50%);*/
-        img{
-            max-width:100%;
-            height:auto;
+        
+
+        img {
+            max-width: 100%;
+            height: auto;
         }
-        figurecaption{
-            font-family:var(--font-secondary);
-            font-size:14px;
-            padding:10px 0 0 0 ;
+
+        figurecaption {
+            font-family: var(--font-secondary);
+            font-size: 14px;
+            padding: 10px 0 0 0;
         }
     }
 }
@@ -939,5 +943,7 @@ Safari 7+ */
   font-family: var(--font-secondary);
   font-size: 12px;
 }
+
+
 
 
