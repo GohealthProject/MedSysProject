@@ -4,7 +4,10 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 @model List<MedSysProject.ViewModels.CPlanViewModel> 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"></script>
+<script src="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"></script>
+@*<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>*@
 @*這是回上頁抬頭*@
 <section class="breadcrumbs">
     <div class="container">
@@ -37,10 +40,17 @@
                     <div class="col-lg-8">
                         <div class="portfolio-details-slider swiper">
                             <div class="swiper-wrapper align-items-center">
+                                @foreach(var plan in Model){
 
-                                <div class="swiper-slide">
-                                    <img src="~/img/PersonalPlan/heart.jpg" alt="" >
-                                </div>                                                            
+                                    if (plan.PlanId>0)
+                                    {
+                                 <div class="swiper-slide">
+                                    <img src="~/img/PersonalPlan/p1-@{@plan.PlanId}.jpg" alt="" >
+                                        </div>
+                                        continue;
+                                    }
+                                    }
+                                                                                     
 
                             </div>
 
@@ -51,14 +61,24 @@
                  @*  原位置在這裡 *@
                     <div class="col-lg-4">
                         <div class="portfolio-info">
-
-                            <h3 style="color:#7045af" id="PlanName">  樂活銀髮方案<input id="PlanID" type="hidden"  name="PlanID" value="2"/> </h3>
+                            @foreach(var plandetail in Model)
+                            {
+                                if (plandetail.PlanId > 0) {
+                                    <h3 style="color:#7045af" id="@plandetail.PlanName">@plandetail.PlanName<input id="@plandetail.PlanId" type="hidden" name="@plandetail.PlanId" value="2" /> </h3>
                                 
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
+                                 <li class="list-group-item"><strong style="color:#51966d">方案介紹</strong>: @plandetail.PlanDescription</li>
                                 <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i>/女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></li>
-                            </ul>
+                            
+                                    </ul>
+                                }
+
+                                continue;
+
+                            }
+                            
                             
                         </div>
                         <div class="portfolio-description">
@@ -76,82 +96,45 @@
                             </h2>
                         
                             <div class="table-responsive-lg  table-dialog table-dialog-scrollable">
-                                <div >
-                                <table class="table ">
+                                <div class="overflow-auto navbar-nav-scroll ">
+                                    <table class="table order-column " style="width:100%" id="Plan">
                                     <thead>
                                         <tr class="">
                                             <th scope="col" disable></th>
-                                            <th scope="col" >項目內容</th>
-                                            @foreach (var project in Model)
-                                            {
-
-                                                    @if (project.ProjectId == 1)
-                                                    {
-                                                        <th id="item" class="text-nowrap">
-
-                                                            @if (project.ItemId > 0)
-                                                            {
-                                                                @for (int i = 0; i < project.ItemName.Count(); i++)
-                                                                {
-                                                                    @Html.DisplayFor(p => project.ItemName[i])
-                                                                }
-                                                            }
-                                                    </th>
-                                                   
-                                                        continue;
-                                                    }
-                                            }
-                                            <th scope="col" disable>                                          
-                                                
-                                          </th>
+                                            <th scope="col" >項目內容</th>                                                                      
+                                                                                     
                                             <th scope="col">男</th>
                                             <th scope="col">女</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="ProjectDetail">
+                                        <tbody id="ProjectDetail" class="">
+                                      
                                         @foreach(var project in Model)
-                                        {
-
-                                            <tr>
-                                              
-                                                    @if (project.ProjectId >1)
+                                        { <tr>                    
+                                           
+                                                    @if (project.ProjectName !=null)
                                                 {
-                                                    <th scope="row" id="project">@project.ProjectName </th>
-                                                        <th id="item" class="text-nowrap">
+                                                        <th scope="row" id="project" class="">@project.ProjectName </th>
+                                                        <th id="item" class="text-nowrap ">
                                                         
-                                                        @if (project.ItemId > 0)
+                                                        @if (project.ItemId != 0)
                                                         {
                                                             @for (int i = 0; i < project.ItemName.Count(); i++)
                                                             {
                                                                 @Html.DisplayFor(p => project.ItemName[i])
                                                             }
+                                                           
                                                         }
-                                                    </th>
-                                                 
+                                                    </th>                                                  
                                                     <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                                      continue;
-                                                } 
-                                                
-                                               
-                                              
+                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>                                                                                             
+                                                     continue;
+                                                }                                                 
                                         </tr>
-                                        
                                         
                                         }
                                         
-                                        <tr>
-                                            <th scope="row">尿液一般檢查</th>
-                                            <td>尿酸鹼度</td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">體脂肪檢查</th>
-                                            <td>體脂肪、肌肉率</td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                            <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                        </tr>
+                                       
 
                                     </tbody>
                                 </table>
@@ -179,24 +162,10 @@
         const id = document.querySelectorAll("#item");
         const project= document.querySelectorAll("#project");
         console.log(project);
-    //function load() { 
-    //    $.getJSON(url, function (datas) { 
-    //        const id = $("#PlanID").val();
-    //        if (id) {
-    //            const jsonData = JSON.stringify({
-    //                planId: PlanID, planName: PlanName.val()
-    //            });
-    //            $.ajax({
-    //                url: `${url}${id}`,
-    //                type:'GET',
-    //                contentType:'appliction/json',
-    //                    data: jsonData
-    //            })
-    //        }
-    //    })
+   //------------------select列
+     
     
-    
-    //}
+    //----------------------
 
 
 </script>
