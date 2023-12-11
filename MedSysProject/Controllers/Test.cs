@@ -1,6 +1,7 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TinifyAPI;
 
 namespace MedSysProject.Controllers
 {
@@ -176,74 +177,74 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
-        //[HttpPost]
-        //public async Task<IActionResult> TestTiny2(string Title, int ArticleClassId, string Content, IFormFile BlogImage, int EmployeeId)
-        //{
-        //    try
-        //    {
-        //        string before = "";
-        //        string after = "";
-        //        Blog newBlog = new Blog();
-        //        newBlog.Title = Title;
-        //        newBlog.ArticleClassId = ArticleClassId;
-        //        newBlog.Views = 0;
-        //        newBlog.Content = Content;
-        //        newBlog.CreatedAt = DateTime.Now;
-        //        Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
-        //        if (BlogImage != null && BlogImage.Length > 0)
-        //        {
-        //            using (MemoryStream originalMs = new MemoryStream())
-        //            {
-        //                BlogImage.CopyTo(originalMs);
-        //                before = $"{originalMs.ToArray().Length}bytes";
-        //                var source = Tinify.FromBuffer(originalMs.ToArray());
-        //                var resize = await source.ToBuffer();
-        //                after = $"{resize.Length}bytes";
-        //                newBlog.BlogImage = resize;
-        //            }
-        //        }
-                
-        //        newBlog.EmployeeId= EmployeeId;
-        //        _db.Blogs.Add(newBlog);
-        //        await _db.SaveChangesAsync();
+        [HttpPost]
+        public async Task<IActionResult> TestTiny2(string Title, int ArticleClassId, string Content, IFormFile BlogImage, int EmployeeId)
+        {
+            try
+            {
+                string before = "";
+                string after = "";
+                Blog newBlog = new Blog();
+                newBlog.Title = Title;
+                newBlog.ArticleClassId = ArticleClassId;
+                newBlog.Views = 0;
+                newBlog.Content = Content;
+                newBlog.CreatedAt = DateTime.Now;
+                Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
+                if (BlogImage != null && BlogImage.Length > 0)
+                {
+                    using (MemoryStream originalMs = new MemoryStream())
+                    {
+                        BlogImage.CopyTo(originalMs);
+                        before = $"{originalMs.ToArray().Length}bytes";
+                        var source = Tinify.FromBuffer(originalMs.ToArray());
+                        var resize = await source.ToBuffer();
+                        after = $"{resize.Length}bytes";
+                        newBlog.BlogImage = resize;
+                    }
+                }
 
-        //    }
-        //    catch (Exception ex) { Console.WriteLine(ex.Message); }
-        //    return RedirectToAction("TestList");
-        //}
+                newBlog.EmployeeId = EmployeeId;
+                _db.Blogs.Add(newBlog);
+                await _db.SaveChangesAsync();
 
-        //public async Task<IActionResult> CompressImage() 
-        //{
-        //    //var images = (from blog in _db.Blogs
-        //    //             select blog).ToList();
-        //    //Tinify.Key= "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
-        //    //foreach (var image in images) 
-        //    //{
-        //    //    if (image.BlogImage != null && image.BlogImage.Length > 0) 
-        //    //    {
-        //    //        var source = Tinify.FromBuffer(image.BlogImage);
-        //    //        var compressedImage = await source.ToBuffer();
-        //    //        Blog iCompressed = _db.Blogs.FirstOrDefault(blog => blog.BlogId == image.BlogId);
-        //    //        if (iCompressed != null) 
-        //    //        {
-        //    //            iCompressed.BlogImage = compressedImage;
-        //    //        }
-                    
-                                
-        //    //    }
-        //    }
-        //    //_db.SaveChanges();
-        //    //return RedirectToAction("TestList");
-        //}
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return RedirectToAction("TestList");
+        }
 
-        #endregion
+        public async Task<IActionResult> CompressImage()
+        {
+            var images = (from blog in _db.Blogs
+                          select blog).ToList();
+            Tinify.Key = "rhkRy28T0Xz4JDdQ1y45cbxNTW47Gm46";
+            foreach (var image in images)
+            {
+                if (image.BlogImage != null && image.BlogImage.Length > 0)
+                {
+                    var source = Tinify.FromBuffer(image.BlogImage);
+                    var compressedImage = await source.ToBuffer();
+                    Blog iCompressed = _db.Blogs.FirstOrDefault(blog => blog.BlogId == image.BlogId);
+                    if (iCompressed != null)
+                    {
+                        iCompressed.BlogImage = compressedImage;
+                    }
 
-        #region 前台顯示
-        /// <summary>
-        /// 測試顯示單篇文章
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult SinglePost(int? singleBlogID)
+
+                }
+            }
+            _db.SaveChanges();
+            return RedirectToAction("TestList");
+        }
+
+    #endregion
+
+    #region 前台顯示
+    /// <summary>
+    /// 測試顯示單篇文章
+    /// </summary>
+    /// <returns></returns>
+    public IActionResult SinglePost(int? singleBlogID)
         {
             //singleBlogID = 37;
             IEnumerable<Blog> singlePost = null;
