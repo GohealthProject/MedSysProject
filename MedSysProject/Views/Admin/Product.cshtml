@@ -8,6 +8,12 @@
     Layout = "_Layout_Admin2";
 }
 
+<style>
+    .custom-modal-dialog {
+        max-width: 100%;
+    }
+</style>
+
 <script>
     const Product = document.getElementById("li-Product");
     const Index = document.getElementById("li-index");
@@ -69,7 +75,14 @@
                             <td>@Html.DisplayFor(modelItem => item.WrappedIngredient)</td>
 
                             <td>
-                                <img src="@Url.Content(item.ImagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                @{
+                                    // 分割圖片路徑
+                                    var imagePaths = item.FimagePath.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                    foreach (var imagePath in imagePaths)
+                                    {
+                                        <img src="@Url.Content("~/img-product/" + imagePath.Trim())" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                                    }
+                                }
                             </td>
 
                             <td>@Html.DisplayFor(modelItem => item.WrappedUnitsInStock)</td>
@@ -99,7 +112,8 @@
 
         <!-- ---新增彈窗開始--- -->
         <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+                <div class="modal-dialog custom-modal-dialog" role="document">
+                    <!-- 添加自定義 CSS 類別 -->
                 <div class="modal-content">
                     <!-- 主體 -->
                     <div class="modal-header">
@@ -244,8 +258,6 @@
     }
 
 
-
-
     function loadCreateProductModal() {
         $.ajax({
             url: '@Url.Action("Create", "Admin")',
@@ -253,12 +265,43 @@
             success: function (data) {
                 $('#createProductModalContent').html(data);
                 $('#modalCreate').modal('show');
+                bindImageUploadEvent(); // 呼叫綁定事件的函數
             },
             error: function (error) {
                 alert('載入_CreateProductModal 失敗：' + error.statusText);
             }
         });
     }
+    function bindImageUploadEvent() {
+        var fileInput = document.getElementById('formFile');
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                var files = e.target.files;
+                var imagePreviewContainer = document.getElementById('imagePreview');
+                imagePreviewContainer.innerHTML = '';
+
+                for (let i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.maxWidth = '100px';
+                        imgElement.style.maxHeight = '100px';
+                        imgElement.style.marginRight = '10px';
+                        imagePreviewContainer.appendChild(imgElement);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        } else {
+            console.error('找不到ID為 formFile 的文件輸入元素。');
+        }
+    }
+  
+    
     function displayProductDetails(data) {
         $('#editProductName').val(data.WrappedProductName);
         $('#inputPrice').val(data.WrappedUnitPrice);

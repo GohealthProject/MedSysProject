@@ -50,7 +50,17 @@ namespace MedSysProject.Controllers
                 ps.Add(c);
             }
             List<int> hot6 = new List<int>();
-            var qq = _db.OrderDetails.Include(n => n.Product).ThenInclude(n => n.ProductsClassifications).ThenInclude(n => n.Categories).Where(n => n.Product.ProductsClassifications.Any(n => n.CategoriesId == id)).GroupBy(n => n.ProductId).Select(n => new { n.Key, sum = n.Sum(n => n.Quantity) }).OrderByDescending(n => n.sum);
+            var qq = _db.OrderDetails
+                .Include(n => n.Product)
+                .ThenInclude(n => n.ProductsClassifications)
+                .ThenInclude(n => n.Categories)
+                .Where(n => n.Product.ProductsClassifications.Any(n => n.CategoriesId == id))
+                .GroupBy(n => n.ProductId)
+                .Select(n => new { 
+                    n.Key,
+                    sum = n.Sum(n => n.Quantity) 
+                })
+                .OrderByDescending(n => n.sum);
             foreach(var item in qq)
             {
                 hot6.Add((int)item.Key);

@@ -368,6 +368,13 @@
   <!-- End Our Portfolio Section -->
   @section Scripts{
       <script>
+          var planidList="";
+          Check.forEach((item)=>{
+              if ( item.checked==true){
+                  planidList += item.value;
+              }
+          })
+          
         const Check = document.querySelectorAll(".chbox");
         const pushcount = document.querySelector("#count");
         let count =0;

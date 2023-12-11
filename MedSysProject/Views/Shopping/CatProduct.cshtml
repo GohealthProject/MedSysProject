@@ -11,22 +11,40 @@
 <div class="container " style="height:3000px;">
     <img src="@Url.Content("~/img/Login2.png")" style="width:100%"/>
     <div>
-    <div class="fs-1">最新產品</div>
+    <div class="fs-1">@Model[0].Product.ProductsClassifications.FirstOrDefault().Categories.CategoriesName</div>
     <hr class="bi-hr"/>
     <div class="row  align-items" style="height:360px">
             @{
-                for(int i =0; i < 6; i++)
-                {
-                    price = (int)Model[i].UnitPrice;
-                    maxprice = price + 200;
-                    <div class="card col" style="width: 18rem;">
-                        <img class="card-img-top" src="@Url.Content("~/img-product/")@Model[i].Path[0]" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title text-danger d-flex justify-content-between"><span>$@price.ToString("N0")</span><span>$@maxprice.ToString("N0")</span></h5>
-                            <a class="card-text" asp-action="selectProduct" asp-route-id="@Model[i].ProductId">@Model[i].ProductName</a>
+                if(Model.Count() > 6){
+                    for (int i = 0; i < 6; i++)
+                    {
+                        price = (int)Model[i].UnitPrice;
+                        maxprice = price + 200;
+                        <div class="card col" style="width: 18rem;">
+                            <img class="card-img-top" src="@Url.Content("~/img-product/")@Model[i].Path[0]" alt="Card image cap" style="width:194px;height:194px">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger d-flex justify-content-between"><span class="fs-2">$@maxprice.ToString("N0")</span><span class="fs-3"style="text-decoration:line-through">$@price.ToString("N0")</span></h5>
+                                <a class="card-text" asp-action="selectProduct" asp-route-id="@Model[i].ProductId">@Model[i].ProductName</a>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
+                else
+                {
+                    for(int i = 0; i < Model.Count(); i++)
+                    {
+                        price = (int)Model[i].UnitPrice;
+                        maxprice = price + 200;
+                        <div class="card col" style="width: 18rem;">
+                            <img class="card-img-top" src="@Url.Content("~/img-product/")@Model[i].Path[0]" alt="Card image cap" style="width:194px;height:194px">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger d-flex justify-content-between"><span class="fs-4" style="text-decoration:line-through">$@maxprice.ToString("N0")</span><span class="fs-3">$@price.ToString("N0")</span></h5>
+                                <a class="card-text" asp-action="selectProduct" asp-route-id="@Model[i].ProductId">@Model[i].ProductName</a>
+                            </div>
+                        </div>
+                    }
+                }
+
         }
         
         
@@ -44,9 +62,9 @@
                     price = (int)item.UnitPrice;
                     maxprice = price + 200;
                     <div class="card col" style="width: 18rem;">
-                        <img class="card-img-top" src="@Url.Content("~/img-product/")@item.Path[0]" alt="Card image cap">
+                        <img class="card-img-top" src="@Url.Content("~/img-product/")@item.Path[0]" alt="Card image cap" style="width:194px;height:194px">
                         <div class="card-body">
-                            <h5 class="card-title text-danger d-flex justify-content-between"><span>$@price.ToString("N0")</span><span>$@maxprice.ToString("N0")</span></h5>
+                            <h5 class="card-title text-danger d-flex justify-content-between"><span class="fs-4" style="text-decoration:line-through">$@maxprice.ToString("N0")</span><span class="fs-3">$@price.ToString("N0")</span></h5>
                             <a class="card-text" asp-action="selectProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
                         </div>
                     </div>
