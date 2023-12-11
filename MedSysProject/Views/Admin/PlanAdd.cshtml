@@ -46,26 +46,26 @@
                     foreach (var item in Model)
                     {
                         count++;
-                            <tr class="table-warning">
-                                <td>
-                                    @count
-                                    <input type="hidden" value="@item.PlanId" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PlanName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PlanDescription)
-                                </td>
-                                <td>
-                                    <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="btn btn-danger" id="btnDel" onclick="get(this)">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr class="table-warning">
+                            <td>
+                                @count
+                                <input type="hidden" value="@item.PlanId" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanDescription)
+                            </td>
+                            <td>
+                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-danger" id="btnDel" onclick="get(this)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
@@ -111,14 +111,14 @@
                                 @{
                                     foreach (var item in ViewBag.Project)
                                     {
-                                            <div class="form-check-inline" style="margin-left:1em;">
-                                                <input class="form-check-input" type="checkbox" name="Cprjchk" value="@item.ProjectId" id="@item.ProjectId">
-                                                <label class="form-check-label" for="@item.ProjectId">
-                                                    @item.ProjectName
-                                                </label>
-                                            </div>
+                                        <div class="form-check-inline" style="margin-left:1em;">
+                                            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                            <label class="form-check-label" for="@item.ProjectId">
+                                                @item.ProjectName
+                                            </label>
+                                        </div>
 
-                                            <br />
+                                        <br />
                                     }
                                 }
                                 <div class="invalid-feedback">請至少勾選一項</div>
@@ -152,7 +152,7 @@
             </div>
             <!--Body-->
             <div class="modal-body">
-                <form id="myCreatedataform" novalidate class="needs-validation">
+                <form id="myUpdataform" novalidate class="needs-validation">
                     <div class="row">
                         <div class="col-md-10">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -176,14 +176,14 @@
                                 @{
                                     foreach (var item in ViewBag.Project)
                                     {
-                                            <div class="form-check-inline" style="margin-left:1em;">
-                                                <input class="form-check-input" type="checkbox" name="prjchk" value="@item.ProjectId" id="@item.ProjectId">
-                                                <label class="form-check-label" for="@item.ProjectId">
-                                                    @item.ProjectName
-                                                </label>
-                                            </div>
+                                        <div class="form-check-inline" style="margin-left:1em;">
+                                            <input class="form-check-input" type="checkbox" name="prjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                            <label class="form-check-label" for="@item.ProjectId">
+                                                @item.ProjectName
+                                            </label>
+                                        </div>
 
-                                            <br />
+                                        <br />
                                     }
                                 }
                                 <div class="invalid-feedback">請至少勾選一項</div>
@@ -194,7 +194,7 @@
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="CancelPlanCreate" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定修改</button>
+                    <button type="button" class="btn btn-success" onclick="putdata2()" id="Cbtn">確定修改</button>
                 </div>
             </div>
         </div>
@@ -220,7 +220,7 @@
         });
         const state = await response.status;
         if (response.ok) {
-            
+
             createRef(form);
 
         } else {
@@ -287,7 +287,113 @@
         document.getElementById("inputDescription").value = tddescription.trim();
 
 
+        fetch(`https://localhost:7078/api/PlanRefs/get/${tdid.value}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log("aaxxx");
+                console.log(data);
+                // 抓projectId
+                let prjId = [];
+
+                data.forEach((item) => {
+                    prjId.push(item.projectId);
+                });
+
+                console.log("ProjectIds:", prjId);
+
+                // 抓checkbox
+                let prjChk = document.querySelectorAll('input[name="prjchk"]');
+                console.log(prjChk);
+
+                prjChk.forEach((item) => {
+                    if (prjId.includes(parseInt(item.value))) {
+                        item.checked = true;
+                    } else {
+                        item.checked = false;
+                    }
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+
     }
+
+    async function putdata2() {
+        let id = document.getElementById("inputId").value;
+        console.log(id)
+        let apiurl = `https://localhost:7078/api/Plans/Up/${id}`;
+        var myForm = document.getElementById("myUpdataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'PUT',
+            body: data
+        });
+        const status = await response.status;
+        if (response.ok) {
+            putdataRef2();
+        }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
+    async function putdataRef2() {
+        let id = document.getElementById("inputId").value;
+        console.log(id)
+        let apiurl = `https://localhost:7078/api/PlanRefs/Up/${id}`;
+        var myForm = document.getElementById("myUpdataform");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'PUT',
+            body: data
+        });
+        const status = await response.status;
+        if (response.ok) {
+
+            $('#modalEdit').modal('hide');
+
+            Swal.fire({
+                title: "修改成功!",
+                text: status,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+
+
+            research();
+        }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
+    // document.addEventListener("keydown", (event) => {
+    //     if (event.key == "Enter") {
+    //         console.log(document.querySelectorAll(".pjlist"));
+    //         if (document.querySelectorAll(".pjlist").forEach((item) => {
+    //             if (item.checked == true) {
+    //                 console.log(item);
+    //             }
+    //         })
+    //         }
+
+    // })
+
+
 
     async function del(id) {
         const result = await Swal.fire({
