@@ -65,7 +65,7 @@
     #chose1, #chose2 {
         width:80%;
     }
-  /*  div {
+   /* div {
         border: 1px solid #333;
     }*/
 </style>
@@ -171,7 +171,9 @@
                                 {
                                     <option value="1">
 
-                                        @s.Split("-")[2]
+                                        @s.Split("-")[0]
+
+
                                     </option>
 
                                 }
@@ -181,6 +183,53 @@
                         </select>
                     </div>
                     <div class="col-4"></div>
+
+                    @*d-none隱藏*@
+                    <div class="col-2 d-none"></div>
+                    <div class="col-2 d-none">
+                        <h4>隱藏內容</h4>
+                    </div>
+                    <div class="col-2 title d-none">
+                        <select class="form-select" aria-label="Default select example" id="chose1id">
+                            <option selected>選擇健檢報告</option>
+
+                            @{
+
+                                foreach (var s in rd.Distinct())
+                                {
+                                    <option value="@s.Split("-")[2]">
+
+                                        @s.Split("-")[2]
+                                    </option>
+
+                                }
+                            }
+
+
+                        </select>
+                    </div>
+                    <div class="col-2 title d-none">
+                        <select class="form-select" aria-label="Default select example" id="chose2id">
+                            <option selected>選擇健檢報告</option>
+
+                            @{
+
+                                foreach (var s in rd.Distinct())
+                                {
+                                    <option value="@s.Split("-")[2]">
+
+                                        @s.Split("-")[2]
+                                    </option>
+
+                                }
+                            }
+                            ////s.Split("-")[0]
+
+                        </select>
+                    </div>
+                    <div class="col-4 d-none"></div>
+
+
                     @*  <div class="col-6 title">
                         <select class="form-select" aria-label="Default select example" id="chose2">
                             <option selected>選擇健檢報告</option>
@@ -413,208 +462,285 @@
     </div>
     @ViewData["id"]
 </div>
-
-
-<script>
-    var ch1 = document.querySelector("#chose1");
-    var ch2 = document.querySelector("#chose2");
+    <script>
     var table = document.querySelector("#reportshow1");
-    //var val = document.all['#chose2'].value;
-    var index = ch1.selectedIndex;
-
-    function rp2Display() {
-        let td1 = document.createElement("td");
-        let td2 = document.createElement("td");
-        //let rp2 = document.querySelector("#tr").children[2]
-        let rp3 =document.querySelectorAll('#rp2')
-        let tr = document.querySelector("#tr")
+    show();
+        var ch1 = document.querySelector("#chose1");
+        var ch1id = document.querySelector("#chose1id");
+        var ch2 = document.querySelector("#chose2");
+        var ch2id = document.querySelector("#chose2id");
         
-        td1.innerHTML = "ABC"
-        console.log(rp3[0])
-        let length = tr.length
+        //var val = document.all['#chose2'].value;
+        var index = ch1.selectedIndex;
+    
 
-        for (var i = 0; i < 80; i++) {
-            let j = document.createElement("td");
-            //j.innerHTML ="FUCK"
-            rp3[i].parentNode.replaceChild(td1,rp3[i]);
-        }
-    }
-      
+        ////todo 顯示問題
+    function rp1Display() {
 
-        const endpoint = '';
+        //let rp2 = document.querySelector("#tr").children[2]
+        //old length=3
+        let rp1 = document.querySelectorAll('#rp1')
+
+        ///ajax///
+        const endpoint = 'https://localhost:7203/transaction/rp2';
+        const reportdid = ch1id.value
         $.ajax({
             type: "GET",
-            url: endpoint,
+            url: `${endpoint}/${reportdid}`,
             dataType: "json",
             success: function (response) {
-                const charge = [];
-                charge.push(...response);
-                createDomElement(charge);
+                alert(response)
+                //response[0].reportDetailId
+                //response[0].reportId
+                //response[0].itemId
+                //response[0].result
+                //const charge = [];
+                //charge.push(...response);
+                //createDomElement(charge);
+                console.log(ch2.value)
+                for (var i = 0; i <= response.length; i++) {
+                    let j = document.createElement("td");
+                    j.setAttribute("id","rp1");
+                    
+                    if (response[i]?.result != undefined) 
+                    {
+                        j.innerHTML = response[i].result
+                    }
+                    else
+                    {
+                        j.innerHTML = "null"
+                        
+                    }
+                    rp1[i].parentNode.replaceChild(j, rp1[i]);
+
+                }
             },
             error: function (thrownError) {
                 console.log(thrownError);
             }
         });
 
+
+    }
+
+        function rp2Display() {
+           
+            //let rp2 = document.querySelector("#tr").children[2]
+            let rp3 = document.querySelectorAll('#rp2')
+         
+            ///ajax///
+        const endpoint = 'https://localhost:7203/transaction/rp2';
+        const reportdid = ch2id.value
+        $.ajax({
+            type: "GET",
+            url: `${endpoint}/${reportdid}`,
+            dataType: "json",
+            success: function (response) {
+                alert(response)
+               
+                console.log(ch2id.value)
+                for (var i = 0; i <= response.length; i++) {
+                    let j = document.createElement("td");
+                    j.setAttribute("id", "rp2");
+
+                    if (response[i]?.result != undefined) {
+                        j.innerHTML = response[i].result
+                    }
+                    else {
+                        j.innerHTML = "null"
+
+                    }
+                    
+                    rp3[i].parentNode.replaceChild(j, rp3[i]);
+
+                }
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+       
+        }
+
+
+   
+
         function createDomElement(charge) {
             const domElements = charge.map(place => {
                 return `
-            <li>
-              <p class="location">位置： ${place.Location}</p>
-              <p class="address">地址：${place.Address}</p>
-            </li>
-          `;
+                    <li>
+                      <p class="location">位置： ${place.Location}</p>
+                      <p class="address">地址：${place.Address}</p>
+                    </li>
+                  `;
             }).join("");
 
             const chargeList = document.querySelector('.charge-list');
             chargeList.innerHTML = domElements;
         }
-    
 
-    ch1.addEventListener("change", () => {
-        console.log(ch2.value)
-        index = ch1.selectedIndex;
-        ch2.selectedIndex = index;
+
+        ch1.addEventListener("change", () => {
+            //console.log(ch2.value)
+            index = ch1.selectedIndex;
+            ch1id.selectedIndex = index;
+            rp1Display();
+
+        })
+
+        ch2.addEventListener("change", () => {
+        //console.log(ch2.value)
+        index = ch2.selectedIndex;
+        ch2id.selectedIndex = index;
         rp2Display();
 
     })
-    //var td1 = document.createElement("td");
-    //var td2 = document.createElement("td");
-    //var td3 = document.createElement("td");
-    //var td4 = document.createElement("td");
+        //var td1 = document.createElement("td");
+        //var td2 = document.createElement("td");
+        //var td3 = document.createElement("td");
+        //var td4 = document.createElement("td");
 
-    //var tr = document.createElement("tr");
+        //var tr = document.createElement("tr");
 
-    //td1.innerHTML = "項目";
-    //tr.appendChild(td1);
-    //td2.innerHTML = "報告1"
-    //tr.appendChild(td2);
-    //td3.innerHTML = "報告2"
-    //tr.appendChild(td3);
-    //td4.innerHTML = "標準"
-    //tr.appendChild(td4);
-    //table.appendChild(tr);
+        //td1.innerHTML = "項目";
+        //tr.appendChild(td1);
+        //td2.innerHTML = "報告1"
+        //tr.appendChild(td2);
+        //td3.innerHTML = "報告2"
+        //tr.appendChild(td3);
+        //td4.innerHTML = "標準"
+        //tr.appendChild(td4);
+        //table.appendChild(tr);
 
 
-    //var report= foreach(var items in Model)
-    //     {
-    //     var tr = document.createElement("tr");
-    //     td1.innerHTML = "項目";
-    //     tr.appendChild(td1);
-    //     td2.innerHTML = "報告1"
-    //     tr.appendChild(td2);
-    //     td3.innerHTML = "報告2"
-    //     tr.appendChild(td3);
-    //     td4.innerHTML = "標準"
-    //     tr.appendChild(td4);
-    //     table.appendChild(tr);
-    //     }
+        //var report= foreach(var items in Model)
+        //     {
+        //     var tr = document.createElement("tr");
+        //     td1.innerHTML = "項目";
+        //     tr.appendChild(td1);
+        //     td2.innerHTML = "報告1"
+        //     tr.appendChild(td2);
+        //     td3.innerHTML = "報告2"
+        //     tr.appendChild(td3);
+        //     td4.innerHTML = "標準"
+        //     tr.appendChild(td4);
+        //     table.appendChild(tr);
+        //     }
 
-    @{
-        var report = from s in Model
-                     where s.Report.Reserve.ReserveDate.Value.ToShortDateString() == "2023/10/10" &&
-                     s.Report.ReportId == 30
-                     select s;
-    }
+        
+        function show(){
 
-        table.innerHTML =
-    `
-
-    @foreach (var items in report)
-    {
-        @Html.Raw("<tr id='tr'>")
-        @Html.Raw("<td>")
-        @items.Item.ItemName
-        @Html.Raw("</td>")
-        @Html.Raw("<td>")
-        @items.Result
-        @Html.Raw("</td>")
-        @Html.Raw("<td id='rp2'>")
-        @Html.Raw("none")
-        @Html.Raw("</td>")
-        @Html.Raw("<td>")
-
-        if (@items.Item.ItemRange != null)
-        {
-            @items.Item.ItemRange
+        
+        @{
+            var report = from s in Model
+                         where s.Report.Reserve.ReserveDate.Value.ToShortDateString() == "2023/10/10" &&
+                         s.Report.ReportId == 30
+                         select s;
         }
-        else
+
+            table.innerHTML =
+        `
+
+        @foreach (var items in report)
         {
-            if (@items.Item.ItemRangeMin != null)
+            @Html.Raw("<tr id='tr'>")
+            @Html.Raw("<td>")
+            @items.Item.ItemName
+            @Html.Raw("</td>")
+            @Html.Raw("<td id='rp1'>")
+            @items.Result
+            @Html.Raw("</td>")
+            @Html.Raw("<td id='rp2'>")
+            @Html.Raw("none")
+            @Html.Raw("</td>")
+            @Html.Raw("<td>")
+
+            if (@items.Item.ItemRange != null)
             {
-                @items.Item.ItemRangeMin
-                @Html.DisplayName("~")
-                @items.Item.ItemRangeMax
+                @items.Item.ItemRange
             }
             else
             {
-                if (@items.Report.Member.MemberGender == "男         ")
+                if (@items.Item.ItemRangeMin != null)
                 {
-                    @items.Item.Mmin
+                    @items.Item.ItemRangeMin
                     @Html.DisplayName("~")
-                    @items.Item.Mmax
+                    @items.Item.ItemRangeMax
                 }
                 else
                 {
-                    @items.Item.Fmin
-                    @Html.DisplayName("~")
-                    @items.Item.Fmax
+                    if (@items.Report.Member.MemberGender == "男         ")
+                    {
+                        @items.Item.Mmin
+                        @Html.DisplayName("~")
+                        @items.Item.Mmax
+                    }
+                    else
+                    {
+                        @items.Item.Fmin
+                        @Html.DisplayName("~")
+                        @items.Item.Fmax
+                    }
                 }
+
+
+
+                @Html.Raw("</td>")
+                @Html.Raw("</tr>")
+
             }
+        }`
+    }
+
+
+        //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
+        //    console.log(datas);
+        //    const docFrag = $(document.createDocumentFragment());
+        //    $.each(datas, (index, city) => {
+        //        //console.log(city);
+        //        // <li class="list-group-item" > An item < /li>
+        //        const li = $('<li></li>').text(city).addClass('list-group-item');
+        //        docFrag.append(li);
+        //    })
+        //    $('.list-group').html(docFrag);
+        //})
+        //$("#chose1").click(function(){
+        //    $.getJSON("@Url.Content("~/Home/qureyReportDetailAll")", {}, data => {
+        //        const docFrag = $(document.createDocumentFragment());
+        //        $.each(data,(index,report)=>{
+        //            const show = $("<td></td>").text(report).addClass("col - 4");
+        //            docFrag.append(show);
+
+
+        //        })
+        //        $("#reportshow1").html(docFrag);
+        //        })
+        //})
+
+
+        $("#chose1").change(function () {
+            $("#reportshow1").removeClass("d-none")
+
+
+        })
+        $("#chose2").change(function () {
+            $("#reportshow2").removeClass("d-none")
+
+
+        })
+        ///////////
+        ///print///
+        ///////////
+        var $table = $('#table1')
+
+        $(function () {
+            $table.bootstrapTable()
+        })
+
+    </script>
 
 
 
-            @Html.Raw("</td>")
-            @Html.Raw("</tr>")
 
-        }
-    }`
-
-   
-
-    //    $.getJSON('@Url.Content("~/api/town")', { "city": "金門縣" }, (datas) => {
-    //    console.log(datas);
-    //    const docFrag = $(document.createDocumentFragment());
-    //    $.each(datas, (index, city) => {
-    //        //console.log(city);
-    //        // <li class="list-group-item" > An item < /li>
-    //        const li = $('<li></li>').text(city).addClass('list-group-item');
-    //        docFrag.append(li);
-    //    })
-    //    $('.list-group').html(docFrag);
-    //})
-    //$("#chose1").click(function(){
-    //    $.getJSON("@Url.Content("~/Home/qureyReportDetailAll")", {}, data => {
-    //        const docFrag = $(document.createDocumentFragment());
-    //        $.each(data,(index,report)=>{
-    //            const show = $("<td></td>").text(report).addClass("col - 4");
-    //            docFrag.append(show);
-
-
-    //        })
-    //        $("#reportshow1").html(docFrag);
-    //        })
-    //})
-
-
-    $("#chose1").change(function () {
-        $("#reportshow1").removeClass("d-none")
-
-
-    })
-    $("#chose2").change(function () {
-        $("#reportshow2").removeClass("d-none")
-
-
-    })
-    ///////////
-    ///print///
-    ///////////
-    var $table = $('#table1')
-
-    $(function () {
-        $table.bootstrapTable()
-    })
-
-</script>
    

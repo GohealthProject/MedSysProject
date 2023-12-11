@@ -220,7 +220,7 @@
         </div>
        
 
-@* 預約確認*@
+        @* 預約確認final*@
     <div class="modal fade" id="reserve" aria-hidden="true" aria-labelledby="reservelbl" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -232,12 +232,13 @@
                     預約日期:2023/12/01 付費方式:現場付款
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal">確定</button>
+                    <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal" id="reservesubmit">確定</button>
                     <button class="btn btn-danger" data-bs-target="#cancel" data-bs-toggle="modal">取消</button>
                 </div>
             </div>
         </div>
     </div>
+        @* 預約確認final>ok*@
     <div class="modal fade" id="confirm" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -246,6 +247,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    @*TODO動態更新*@
                     預約日期:2023/12/01 付費方式:現場付款
                 </div>
                 <div class="modal-footer">
@@ -254,6 +256,7 @@
             </div>
         </div>
     </div>
+        @* 預約確認final>no*@
     <div class="modal fade" id="cancel" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -294,7 +297,17 @@
     table.innerHTML = forminput;
     console.log(forminput)
     console.log(table.innerHTML)
-
+  ////reservesubmit////
+    var rsvsbm = document.querySelector("#reservesubmit")
+    rsvsbm.addEventListener("click",()=>{
+        alert("fku")
+    @{
+        //////todo////////
+        ///array[].add(item)or form///
+        ///send to api///
+        ///api add///
+    }
+    })
 
 
 
@@ -340,19 +353,7 @@
         //console.log(t.innerHTML)
     }
 
-    //var item = document.querySelector("#rsitem").innerHTML;
-    
-    //var reserve = document.querySelector("#rsdiv").innerHTML.valueOf
-    //$(".click").click(function () {
-    //    $(".show").removeClass("d-none")})
 
-    //$("#sbmbtn").click(()=>{
-    //    console.log(item)
-        
-    ////reserve = "987";
-    //    document.querySelector("#rsdiv").innerHTML = `${item}`
-    //    console.log(reserve)
-    //})
 
     //var table = document.querySelector("#show")
     //table.innerHTML = @ViewBag.item;
