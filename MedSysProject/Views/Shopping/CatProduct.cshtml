@@ -1,0 +1,60 @@
+﻿@model List<MedSysProject.Models.CProductWarp>
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    int price = 0;
+    int maxprice = 0;
+    List<int> hop = ViewBag.hot;
+    var hot = Model.Where(n=>hop.Contains(n.ProductId)).ToList();
+}
+
+<div class="container " style="height:3000px;">
+    <img src="@Url.Content("~/img/Login2.png")" style="width:100%"/>
+    <div>
+    <div class="fs-1">最新產品</div>
+    <hr class="bi-hr"/>
+    <div class="row  align-items" style="height:360px">
+            @{
+                for(int i =0; i < 6; i++)
+                {
+                    price = (int)Model[i].UnitPrice;
+                    maxprice = price + 200;
+                    <div class="card col" style="width: 18rem;">
+                        <img class="card-img-top" src="@Url.Content("~/img-product/")@Model[i].Path[0]" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger d-flex justify-content-between"><span>$@price.ToString("N0")</span><span>$@maxprice.ToString("N0")</span></h5>
+                            <a class="card-text" asp-action="selectProduct" asp-route-id="@Model[i].ProductId">@Model[i].ProductName</a>
+                        </div>
+                    </div>
+                }
+        }
+        
+        
+        
+    </div>
+    </div>
+    <img src="~/img/Member.jpg" style="width:1296px"/>
+    <div>
+        <div class="fs-1">暢銷產品</div>
+        <hr class="bi-hr" />
+        <div class="row  align-items" style="height:360px">
+            @{
+                foreach(var item in hot)
+                {
+                    price = (int)item.UnitPrice;
+                    maxprice = price + 200;
+                    <div class="card col" style="width: 18rem;">
+                        <img class="card-img-top" src="@Url.Content("~/img-product/")@item.Path[0]" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger d-flex justify-content-between"><span>$@price.ToString("N0")</span><span>$@maxprice.ToString("N0")</span></h5>
+                            <a class="card-text" asp-action="selectProduct" asp-route-id="@item.ProductId">@item.ProductName</a>
+                        </div>
+                    </div>
+                }
+            }
+            
+            
+
+        </div>
+    </div>
+</div>
