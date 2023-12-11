@@ -46,26 +46,26 @@
                     foreach (var item in Model)
                     {
                         count++;
-                                <tr class="table-warning">
-                                    <td>
-                                        @count
-                                        <input type="hidden" value="@item.PlanId" />
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PlanName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PlanDescription)
-                                    </td>
-                                    <td>
-                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a class="btn btn-danger" id="btnDel" onclick="get(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                            <tr class="table-warning">
+                                <td>
+                                    @count
+                                    <input type="hidden" value="@item.PlanId" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PlanName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PlanDescription)
+                                </td>
+                                <td>
+                                    <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-danger" id="btnDel" onclick="get(this)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
                     }
                 }
             </tbody>
@@ -93,15 +93,15 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <div class="form-group">
-                                <input type="hidden" id="CinputId" value="" name="PlanId" />
+                                <input type="hidden" id="CinputId" value="" name="CPlanId" />
                                 <label class="control-label">方案名稱</label>
-                                <input class="form-control" id="CinputName" name="PlanName" required />
+                                <input class="form-control" id="CinputName" name="CPlanName" required />
                                 <div class="invalid-feedback">請輸入方案名稱</div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label">方案描述</label>
-                                <textarea class="form-control" id="CinputDescription" name="PlanDescription" rows="3" required></textarea>
+                                <textarea class="form-control" id="CinputDescription" name="CPlanDescription" rows="3" required></textarea>
                                 <div class="invalid-feedback">請輸入方案描述</div>
                             </div>
 
@@ -111,12 +111,14 @@
                                 @{
                                     foreach (var item in ViewBag.Project)
                                     {
-                                                <div class="form-check-inline" style="margin-left:1em;">
-                                                    <input class="form-check-input" type="checkbox" name="Cprjchk" value="@item.ProjectId" id="@item.ProjectId">
-                                                    <label class="form-check-label" for="@item.ProjectId">
-                                                        @item.ProjectName
-                                                    </label>
-                                                </div><br />
+                                            <div class="form-check-inline" style="margin-left:1em;">
+                                                <input class="form-check-input" type="checkbox" name="Cprjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                                <label class="form-check-label" for="@item.ProjectId">
+                                                    @item.ProjectName
+                                                </label>
+                                            </div>
+
+                                            <br />
                                     }
                                 }
                                 <div class="invalid-feedback">請至少勾選一項</div>
@@ -127,7 +129,7 @@
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="CancelPlanCreate" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-success"  id="Cbtn">確定新增</button>
+                    <button type="button" class="btn btn-success" id="Cbtn">確定新增</button>
                     <button class="btn btn-dark" id="demoPlanCreate">DEMO</button>
                 </div>
             </div>
@@ -174,14 +176,14 @@
                                 @{
                                     foreach (var item in ViewBag.Project)
                                     {
-                                                <div class="form-check-inline" style="margin-left:1em;">
-                                                    <input class="form-check-input" type="checkbox" name="prjchk" value="@item.ProjectId" id="@item.ProjectId">
-                                                    <label class="form-check-label" for="@item.ProjectId">
-                                                        @item.ProjectName
-                                                    </label>
-                                                </div>
+                                            <div class="form-check-inline" style="margin-left:1em;">
+                                                <input class="form-check-input" type="checkbox" name="prjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                                <label class="form-check-label" for="@item.ProjectId">
+                                                    @item.ProjectName
+                                                </label>
+                                            </div>
 
-                                                <br />
+                                            <br />
                                     }
                                 }
                                 <div class="invalid-feedback">請至少勾選一項</div>
@@ -208,7 +210,7 @@
         let createform = document.querySelector("#myCreatedataform");
         let form = new FormData(createform);
         create(form);
-       
+
     })
     async function create(form) {
         let url = `https://localhost:7078/api/Plans`;
@@ -216,6 +218,44 @@
             method: 'POST',
             body: form,
         });
+        const state = await response.status;
+        if (response.ok) {
+            
+            createRef(form);
+
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
+    async function createRef(form) {
+        let url = `https://localhost:7078/api/PlanRefs`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: form,
+        });
+        const state = await response.status;
+        if (response.ok) {
+            Swal.fire({
+                title: "新增成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            research();
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
     }
 
     const id = document.querySelector("Planid");
@@ -263,7 +303,7 @@
 
         if (result.isConfirmed) {
 
-            const response = await fetch(`https://localhost:7078/api/Employees/${id}`, {
+            const response = await fetch(`https://localhost:7078/api/Plans/${id}`, {
                 method: 'DELETE'
             });
             let data = await response.status
@@ -286,11 +326,16 @@
         }
     }
 
+    async function research() {
+        await new Promise(resolve => setTimeout(resolve, 1600));
+        window.location.reload();
+    }
+
     $("#demoPlanCreate").click(function () {
         $("#CinputId").val("");
         $("#CinputName").val("超級快樂方案");
         $("#CinputDescription").val("方案的描述");
-    
+
     });
 
     $("#CancelPlanCreate").click(function () {
