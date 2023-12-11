@@ -131,7 +131,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        [HttpPost]
+        //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
         { //預約總覽
 
