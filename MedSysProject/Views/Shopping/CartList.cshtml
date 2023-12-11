@@ -1,26 +1,27 @@
-﻿@model IEnumerable<MedSysProject.Models.CCartItem>
+﻿@model List<MedSysProject.Models.CCartItem>
 
 @{
     ViewData["Title"] = "CartList";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
 }
-
+<form method="post">
 <div class="container" style="margin-top:30px">
     <img src="~/img/Login2.png" style="margin:auto"/>
     <div style="margin-top:20px"><span class="fs-1">購物車</span></div>
+    
 <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductName)
+                @Html.DisplayNameFor(model => model[0].ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UnitPrice)
+                @Html.DisplayNameFor(model => model[0].UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.小計)
+                @Html.DisplayNameFor(model => model[0].小計)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.count)
+                @Html.DisplayNameFor(model => model[0].count)
             </th>
             <th></th>
         </tr>
@@ -33,15 +34,19 @@
                 總計 += item.小計;
                 <tr>
                     <td>
+                        <input type="hidden" value="@item.Product.ProductId" name="ProductID"/>
                         @Html.DisplayFor(modelItem => item.ProductName)
                     </td>
                     <td>
+                        
                         @Html.DisplayFor(modelItem => item.UnitPrice)
                     </td>
                     <td>
+
                         @Html.DisplayFor(modelItem => item.小計)
                     </td>
                     <td>
+                        <input type="hidden" value="@item.count" name="ProductQta" />
                         @Html.DisplayFor(modelItem => item.count)
                     </td>
                     <td>
@@ -67,25 +72,35 @@
             </tr>
         }
             </table>
+      
 </div>
 <div class="container " style="margin-top:30px">
     <span class="fs-1">宅配方式</span>
     <hr class="hr-dashed "/>
-    <label style="margin-right:10px"><input type="checkbox" value="1" />中華郵政</label>
-    <label style="margin-right:10px"><input type="checkbox" value="2" />黑貓宅急便</label>
-    <label style="margin-right:10px"> <input type="checkbox" value="3" />全球快遞</label>
-    <label style="margin-right:10px"><input type="checkbox" value="4" />新竹物流</label>
-    <label style="margin-right:10px"><input type="checkbox" value="5" />嘉里大榮</label>
-    <label style="margin-right:10px"><input type="checkbox" value="6" />蝦皮店到店</label>
+        <label style="margin-right:10px"><input type="radio" value="1" name="odship" />中華郵政</label>
+        <label style="margin-right:10px"><input type="radio" value="2" name="odship" />黑貓宅急便</label>
+        <label style="margin-right:10px"> <input type="radio" value="3" name="odship" />全球快遞</label>
+        <label style="margin-right:10px"><input type="radio" value="4" name="odship" />新竹物流</label>
+        <label style="margin-right:10px"><input type="radio" value="5" name="odship" />嘉里大榮</label>
+        <label style="margin-right:10px"><input type="radio" value="6" name="odship" />蝦皮店到店</label>
     <hr class="hr-dashed" />
 </div>
 <div class="container" style="height:1000px; margin-top100px;">
     <span style="margin-bottom:20px" class="fs-1">付款方式</span><br />
-    <input type="button" value="信用卡"/>
-    <input type="button" value="超商取貨付款" />
-    <input type="button" value="PAY" />
-    <input type="button" value="先享後付"/>
-    <input type="button" value="ATM" />
-    <input type="button" value="銀行轉帳" />
-    <input type="button" value="貨到付款" /> 
+        <label><input type="radio" value="1" name="odPay" />信用卡</label>
+        <label><input type="radio" value="2" name="odPay" />超商取貨付款</label>
+        <label><input type="radio" value="3" name="odPay" />PAY</label>
+        <label><input type="radio" value="4" name="odPay" />先享後付</label>
+        <label><input type="radio" value="5" name="odPay" />ATM</label>
+        <label><input type="radio" value="6" name="odPay" />銀行轉帳</label>
+        <label><input type="radio" value="7" name="odPay" />貨到付款</label>
 </div>
+
+<input type="submit" value="送出" />
+</form>
+
+   @section Scripts {
+        <script>
+            
+        </script>
+        }

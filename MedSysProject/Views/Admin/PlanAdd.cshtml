@@ -25,45 +25,277 @@
                 <i class="fas fa-plus"></i>
             </a>
         </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                方案ID
-            </th>
-            <th>
-                方案名稱
-            </th>
-            <th>
-                方案描述
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlanDescription)
-            </td>
-            <td>
-                            <a href="@Url.Action(" Details", new { id=item.PlanId })" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a class="btn btn-danger" id="btnDel">
-                                @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        序
+                    </th>
+                    <th>
+                        方案名稱
+                    </th>
+                    <th>
+                        方案描述
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                                <tr class="table-warning">
+                                    <td>
+                                        @count
+                                        <input type="hidden" value="@item.PlanId" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PlanName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PlanDescription)
+                                    </td>
+                                    <td>
+                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger" id="btnDel" onclick="get(this)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+@* ---新增彈窗開始--- *@
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">新增方案</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form id="myCreatedataform" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <input type="hidden" id="CinputId" value="" name="PlanId" />
+                                <label class="control-label">方案名稱</label>
+                                <input class="form-control" id="CinputName" name="PlanName" required />
+                                <div class="invalid-feedback">請輸入方案名稱</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">方案描述</label>
+                                <textarea class="form-control" id="CinputDescription" name="PlanDescription" rows="3" required></textarea>
+                                <div class="invalid-feedback">請輸入方案描述</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">方案選擇</label>
+                                <br />
+                                @{
+                                    foreach (var item in ViewBag.Project)
+                                    {
+                                                <div class="form-check-inline" style="margin-left:1em;">
+                                                    <input class="form-check-input" type="checkbox" name="Cprjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                                    <label class="form-check-label" for="@item.ProjectId">
+                                                        @item.ProjectName
+                                                    </label>
+                                                </div><br />
+                                    }
+                                }
+                                <div class="invalid-feedback">請至少勾選一項</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelPlanCreate" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success"  id="Cbtn">確定新增</button>
+                    <button class="btn btn-dark" id="demoPlanCreate">DEMO</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+@* ---新增彈窗結束--- *@
+
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">修改方案</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form id="myCreatedataform" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <input type="hidden" id="inputId" value="" name="PlanId" />
+                                <label class="control-label">方案名稱</label>
+                                <input class="form-control" id="inputName" name="PlanName" required />
+                                <div class="invalid-feedback">請輸入方案名稱</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">方案描述</label>
+                                <textarea class="form-control" id="inputDescription" name="PlanDescription" rows="3" required></textarea>
+                                <div class="invalid-feedback">請輸入方案描述</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">方案選擇</label>
+                                <br />
+                                @{
+                                    foreach (var item in ViewBag.Project)
+                                    {
+                                                <div class="form-check-inline" style="margin-left:1em;">
+                                                    <input class="form-check-input" type="checkbox" name="prjchk" value="@item.ProjectId" id="@item.ProjectId">
+                                                    <label class="form-check-label" for="@item.ProjectId">
+                                                        @item.ProjectName
+                                                    </label>
+                                                </div>
+
+                                                <br />
+                                    }
+                                }
+                                <div class="invalid-feedback">請至少勾選一項</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelPlanCreate" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script>
+
+    document.querySelector("#Cbtn").addEventListener("click", () => {
+        console.log("hello")
+        let createform = document.querySelector("#myCreatedataform");
+        let form = new FormData(createform);
+        create(form);
+       
+    })
+    async function create(form) {
+        let url = `https://localhost:7078/api/Plans`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: form,
+        });
+    }
+
+    const id = document.querySelector("Planid");
+    function get(element) {
+        let par = element.parentNode.parentNode;
+        var hidd = par.querySelector('input[type="hidden"]');
+        console.log(hidd.value);
+        del(hidd.value);
+
+    }
+
+
+    //主畫面按下去要彈框框的事件
+    function updata(element) {
+        showTogget(element)
+    }
+
+    //把資料印到彈出來的視窗(去掉空白)
+    function showTogget(element) {
+        let par = element.closest("tr");
+        let tds = par.getElementsByTagName("td");
+
+        let tdid = tds[0].querySelector('input[type="hidden"]');
+        let tdname = tds[1].innerHTML;
+        let tddescription = tds[2].innerHTML;
+
+        document.getElementById("inputId").value = tdid.value;
+        document.getElementById("inputName").value = tdname.trim();
+        document.getElementById("inputDescription").value = tddescription.trim();
+
+
+    }
+
+    async function del(id) {
+        const result = await Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        });
+
+        if (result.isConfirmed) {
+
+            const response = await fetch(`https://localhost:7078/api/Employees/${id}`, {
+                method: 'DELETE'
+            });
+            let data = await response.status
+            if (data = 200) {
+                Swal.fire({
+                    title: "刪除成功!",
+                    text: data,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
+                });
+            }
+            research()
+        }
+    }
+
+    $("#demoPlanCreate").click(function () {
+        $("#CinputId").val("");
+        $("#CinputName").val("超級快樂方案");
+        $("#CinputDescription").val("方案的描述");
+    
+    });
+
+    $("#CancelPlanCreate").click(function () {
+        $("#CinputId").val("");
+        $("#CinputName").val("");
+        $("#CinputDescription").val("");
+    });
+</script>

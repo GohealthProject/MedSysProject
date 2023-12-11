@@ -7,6 +7,10 @@ using System.Linq;
 using System.IO;
 using NuGet.Protocol;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using Microsoft.IdentityModel.Tokens;
+using Humanizer;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Azure;
 
 namespace MedSysProject.Controllers
 {
@@ -308,29 +312,156 @@ namespace MedSysProject.Controllers
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
-            var q = from p in _db.Plans
-                    select p;
+            var qq = _db.Projects.ToList();
+            var q = _db.Plans;
 
+            ViewBag.Project = qq;
 
             return View(q);
         }
 
+        public IActionResult Order(int page = 1)
+        {
+            IEnumerable<Order> datas = null; //宣告一個空的集合
 
+            var dd = _db.Orders.ToList();
+            var cc = _db.OrderStates.ToList();
+            ViewBag.mindate = dd.IsNullOrEmpty() ? "" : dd.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
+            ViewBag.maxdate = dd.IsNullOrEmpty() ? "" : dd.Max(p => p.OrderDate).ToString("yyyy-MM-dd");
+            ViewBag.State = cc;
 
+            int pgsize = 10; //每頁顯示幾筆資料
+            int total = _db.Orders.Count(); //資料總筆數
+            int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1); //總頁數
+            if (page < 1) page = 1; //如果頁數小於1，就顯示第1頁
+            if (page > maxpage) page = maxpage; //如果頁數大於總頁數，就顯示最後一頁
+            datas = _db.Orders.Include(m => m.Member).Include(s => s.State).Include(h => h.Ship).Include(p => p.Pay).Include(n => n.OrderDetails).ThenInclude(n => n.Product).OrderByDescending(d => d.OrderDate).Skip((page - 1) * pgsize).Take(pgsize); //取得資料
+            ViewBag.page = page; //目前頁數
+            ViewBag.TotalPage = maxpage; //總頁數
+            ViewBag.total = total; //資料總筆數
+            ViewBag.pgsize = pgsize; //每頁顯示幾筆資料
 
-        public IActionResult Order()
+            return View(datas);
+        }
+
+        [HttpPost]
+        public IActionResult Order(CStateViewModel? vmS, CKeywordViewModel? vmK, CDateViewModel? vmD, int page = 1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
             //string keyword = "";
+            var cc = _db.OrderStates.ToList();
+            ViewBag.State = cc;
+
+            //
+            
             IEnumerable<Order> datas = null;
 
-            //if (string.IsNullOrEmpty(keyword))
-            datas = from t in _db.Orders.Include(m => m.Member).Include(s => s.State)
-                    select t;
-            //else
-            //    datas = db.Orders.Where(p => p.OrderDate.Contains(keyword));
+            if (string.IsNullOrEmpty(vmK.txtKeyword))
+            {
+                //var word = Request.Form["txtKeyword"];
+                var dd = _db.Orders.ToList();
+                DateTime mindate = dd.IsNullOrEmpty() ? DateTime.MinValue : dd.Min(p => p.OrderDate);
+                DateTime maxdate = dd.IsNullOrEmpty() ? DateTime.MaxValue : dd.Max(p => p.OrderDate);
+                ViewBag.mindate = mindate.ToString("yyyy-MM-dd");
+                ViewBag.maxdate = maxdate.ToString("yyyy-MM-dd");
+
+
+                if (vmD.txtMinDate.HasValue && vmD.txtMaxDate.HasValue && vmS.statechk == null)
+                {
+                    int pgsize = 10; //每頁顯示幾筆資料
+                    int total = _db.Orders.Count(); //資料總筆數
+                    int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1); //總頁數
+                    if (page < 1) page = 1; //如果頁數小於1，就顯示第1頁
+                    if (page > maxpage) page = maxpage; //如果頁數大於總頁數，就顯示最後一頁
+
+                    datas = _db.Orders
+                        .Include(m => m.Member)
+                        .Include(s => s.State)
+                        .Include(h => h.Ship)
+                        .Include(p => p.Pay)
+                        .Include(n => n.OrderDetails)
+                        .ThenInclude(n => n.Product)
+                        .OrderByDescending(d => d.OrderDate)
+                        .Skip((page - 1) * pgsize)
+                        .Take(pgsize);
+
+                    ViewBag.page = page; //目前頁數
+                    ViewBag.TotalPage = maxpage; //總頁數
+                    ViewBag.total = total; //資料總筆數
+                    ViewBag.pgsize = pgsize; //每頁顯示幾筆資料
+
+                    ViewBag.mindate = vmD.txtMinDate.Value.ToString("yyyy-MM-dd");
+                    ViewBag.maxdate = vmD.txtMaxDate.Value.ToString("yyyy-MM-dd");
+                    ViewBag.Checked = vmS.statechk;
+                }
+                else if (vmD.txtMinDate.HasValue && vmD.txtMaxDate.HasValue && vmS.statechk != null)
+                {
+                    datas = _db.Orders
+                        //find p.StateID equal to List all numbers in vmS.statechk and p.OrderDate between vmD.txtMinDate and vmD.txtMaxDate
+                        .Where(p => vmS.statechk.Contains((int)p.StateId) && p.OrderDate >= vmD.txtMinDate && p.OrderDate <= vmD.txtMaxDate)
+                        .Include(m => m.Member)
+                        .Include(s => s.State)
+                        .Include(h => h.Ship)
+                        .Include(p => p.Pay)
+                        .Include(n => n.OrderDetails)
+                        .ThenInclude(n => n.Product)
+                        .OrderByDescending(d => d.OrderDate);
+
+                    ViewBag.mindate = vmD.txtMinDate.Value.ToString("yyyy-MM-dd");
+                    ViewBag.maxdate = vmD.txtMaxDate.Value.ToString("yyyy-MM-dd");
+                    ViewBag.Checked = vmS.statechk;
+                }
+                else
+                {
+                    int pgsize = 10; //每頁顯示幾筆資料
+                    int total = _db.Orders.Count(); //資料總筆數
+                    int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1); //總頁數
+                    if (page < 1) page = 1; //如果頁數小於1，就顯示第1頁
+                    if (page > maxpage) page = maxpage; //如果頁數大於總頁數，就顯示最後一頁
+
+                    datas = _db.Orders
+                            .Include(m => m.Member)
+                            .Include(s => s.State)
+                            .Include(h => h.Ship)
+                            .Include(p => p.Pay)
+                            .Include(n => n.OrderDetails)
+                            .ThenInclude(n => n.Product)
+                            .OrderByDescending(d => d.OrderDate)
+                            .Skip((page - 1) * pgsize)
+                            .Take(pgsize);
+
+                    ViewBag.page = page; //目前頁數
+                    ViewBag.TotalPage = maxpage; //總頁數
+                    ViewBag.total = total; //資料總筆數
+                    ViewBag.pgsize = pgsize; //每頁顯示幾筆資料
+
+                    ViewBag.mindate = datas.IsNullOrEmpty() ? "" : datas.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
+                    ViewBag.maxdate = datas.IsNullOrEmpty() ? "" : datas.Max(p => p.OrderDate).ToString("yyyy-MM-dd");
+                    ViewBag.key = vmK.txtKeyword;
+                }
+            }
+            else
+            {
+                datas = _db.Orders
+                    .Include(m => m.Member)
+                    .Include(s => s.State)
+                    .Include(h => h.Ship)
+                    .Include(p => p.Pay)
+                    .Include(n => n.OrderDetails)
+                    .ThenInclude(n => n.Product)
+                    .Where(p => p.OrderId.ToString().Contains(vmK.txtKeyword) ||
+                    p.Member.MemberName.Contains(vmK.txtKeyword) ||
+                    p.State.StateName.Contains(vmK.txtKeyword)
+                    )
+                    .OrderByDescending(d => d.OrderDate);
+
+                ViewBag.mindate = datas.IsNullOrEmpty() ? "" : datas.Min(p => p.OrderDate).ToString("yyyy-MM-dd");
+                ViewBag.maxdate = datas.IsNullOrEmpty() ? "" : datas.Max(p => p.OrderDate).ToString("yyyy-MM-dd");
+                ViewBag.key = vmK.txtKeyword;
+            }
+
             return View(datas);
         }
 
@@ -365,7 +496,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult ReportDelete(int? id)
         {
-            ReportDetail rd = _db.ReportDetails.First (p => p.ReportDetailId == id);
+            ReportDetail rd = _db.ReportDetails.First(p => p.ReportDetailId == id);
             if (rd != null)
             {
                 _db.ReportDetails.Remove(rd);
@@ -568,6 +699,7 @@ namespace MedSysProject.Controllers
             return PartialView("_CreateProductModal", productWrap);
         }
 
+
         [HttpGet]
         public IActionResult Edit(int? productId)
         {
@@ -576,7 +708,16 @@ namespace MedSysProject.Controllers
                 return NotFound();
             }
 
-            Product? product = _db.Products.Where(e => e.ProductId == productId).FirstOrDefault();
+            // 將查詢結果轉換為 List
+            List<Product> products = _db.Products.Where(e => e.ProductId == productId).ToList();
+
+            if (products.Count == 0)
+            {
+                return NotFound();
+            }
+
+            // 取第一筆資料
+            Product product = products.FirstOrDefault();
 
             if (product == null)
                 return NotFound();
@@ -596,15 +737,35 @@ namespace MedSysProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit([FromForm] CProductsWrap productId)
+        public async Task<IActionResult> Edit([FromForm] CProductsWrap model, int wrappedProductId)
         {
             try
             {
+                // 移除不需要進行模型驗證的屬性
+                ModelState.Remove("FormFiles");
+                ModelState.Remove("ImagePath");
+
+                if (!ModelState.IsValid)
+                {
+                    // 記錄或處理錯誤...
+                    // 輸出所有錯誤信息到控制台
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var errors = ModelState[key].Errors;
+                        foreach (var error in errors)
+                        {
+                            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+                        }
+                    }
+
+                    return RedirectToAction("Product");
+                }
+
                 // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
                 if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     var product = _db.Products
-                        .Where(p => p.ProductId == productId.WrappedProductId)
+                        .Where(p => p.ProductId == model.WrappedProductId)
                         .Select(p => new
                         {
                             p.ProductId,
@@ -623,66 +784,56 @@ namespace MedSysProject.Controllers
                 }
 
                 // 非 AJAX 請求，執行原有的編輯邏輯
-                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == productId.WrappedProductId);
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
 
                 if (pDb != null)
                 {
-                    // 如果原有的圖片路徑不為空，則將其轉為集合
-                    var existingImagePaths = !string.IsNullOrEmpty(pDb.FimagePath)
-                        ? pDb.FimagePath.Split(',').ToList()
-                        : new List<string>();
 
-                    // 合併新上傳的圖片路徑和現有的圖片路徑
-                    var combinedImagePaths = new List<string>();
-                    if (productId.FimagePaths != null && productId.FimagePaths.Any())
+                    pDb.FimagePath = string.Empty;
+
+                    var newImagePaths = new List<string>();
+
+
+                    if (model.FormFiles != null && model.FormFiles.Count > 0)
                     {
-                        combinedImagePaths.AddRange(productId.FimagePaths);
-                    }
-                    if (productId.FormFiles != null && productId.FormFiles.Count > 0)
-                    {
-                        foreach (var formFile in productId.FormFiles)
+                        foreach (var formFile in model.FormFiles)
                         {
-                            // 生成唯一的檔案名稱
                             string photoName = Guid.NewGuid().ToString() + ".jpg";
-
-                            // 將圖片存放在 wwwroot/img-product 資料夾中
                             string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
 
-                            // 寫入圖片檔案
                             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
                             {
                                 await formFile.CopyToAsync(fileStream);
                             }
 
-                            // 將圖片路徑保存到集合中
-                            combinedImagePaths.Add("/img-product/" + photoName);
+                            newImagePaths.Add(photoName);
                         }
                     }
 
-                    // 將新的圖片路徑和現有的圖片路徑合併，用逗號隔開
-                    pDb.FimagePath = string.Join(",", existingImagePaths.Concat(combinedImagePaths));
+
+                    pDb.FimagePath = string.Join(",", newImagePaths);
 
                     // 處理其他欄位
-                    pDb.ProductName = productId.WrappedProductName;
-                    pDb.UnitsInStock = productId.WrappedUnitsInStock;
-                    pDb.License = productId.WrappedLicense;
-                    pDb.UnitPrice = productId.WrappedUnitPrice;
-                    pDb.Ingredient = productId.WrappedIngredient;
-                    pDb.Description = productId.WrappedDescription;
-                    pDb.Discontinued = productId.WrappedDiscontinued;
+                    pDb.ProductName = model.WrappedProductName;
+                    pDb.UnitsInStock = model.WrappedUnitsInStock;
+                    pDb.License = model.WrappedLicense;
+                    pDb.UnitPrice = model.WrappedUnitPrice;
+                    pDb.Ingredient = model.WrappedIngredient;
+                    pDb.Description = model.WrappedDescription;
+                    pDb.Discontinued = model.WrappedDiscontinued;
 
                     // 處理 ProductsClassification 資料表
-                    if (productId.SelectedCategories != null && productId.SelectedCategories.Any())
+                    if (model.SelectedCategories != null && model.SelectedCategories.Any())
                     {
                         // 移除所有現有的 CategoriesId 記錄
-                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == productId.WrappedProductId));
+                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
 
                         // 新增選擇的 CategoriesId 記錄
-                        foreach (var categoryId in productId.SelectedCategories)
+                        foreach (var categoryId in model.SelectedCategories)
                         {
                             var classification = new ProductsClassification
                             {
-                                ProductId = productId.WrappedProductId,
+                                ProductId = model.WrappedProductId,
                                 CategoriesId = categoryId
                             };
 
@@ -702,21 +853,13 @@ namespace MedSysProject.Controllers
                     }
                 }
 
-                // 在這裡加上一個 return 陳述式
                 return RedirectToAction("Product");
             }
             catch (Exception ex)
-            {
-                // 處理異常，例如記錄日誌
+            {  // 處理異常，例如記錄日誌
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
-
-
-
-
-
 
 
 
