@@ -162,7 +162,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-
+        
 
         public IActionResult EmpClass()
         {
@@ -215,97 +215,6 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult BlogList(int? id, CKeywordViewModel vm)
-        {//
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
-
-            IEnumerable<CBlogModel> blogs = null;
-            if (id == null)
-            {
-                if (string.IsNullOrEmpty(vm.txtKeyword))
-                {
-                    blogs = from blog in _db.Blogs
-                            select new CBlogModel
-                            {
-                                BlogID = blog.BlogId,
-                                Title = blog.Title,
-                                ArticleClassID = blog.ArticleClassId,
-                                Category = blog.ArticleClass.BlogCategory1,
-                                Views = blog.Views,
-                                CreatedAt = blog.CreatedAt,
-                                Content = blog.Content,
-                                BlogImage = blog.BlogImage,
-                                AuthorID = blog.EmployeeId,
-                                AuthorName = blog.Employee.EmployeeName
-                            };
-                }
-                else
-                {
-                    blogs = from blog in _db.Blogs
-                            where blog.Title.Contains(vm.txtKeyword) ||
-                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
-                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword)
-                            select new CBlogModel
-                            {
-                                BlogID = blog.BlogId,
-                                Title = blog.Title,
-                                ArticleClassID = blog.ArticleClassId,
-                                Category = blog.ArticleClass.BlogCategory1,
-                                Views = blog.Views,
-                                CreatedAt = blog.CreatedAt,
-                                Content = blog.Content,
-                                BlogImage = blog.BlogImage,
-                                AuthorID = blog.EmployeeId,
-                                AuthorName = blog.Employee.EmployeeName
-                            };
-                }
-
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(vm.txtKeyword))
-                {
-                    blogs = from blog in _db.Blogs
-                            where blog.EmployeeId == id
-                            select new CBlogModel
-                            {
-                                BlogID = blog.BlogId,
-                                Title = blog.Title,
-                                ArticleClassID = blog.ArticleClassId,
-                                Category = blog.ArticleClass.BlogCategory1,
-                                Views = blog.Views,
-                                CreatedAt = blog.CreatedAt,
-                                Content = blog.Content,
-                                BlogImage = blog.BlogImage,
-                                AuthorID = blog.EmployeeId,
-                                AuthorName = blog.Employee.EmployeeName
-                            };
-                }
-                else
-                {
-                    blogs = from blog in _db.Blogs
-                            where (blog.EmployeeId == id) && (blog.Title.Contains(vm.txtKeyword) ||
-                                  blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
-                                  blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword))
-                            select new CBlogModel
-                            {
-                                BlogID = blog.BlogId,
-                                Title = blog.Title,
-                                ArticleClassID = blog.ArticleClassId,
-                                Category = blog.ArticleClass.BlogCategory1,
-                                Views = blog.Views,
-                                CreatedAt = blog.CreatedAt,
-                                Content = blog.Content,
-                                BlogImage = blog.BlogImage,
-                                AuthorID = blog.EmployeeId,
-                                AuthorName = blog.Employee.EmployeeName
-                            };
-                }
-
-            }
-            return View(blogs);
-        }
 
         public IActionResult PlanAdd()
         {
@@ -355,7 +264,7 @@ namespace MedSysProject.Controllers
             ViewBag.State = cc;
 
             //
-            
+
             IEnumerable<Order> datas = null;
 
             if (string.IsNullOrEmpty(vmK.txtKeyword))
