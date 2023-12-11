@@ -74,74 +74,109 @@ namespace MedSysProject.Controllers
         }
         public IActionResult planComeparisonTotal()
         {////方案比較總計(總項+PDF產生)
-            return View();
-        }
-
-      public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  篩對應project和item(以viewModel解決)
-            //dynamic方法================
-           
-            //var WholePlan = _context.Projects.Include(p => p.Items).Include(p => p.PlanRefs).ThenInclude(p => p.Plan);
-           
-            
-            //var ID = .Where(i => i.PlanId == id);
-            //var joins = from i in _context.Plans.Where(i => i.PlanId == id).Include(i=>i.PlanRefs.Where(i=>i.PlanId==id))
-            //                //from bg in _context.Items.Include(b=>b.Project).Where(b=>b.ProjectId==_context.Projects.)
-            //            from pj in _context.Projects.Include(i => i.PlanRefs.Where(j => j.PlanId == id))
-            //            from it in _context.Items
-            //            select new
-            //            {
-            //                i.PlanId,
-            //                i.PlanName,
-            //                i.PlanDescription,
-            //                //i.PlanRefs,
-            //                pj.ProjectId,
-            //                pj.ProjectName,
-            //                pj.ProjectPrice,
-            //                it.ItemId,
-            //                it.ItemName,
-            //            };
-            //dynamic方法================
-            //vm方法
-            List<CPlanViewModel>data= new List<CPlanViewModel>();
+            int id = 3;
+            ViewBag.Id = id;
+            List<CPlanViewModel> data = new List<CPlanViewModel>();
             var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
                        select pl;
-          
+
             foreach (Plan plans in plan)
             {
-                data.Add(new CPlanViewModel() { 
+                data.Add(new CPlanViewModel()
+                {
                     PlanName = plans.PlanName,
-                    PlanDescription=plans.PlanDescription,
+                    PlanDescription = plans.PlanDescription,
                     PlanId = plans.PlanId,
-                    
+
                 });
                 //data.Add(new CPlanViewModel() { plan=plans });
             }
-            var project=from pj in _context.PlanRefs.Where(p=>p.PlanId==id)
-                        select pj;
+            var project = from pj in _context.PlanRefs.Where(p => p.PlanId == id)
+                          select pj;
             foreach (PlanRef projects in project)
             {
                 data.Add(new CPlanViewModel()
-                {ProjectId= (int)projects.ProjectId,
-             
-                
+                {
+                    ProjectId = (int)projects.ProjectId,
+
+
                 });
-                    //data.Add(new CPlanViewModel() { planRef=projects });
-                }
-        var item=from it in _context.Items.Include(i=>i.Project).ThenInclude(i=>i.PlanRefs.Where(i=>i.PlanId==id))
-                 select it;
+                //data.Add(new CPlanViewModel() { planRef=projects });
+            }
+            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(i => i.PlanId == id))
+                       select it;
 
             foreach (Item items in item)
             {
                 data.Add(new CPlanViewModel()
-                {  ItemId= (int)items.ItemId,
-                ItemName= items.ItemName,
-                ProjectId= (int)items.ProjectId,
-                ProjectName=items.Project.ProjectName,
-                ProjectPrice=items.Project.ProjectPrice
-            });
+                {
+                    ItemId = (int)items.ItemId,
+                    ItemName = items.ItemName,
+                    ProjectId = (int)items.ProjectId,
+                    ProjectName = items.Project.ProjectName,
+                    ProjectPrice = items.Project.ProjectPrice
+                });
                 //data.Add(new CPlanViewModel() { item = items });
             }
+
+
+
+
+
+
+            return View(data);
+        }
+
+      public IActionResult PlanIntroductionProject(int? id)
+        { //放方案介紹  篩對應project和item(以viewModel解決)
+
+            //vm方法
+            List<CPlanViewModel>data= new List<CPlanViewModel>();
+            var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
+                       select pl;
+
+            foreach (Plan plans in plan)
+            {
+                data.Add(new CPlanViewModel()
+                {
+                    PlanName = plans.PlanName,
+                    PlanDescription = plans.PlanDescription,
+                    PlanId = plans.PlanId,
+
+                });
+                //data.Add(new CPlanViewModel() { plan=plans });
+            }
+            var project = from pj in _context.PlanRefs.Where(p => p.PlanId == id)
+                          select pj;
+            foreach (PlanRef projects in project)
+            {
+                data.Add(new CPlanViewModel()
+                {
+                    ProjectId = (int)projects.ProjectId,
+
+
+                });
+                //data.Add(new CPlanViewModel() { planRef=projects });
+            }
+            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(i => i.PlanId == id))
+                       select it;
+
+            foreach (Item items in item)
+            {
+                data.Add(new CPlanViewModel()
+                {
+                    ItemId = (int)items.ItemId,
+                    ItemName = items.ItemName,
+                    ProjectId = (int)items.ProjectId,
+                    ProjectName = items.Project.ProjectName,
+                    ProjectPrice = items.Project.ProjectPrice
+                });
+                //data.Add(new CPlanViewModel() { item = items });
+            }
+
+
+
+
 
 
             return View(data);
