@@ -41,7 +41,7 @@ namespace MedSysProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-       
+
         public IActionResult planComeparison()
         {////方案比較(設計filter篩選方案)
             //_context.Projects.Load();
@@ -49,24 +49,26 @@ namespace MedSysProject.Controllers
             //調整planname個數
             var projectprice = from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
                    .AsEnumerable()
-                               //from ppp in _context.Plans
+                                   //from ppp in _context.Plans
                                group p by p.Plan.PlanName into g
                                //select p;
                                select new
                                {
-                                   
-                PlanName = g.Key,                
-                PlanPrice = g.Sum(p => p.Project.ProjectPrice) };
+
+                                   PlanName = g.Key,
+                                   PlanPrice = g.Sum(p => p.Project.ProjectPrice)
+                               };
 
             var total = from p in projectprice
                         from pp in _context.Plans
-                        select new { 
-                        pp.PlanName,
-                        pp.PlanId,
-                        
-                           //p.PlanName,
-                        p.PlanPrice
-                        
+                        select new
+                        {
+                            pp.PlanName,
+                            pp.PlanId,
+
+                            //p.PlanName,
+                            p.PlanPrice
+
                         };
             return View(total.ToList());
             //return View(projectprice.ToList());
@@ -127,11 +129,11 @@ namespace MedSysProject.Controllers
             return View(data);
         }
 
-      public IActionResult PlanIntroductionProject(int? id)
+        public IActionResult PlanIntroductionProject(int? id)
         { //放方案介紹  篩對應project和item(以viewModel解決)
 
             //vm方法
-            List<CPlanViewModel>data= new List<CPlanViewModel>();
+            List<CPlanViewModel> data = new List<CPlanViewModel>();
             var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
                        select pl;
 
@@ -182,7 +184,7 @@ namespace MedSysProject.Controllers
             return View(data);
             //return View(joins.ToList());
         }
-       public IActionResult xxx()
+        public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
 
             return View(_context.Projects);
@@ -201,7 +203,7 @@ namespace MedSysProject.Controllers
 
             return PartialView(_context.Projects);
         }
-  
+
         public IActionResult partialviewItem()
         { //items區==>測試用
 
@@ -242,7 +244,7 @@ namespace MedSysProject.Controllers
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
             _context.Members.Load();
-            var j = (from s in _context.ReportDetails.Include(p=>p.Item).Include(p=>p.Report).ThenInclude(p=>p.Reserve)
+            var j = (from s in _context.ReportDetails.Include(p => p.Item).Include(p => p.Report).ThenInclude(p => p.Reserve)
                      where s.Report.MemberId == 7
                      //select s.Report.Reserve.ReserveDate).Distinct();
                      select s);
@@ -261,7 +263,7 @@ namespace MedSysProject.Controllers
             var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
 
             //List<CProjectWarp> list = new List<CProjectWarp>();
-            
+
             //foreach(var item in datass)
             //{
             //    CProjectWarp warp = new CProjectWarp();
@@ -272,7 +274,7 @@ namespace MedSysProject.Controllers
             //        var xx = items.Plan;
             //    }
             //}
-         
+
             return View(datass.ToList());
         }
 
@@ -294,7 +296,7 @@ namespace MedSysProject.Controllers
                        select s;
             return data;
 
-           
+
 
         }
 
@@ -436,11 +438,37 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public async Task<IActionResult> GetPlansAndProjects()
+        {//企業方案API
+            try
+            {
+                var plans = await _context.Plans
+                    .Select(p => new
+                    {
+                        PlanId = p.PlanId,
+                        PlanName = p.PlanName,
+                        Projects = p.PlanRefs.Select(pr => pr.Project).ToList()
+                    })
+                    .ToListAsync();
 
+                var viewModel = new
+                {
+                    Plans = plans
+                };
+
+                return Json(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching plans and projects: " + ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
 
     }
 }
+
 
 
 
