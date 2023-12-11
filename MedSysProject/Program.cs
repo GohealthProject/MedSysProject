@@ -1,5 +1,6 @@
 using MedSysProject.Models;
 using Microsoft.EntityFrameworkCore;
+using SignalRChat.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
 
@@ -34,6 +35,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
+app.MapHub<ChatHub>("/chatHub");
 
 
 
