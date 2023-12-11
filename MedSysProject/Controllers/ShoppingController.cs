@@ -150,6 +150,7 @@ namespace MedSysProject.Controllers
             foreach (var id in pid)
             {
                 var q = _db.Products.Find(Int32.Parse(id));
+                q.UnitsInStock -= int.Parse(qta[count]);
                 OrderDetail od = new OrderDetail();
                 od.ProductId = Int32.Parse(id);
                 od.Quantity = int.Parse(qta[count]);
@@ -160,6 +161,8 @@ namespace MedSysProject.Controllers
             }
             _db.SaveChanges();
             
+            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
             return RedirectToAction("index");
         }
         public IActionResult KeySearch(string Key)
