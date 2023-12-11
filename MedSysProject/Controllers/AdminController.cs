@@ -312,9 +312,10 @@ namespace MedSysProject.Controllers
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
-            var q = from p in _db.Plans
-                    select p;
+            var qq = _db.Projects.ToList();
+            var q = _db.Plans;
 
+            ViewBag.Project = qq;
 
             return View(q);
         }
