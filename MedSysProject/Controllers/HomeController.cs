@@ -235,7 +235,7 @@ namespace MedSysProject.Controllers
 
             //             select s).Distinct();
 
-            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
+            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p => p.Project).ThenInclude(p => p.Items)
 
             //             select s).Distinct();
 

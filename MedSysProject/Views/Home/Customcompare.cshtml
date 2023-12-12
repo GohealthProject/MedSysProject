@@ -314,12 +314,14 @@
             let img = document.querySelectorAll(".imgdelete");
             var dtr = document.querySelectorAll("#dtr");
             let iid = event.target.parentNode.querySelector(".iid");
+           
             console.log(event.target.this);
             //var t = dtr.removeChild(event.target.parentNode);
             var del =list.removeChild(event.target.parentNode.parentNode);
+            var tar = event.target.nextSibling;
             //console.log(t.innerHTML)
             var index = items.indexOf(event.target)
-            console.log(event.target)
+            console.log(tar)
             items.splice()(index,1)
             console.log(index);
             console.log(items);
@@ -345,6 +347,7 @@
                                     </td>
                                     <td>
                                        <img src="/img/icon/x.png" onclick="imgdelete()"/>
+                                       <p id="${iid.innerHTML}">${iid.innerHTML}</p>
                                     </td>
                      </tr>
             `;

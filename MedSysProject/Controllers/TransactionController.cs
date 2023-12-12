@@ -1,5 +1,6 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -29,15 +30,19 @@ namespace MedSysProject.Controllers
             return Json(rp2json);
 
         }
-
-        public IActionResult reserve(Reserve rs)
+        [HttpPost]
+        public IActionResult reserve()
         {
+            var form = Request.Form;
+            
+            var rs2 = form["reserve"];
 
-            _context.Add(rs);
-            _context.SaveChanges();
+            Reserve rsggg = JsonSerializer.Deserialize<Reserve>(rs2);
+            //_context.Add(rsggg);
+            //_context.SaveChanges();
             return Content("rsyes");
         }
-
+        [HttpPost]
         public IActionResult reservesub(ReservedSub rsb)
         {
 
@@ -45,6 +50,7 @@ namespace MedSysProject.Controllers
             _context.SaveChanges();
             return Content("rsbyes");
         }
+        [HttpPost]
         public IActionResult healthreport(HealthReport hrp)
         {
             //var items = Request.Form;
@@ -62,11 +68,11 @@ namespace MedSysProject.Controllers
             //    r.Item = item;
             //}
 
-            //_context.Add(hrp);
-            //_context.SaveChanges();
+            _context.Add(hrp);
+            _context.SaveChanges();
             return Content("hrpyes");
         }
-
+        [HttpPost]
         public IActionResult reportdetail(ReportDetail rdl)
         {
             _context.Add(rdl);
