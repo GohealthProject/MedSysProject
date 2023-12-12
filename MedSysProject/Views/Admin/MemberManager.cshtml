@@ -369,6 +369,10 @@
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    document.querySelector("#back").addEventListener("click", () => {
+        window.location.href = "/Admin/MemberManager";
+    });
+
     const id = document.getElementById("Memid");
     function get(element) {
         let par = element.parentNode.parentNode;
@@ -388,28 +392,37 @@
 
     //修改資料
     async function putdata2() {
-        let id = document.getElementById("inputId").value;
-        console.log(id)
-        let apiurl = `https://localhost:7078/api/Members/Up/${id}`;
-        var myForm = document.getElementById("myUpdataform");
-        var data = new FormData(myForm);
-        const response = await fetch(apiurl, {
-            method: 'PUT',
-            body: data
-        });
-        const status = await response.status;
-        if (response.ok) {
-            $('#modalEdit').modal('hide');
-
-            Swal.fire({
-                title: "修改成功!",
-                text: state,
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
+        try {
+            let id = document.getElementById("inputId").value;
+            console.log(id)
+            let apiurl = `https://localhost:7078/api/Members/Up/${id}`;
+            var myForm = document.getElementById("myUpdataform");
+            var data = new FormData(myForm);
+            const response = await fetch(apiurl, {
+                method: 'PUT',
+                body: data
             });
+            const status = await response.status;
+            if (response.ok) {
+                $('#modalEdit').modal('hide');
 
-            research();
+                Swal.fire({
+                    title: "修改成功!",
+                    text: status,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                research();
+            }
+        } catch {
+            const status = await response.status;
+            Swal.fire({
+                title: "有錯誤發生!",
+                text: status,
+                icon: "error",
+            });
         }
     }
 

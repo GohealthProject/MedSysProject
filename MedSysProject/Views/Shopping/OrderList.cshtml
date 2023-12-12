@@ -5,6 +5,7 @@
     ViewData["Title"] = "OrderList";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
     int count = Model.Count();
+    string json = JsonSerializer.Serialize(Model);
 }
 
 

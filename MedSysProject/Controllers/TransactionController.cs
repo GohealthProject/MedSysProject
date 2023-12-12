@@ -1,5 +1,6 @@
 ﻿using MedSysProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,6 +29,55 @@ namespace MedSysProject.Controllers
                      
             return Json(rp2json);
 
+        }
+        [HttpPost]
+        public IActionResult reserve()
+        {
+            var form = Request.Form;
+            
+            var rs2 = form["reserve"];
+
+            Reserve rsggg = JsonSerializer.Deserialize<Reserve>(rs2);
+            //_context.Add(rsggg);
+            //_context.SaveChanges();
+            return Content("rsyes");
+        }
+        [HttpPost]
+        public IActionResult reservesub(ReservedSub rsb)
+        {
+
+            _context.Add(rsb);
+            _context.SaveChanges();
+            return Content("rsbyes");
+        }
+        [HttpPost]
+        public IActionResult healthreport(HealthReport hrp)
+        {
+            //var items = Request.Form;
+
+            //List<int> itemlist = items["itemID"];
+
+            //var q = _context.Items.Where(n => itemlist.Contains(n.ItemId));
+
+            //var re = _context.Reserves.OrderByDescending(n => n.ReserveId).FirstOrDefault().ReserveId;
+
+            //foreach(var item in q)
+            //{
+            //    ReservedSub r = new ReservedSub();
+            //    r.Reserved = re;
+            //    r.Item = item;
+            //}
+
+            _context.Add(hrp);
+            _context.SaveChanges();
+            return Content("hrpyes");
+        }
+        [HttpPost]
+        public IActionResult reportdetail(ReportDetail rdl)
+        {
+            _context.Add(rdl);
+            _context.SaveChanges();
+            return Content("rdlyes");
         }
 
         public IActionResult payment()

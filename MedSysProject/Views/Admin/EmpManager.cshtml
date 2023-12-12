@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "EmpManager";
     Layout = "_Layout_Admin2";
+    
 }
 
 @* 這邊是確保左側邊欄的目前區域標亮 *@
@@ -34,47 +35,49 @@
                 @{
                     if (ViewBag.page == null)
                     {
-                      
+
                     }
 
                     else
-{
-                    int previous = ViewBag.page - 1;
-                    int next = ViewBag.page + 1;
-                    int current = ViewBag.page;
-                    if (ViewBag.page == 1){
-                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
-                    }
-                    else{
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
-                    }
-                    
-                    for (int i = 1; i <= ViewBag.maxpage; i++)
                     {
-                        if (i == ViewBag.page)
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        if (ViewBag.page == 1)
                         {
-                            <li class="page-item active"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
                         }
-                    }
 
-                    if (ViewBag.page == ViewBag.maxpage)
-                    {
+                        for (int i = 1; i <= ViewBag.maxpage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.maxpage)
+                        {
                             <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
-                    }
-                    else
-                    {
+                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                        }
+                        else
+                        {
                             <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
                             <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
-                    }
+                        }
 
-                }
+                    }
                 }
             </ul>
         </nav>
@@ -111,6 +114,7 @@
                                             <option value="1">醫生</option>
                                             <option value="2">護理師</option>
                                             <option value="3">行政人員</option>
+                                            <option value="19">系統管理員</option>
                                         </select>
                                         <div class="invalid-feedback">請選擇類別</div>
                                     </div>
@@ -213,6 +217,7 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeClass.Class)
+                                <input type="hidden" id="hiddenclassid" value="@item.EmployeeClassId" />
                             </td>
                             @{
                                 string date = item.EmployeeBirthDate.ToString().Split(" ")[0];
@@ -329,6 +334,7 @@
                                             <option value="1">醫生</option>
                                             <option value="2">護理師</option>
                                             <option value="3">行政人員</option>
+                                            <option value="19">系統管理員</option>
                                         </select>
                                         <span class="text-danger"></span>
                                     </div>
@@ -384,6 +390,10 @@
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
+    document.querySelector("#back").addEventListener("click", () => {
+        window.location.href = "/Admin/EmpManager";
+    });
+
     const delbtn = document.querySelector("#btnDDD")
     const id = document.querySelector("Empid");
     function get(element) {
@@ -459,38 +469,39 @@
     }
     //把資料印到彈出來的視窗
     function showTogget(element) {
-        let par = element.closest("tr");
-        let tds = par.getElementsByTagName("td");
-        let tdName = tds[3].innerHTML;
-        let tdClas = tds[4].innerHTML;
+        let par = element.parentNode.parentNode;
+        var hidd = par.querySelector('input[type="hidden"]');
+        console.log("主ID是"+hidd.value);
+        var name = par.querySelector('td:nth-child(3)');
+        var classid = par.querySelector('#hiddenclassid');
+        console.log("類別ID是" + classid.value);
 
-        let tddateA = tds[5].innerHTML; //這裡要把2000/01/01轉成2000-01-01
-        let tddateB = tddateA.replace('/', '-');
-        let tddateC = tddateB.replace('/', '-');
-        var tddateD = new Date(tddateC.trim());
-        var year = tddateD.getFullYear();
-        // getMonth() 返回的月份是從 0 開始的，所以需要加 1
-        var month = (tddateD.getMonth() + 1).toString().padStart(2, '0');
-        var day = tddateD.getDate().toString().padStart(2, '0');
-        var tddate = `${year}-${month}-${day}`;
 
-        let tdphone = tds[6].innerHTML;
-        let tdemail = tds[7].innerHTML;
-        let tdpwd = tds[8].innerHTML;
-        let tdid = tds[0].querySelector('input[type="hidden"]').value;
-        let tdph = tds[9].innerHTML;
-        console.log(tdid);
-        document.querySelector("#inputName").value = tdName.trim();
-        document.querySelector("#inputClass").value = tdClas.trim();
-        console.log(tdClas.trim());
-        document.querySelector("#inputDate").value = tddate.trim();
-        console.log(tddate.trim());
-        document.querySelector("#inputPhone").value = tdphone.trim();
-        document.querySelector("#inputEmail").value = tdemail.trim();
-        document.querySelector("#inputPwd").value = tdpwd.trim();
-        document.querySelector("#inputId").value = tdid.trim();
-        //  FormData data = new FormData(document.querySelector("#form"));
-        // console.log(data);
+        var dateA = par.querySelector('td:nth-child(5)');
+        var dateB = dateA.textContent.trim();
+        console.log(dateB);
+        //yyyy/mm/dd 轉成 yyyy-mm-dd 並且個位數的月份和日期補0
+        var dateC = dateB.replace(/\//g, "-");
+        var dateD = dateC.split("-");
+        var date = dateD[0] + "-" + dateD[1].padStart(2, "0") + "-" + dateD[2].padStart(2, "0");
+        console.log(date);
+
+
+
+
+        var phone = par.querySelector('td:nth-child(6)');
+        var email = par.querySelector('td:nth-child(7)');
+        var pwd = par.querySelector('td:nth-child(8)');
+        var img = par.querySelector('img');
+        console.log(hidd.value);
+        document.querySelector("#inputId").value = hidd.value.trim();
+        document.querySelector("#inputName").value = name.textContent.trim();
+        document.querySelector("#inputClass").value = classid.value;
+        document.querySelector("#inputDate").value = date;
+        document.querySelector("#inputPhone").value = phone.textContent.trim();
+        document.querySelector("#inputEmail").value = email.textContent.trim();
+        document.querySelector("#inputPwd").value = pwd.textContent.trim();
+        document.querySelector("#formFile").src = img.src;
 
     }
     async function research() {
@@ -534,45 +545,45 @@
             };
             let s =
                 `
-                                                                                     <tr>
-                                                                                        <td>
-                                                                                             <input type="hidden" value=${id}>
-                                                                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                                                        </td>
-                                                                                        <td>
-                                                                                              ${count}
-                                                                                         </td>
-                                                                                         <td>
-                                                                                                 <img src="${imgurl}" width="100">
-                                                                                          </td>
-                                                                                          <td>
-                                                                                               ${name}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                               ${cid}
-                                                                                          </td>
-                                                                                          <td>
-                                                                                                           ${valuedate}
-                                                                                           </td>
-                                                                                           <td>
-                                                                                                ${phone}
-                                                                                           </td>
-                                                                                           <td>
-                                                                                                ${email}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${pwd}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                     <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                                                                 <i class="fas fa-user-edit"></i>
-                                                                                                 </a>
-                                                                                                 <a class="btn btn-danger" onclick="get(this)">
-                                                                                                 <i class="fas fa-user-times"></i>
-                                                                                                 </a>
-                                                                                              </td>
-                                                                                        </tr>
-                                                                                    `
+                                                                                                             <tr>
+                                                                                                                <td>
+                                                                                                                     <input type="hidden" value=${id}>
+                                                                                                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                      ${count}
+                                                                                                                 </td>
+                                                                                                                 <td>
+                                                                                                                         <img src="${imgurl}" width="100">
+                                                                                                                  </td>
+                                                                                                                  <td>
+                                                                                                                       ${name}
+                                                                                                                  </td>
+                                                                                                                  <td>
+                                                                                                                       ${cid}
+                                                                                                                  </td>
+                                                                                                                  <td>
+                                                                                                                                   ${valuedate}
+                                                                                                                   </td>
+                                                                                                                   <td>
+                                                                                                                        ${phone}
+                                                                                                                   </td>
+                                                                                                                   <td>
+                                                                                                                        ${email}
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        ${pwd}
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                             <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                         <i class="fas fa-user-edit"></i>
+                                                                                                                         </a>
+                                                                                                                         <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                         <i class="fas fa-user-times"></i>
+                                                                                                                         </a>
+                                                                                                                      </td>
+                                                                                                                </tr>
+                                                                                                            `
             count++;
             console.log(count);
             return s

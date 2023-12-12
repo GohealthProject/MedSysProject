@@ -13,7 +13,7 @@ public partial class Reserve
 
     public int? PlanId { get; set; }
 
-    public DateTime? ReserveDate { get; set; }
+    public string ReserveDate { get; set; }
 
     public string ReserveState { get; set; }
 

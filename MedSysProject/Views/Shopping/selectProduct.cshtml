@@ -4,6 +4,7 @@
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
     string s = Model.UnitPrice.ToString();
+    
 }
 <section class="breadcrumbs">
     <div class="container">
@@ -77,29 +78,26 @@
                         </select>
                         <input type="hidden" value="@Model.ProductId" name="id" />
                             @{
-                                if(Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK] == null)
+                                if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                                 {
                                     <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
-                                    string json = Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
-                                    List<CProductWarp> list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
-                                    foreach (var item in list)
-                                    {
-                                        if (Model.ProductId == item.ProductId)
-                                        {
-                                            <img src="~/img/heart.png" id="ProductTracking" />
-                                        }
-                                        else
-                                        {
-                                            <img src="~/img/Noheart.png" id="ProductTracking" />
-                                        }
-                                    }
+                                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
+                                var q = Model.Product.TrackingLists.Where(n => n.ProductId == Model.ProductId && n.MemberId == member.MemberId);
+                                if (!q.Any())
+                                {
+                                    <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
-
+                                else
+                                {
+                                    <img src="~/img/heart.png" id="ProductTracking" />
+                                }
+                                }
                                 
-                            }
+                            }                 
                         <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
                         </form>
                     </p>
@@ -110,6 +108,55 @@
 
     </div>
 </section><!-- End Portfolio Details Section -->
+<div class="container">
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Accordion Item #1
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <p>This is the first item's accordion body.</p> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Accordion Item #2
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Accordion Item #3
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+      </div>
+    </div>
+  </div>
+        <div class="input-group input-group-lg">
+            @{
+                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
+                <span class="input-group-text" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@member.MemberImage" style="height:40px;height:40px;"/></span>
+            }
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"placeholder="輸入留言">
+        </div>
+</div>
+</div>
+
 @section Scripts{
     <script>
         const item = document.querySelector("#datas");
@@ -140,13 +187,23 @@
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
+                if(data === "請先登入"){
+                    alert(data);
+                    return;
+                }
                 event.target.src= "/img/heart.png";
+                alert(data);
             } else if(imgName === "heart.png") {
                 let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
+                if(data === "請先登入"){
+                    alert(data);
+                    return;
+                }
                 event.target.src = "/img/Noheart.png";
+                alert(data);
             }
         }
         function changeImg(imgElement) {

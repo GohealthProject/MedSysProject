@@ -77,24 +77,24 @@
 }
 <div class="col-2 title">
     <select class="form-select" aria-label="Default select example" id="import">
-        <option selected>選擇健檢報告</option>
+        <option selected>選擇健檢報告0</option>
 
         @{
 
 
-            foreach (var item in Model)
-            {
-                rd.Add(item.Report.Reserve.ReserveDate.Value.ToShortDateString() +"--"+ item.Report.ReportId);
+             foreach (var item in Model)
+             {
+                 rd.Add(item.Report.Reserve.ReserveDate+"="+ item.Report.ReportId);
                
 
 
 
-            }
+             }
             
         foreach (var s in rd.Distinct())
             {
                 <option value="1">@s</option>
-                string[] cc =s.Split("-");
+                string[] cc =s.Split("=");
                 sArray = cc;
             }
 
@@ -148,7 +148,7 @@
                                 {
                                     <option value="1">
 
-                                        @s.Split("-")[0]
+                                        @s.Split("=")[0]
                                         
                                        
                                     </option>
@@ -171,7 +171,7 @@
                                 {
                                     <option value="1">
 
-                                        @s.Split("-")[0]
+                                        @s.Split("=")[0]
 
 
                                     </option>
@@ -197,9 +197,9 @@
 
                                 foreach (var s in rd.Distinct())
                                 {
-                                    <option value="@s.Split("-")[2]">
+                                    <option value="@s.Split("=")[1]">
 
-                                        @s.Split("-")[2]
+                                        @s.Split("=")[1]
                                     </option>
 
                                 }
@@ -216,9 +216,9 @@
 
                                 foreach (var s in rd.Distinct())
                                 {
-                                    <option value="@s.Split("-")[2]">
+                                    <option value="@s.Split("=")[1]">
 
-                                        @s.Split("-")[2]
+                                        @s.Split("=")[1]
                                     </option>
 
                                 }
@@ -634,7 +634,7 @@
         
         @{
             var report = from s in Model
-                         where s.Report.Reserve.ReserveDate.Value.ToShortDateString() == "2023/10/10" &&
+                         where s.Report.Reserve.ReserveDate == "2023-10-10" &&
                          s.Report.ReportId == 30
                          select s;
         }

@@ -33,6 +33,10 @@ public partial class Member
 
     public string MemberImage { get; set; }
 
+    public bool IsVerified { get; set; }
+
+    public string VieifiedId { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new List<HealthReport>();
@@ -42,4 +46,6 @@ public partial class Member
     public virtual ICollection<Reserve> Reserves { get; set; } = new List<Reserve>();
 
     public virtual Corporation Tax { get; set; }
+
+    public virtual ICollection<TrackingList> TrackingLists { get; set; } = new List<TrackingList>();
 }

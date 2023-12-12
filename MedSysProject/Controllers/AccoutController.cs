@@ -43,9 +43,11 @@ namespace MedSysProject.Controllers
                 return View("Login");
 
             var q = _db.Members.FirstOrDefault(n => n.MemberEmail == c.txtEmail);
+            MemberWarp m = new MemberWarp();
+            m.member = q;
             if (q != null)
             {
-                if (q.MemberPassword == c.txtPassWord)
+                if (m.member.MemberPassword == c.txtPassWord)
                 {
                     string json = JsonSerializer.Serialize(q);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);

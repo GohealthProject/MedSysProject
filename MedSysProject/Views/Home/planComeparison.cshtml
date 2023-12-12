@@ -130,12 +130,18 @@
                                 <div>
                                     <div class="col-md-12 col-xs-3">
                                         <div class="config-one-item animated animation fadeInDown">
-                                            <a href="~/Home/planComeparisonTotal">
+                                            <div >
+                                                <a id="link">
+                                                
                                                 <i class="fa fa-desktop lblue"></i>
                                                 <h2 id ="count">0</h2>
-                                                <h4 class="br-lblue" >目前方案個數</h4>
-                                                <input  type="button" id="sendit"/>
+                                                <h4 class="br-lblue" >
+                                                    目前方案個數
+                                                    
+                                                </h4>
+                                                
                                             </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -168,7 +174,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{
                                                                     @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
                                     </div>
@@ -187,7 +193,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{
                                                                     @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
@@ -231,9 +237,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                                                    @plan.PlanId
-} " value="加入方案比較">加入方案比較</a>
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@plan.PlanId" value="加入方案比較">加入方案比較</a>
 
                                     </div>
                                 </div>
@@ -251,7 +255,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{
                                                                     @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
@@ -275,7 +279,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{
                                                                     @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
@@ -295,7 +299,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{
                                                                     @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
@@ -320,8 +324,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                                                    @plan.PlanId
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -340,7 +343,7 @@
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{@plan.PlanId}" value="加入方案比較">加入方案比較</a>
+                                        <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId}" value="">加入方案比較</a>
 
                                     </div>
                                 </div>
@@ -372,7 +375,7 @@
           var planidList="";
         const Check = document.querySelectorAll(".chbox");
         const pushcount = document.querySelector("#count");
-          const btnSend = document.querySelector("#sendit");
+          
           Check.forEach((item)=>{
               if ( item.checked==true){
                   planidList += item.value;
@@ -386,14 +389,15 @@
             btn.addEventListener("change",(event)=>{
                 console.log(event.target.id);
                 if(event.target.checked==true){
+                    console.log(event.target.id)
                     count ++;
-                    planidList += event.target.id;
+                    planidList += event.target.id+",";
                 }
                 if(event.target.checked==false){
                     count--;
                     var temporary = ""; var emp = "";
                     temporary = planidList;
-                    planidList=temporary.replace(event.target.id, emp);
+                    planidList=temporary.replace(event.target.id);
                 }
                 pushcount.innerText= count;
             })
@@ -404,7 +408,11 @@
                 console.log(Check);
             }
         })
-      
+        document.querySelector("#link").addEventListener("click",()=>{
+
+            window.location.href = `/Home/planComeparisonTotal?planlist=${planidList}`
+        })
+
 
   </script>
   

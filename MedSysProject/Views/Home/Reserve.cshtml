@@ -116,7 +116,7 @@
 <body>
 
 
-   
+  
    
    
     <div class="container-fluid">
@@ -281,9 +281,58 @@
        
 
 </div>
-  
+    @{
+        //reserve//
+        Reserve rs = new Reserve();
+        rs.MemberId = 9;
+        rs.PlanId = 6;
+        rs.ReserveDate = DateTime.Now.ToShortDateString();
+        rs.ReserveState = "預約中中";
+        string jsonreserve = System.Text.Json.JsonSerializer.Serialize(rs);
+
+        //reservedsub//
+        List<ReservedSub> listrss = new List<ReservedSub>();
+
+        for (int i =0; i<99; i++)
+        {
+
+            ReservedSub rss = new ReservedSub();
+            //serch rss.ReservedId
+            rss.ItemId = 6;////todo
+            listrss.Add(rss);
+
+        }
+        string jsonreservedsub = System.Text.Json.JsonSerializer.Serialize(listrss);
+
+        //healthreport
+        HealthReport hrp = new HealthReport();
+        hrp.MemberId = 9;
+        hrp.ReportDate = null;
+        hrp.PlanId = 6;
+        //serch ReserveId 
+        hrp.Paymentstatus = 0;
+        string jsonhealthreport = System.Text.Json.JsonSerializer.Serialize(hrp);
+
+        //reportdetail//
+        List<ReportDetail> listrpd = new List<ReportDetail>();
+
+        for (int i = 0; i < 99; i++)
+        {
+            ReportDetail rpd = new ReportDetail();
+            //serch ReportId
+            rpd.ItemId = 6;////todo
+            rpd.Result = null;
+            listrpd.Add(rpd);
+        }
+        string jsonreportdetail = System.Text.Json.JsonSerializer.Serialize(listrpd);
+       
+    }
     <form id="form" method="post">
             <input type="text" value="@ViewBag.item" id="forminput" name="item">
+            <input type="text" value="@jsonreserve" id="ttt" name="reserve">
+            <input type="text" value="@jsonreservedsub" id="ttt" name="reservesub">
+        <input type="text" value="@jsonhealthreport" id="ttt" name="healthreport">
+        <input type="text" value="@jsonreportdetail" id="ttt" name="reportdetail">
     </form>
  
 </body>
@@ -300,16 +349,205 @@
   ////reservesubmit////
     var rsvsbm = document.querySelector("#reservesubmit")
     rsvsbm.addEventListener("click",()=>{
-        alert("fku")
+        
+
     @{
-        //////todo////////
-        ///array[].add(item)or form///
-        ///send to api///
-        ///api add///
+     
+
+        //[reportdetail]
+        // reportID new
+        //itemID
+        //result null?
+
+        // [healthreport]
+        //memberID
+        //reportdate?
+        //planID
+        //reserveID new
+        //payment
+
+        //[reserve]
+        //mID
+        //pID
+        //Reservestatus new
+        //reservedate new
+
+        //[reservesub]
+        //reserveID new
+        //itemID
     }
+   
+         var t3 = document.querySelector("#ttt")
+     
+        console.log(t3)
+        console.log(t3.value)
+        gg(t3);
+
+    //    fetch('@Url.Content("~/Transaction/reserve")', {
+    //        method: "POST",
+    //        body: t3.value,
+    //    })
+    //        .then((response) => {
+    //            if (response.ok) {
+    //                alert("新增成功");
+    //                //location.href = '@Url.Content("~/home/members")';
+    //            }
+    //        })
+    //        .catch((error) => console.error("Error:", error))
+    //        .then((response) => console.log("Success:", response));
     })
 
+    async function gg(event) {
+        //todo input>form
+        let input = document.querySelector("#form");
+        let form = new FormData(input);
 
+
+        let url = `/Transaction/reserve`;
+        const response = await fetch(url, {
+            body: form,
+            method: "POST",
+
+        });
+        const data = await response.text();
+        console.log(`data${data}`);
+
+    }
+
+    function TTT() {
+        var formData = new FormData();
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        //reserve
+        formData.append("MemberId", @ViewBag.mid);
+        formData.append("PlanId", @ViewBag.pid);
+        formData.append("ReserveDate", now)
+        formData.append("ReserveState", "預約中");
+        //reservesub
+        formData.append("ReservedID", 2);//serch
+        formData.append("ItemID", 6);
+        //healthreport
+        //formData.append("MemberId", 2);
+        formData.append("ReportDate", 6); 
+        //formData.append("PlanID", now)
+        //formData.append("ReserveID", "預約中");
+        formData.append("Paymentstatus", "預約中");
+        //reportdetail
+        formData.append("ReportID", 2);//serch
+        //formData.append("itemID", 6);
+        formData.append("result", now)
+
+        fetch('@Url.Content("~/Transaction/reservesub")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function reserve() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("MemberId", 2);
+        formData.append("PlanId", 6);
+        formData.append("ReserveDate", now)
+        formData.append("ReserveState", "預約中");
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/reserve")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+  
+
+    function reservesub() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+       
+        formData.append("ReservedID", 2);
+        formData.append("ItemID", 6);
+       
+        fetch('@Url.Content("~/Transaction/reservesub")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function healthreport() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("MemberId", 2);
+        formData.append("ReportDate", 6);
+        formData.append("PlanID", now)
+        formData.append("ReserveID", "預約中");
+        formData.append("Paymentstatus", "預約中");
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/healthreport")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function reportdetail() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("ReportID", 2);
+        formData.append("itemID", 6);
+        formData.append("result", now)
+       
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/healthreport")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
 
     //total sum////
     

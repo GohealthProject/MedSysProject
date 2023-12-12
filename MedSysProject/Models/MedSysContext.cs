@@ -51,6 +51,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductReview> ProductReviews { get; set; }
+
     public virtual DbSet<ProductsCategory> ProductsCategories { get; set; }
 
     public virtual DbSet<ProductsClassification> ProductsClassifications { get; set; }
@@ -59,13 +61,13 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<ReportDetail> ReportDetails { get; set; }
 
-    public virtual DbSet<ReportTest> ReportTests { get; set; }
-
     public virtual DbSet<Reserve> Reserves { get; set; }
 
     public virtual DbSet<ReservedSub> ReservedSubs { get; set; }
 
     public virtual DbSet<SubProjectBridge> SubProjectBridges { get; set; }
+
+    public virtual DbSet<TrackingList> TrackingLists { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -297,6 +299,7 @@ public partial class MedSysContext : DbContext
             entity.HasKey(e => e.MemberId).HasName("PK_Member");
 
             entity.Property(e => e.MemberId).HasColumnName("memberId");
+            entity.Property(e => e.IsVerified).HasColumnName("isVerified");
             entity.Property(e => e.MemberAccount)
                 .HasMaxLength(50)
                 .HasColumnName("memberAccount");
@@ -338,6 +341,7 @@ public partial class MedSysContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("memberPhone");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
+            entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
 
             entity.HasOne(d => d.Tax).WithMany(p => p.Members)
                 .HasForeignKey(d => d.TaxId)
@@ -473,7 +477,21 @@ public partial class MedSysContext : DbContext
         {
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.FimagePath).HasColumnName("FImagePath");
+            entity.Property(e => e.Likecount).HasColumnName("likecount");
             entity.Property(e => e.UnitPrice).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<ProductReview>(entity =>
+        {
+            entity.ToTable("ProductReview");
+
+            entity.Property(e => e.ProductReviewId).HasColumnName("ProductReviewID");
+            entity.Property(e => e.IsLike).HasColumnName("isLIke");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("date")
+                .HasColumnName("timestamp");
         });
 
         modelBuilder.Entity<ProductsCategory>(entity =>
@@ -541,29 +559,6 @@ public partial class MedSysContext : DbContext
                 .HasConstraintName("FK_ReportDetail_HealthReport");
         });
 
-        modelBuilder.Entity<ReportTest>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("ReportTest");
-
-            entity.Property(e => e.ItemId).HasColumnName("itemID");
-            entity.Property(e => e.ReportDetailId).HasColumnName("ReportDetailID");
-            entity.Property(e => e.ReportId).HasColumnName("ReportID");
-            entity.Property(e => e.Result)
-                .HasColumnType("text")
-                .HasColumnName("result");
-
-            entity.HasOne(d => d.Item).WithMany()
-                .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK_ReportTest_Item");
-
-            entity.HasOne(d => d.Report).WithMany()
-                .HasForeignKey(d => d.ReportId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ReportTest_HealthReport");
-        });
-
         modelBuilder.Entity<Reserve>(entity =>
         {
             entity.ToTable("Reserve");
@@ -571,7 +566,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.ReserveId).HasColumnName("ReserveID");
             entity.Property(e => e.MemberId).HasColumnName("memberID");
             entity.Property(e => e.PlanId).HasColumnName("planID");
-            entity.Property(e => e.ReserveDate).HasColumnType("date");
+            entity.Property(e => e.ReserveDate).HasMaxLength(50);
             entity.Property(e => e.ReserveState).HasMaxLength(50);
 
             entity.HasOne(d => d.Member).WithMany(p => p.Reserves)
@@ -619,6 +614,23 @@ public partial class MedSysContext : DbContext
             entity.HasOne(d => d.Project).WithMany(p => p.SubProjectBridges)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_subProjectBridges_subproject");
+        });
+
+        modelBuilder.Entity<TrackingList>(entity =>
+        {
+            entity.ToTable("TrackingList");
+
+            entity.Property(e => e.TrackingListId).HasColumnName("TrackingListID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.TrackingLists)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_TrackingList_Members");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TrackingLists)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_TrackingList_Products");
         });
 
         OnModelCreatingPartial(modelBuilder);

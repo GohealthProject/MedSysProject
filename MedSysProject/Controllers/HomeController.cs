@@ -74,15 +74,28 @@ namespace MedSysProject.Controllers
             //return View(projectprice.ToList());
             //return View(_context.Plans);
         }
-        public IActionResult planComeparisonTotal()
-        {////方案比較總計(總項+PDF產生)
-            int id = 3;
-            ViewBag.Id = id;
-            List<CPlanViewModel> data = new List<CPlanViewModel>();
-            var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
-                       select pl;
 
-            foreach (Plan plans in plan)
+        
+        [HttpGet]
+        public IActionResult planComeparisonTotal(string planlist)
+        {////方案比較總計(總項+PDF產生)
+            //int id = 3;
+            List<int> list = new List<int>();
+
+            foreach(var item2 in planlist.Split(','))
+            {
+                if(item2!="")
+                    list.Add(Int32.Parse(item2));
+
+            }
+            //ViewBag.Id = id;
+            var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
+            List<CPlanViewModel> data = new List<CPlanViewModel>();
+            List<CPlanViewModel> test = new List<CPlanViewModel>();
+            //var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
+            //           select pl;
+
+            foreach (Plan plans in plan2)
             {
                 data.Add(new CPlanViewModel()
                 {
@@ -91,36 +104,40 @@ namespace MedSysProject.Controllers
                     PlanId = plans.PlanId,
 
                 });
-                //data.Add(new CPlanViewModel() { plan=plans });
+                
             }
-            var project = from pj in _context.PlanRefs.Where(p => p.PlanId == id)
+            var project = from pj in _context.PlanRefs.Include(p=>p.Project).Where(n => list.Contains(n.PlanId))
                           select pj;
             foreach (PlanRef projects in project)
             {
                 data.Add(new CPlanViewModel()
                 {
                     ProjectId = (int)projects.ProjectId,
-
+                    ProjectName = projects.Project.ProjectName,
+                    ProjectPrice = projects.Project.ProjectPrice,
 
                 });
-                //data.Add(new CPlanViewModel() { planRef=projects });
+              
             }
-            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(i => i.PlanId == id))
+           
+            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
                        select it;
+           
+            
 
             foreach (Item items in item)
             {
                 data.Add(new CPlanViewModel()
                 {
+                    
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                    ProjectId = (int)items.ProjectId,
-                    ProjectName = items.Project.ProjectName,
-                    ProjectPrice = items.Project.ProjectPrice
+                   
+                  
                 });
-                //data.Add(new CPlanViewModel() { item = items });
+                
             }
-
+          
 
 
 
@@ -169,7 +186,7 @@ namespace MedSysProject.Controllers
                 {
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                    ProjectId = (int)items.ProjectId,
+                    //ProjectId = (int)items.ProjectId,
                     ProjectName = items.Project.ProjectName,
                     ProjectPrice = items.Project.ProjectPrice
                 });
@@ -223,11 +240,13 @@ namespace MedSysProject.Controllers
 
             //             select s).Distinct();
 
-            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p=>p.Project).ThenInclude(p=>p.Items)
+            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p => p.Project).ThenInclude(p => p.Items)
 
             //             select s).Distinct();
 
             ViewBag.item = item["item"];
+            ViewBag.mid = item["Mid"];
+            ViewBag.pid = item["Pid"];
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
