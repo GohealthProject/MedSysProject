@@ -76,30 +76,11 @@
                                 }
                         </select>
                         <input type="hidden" value="@Model.ProductId" name="id" />
-                            @{
-                                if(Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK] == null)
-                                {
-                                    <img src="~/img/Noheart.png" id="ProductTracking" />
-                                }
-                                else
-                                {
-                                    string json = Context.Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
-                                    List<CProductWarp> list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
-                                    foreach (var item in list)
-                                    {
-                                        if (Model.ProductId == item.ProductId)
-                                        {
-                                            <img src="~/img/heart.png" id="ProductTracking" />
-                                        }
-                                        else
-                                        {
-                                            <img src="~/img/Noheart.png" id="ProductTracking" />
-                                        }
-                                    }
-                                }
 
-                                
-                            }
+                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+
+
+                             
                         <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
                         </form>
                     </p>
