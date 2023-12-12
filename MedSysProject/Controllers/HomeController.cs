@@ -91,6 +91,7 @@ namespace MedSysProject.Controllers
             //ViewBag.Id = id;
             var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
             List<CPlanViewModel> data = new List<CPlanViewModel>();
+            List<CPlanViewModel> test = new List<CPlanViewModel>();
             //var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
             //           select pl;
 
@@ -103,36 +104,40 @@ namespace MedSysProject.Controllers
                     PlanId = plans.PlanId,
 
                 });
-                //data.Add(new CPlanViewModel() { plan=plans });
+                
             }
-            var project = from pj in _context.PlanRefs.Where(n => list.Contains(n.PlanId))
+            var project = from pj in _context.PlanRefs.Include(p=>p.Project).Where(n => list.Contains(n.PlanId))
                           select pj;
             foreach (PlanRef projects in project)
             {
                 data.Add(new CPlanViewModel()
                 {
                     ProjectId = (int)projects.ProjectId,
-                    
+                    ProjectName = projects.Project.ProjectName,
+                    ProjectPrice = projects.Project.ProjectPrice,
 
                 });
-                //data.Add(new CPlanViewModel() { planRef=projects });
+              
             }
+           
             var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
                        select it;
+           
+            
 
             foreach (Item items in item)
             {
                 data.Add(new CPlanViewModel()
                 {
+                    
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                    //ProjectId = (int)items.ProjectId,
-                    ProjectName = items.Project.ProjectName,
-                    ProjectPrice = items.Project.ProjectPrice
+                   
+                  
                 });
-                //data.Add(new CPlanViewModel() { item = items });
+                
             }
-
+          
 
 
 
