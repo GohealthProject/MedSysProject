@@ -11,9 +11,11 @@ public partial class ProductReview
 
     public int? MemberId { get; set; }
 
-    public int? Product { get; set; }
+    public int? ProductId { get; set; }
 
     public string ReviewContent { get; set; }
 
     public DateTime? Timestamp { get; set; }
+
+    public bool? IsLike { get; set; }
 }

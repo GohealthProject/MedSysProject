@@ -46,4 +46,6 @@ public partial class Member
     public virtual ICollection<Reserve> Reserves { get; set; } = new List<Reserve>();
 
     public virtual Corporation Tax { get; set; }
+
+    public virtual ICollection<TrackingList> TrackingLists { get; set; } = new List<TrackingList>();
 }

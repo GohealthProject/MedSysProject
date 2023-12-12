@@ -10,6 +10,7 @@ namespace MedSysProject.Models
         private Member _member;
         public Member member { get { return this._member; } set {this. _member = value; } }
         public int MemberId { get { return this._member.MemberId; } set {this.member.MemberId=value; } }
+        public bool  IsVerified { get { return this._member.IsVerified; } set { this.member.IsVerified = value; } }
         [DisplayName("會員姓名")]
         public string? MemberName { get { return this._member.MemberName; } set { this.member.MemberName = value; } }
         [DisplayName("會員性別")]
