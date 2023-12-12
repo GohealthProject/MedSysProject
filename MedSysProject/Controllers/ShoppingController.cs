@@ -71,7 +71,7 @@ namespace MedSysProject.Controllers
         public IActionResult selectProduct(int id)
         {
             
-            var product = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
+            var product = _db.Products.Include(n=>n.TrackingLists).Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
             
             if (product == null)
                 return RedirectToAction("index");
@@ -375,33 +375,29 @@ namespace MedSysProject.Controllers
         
         public IActionResult ProductTracking(int Pid,string heart)
         {
-            var q = _db.Products.Find(Pid);
-            List<CProductWarp>? list;
-            string json = "";
-                if (HttpContext.Request.Cookies.ContainsKey(CDictionary.SK_PRODUCT_TRACK))
-                {
-                    json = Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
-                    list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
-                }
-                else
-                list = new List<CProductWarp>();
-                
-            if (heart == "heart.png")
+            var q = _db.Products.Find(Pid); 
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
             {
-                return Content("刪除追蹤清單");
+                return Ok("請先登入");
+            }
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            List<CProductWarp>? list;
+
+            if (heart == "Noheart.png")
+            {
+                TrackingList tl = new TrackingList();
+                tl.MemberId = m.MemberId;
+                tl.ProductId= Pid; 
+                _db.TrackingLists.Add(tl);
+                _db.SaveChanges();
+                return Ok("加入追蹤清單成功");
             }
             else
             {
-                CProductWarp cp = new CProductWarp();
-                cp.Product = q;
-                cp.Path = q.FimagePath.Split(",");
-                list.Add(cp);
-                var cookieoption = new Microsoft.AspNetCore.Http.CookieOptions();
-                cookieoption.Expires = System.DateTime.Now.AddDays(7);
-                cookieoption.Path = "/";
-                json = JsonSerializer.Serialize(list);
-                Response.Cookies.Append(CDictionary.SK_PRODUCT_TRACK, json,cookieoption);
-                return Ok("加入追蹤清單成功");
+                _db.TrackingLists.Remove(_db.TrackingLists.FirstOrDefault(n => n.MemberId == m.MemberId && n.ProductId == Pid));
+                _db.SaveChanges();
+                return Ok("移除追蹤清單成功");
             }
         }
     }
