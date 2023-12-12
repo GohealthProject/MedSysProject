@@ -373,19 +373,19 @@ namespace MedSysProject.Controllers
             }
         }
         
-        public IActionResult ProductTracking(int Pid,string heart)
-        {
-            var q = _db.Products.Find(Pid); 
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
-            List<CProductWarp>? list;
+        //public IActionResult ProductTracking(int Pid,string heart)
+        //{
+        //    var q = _db.Products.Find(Pid); 
+        //    string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+        //    MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+        //    List<CProductWarp>? list;
 
-            if (heart == "Noheart.png")
-            {
-                ProductTracking pt = new ProductTracking();
-            }
+        //    if (heart == "Noheart.png")
+        //    {
+        //        ProductTracking pt = new ProductTracking();
+        //    }
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }
