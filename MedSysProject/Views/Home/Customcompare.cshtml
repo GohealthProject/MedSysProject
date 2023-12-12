@@ -218,6 +218,8 @@
 
             <form id="form" method="post" action="~/Home/Reserve">
             <input type="text" value="" id="forminput" name="item">
+            <input type="text" value="" id="Mid" name="Mid">
+            <input type="text" value="" id="Pid" name="Pid">
             <button id="formbtn" type="submit">btn</button>
             </form>
         </div>
@@ -257,7 +259,7 @@
                     </tr>
               </thead>
                 <tbody id="ilist">
-                  <tr>
+               @*   <tr>
                       <td>
                           A
                       </td>
@@ -268,9 +270,9 @@
                         150
                     </td>
                         <td><img src="~/img/icon/x.png" /></td>
-                  </tr>
+                  </tr>*@
                  
-                    <tr>
+                   @* <tr>
                         <td>
                             A
                         </td>
@@ -282,7 +284,7 @@
                     </td>
                         <td><img src="~/img/icon/x.png" /></td>
                         
-                    </tr>
+                    </tr>*@
        
               </tbody>
             </table>
@@ -294,6 +296,7 @@
 
 @section Scripts{
     <script>
+        const items = [];
         //todo 選後enable
         let btn = document.querySelectorAll(".ibtn");
         let list = document.querySelector("#ilist");
@@ -310,14 +313,21 @@
         function imgdelete() {
             let img = document.querySelectorAll(".imgdelete");
             var dtr = document.querySelectorAll("#dtr");
+            let iid = event.target.parentNode.querySelector(".iid");
             console.log(event.target.this);
             //var t = dtr.removeChild(event.target.parentNode);
             var del =list.removeChild(event.target.parentNode.parentNode);
             //console.log(t.innerHTML)
+            var index = items.indexOf(event.target)
+            console.log(event.target)
+            items.splice()(index,1)
+            console.log(index);
+            console.log(items);
         }
         function itemadd (event){
             console.log(event.target);
             console.log()
+            
             let iid = event.target.parentNode.querySelector(".iid");
             let iprice = event.target.parentNode.querySelector(".iprice");
             //let iid = event.target.parentNode.querySelector(".iid");
@@ -339,7 +349,10 @@
                      </tr>
             `;
             list.innerHTML +=show;
-            console.log(iid.innerHTML);
+            
+
+            items.push(iid.innerHTML)
+            console.log(items);
         }
 
         function submit()
@@ -347,8 +360,13 @@
             var total = document.querySelector("#ilist");
             var form = document.querySelector("#form");
             var forminput = document.querySelector("#forminput");
+            var Mid = document.querySelector("#Mid");
+            var Pid = document.querySelector("#Pid");
             var sumbit = document.querySelector("#submit")
             forminput.value= total.innerHTML;
+            
+            Mid.value = 7;//
+            Pid.value = 6;
             console.log(form.value)
             console.log(total.innerHTML)
             form.submit();

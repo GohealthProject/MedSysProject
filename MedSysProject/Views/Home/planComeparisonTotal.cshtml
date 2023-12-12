@@ -261,7 +261,7 @@
                     <th>
                     @foreach(var name in Model)
                     {
-                        if (name.PlanId == ViewBag.Id)
+                        if (name.PlanId !=0)
                             {
                                 <i class="bi bi-flower1" style="color:goldenrod">
                             @Html.DisplayFor(p=>name.PlanName)</i>

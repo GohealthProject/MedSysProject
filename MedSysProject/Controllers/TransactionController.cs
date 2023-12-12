@@ -30,6 +30,50 @@ namespace MedSysProject.Controllers
 
         }
 
+        public IActionResult reserve(Reserve rs)
+        {
+
+            _context.Add(rs);
+            _context.SaveChanges();
+            return Content("rsyes");
+        }
+
+        public IActionResult reservesub(ReservedSub rsb)
+        {
+
+            _context.Add(rsb);
+            _context.SaveChanges();
+            return Content("rsbyes");
+        }
+        public IActionResult healthreport(HealthReport hrp)
+        {
+            //var items = Request.Form;
+
+            //List<int> itemlist = items["itemID"];
+
+            //var q = _context.Items.Where(n => itemlist.Contains(n.ItemId));
+
+            //var re = _context.Reserves.OrderByDescending(n => n.ReserveId).FirstOrDefault().ReserveId;
+
+            //foreach(var item in q)
+            //{
+            //    ReservedSub r = new ReservedSub();
+            //    r.Reserved = re;
+            //    r.Item = item;
+            //}
+
+            //_context.Add(hrp);
+            //_context.SaveChanges();
+            return Content("hrpyes");
+        }
+
+        public IActionResult reportdetail(ReportDetail rdl)
+        {
+            _context.Add(rdl);
+            _context.SaveChanges();
+            return Content("rdlyes");
+        }
+
         public IActionResult payment()
         {
             //step1 : 網頁導入傳值到前端
