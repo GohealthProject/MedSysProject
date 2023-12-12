@@ -70,6 +70,7 @@ namespace MedSysProject.Controllers
         }
         public IActionResult selectProduct(int id)
         {
+            
             var product = _db.Products.Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
             
             if (product == null)
@@ -151,6 +152,10 @@ namespace MedSysProject.Controllers
         }
         public IActionResult CartList()
         {
+            if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
+            {
+                return RedirectToAction("Login", "Accout");
+            }
             if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) == null)
             {
                 return RedirectToAction("Index");
