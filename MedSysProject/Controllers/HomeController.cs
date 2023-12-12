@@ -122,7 +122,7 @@ namespace MedSysProject.Controllers
            
             var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
                        select it;
-            
+           
             
 
             foreach (Item items in item)
