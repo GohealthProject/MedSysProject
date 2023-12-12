@@ -4,6 +4,7 @@
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
     string s = Model.UnitPrice.ToString();
+    
 }
 <section class="breadcrumbs">
     <div class="container">
@@ -145,6 +146,14 @@
       </div>
     </div>
   </div>
+        <div class="input-group input-group-lg">
+            @{
+                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
+                <span class="input-group-text" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@member.MemberImage" style="height:40px;height:40px;"/></span>
+            }
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"placeholder="輸入留言">
+        </div>
 </div>
 </div>
 
