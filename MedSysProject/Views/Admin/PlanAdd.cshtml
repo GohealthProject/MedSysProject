@@ -204,6 +204,9 @@
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
+    document.querySelector("#back").addEventListener("click", () => {
+        window.location.href = "/Admin/PlanAdd";
+    });
 
     document.querySelector("#Cbtn").addEventListener("click", () => {
         console.log("hello")
