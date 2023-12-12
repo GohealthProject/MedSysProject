@@ -297,6 +297,7 @@ public partial class MedSysContext : DbContext
             entity.HasKey(e => e.MemberId).HasName("PK_Member");
 
             entity.Property(e => e.MemberId).HasColumnName("memberId");
+            entity.Property(e => e.IsVerified).HasColumnName("isVerified");
             entity.Property(e => e.MemberAccount)
                 .HasMaxLength(50)
                 .HasColumnName("memberAccount");
@@ -338,6 +339,7 @@ public partial class MedSysContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("memberPhone");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
+            entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
 
             entity.HasOne(d => d.Tax).WithMany(p => p.Members)
                 .HasForeignKey(d => d.TaxId)
@@ -571,7 +573,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.ReserveId).HasColumnName("ReserveID");
             entity.Property(e => e.MemberId).HasColumnName("memberID");
             entity.Property(e => e.PlanId).HasColumnName("planID");
-            entity.Property(e => e.ReserveDate).HasColumnType("date");
+            entity.Property(e => e.ReserveDate).HasMaxLength(50);
             entity.Property(e => e.ReserveState).HasMaxLength(50);
 
             entity.HasOne(d => d.Member).WithMany(p => p.Reserves)
