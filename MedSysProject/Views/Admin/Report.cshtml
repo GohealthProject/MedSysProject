@@ -29,6 +29,62 @@
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+
+                    }
+
+                    else
+                    {
+                        string PPath = "~/Admin/Report?page=";
+
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        int Home = 1;
+                        int Total = ViewBag.TotalPage;
+                        if (ViewBag.page == 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+
+                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.TotalPage)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+
+                    }
+                }
+            </ul>
+        </nav>
+
 <table class="table">
     <thead>
         <tr>
@@ -85,6 +141,62 @@
    
 
 </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm">
+                @{
+                    if (ViewBag.page == null)
+                    {
+
+                    }
+
+                    else
+                    {
+                        string PPath = "~/Admin/Report?page=";
+
+                        int previous = ViewBag.page - 1;
+                        int next = ViewBag.page + 1;
+                        int current = ViewBag.page;
+                        int Home = 1;
+                        int Total = ViewBag.TotalPage;
+                        if (ViewBag.page == 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                        }
+
+                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        {
+                            if (i == ViewBag.page)
+                            {
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                            }
+                        }
+
+                        if (ViewBag.page == ViewBag.TotalPage)
+                        {
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                        }
+
+                    }
+                }
+            </ul>
+        </nav>
         @*互動式選單修*@
         <div class="modal fade" tabindex="-1" id="edit">
             <div class="modal-dialog modal-dialog-centered">
