@@ -37,10 +37,28 @@ namespace MedSysProject.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return View();
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
 
-            return RedirectToAction("Login");
+            List<int> allcounts = new List<int>();
+
+            //Blogs Count Member Count Order Count Report Count
+            var members = _db.Members.Count();
+            ViewBag.MemberCount = members;
+
+            var reports = _db.ReportDetails.Count();
+            ViewBag.ReportCount = reports;
+
+            var orders = _db.Orders.Count();
+            ViewBag.OrderCount = orders;
+
+            var blogs = _db.Blogs.Count();
+            ViewBag.BlogCount = blogs;
+
+            var products = _db.Products.Count();
+            ViewBag.ProductCount = products;
+
+            return View();
         }
 
         public IActionResult Login()
@@ -162,7 +180,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        
+
 
         public IActionResult EmpClass()
         {
@@ -216,17 +234,25 @@ namespace MedSysProject.Controllers
 
 
 
-        public IActionResult PlanAdd()
+        public IActionResult PlanAdd(CKeywordViewModel vm)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
+            IEnumerable<Plan> datas = null;
             var qq = _db.Projects.ToList();
-            var q = _db.Plans;
-
             ViewBag.Project = qq;
 
-            return View(q);
+            if (string.IsNullOrEmpty(vm.txtKeyword))
+            {
+                datas = _db.Plans;
+            }
+            else
+            {
+                datas = _db.Plans.Where(p => p.PlanName.Contains(vm.txtKeyword));
+            }
+
+            return View(datas);
         }
 
         public IActionResult Order(int page = 1)
@@ -382,7 +408,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report(CKeywordViewModel vm)
+        public IActionResult Report(CKeywordViewModel vm,int page=1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
@@ -391,13 +417,22 @@ namespace MedSysProject.Controllers
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
             if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails.Include(p => p.Item)
-                        orderby s.ReportId
-                        select s;
+            {
+                int pagesize = 10;
+                int total = _db.ReportDetails.Count();
+                int maxpage = (total % pagesize == 0 ? total / pagesize : total / pagesize + 1);
+                datas = _db.ReportDetails.Include(p => p.Item).OrderByDescending(p => p.ReportId).Skip((page - 1) * pagesize).Take(pagesize);
+                ViewBag.page = page; //目前頁數
+                ViewBag.TotalPage = maxpage; //總頁數
+                ViewBag.total = total; //資料總筆數
+                ViewBag.pagesize = pagesize; //每頁顯示幾筆資料
+            }
 
             else
+            {
                 datas = _db.ReportDetails.Where(p =>
                 p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            }
             return View(datas);
 
 
