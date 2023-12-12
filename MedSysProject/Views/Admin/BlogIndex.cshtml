@@ -56,7 +56,7 @@
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="previewImage" style="margin-bottom:20px;">
-                                            <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:500px; max-height:250px;">
+                                            <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
                                         </div>
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -159,13 +159,12 @@
                                     @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
                                     @if (item.EmployeeId == empID)
                                     {
-                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-toggle="modal" data-target="#modalEdit">
+                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
+                                        <button asp-action="Delete" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
                                             <i class="fas fa-trash"></i>
                                         </button>
-
                                     }
                                 </td>
                             </tr>
@@ -181,11 +180,11 @@
 @* ---修改彈窗開始--- *@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <!--Header-->
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">修改部落格</h4>
+                <h4 class="modal-title" id="myModalLabel">修改文章</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -194,37 +193,53 @@
             <div class="modal-body">
 
                 @*部落格修改窗口*@
-
-                @*<hr />*@
-                <div class="row">
-                    <div class="col-md-4">
-                        <form asp-action="Edit" enctype="multipart/form-data">
+                <form id="myCreatedataform" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="hideId">
+                                <input id="idEdit" />
+                            </div>
+                            <div class="previewImage" style="margin-bottom:20px;">
+                                <img id="imagePreviewEdit" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                            </div>
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div>
-                                <input type="hidden" name="FId" value="">
+
+                            <div class="form-group" style="margin-bottom:20px;">
+                                <label for="titleInput" class="control-label">文章標題:</label>
+                                <input id="titleEdit" class="form-control" name="Title" required />
+
                             </div>
 
-                            <div class="form-group">
-                                <label>文章標題</label>
-                                <input type="text">
+                            <div style="margin-bottom:20px;">
+                                <label for="articleClass" class="control-label">文章類別:</label>
+                                <select id="classEdit" class="form-control" name="ArticleClassId" required>
+                                    <option value="1">活動快訊</option>
+                                    <option value="2">醫療新知</option>
+                                    <option value="3">名人分享會</option>
+                                    <option value="4">媒體報導</option>
+                                    <option value="5">企業責任</option>
+                                </select>
                             </div>
-                            <div class="form-group">
-                                <label>文章類別</label>
-                                <input type="text">
-                            </div>
-                            <div class="form-group">
-                                <label>文章內容</label>
-                                <textarea id="myTextarea" name="content"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <input type="file" name="photo" />
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="修改並送出" class="btn btn-primary" />
-                            </div>
-                        </form>
 
+                            <div class="form-group" style="margin-bottom:20px;">
+                                <label for="mytextarea" class="control-label">文章內容:</label>
+                                <textarea id="mytextareaEdit" class="form-control" name="Content"></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom:20px;">
+                                <label for="mainPhoto" class="control-label">選擇主題相片:</label>
+                                <input id="mainPhotoEdit" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImageForEdit(event)" />
+                            </div>
+                            <div class="form-group">
+                                <input id="authorEdit" class="form-control" value="@empID" type="hidden" name="EmployeeId" />
+
+                            </div>
+                        </div>
                     </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" onclick="sureEditPost()" id="Ebtn">確定修改</button>
+                    <button class="btn btn-dark" id="demoPostEdit">DEMO</button>
                 </div>
             </div>
         </div>
@@ -232,17 +247,86 @@
 </div>
 
 <script>
-    // function newPostt() {
-    //     var myform = document.querySelector('#myCreatedataform');
-    //     var data = new FormData(myform);
-    //     //確認資料有沒有傳進來
-    //     for (var value of data.values()) {
-    //         console.log(value);
-    //     }
+    //修改文章相關
+    //(1)讓資料可以顯示在修改彈窗上
+    function updateThisPost(editButton) {
+        var blogId = editButton.getAttribute('data-blog-id');
+        console.log(blogId);//可以取到blogId
+        fetch(`https://localhost:7078/api/Blogs/${blogId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.querySelector('#idEdit').value = data.blogId;
+                document.querySelector('#titleEdit').value = data.title;
+                document.querySelector('#classEdit').value = data.articleClassId;
+                tinymce.get('mytextareaEdit').setContent(data.content);
+                //document.querySelector('#mainPhoto').value = data.blogImage;
+                console.log(`取出來的圖片${typeof data.blogImage}`);//型別是string
+                console.log(data.blogImage);
+                //如果data.BlogImage是null，#imagePreviewEdit Display:none
+                if (data.blogImage == null) {
+                    document.querySelector('#imagePreviewEdit').style.display = 'none';
+                }
+                else {
+                    var binary = atob(data.blogImage);
+                    var byteArray = new Uint8Array(binary.length);
+                    for (var i = 0; i < binary.length; i++) {
+                        byteArray[i] = binary.charCodeAt(i);
+                    }
+                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    var imageUrl = URL.createObjectURL(blob);
+                    document.querySelector('#imagePreviewEdit').src = imageUrl;
+                    document.querySelector('#imagePreviewEdit').style.display = 'block';
+                }
+            }).catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+    //(2)確認修改後執行
+    async function sureEditPost() {
+        var blogId = document.querySelector('#idEdit').value;
+        var editTitle = document.querySelector('#titleEdit').value;
+        var editClass = document.querySelector('#classEdit').value;
+        var editContent = tinymce.get('mytextareaEdit').getContent();
+        var editPhoto = document.querySelector('#mainPhotoEdit').files[0];
+        var author = document.querySelector('#authorEdit').value;
 
-    //     var contenttt = tinymce.get('mytextarea').getContent();
-    //     console.log(contenttt);
-    // }
+        var afterEdit = new FormData();
+        afterEdit.append('Title', editTitle);
+        afterEdit.append('ArticleClassId', editClass);
+        afterEdit.append('Content', editContent);
+        afterEdit.append('EmployeeId', author);
+        if (editPhoto) {
+            afterEdit.append('BlogImage', editPhoto);
+        }
+        try {
+            const response = await fetch(`https://localhost:7078/api/Blogs/${blogId}`, {
+                method: 'PUT',
+                body: afterEdit
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            console.log("修改成功!");
+            $('#modalEdit').modal('hide');
+            Swal.fire({
+                title: "修改成功!",
+                text: "Post updated successfully",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            research();
+        } catch (error) {
+            console.error('發生錯誤:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+
+    }
 
 
     async function newPost() {
@@ -283,6 +367,7 @@
 
     }
 
+    //刪除文章相關
     function selectPost(element) {
         let grandpa = element.parentNode.parentNode;
         var hideId = grandpa.querySelector('input[type="hidden"]').value;
@@ -330,7 +415,7 @@
         await new Promise(resolve => setTimeout(resolve, 1600));
         window.location.reload();
     }
-
+    //預覽圖片
     function previewImage(event) {
         const input = event.target;
         if (input.files && input.files[0]) {
@@ -343,4 +428,18 @@
             reader.readAsDataURL(input.files[0]);
         }
     };
+    //修改彈窗預覽圖片
+    function previewImageForEdit(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader(); // 創建FileReader物件
+            reader.onload = function (e) { // 正確拼寫onload
+                const imagePreview = document.getElementById('imagePreviewEdit');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
 </script>

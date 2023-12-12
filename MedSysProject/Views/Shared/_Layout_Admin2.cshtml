@@ -37,6 +37,23 @@
 
         tinymce.init({
             selector: '#mytextarea',
+            height:1000,
+            width:1107,
+            plugins: 'advlist link image lists',
+            toolbar: 'undo redo| image',
+            image_caption: true,
+            images_upload_handler: function (blobInfo, success, failure) { //todo需要理解一下在幹嘛
+                return new Promise(function (resolve, reject) {
+                    handleImageUpload(blobInfo.blob(), resolve, reject);
+                });
+            }
+
+        });
+        //修改文章modal的文字編輯器
+        tinymce.init({
+            selector: '#mytextareaEdit',
+            height: 1000,
+            width: 1107,
             plugins: 'advlist link image lists',
             toolbar: 'undo redo| image',
             image_caption: true,
