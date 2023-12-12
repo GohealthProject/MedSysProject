@@ -370,12 +370,12 @@ namespace MedSysProject.Controllers
         
         public IActionResult ProductTracking(int Pid,string heart)
         {
-                var q = _db.Products.Find(Pid);
+            var q = _db.Products.Find(Pid);
             List<CProductWarp>? list;
             string json = "";
                 if (HttpContext.Request.Cookies.ContainsKey(CDictionary.SK_PRODUCT_TRACK))
                 {
-                    json = HttpContext.Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
+                    json = Request.Cookies[CDictionary.SK_PRODUCT_TRACK];
                     list = JsonSerializer.Deserialize<List<CProductWarp>>(json);
                 }
                 else
@@ -391,18 +391,13 @@ namespace MedSysProject.Controllers
                 cp.Product = q;
                 cp.Path = q.FimagePath.Split(",");
                 list.Add(cp);
-                
+                var cookieoption = new Microsoft.AspNetCore.Http.CookieOptions();
+                cookieoption.Expires = System.DateTime.Now.AddDays(7);
+                cookieoption.Path = "/";
                 json = JsonSerializer.Serialize(list);
-                HttpContext.Response.Cookies.Append(CDictionary.SK_PRODUCT_TRACK, json);
-
-
-                
-                return Content("加入追蹤清單成功");
+                Response.Cookies.Append(CDictionary.SK_PRODUCT_TRACK, json,cookieoption);
+                return Ok("加入追蹤清單成功");
             }
-
-                
-            
-          
         }
     }
 }
