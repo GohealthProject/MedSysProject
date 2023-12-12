@@ -4,43 +4,45 @@
 }
 @model List<MedSysProject.ViewModels.CPlanViewModel>
 <head>
-    <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
-    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
+   @*  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script> *@
     @*test區*@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> *@
     
     <style>
-        .text-custom-truncate {
+       /*  .text-custom-truncate {
             display: -webkit-box !important;
             max-width: 230px;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden
         }
-
+ */
         .table thead tr th {
-            background-color: white ;
+           /*  background-color: white ; */
             z-index: 10;
             color: #705972;
         }
 
         .table tbody tr th {
-            background-color: #5b5d23;
+          /*   background-color: #5b5d23; */
             color: #a7a5e4;
             z-index: 10
         }
 
         
-        body {
+     /*    body {
             margin: 0;
             padding: 2rem
         }
@@ -60,7 +62,7 @@
 
         .table-responsive {
             overflow-x: inherit !important
-        }
+        } */
 
     </style>
 
@@ -95,166 +97,12 @@
        
     </div>
    
-    @*移動區*@
-    <div class="container-fluid">
-        <div class="table-responsive">
-            <table class="table" id="table" data-show-print="true"
-                   data-url="json/data1.json" >
-                
-                @*欄位區*@
-                @foreach(var table in Model){
-                <thead>
-                    <tr class="simple-head">
-                        <th width="20%">
-                            <div class="bg-white h-100 w-100">
-                            </div>
-                        </th>
-                        <th width="20%">
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <img src="~/img/PersonalPlan/heart.jpg" width="50">
-                                    <span class="d-block text-custom-truncate ml-1">
-                                            @if (table.PlanName!=null)
-                                            {
-                                                @Html.DisplayFor(t=>table.PlanName)
-                                                
-                                              break;}
-                                        </span>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">NT$34450</h6>
-                                    <button class="btn btn-sm btn-primary"><a asp-action="Customcompare" asp-controller="Home">確認方案與加選</a></button>
-                                </div>
-                            </div>
-                        </th>
-                                             
-                                            
-                        <th width="20%">
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <img src="~/img/PersonalPlan/liver.jpg" width="50">
-                                    <span class="d-block text-custom-truncate ml-1">
-                                            @if (table.PlanName != null)
-                                            {
-                                                @Html.DisplayFor(t=>table.PlanName)
-                                                continue;
-                                            }
-                                        </span>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">NT$244500</h6>
-                                    <button class="btn btn-sm btn-primary">確認方案選擇</button>
-                                </div>
-                            </div>
-                        </th>
-                        <th width="20%">
-                            <div class="mb-2">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <img src="~/img/PersonalPlan/uterus.jpg" width="50">
-                                    <span class="d-block text-custom-truncate ml-1">
-                                            @if (table.PlanName != null)
-                                            {
-                                                @Html.DisplayFor(t=>table.PlanName)
-                                                continue;
-                                            }
-                                    </span>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="mb-0">NT$25550</h6>
-                                    <button class="btn btn-sm btn-primary">確認方案選擇</button>
-                                </div>
-                            </div>
-                        </th>
-                   
-                    </tr>
-                </thead>
-                }
-                @*欄位區*@
-                @*內容細項區*@
-                <tbody id="myTable">
-                    <tr>
-                      
-                                 <th scope="row">一般生理檢查 
-                            <br><br />
-                                </th>
-                            
-                          <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                         
-                       
-                    </tr>
-                    <tr>
-                        <th scope="row">尿液一般檢查
-                            <br>(尿液外觀、尿比重、尿液酸鹼度、尿膽素原、尿蛋白、尿糖、酮尿、膽紅素、尿潛血、尿液白血球、亞硝酸鹽、尿沉渣)<br />
-                                                  </th>
-                        <td class="base-item"><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                        <td><i class="bi bi-check-circle-fill" style="color:#b28c8e"></i></td>
-                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
-                        <td><i class="bi bi-ban-fill" style="color:#bf3d6a"></i></td>
-                    </tr>
-                   
-                    
-                
-                    <tr>
-                        <th scope="row">女性內分泌檢查</th>
-                        <td class="base-item">女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>                        
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">男性內分泌檢查</th>
-                        <td class="base-item">男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                    </tr>
-                    <tr>
-                        <th>女性癌症檢查</th>
-                        <td class="base-item">女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">男性癌症檢查</th>
-                        <td class="base-item">男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                    </tr>
-                   
-                   
-                    <tr>
-                        <th scope="row">女性超音波檢查</th>
-                        <td class="base-item">女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                        <td>女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">男性超音波檢查</th>
-                        <td class="base-item">男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                        <td>男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></td>
-                    </tr>
-                    
-                </tbody>
-                @*內容細項區*@
-            </table>
-        </div>
-    </div>
+    
 
 
     @*移動區*@
     <div class="container-fluid navbar-nav-scroll">
-        <table class="table table-striped " id="table">
+        <table class="table table-striped  table-bordered" id="dt-basic-checkbox" cellspacing="0" width="100%">
 
             <thead>
                 <tr>
@@ -276,14 +124,20 @@
                 </tr>
             </thead>
             <tbody id="myTable">
-                @foreach (var plan in Model)
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                </tr>
+              @*   @foreach (var plan in Model)
                 {
                     <tr>
                         @if (plan.ProjectName != null)
-                        {    <th></th>
-                            <th>
+                        {    <td></td>
+                            <td>
                                 @Html.DisplayFor(p=>plan.ProjectName)
-                            </th>
+                            </td>
                             <td>
                                 @Html.DisplayFor(p=>plan.ProjectPrice)
                             </td>
@@ -301,7 +155,7 @@
                         }
                     </tr>
                         
-                        }
+                        } *@
             </tbody>
             <tfoot></tfoot>
         </table>
@@ -314,6 +168,7 @@
 </div>
 @section Scripts{
     <script>
+        let table=new DataTable('#dt-basic-checkbox');
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -324,7 +179,7 @@
         });
     //---------------------------------------------test
         $(document).ready(function () {
-            var table = $('#table').DataTable({
+            var table = $('#dt-basic-checkbox').DataTable({
                 lengthChange: false,
                 buttons: ['copy', 'excel', 'pdf', 'colvis']
             });
@@ -332,7 +187,19 @@
             table.buttons().container()
                 .appendTo('#table_wrapper .col-md-6:eq(0)');
         });
+        //-----------------------------------------------------
+        $('#dt-basic-checkbox').DataTable({
 
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            }
+        });
 
 
     </script>

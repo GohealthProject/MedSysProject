@@ -122,8 +122,22 @@ namespace MedSysProject.Controllers
            
             var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
                        select it;
-           
-            
+
+            //var itemsss = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items));
+            //    foreach (var p in itemsss) {
+            //    test.Add(new CPlanViewModel()
+            //    {
+            //        PlanDescription = (string)p.Project.PlanRefs.SelectMany(p=>p.Plan.PlanDescription),
+            //        PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
+            //        PlanId = 4,
+            //        ProjectId = (int)p.ProjectId,
+            //        ProjectName =(string) p.Project.ProjectName,
+            //        //ProjectPrice = p.PlanRefs.SelectMany(pp => pp.Project.ProjectPrice),
+            //       ItemId=p.ItemId,
+            //        //ItemName = p.PlanRefs.SelectMany(pp => pp.Project.Items.SelectMany(ppp => ppp.ItemName)),
+
+            //    });
+            //}
 
             foreach (Item items in item)
             {
