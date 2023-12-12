@@ -116,7 +116,7 @@
 <body>
 
 
-   
+  
    
    
     <div class="container-fluid">
@@ -301,15 +301,203 @@
     var rsvsbm = document.querySelector("#reservesubmit")
     rsvsbm.addEventListener("click",()=>{
         alert("fku")
+        reserve();
+        
     @{
         //////todo////////
         ///array[].add(item)or form///
         ///send to api///
         ///api add///
+        ///
+     
+
+    }
+
+   
+
+
+    @{
+        //////todo////////
+        ///array[].add(item)or form///
+        ///send to api///
+        ///api add///
+
+        
+        //Reserve rs = new Reserve();
+        //rs.MemberId = 2;
+        //rs.PlanId = 6;
+        //rs.ReserveDate = DateTime.Now;
+        //rs.ReserveState = "預約中";
+
+      
+       
+       
+
+
+        //////todo////////
+        ///array[].add(item)or form///
+        ///send to api///
+        ///api add///
+        ///
+
+        //[reportdetail]
+        // reportID new
+        //itemID
+        //result null?
+
+        // [healthreport]
+        //memberID
+        //reportdate?
+        //planID
+        //reserveID new
+        //payment
+
+        //[reserve]
+        //mID
+        //pID
+        //Reservestatus new
+        //reservedate new
+
+        //[reservesub]
+        //reserveID new
+        //itemID
     }
     })
 
+    function TTT() {
+        var formData = new FormData();
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        //reserve
+        formData.append("MemberId", @ViewBag.mid);
+        formData.append("PlanId", @ViewBag.pid);
+        formData.append("ReserveDate", now)
+        formData.append("ReserveState", "預約中");
+        //reservesub
+        formData.append("ReservedID", 2);//serch
+        formData.append("ItemID", 6);
+        //healthreport
+        //formData.append("MemberId", 2);
+        formData.append("ReportDate", 6); 
+        //formData.append("PlanID", now)
+        //formData.append("ReserveID", "預約中");
+        formData.append("Paymentstatus", "預約中");
+        //reportdetail
+        formData.append("ReportID", 2);//serch
+        //formData.append("itemID", 6);
+        formData.append("result", now)
 
+        fetch('@Url.Content("~/Transaction/reservesub")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function reserve() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("MemberId", 2);
+        formData.append("PlanId", 6);
+        formData.append("ReserveDate", now)
+        formData.append("ReserveState", "預約中");
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/reserve")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+  
+
+    function reservesub() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+       
+        formData.append("ReservedID", 2);
+        formData.append("ItemID", 6);
+       
+        fetch('@Url.Content("~/Transaction/reservesub")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function healthreport() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("MemberId", 2);
+        formData.append("ReportDate", 6);
+        formData.append("PlanID", now)
+        formData.append("ReserveID", "預約中");
+        formData.append("Paymentstatus", "預約中");
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/healthreport")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
+
+    function reportdetail() {
+        var formData = new FormData();
+        //var fileField = document.querySelector("input[type='file']");
+        var date = new Date()
+        var now = date.toLocaleDateString()
+        formData.append("ReportID", 2);
+        formData.append("itemID", 6);
+        formData.append("result", now)
+       
+        //alert(now)
+        //console.log(`${year}/${month}/${day}`)
+        fetch('@Url.Content("~/Transaction/healthreport")', {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("新增成功");
+                    //location.href = '@Url.Content("~/home/members")';
+                }
+            })
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));
+    }
 
     //total sum////
     

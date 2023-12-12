@@ -228,6 +228,8 @@ namespace MedSysProject.Controllers
             //             select s).Distinct();
 
             ViewBag.item = item["item"];
+            ViewBag.mid = item["Mid"];
+            ViewBag.pid = item["Pid"];
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
