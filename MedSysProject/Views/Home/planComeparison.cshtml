@@ -134,6 +134,7 @@
                                                 <i class="fa fa-desktop lblue"></i>
                                                 <h2 id ="count">0</h2>
                                                 <h4 class="br-lblue" >目前方案個數</h4>
+                                                <input  type="button" id="sendit"/>
                                             </a>
                                         </div>
                                     </div>
@@ -168,7 +169,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
                                     </div>
                                 </div>
@@ -187,7 +188,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -231,7 +232,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 } " value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -251,7 +252,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -275,7 +276,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -295,7 +296,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -320,7 +321,7 @@
                                         <h3 style="color:#bd93e8" id="PlanPrice">價格NT$ @plan.PlanPrice</h3>
                                         <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details"><input class="form-check-input chbox" type="checkbox" id="checkID@{
-                                    @plan.PlanId
+                                                                    @plan.PlanId
 }" value="加入方案比較">加入方案比較</a>
 
                                     </div>
@@ -369,23 +370,30 @@
   @section Scripts{
       <script>
           var planidList="";
+        const Check = document.querySelectorAll(".chbox");
+        const pushcount = document.querySelector("#count");
+          const btnSend = document.querySelector("#sendit");
           Check.forEach((item)=>{
               if ( item.checked==true){
                   planidList += item.value;
+                  
               }
           })
           
-        const Check = document.querySelectorAll(".chbox");
-        const pushcount = document.querySelector("#count");
+       
         let count =0;
         Check.forEach(btn=>{
             btn.addEventListener("change",(event)=>{
                 console.log(event.target.id);
                 if(event.target.checked==true){
                     count ++;
+                    planidList += event.target.id;
                 }
                 if(event.target.checked==false){
                     count--;
+                    var temporary = ""; var emp = "";
+                    temporary = planidList;
+                    planidList=temporary.replace(event.target.id, emp);
                 }
                 pushcount.innerText= count;
             })

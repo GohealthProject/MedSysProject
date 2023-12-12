@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         h5 {
             font-size: 32px;
@@ -20,133 +23,121 @@
             background-position: top center;
         }
 
+
+        #plansSection {
+            display: flex;
+            flex-wrap: nowrap; 
+            overflow-x: hidden; 
+            justify-content: center; 
+        }
+
         .card {
             background-color: #2F8927;
             background-position: center;
             background-size: contain;
             border: solid;
             border-color: #2F8927;
+            flex: 0 0 auto;
+            margin: 0; /* 移除外邊距，使每個卡片之間沒有留白 */
+            padding: 0; /* 移除內邊距，確保內容填滿整個卡片 */
+            min-width: 0;
+            width: 80%;
+            box-sizing: border-box;
         }
-
-        .text-pink {
-            color: #BF0060;
-        }
-
-        .text-blue {
-            color: #005AB5;
-        }
-
     </style>
-    <title>方案比較</title>
-</head>
-<body>
-    <div class="container">
-        <section class="text-center">
-            <h4 class="mb-4 bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
-            <div class="row gx-lg-5">
-                <div class="col-lg-6 mb-4">
-                    <div class="card ">
-                        <div class="card-header bg-white py-3">
-                            <p class="text-uppercase small mb-2" style="font-size: 200%;"><strong>婦女安心方案</strong></p>
-                            <h5 class="mb-0">NT$25550</h5>
-                        </div>
-                        <div class="card-body" id="femaleplan">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">一般生理檢查</li>
-                                <li class="list-group-item">尿液一般檢查</li>
-                                <li class="list-group-item">血液常規檢查</li>
-                                <li class="list-group-item">腎功能檢查</li>
-                                <li class="list-group-item">肝功能檢查</li>
-                                <li class="list-group-item">新陳代謝檢查</li>
-                                <li class="list-group-item" style="background-color: #FF79BC;">女性內分泌檢查</li>
-                                <li class="list-group-item" style="background-color: #FF79BC;">女性癌症檢查</li>
-                                <li class="list-group-item">體脂肪檢查</li>
-                                <li class="list-group-item">腹部超音波</li>
-                                <li class="list-group-item">頸動脈超音波</li>
-                                <li class="list-group-item">甲狀腺超音波</li>
-                                <li class="list-group-item" style="background-color: #FF79BC;">女性超音波檢查</li>
-                                <li class="list-group-item">眼部檢查</li>
-                                <li class="list-group-item">胸腔檢查</li>
-                                <li class="list-group-item">自律神經壓力檢查</li>
-                            </ul>
-                        </div>
-                        <div class="card-footer bg-white py-3">
-                            <button type="button" id="malePlanConfirm" class="btn btn-success btn-sm">確認方案</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card ">
-                        <div class="card-header bg-white py-3">
-                            <p class="text-uppercase small mb-2" style="font-size: 200%;"><strong>男性保健方案</strong></p>
-                            <h5 class="mb-0">NT$20750</h5>
-                        </div>
-                        <div class="card-body" id="maleplan">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">一般生理檢查</li>
-                                <li class="list-group-item">尿液一般檢查</li>
-                                <li class="list-group-item">血液常規檢查</li>
-                                <li class="list-group-item">腎功能檢查</li>
-                                <li class="list-group-item">肝功能檢查</li>
-                                <li class="list-group-item">新陳代謝檢查</li>
-                                <li class="list-group-item" style="background-color: #66B3FF;">男性內分泌檢查</li>
-                                <li class="list-group-item" style="background-color: #66B3FF;">男性癌症檢查</li>
-                                <li class="list-group-item">體脂肪檢查</li>
-                                <li class="list-group-item">腹部超音波</li>
-                                <li class="list-group-item">頸動脈超音波</li>
-                                <li class="list-group-item">甲狀腺超音波</li>
-                                <li class="list-group-item" style="background-color: #66B3FF;">男性超音波檢查</li>
-                                <li class="list-group-item">眼部檢查</li>
-                                <li class="list-group-item">胸腔檢查</li>
-                                <li class="list-group-item">自律神經壓力檢查</li>
-                            </ul>
-                        </div>
-                        <div class="card-footer bg-white py-3">
-                            <button type="button" id="malePlanConfirm" class="btn btn-success btn-sm">確認方案</button>
-                        </div>
-                    </div>
-                </div>
+  
+    </head>
+    <body>
+        <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
+            <section class="text-center">
+            <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
+            </section>
+            <div @* class="row gx-lg-6" *@ id="plansSection">
             </div>
-        </section>
-    </div>
+    <script>
+        var selectedPlanIds = []; // 儲存已選擇的方案 ID
+        var globalPlans; // 全局變數儲存所有方案
 
-<div class="container">
-    <section class="text-center">
-        <h4 class="mb-4 bg-green" style="background-color: aliceblue"><strong class="text-dark">請輸入預約資料</strong></h4>
-        <div class="row gx-lg-5 justify-content-center">
-            <div class="col-lg-12 mb-4">
-                <div class="mb-4">
-                    <label for="companyName" class="form-label">公司名稱：</label>
-                    <input type="text" class="form-control col-md-4 mx-auto" id="companyName" placeholder="輸入公司名稱">
-                </div>
-                <div class="mb-4">
-                    <label for="companyTaxId" class="form-label">公司統編：</label>
-                    <input type="text" class="form-control col-md-4 mx-auto" id="companyTaxId" placeholder="輸入公司統編">
-                </div>
-                <div class="mb-4">
-                    <label for="fullName" class="form-label">姓名：</label>
-                    <input type="text" class="form-control col-md-4 mx-auto" id="fullName" placeholder="輸入您的姓名">
-                </div>
-                <div class="mb-4">
-                    <label for="phoneNumber" class="form-label">電話：</label>
-                    <input type="tel" class="form-control col-md-4 mx-auto" id="phoneNumber" placeholder="輸入您的電話號碼">
-                </div>
-                <div class="mb-4">
-                    <label for="email" class="form-label">電子郵件：</label>
-                    <input type="email" class="form-control col-md-4 mx-auto" id="email" placeholder="輸入您的電子郵件">
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">送出</button>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        // 函數：更新項目列表
+        function updateProjectsList(projects, projectsList) {
+            projectsList.empty(); // 清空現有項目
+            projects.forEach(function (project) {
+                projectsList.append('<li class="list-group-item">' + project.projectName + '</li>');
+            });
+        }
+
+        // 函數：初始化方案選擇下拉列表和對應的項目列表
+        function initPlanSelect(planSelect, projectsList) {
+            planSelect.empty(); // 清空現有選項
+            planSelect.append(new Option('---請選擇方案---', '', true, true));
+
+            globalPlans.forEach(function (plan) {
+                if (plan.planName !== "非套餐方案" && !selectedPlanIds.includes(plan.planId)) {
+                    planSelect.append(new Option(plan.planName, plan.planId));
+                }
+            });
+
+            planSelect.change(function () {
+                var selectedPlanId = $(this).val();
+                if (!selectedPlanIds.includes(selectedPlanId) && selectedPlanId) {
+                    selectedPlanIds.push(selectedPlanId);
+                    var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
+                    updateProjectsList(selectedPlan ? selectedPlan.projects : [], projectsList);
+                }
+            });
+        }
+
+        // 函數：新增方案比較區域
+        function addNewPlanComparison() {
+            if ($('#plansSection').children().length < globalPlans.length - 1) {
+                var newPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
+                var newCard = $('<div/>', { class: 'card' }).appendTo(newPlanDiv);
+                var newCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(newCard);
+                var newSelect = $('<select/>', { class: 'form-control' }).appendTo(newCardHeader);
+                var newCardBody = $('<div/>', { class: 'card-body' }).appendTo(newCard);
+                var newProjectsList = $('<ul/>', { class: 'list-group list-group-flush' }).appendTo(newCardBody);
+
+                initPlanSelect(newSelect, newProjectsList);
+            } else {
+                alert('已達最大方案比較數量');
+            }
+        }
+
+        // Ajax 請求獲取方案和項目數據
+        $.ajax({
+            url: '@Url.Action("GetPlansAndProjects", "Home")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                globalPlans = data.plans;
+
+                // 初始化第一個方案比較區域
+                var firstPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
+                var firstCard = $('<div/>', { class: 'card' }).appendTo(firstPlanDiv);
+                var firstCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(firstCard);
+                var firstPlanSelect = $('<select/>', { class: 'form-control', id: 'planSelect' }).appendTo(firstCardHeader);
+                var firstCardBody = $('<div/>', { class: 'card-body' }).appendTo(firstCard);
+                var firstProjectsList = $('<ul/>', { class: 'list-group list-group-flush', id: 'projectsList' }).appendTo(firstCardBody);
+
+                initPlanSelect(firstPlanSelect, firstProjectsList);
+
+                $('#addPlanButton').click(addNewPlanComparison);
+            },
+            error: function (error) {
+                console.error("獲取方案和項目時發生錯誤: ", error);
+            }
+        });
+    </script>
+
+
+  
+
+
+
+
 
 </body>
+
 </html>
 
 

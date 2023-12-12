@@ -232,40 +232,34 @@
 </div>
 
 <script>
+    // function newPostt() {
+    //     var myform = document.querySelector('#myCreatedataform');
+    //     var data = new FormData(myform);
+    //     //確認資料有沒有傳進來
+    //     for (var value of data.values()) {
+    //         console.log(value);
+    //     }
 
-    function handleImageUpload(blob, success, failure) {//blob是圖片檔案，success是成功的回呼函式，failure是失敗的回呼函式
-        var reader = new FileReader();//FileReader是一個物件，可以讓我們讀取檔案的內容
-        reader.onload = function (e) {//當讀取完成時，會觸發onload事件
-            var base64data = e.target.result;//e.target.result是讀取到的檔案內容
-            success(base64data);//呼叫成功的回呼函式
-        };
-        reader.onerror = failure;
-        console.log(blob);
-        reader.readAsDataURL(blob);
-    }
+    //     var contenttt = tinymce.get('mytextarea').getContent();
+    //     console.log(contenttt);
+    // }
 
-    tinymce.init({
-        selector: '#mytextarea',
-        plugins: 'advlist link image lists',
-        toolbar: 'undo redo| image',
-        image_caption: true,
-        images_upload_handler: function (blobInfo, success, failure) { //todo需要理解一下在幹嘛
-            return new Promise(function (resolve, reject) {
-                handleImageUpload(blobInfo.blob(), resolve, reject);
-            });
-        }
 
-    });
     async function newPost() {
+
         let apiUrl = `https://localhost:7078/api/Blogs`;
         var myform = document.querySelector('#myCreatedataform');
+        var contentt = tinymce.get('mytextarea').getContent();
+
+        //把contentt放進textarea裡面
+        document.querySelector('#mytextarea').value = contentt;
 
         var data = new FormData(myform);
         const response = await fetch(apiUrl, {
             method: 'POST',
             body: data,
         });
-        const result = await response.status;
+        const state = await response.status;
         if (response.ok) {
 
             $('#modalCreate').modal('hide');

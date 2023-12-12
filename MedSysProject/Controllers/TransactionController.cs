@@ -21,6 +21,15 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult rp2(int id)
+        {
+
+            var rp2json = _context.ReportDetails.Where(p => p.ReportId == id);
+                     
+            return Json(rp2json);
+
+        }
+
         public IActionResult payment()
         {
             //step1 : 網頁導入傳值到前端
