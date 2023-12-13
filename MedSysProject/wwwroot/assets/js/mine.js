@@ -3,7 +3,7 @@
     
     /*sticky header效果*/
     const header = document.querySelector('#header');
-    console.log(header);
+    //console.log(header);
     console.log("我是layout");
     if (header) {
         document.addEventListener('scroll', () => {
@@ -24,17 +24,11 @@
         mobileNavToggleBtn.classList.toggle('bi-list');
         mobileNavToggleBtn.classList.toggle('bi-x');
     }
-    /*不太懂 hash是什麼?*/
-    document.querySelectorAll('#navbar a').forEach(navbarlink => {
-        if (!navbarlink.hash) return;
-        let section = document.querySelector(navbarlink.hash);
-        if (!section) return;
-        navbarlink.addEventListener('click', () => {
-            if (document.querySelector('.mobile-nav-active')) {
-                mobileNavToggle();
-            }
-        })
-    })
+    let what = document.querySelectorAll('#navbar a');
+
+    console.log(what);//F12可以用小箭頭看具體是那些元素
+
+    //選擇 class .navbar .dropdown > a，修改箭頭上下
     const navDropdowns = document.querySelectorAll('.navbar .dropdown >a');
     navDropdowns.forEach(el => {
         el.addEventListener('click', function (event) {
@@ -48,6 +42,7 @@
             }
         })    
     })
+
     /*輪播牆*/
     var swiper = new Swiper(".sliderFeaturedPosts", {
         spaceBetween: 0,
@@ -69,4 +64,17 @@
         },
     });
 
+    //移至頂端按鈕
+    const scrollTop = document.querySelector('.scroll-top');
+    if (scrollTop) {
+        const togglescrollTop = function () {
+            window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
+        }
+        window.addEventListener('load', togglescrollTop);
+        document.addEventListener('scroll', togglescrollTop);
+        scrollTop.addEventListener('click', window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }));
+    }
 });
