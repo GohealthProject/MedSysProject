@@ -1,0 +1,80 @@
+﻿//以下程式可以跑一下, 看看結果並先了解一下
+
+<ul id="data-tree">
+</ul>
+
+
+
+<script>
+
+
+
+    // Sample data Data (Replace this with your actual data)
+
+    const datas = [
+
+        { PostID: 1, ParentID: null, Title: "想準備日檢N2考試大家推薦甚麼書呢?" },
+
+        { PostID: 2, ParentID: 1, Title: "沒想到這裡的工作類型好多種喔" },
+
+        { PostID: 3, ParentID: 1, Title: "中餐烹調(葷食)丙級證照輔導班b" },
+
+        { PostID: 4, ParentID: 2, Title: "職場軟技能" },
+
+        { PostID: 5, ParentID: 2, Title: "請問要怎麼通過專家驗證" },
+
+        { PostID: 6, ParentID: 2, Title: "我會C#!可以發案給我" },
+
+        { PostID: 7, ParentID: 4, Title: "我會英文，想要跟會日文的人語言交換~" },
+
+        { PostID: 8, ParentID: 7, Title: "每天加班好累喔" },
+
+    ];
+
+
+
+
+
+    // Recurisive function
+
+    // Function to build the hierarchy tree as a nested <ul>
+
+    function buildHierarchyTree(datas, parentID = null) {
+
+        const ul = document.createElement('ul');
+
+        datas.filter(data => data.ParentID === parentID).forEach(data => {
+
+            const li = document.createElement('li');
+
+            li.textContent = `PostID: ${data.PostID} ${data.Title}`;
+
+            const subTree = buildHierarchyTree(datas, data.PostID);
+
+            if (subTree.childElementCount > 0) {
+
+                li.appendChild(subTree);
+
+            }
+
+            ul.appendChild(li);
+
+        });
+
+        return ul;
+
+    }
+
+
+
+    // Get the container element where you want to display the hierarchy tree
+
+    const container = document.getElementById('data-tree');
+
+
+
+    // Call the function to build the hierarchy tree and append it to the container
+
+    container.appendChild(buildHierarchyTree(datas));
+
+</script>

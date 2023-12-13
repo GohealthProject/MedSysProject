@@ -16,6 +16,7 @@ namespace MedSysProject.Controllers
             _db = db;
         }
 
+
         /// <summary>
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
@@ -191,17 +192,26 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
 
+        public IActionResult DemoTeachersCode() 
+        {
+            return View();
+        }
+
+        #region 載入留言相關
+        /// <summary>
+        /// 顯示留言
+        /// </summary>
+        /// <param name="BlogId"></param>
+        /// <returns></returns>
         public IActionResult ShowComments(int BlogId)
         {
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
-                                            .Include(comment=>comment.Employee.EmployeeClass)
-                                            .Where(comment => comment.BlogId == BlogId&&comment.ParentCommentId==null)
+                                            .Include(comment => comment.Employee.EmployeeClass)
+                                            .Where(comment => comment.BlogId == BlogId && comment.ParentCommentId == null)
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
         }
-
-        #region 遞迴
         public IActionResult ShowReplies(int mainCommentId) 
         {
             List<Comment> allReplies = new List<Comment>();
