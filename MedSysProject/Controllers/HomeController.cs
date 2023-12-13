@@ -7,12 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NuGet.Versioning;
 using Org.BouncyCastle.Asn1;
+using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Web;
+using System.Data;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace MedSysProject.Controllers
 {
@@ -80,6 +85,17 @@ namespace MedSysProject.Controllers
         public IActionResult planComeparisonTotal(string planlist)
         {////方案比較總計(總項+PDF產生)
             //int id = 3;
+            //-----------datatable
+            //DataSet ds = new DataSet();
+            //ds.Locale = CultureInfo.InvariantCulture;
+            //DataTable plan = ds.Tables["compareplan"];
+            //IEnumerable<DataRow> itemsss = (IEnumerable<DataRow>)_context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items));
+            
+            //foreach (DataRow i in itemsss)
+            //{
+            //    i.Field<string>("方案");
+            //}
+            //--------------------
             List<int> list = new List<int>();
 
             foreach(var item2 in planlist.Split(','))
@@ -122,21 +138,35 @@ namespace MedSysProject.Controllers
            
             var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
                        select it;
+            //int dp = 4;
+            //var itemsss = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items)).Select(p => new
+            //{
+            //    PlanDescription = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanDescription),
+            //    PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
+            //    ProjectId = (int)p.ProjectId,
+            //    ItemId = p.ItemId,
+            //}).AsEnumerable().ToList();
 
-            //var itemsss = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items));
-            //    foreach (var p in itemsss) {
+            //foreach (var p in itemsss)
+            //{
             //    test.Add(new CPlanViewModel()
             //    {
-            //        PlanDescription = (string)p.Project.PlanRefs.SelectMany(p=>p.Plan.PlanDescription),
-            //        PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
-            //        PlanId = 4,
+            //        PlanDescription = p.PlanDescription,
+            //        PlanName = p.PlanName,
             //        ProjectId = (int)p.ProjectId,
-            //        ProjectName =(string) p.Project.ProjectName,
-            //        //ProjectPrice = p.PlanRefs.SelectMany(pp => pp.Project.ProjectPrice),
-            //       ItemId=p.ItemId,
+            //        ItemId = p.ItemId,
+
+
+            //        //PlanDescription = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanDescription),
+            //        //PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
+            //        //PlanId = dp,
+            //        //ProjectId = (int)p.ProjectId,
+            //        //ProjectName = (string)p.Project.ProjectName,
+            //        ////ProjectPrice = p.PlanRefs.SelectMany(pp => pp.Project.ProjectPrice),
+            //        //ItemId = p.ItemId,
             //        //ItemName = p.PlanRefs.SelectMany(pp => pp.Project.Items.SelectMany(ppp => ppp.ItemName)),
 
-            //    });
+            //    }) ;
             //}
 
             foreach (Item items in item)
@@ -151,13 +181,12 @@ namespace MedSysProject.Controllers
                 });
                 
             }
-          
 
 
 
-
-
+            //return View(itemsss);
             return View(data);
+
         }
 
         public IActionResult PlanIntroductionProject(int? id)

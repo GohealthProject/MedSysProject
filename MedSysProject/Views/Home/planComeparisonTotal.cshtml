@@ -4,7 +4,7 @@
 }
 @model List<MedSysProject.ViewModels.CPlanViewModel>
 <head>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
@@ -13,8 +13,8 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+ @*   <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
@@ -102,60 +102,45 @@
 
     @*移動區*@
     <div class="container-fluid navbar-nav-scroll">
-        <table class="table table-striped  table-bordered" id="dt-basic-checkbox" cellspacing="0" width="100%">
+        <table class="table table-striped  table-bordered display-1" id="datatable" cellspacing="0" width="100%">
 
             <thead>
                 <tr>
                     <th>
-                    @foreach(var name in Model)
-                    {
-                        if (name.PlanId !=0)
-                            {
-                                <i class="bi bi-flower1" style="color:goldenrod">
-                            @Html.DisplayFor(p=>name.PlanName)</i>
-                        }
-                        }
+                   
                     </th>
                     
-                    <th>類別名稱</th>
-                    <th>方案價格</th>
-                    <th>方案項目</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
             <tbody id="myTable">
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                </tr>
-              @*   @foreach (var plan in Model)
-                {
-                    <tr>
-                        @if (plan.ProjectName != null)
-                        {    <td></td>
-                            <td>
-                                @Html.DisplayFor(p=>plan.ProjectName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p=>plan.ProjectPrice)
-                            </td>
-                            @if (plan.ItemId != 0)
+                
+      @foreach (var name in Model)
+                        { 
+               <tr>
+                   
+                            @if (name.PlanId != 0)
                             { <td>
-                                @for (int i = 0; i < plan.ItemName.Count(); i++)
-                                {
-                                   
-                                        @Html.DisplayFor(p=>plan.ItemName[i])
-                                    
-                                }
-                                </td>
-                            }
-                               
+                                <i class="bi bi-flower1" style="color:goldenrod">
+                                    @Html.DisplayFor(p=>name.PlanName)
+                                </i> 
+                             
+                           
+                    </td> 
+                     <td>@name.ProjectId</td>
+                    <td>@name.ProjectName</td>
+                            <td>@name.ItemId</td>
                         }
-                    </tr>
-                        
-                        } *@
+                          else{
+                        break;
+                        }
+                  
+                </tr>
+                    }
+             
             </tbody>
             <tfoot></tfoot>
         </table>
@@ -168,7 +153,8 @@
 </div>
 @section Scripts{
     <script>
-        let table=new DataTable('#dt-basic-checkbox');
+        
+       let table = new DataTable('#datatable');
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -178,29 +164,57 @@
             });
         });
     //---------------------------------------------test
-        $(document).ready(function () {
-            var table = $('#dt-basic-checkbox').DataTable({
-                lengthChange: false,
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
-            });
+        //$(document).ready(function () {
+        //    var table = $('#datatable').DataTable({
+        //        lengthChange: false,
+        //        buttons: ['copy', 'excel', 'pdf', 'colvis']
+        //    });
 
-            table.buttons().container()
-                .appendTo('#table_wrapper .col-md-6:eq(0)');
-        });
+        //    table.buttons().container()
+        //        .appendTo('#tdatatable');
+        //});
         //-----------------------------------------------------
-        $('#dt-basic-checkbox').DataTable({
-
-            columnDefs: [{
-                orderable: false,
-                className: 'select-checkbox',
-                targets: 0
-            }],
-            select: {
-                style: 'os',
-                selector: 'td:first-child'
+        
+        //----------------datatable資料
+        $(document).ready(function () {
+        var data=[{
+        "方案名稱":"樂活",
+        "方案價格":"nt",
+        "類別名稱":"一般檢查",
+        "細項名稱":"身高",
+            }, {
+                "方案名稱": "樂活",
+                "方案價格": "nt",
+                "類別名稱": "一般檢查",
+                "細項名稱": "身高",
             }
-        });
+            //["1",
+            //"2",
+            //"3",
+            //"方案項目2"
+            //],
+            //    ["2",
+            //        "2",
+            //        "3",
+            //        "方案項目3"
+            //    ],
+            //    ["3",
+            //        "2",
+            //        "3",
+            //        "方案項目3"
+            //    ],
+        ];   
+            $('#datatable').DataTable({
+            "data":data,
+            "colums":[
+                    { data: '方案名稱',title: "方案"},
+                    { data: '方案價格', title: "方方案" },
+                    { data: '類別名稱', title: "方方案案" },
+                    { data: '細項名稱', title: "暗暗方芳" }
 
+            ]
+            })
+        })
 
     </script>
 
