@@ -4,9 +4,6 @@
 }
 <main id="main">
 
-    <div id="here">
-
-    </div>
 </main>
 
 @section Scripts{
@@ -20,19 +17,7 @@
         async function load (){
             const response = await fetch("@Url.Content("~/blogs/Slider")");
             const data = await response.text();
-            
             document.querySelector("#main").innerHTML=data;
-            console.log(data)
-
-            for(var i = 0;  i<myArray.length;i++){
-
-                const response = await fetch(`@Url.Content("~/blogs/Slider")?id=${myArray[i]}`);
-                const data = await response.text();
-
-                document.querySelector("#here").innerHTML+=data;
-            }
-
-
         }
         
     </script>

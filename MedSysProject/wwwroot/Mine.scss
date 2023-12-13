@@ -73,7 +73,10 @@ section {
         transition: 0.3s all ease;
         visibility: hidden;
         opacity: 0;
-
+        &.active {
+            visibility: visible;
+            opacity: 1;
+        }
         .search-form {
             position: relative;
 
@@ -91,19 +94,19 @@ section {
             .icon {
                 position: absolute;
                 left: 0; //貼左邊
-                top: 0px;
+                top: 2px;
                 opacity: 0.5;
                 left: 10px;
             }
 
             .btn {
                 position: absolute;
-                top: 0px;
+                top: -2px;
                 right: 4px;
                 padding: 0;
                 margin: 0;
                 line-height: 1;
-                font-size: 25px;
+                font-size: 30px;
                 opacity: 0.5;
 
                 &:active, &:focus {
@@ -943,6 +946,37 @@ Safari 7+ */
   font-family: var(--font-secondary);
   font-size: 12px;
 }
+
+.scroll-top {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    right: 15px;
+    bottom: 15px;
+    z-index: 99999;
+    background: var(--color-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    transition: all 0.4s;
+}
+
+.scroll-top i {
+    font-size: 24px;
+    color: #fff;
+    line-height: 0;
+}
+
+.scroll-top:hover {
+    background: rgba(var(--color-primary-rgb), 0.8);
+    color: #fff;
+}
+
+.scroll-top.active {
+    visibility: visible;
+    opacity: 1;
+}
+
 
 
 

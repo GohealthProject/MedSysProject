@@ -70,6 +70,10 @@ section .section-header p {
   visibility: hidden;
   opacity: 0;
 }
+.header .search-form-wrap.active {
+  visibility: visible;
+  opacity: 1;
+}
 .header .search-form-wrap .search-form {
   position: relative;
 }
@@ -86,18 +90,18 @@ section .section-header p {
 .header .search-form-wrap .search-form .icon {
   position: absolute;
   left: 0;
-  top: 0px;
+  top: 2px;
   opacity: 0.5;
   left: 10px;
 }
 .header .search-form-wrap .search-form .btn {
   position: absolute;
-  top: 0px;
+  top: -2px;
   right: 4px;
   padding: 0;
   margin: 0;
   line-height: 1;
-  font-size: 25px;
+  font-size: 30px;
   opacity: 0.5;
 }
 .header .search-form-wrap .search-form .btn:active, .header .search-form-wrap .search-form .btn:focus {
@@ -859,4 +863,34 @@ Safari 7+ */
 .comment .reply-meta .text-muted {
   font-family: var(--font-secondary);
   font-size: 12px;
+}
+
+.scroll-top {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.scroll-top i {
+  font-size: 24px;
+  color: #fff;
+  line-height: 0;
+}
+
+.scroll-top:hover {
+  background: rgba(var(--color-primary-rgb), 0.8);
+  color: #fff;
+}
+
+.scroll-top.active {
+  visibility: visible;
+  opacity: 1;
 }
