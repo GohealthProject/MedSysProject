@@ -127,11 +127,13 @@ namespace MedSysProject.Controllers
             foreach (PlanRef projects in project)
             {
                 data.Add(new CPlanViewModel()
-                {
+                {PlanId= projects.PlanId,
                     ProjectId = (int)projects.ProjectId,
                     ProjectName = projects.Project.ProjectName,
                     ProjectPrice = projects.Project.ProjectPrice,
-
+                    PlanDescription=projects.Plan.PlanDescription,
+                    PlanName=projects.Plan.PlanName,
+                    
                 });
               
             }

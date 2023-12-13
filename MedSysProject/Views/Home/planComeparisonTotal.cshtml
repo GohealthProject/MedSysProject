@@ -107,37 +107,32 @@
             <thead>
                 <tr>
                     <th>
-                   
+                   測試
                     </th>
                     
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>測試</th>
+                    <th>測試</th>
+                    <th>測試</th>
                     
                 </tr>
             </thead>
             <tbody id="myTable">
                 
-      @foreach (var name in Model)
-                        { 
+      
                <tr>
                    
-                            @if (name.PlanId != 0)
-                            { <td>
+                        
+                            <td>
                                 <i class="bi bi-flower1" style="color:goldenrod">
-                                    @Html.DisplayFor(p=>name.PlanName)
+                                 
                                 </i> 
                              
                            
-                    </td> 
-                     <td>@name.ProjectId</td>
-                    <td>@name.ProjectName</td>
-                            <td>@name.ItemId</td>
-                        }
-                          else{
-                        break;
-                        }
-                  
+                    </td>
+                    <td>測試</td>
+                    <td>測試</td>
+                    <td>測試</td>
+                       
                 </tr>
                     }
              
