@@ -79,7 +79,6 @@ namespace MedSysProject.Controllers
         //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
-            //singleBlogID = 37;
             IEnumerable<Blog> singlePost = null;
             if (singleBlogID != null)
             {
@@ -98,23 +97,13 @@ namespace MedSysProject.Controllers
 
             var q = _db.Comments.Where(n => n.BlogId ==singleBlogID&&n.ParentCommentId==null).Select(n => n.CommentId);
             ViewBag.CommentId = JsonSerializer.Serialize(q.ToList());
-
-            
-
-
-
-
-
             return View(singlePost);
-
-
         }
         public IActionResult SelectBlogCategory(int? CategoryID, int page = 1)
         {//
          //var q = _db.BlogCategories.Where(c => c.BlogClassId == CategoryID);
          //var q = _db.Blogs.Include(e => e.Employee).Include(e => e.ArticleClass.BlogCategory1).Where(c => c.ArticleClassId == CategoryID);
             IEnumerable<Blog> q = null;
-
             int pageSize = 5;
             int total;
 
@@ -198,34 +187,10 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Slider() 
         {
-            //var sliderBlog = _db.Blogs.Include(blog => blog.Employee)
-            //                          .Include(blog => blog.ArticleClass)
-            //                          .OrderByDescending(blog => blog.BlogId)
-            //                          .Take(5).ToList();
 
             return PartialView();
         }
-        public IActionResult ad (int id)
-        {
-            // var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
-            //var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
 
-            //List<int> ne = 最新的文章.ToList();
-            //List<int> top5 = 最多觀看的.ToList();
-            var q = _db.Comments.Where(n=>n.CommentId==id).Include(n=>n.Member).Include(n=>n.Employee).FirstOrDefault();
-            Comment com = new Comment();
-            com = q;
-            
-            return View(com);
-        }
-
-
-        public IActionResult Show2 (int id)
-        {
-            var q = _db.Comments.Find(id);
-
-            return PartialView(q);
-        }
         public IActionResult ShowComments(int BlogId)
         {
             var mainComments = (_db.Comments.Include(comment => comment.Member)
@@ -235,6 +200,7 @@ namespace MedSysProject.Controllers
                                 .Select(comment => comment)).ToList();
             return PartialView(mainComments);
         }
+
         #region 遞迴
         public IActionResult ShowReplies(int mainCommentId) 
         {
