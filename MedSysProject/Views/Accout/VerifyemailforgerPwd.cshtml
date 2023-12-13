@@ -11,24 +11,15 @@
     <link rel="stylesheet" href="~/css/AccoutVerifyemail.css" />
 }
 
-@{
-    string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-    MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
-
-    var notverify = TempData["notverify"] as string;
-}
-
-@Html.Raw(notverify)
 
 <div class="card mainVerify">
     <div class="card-header">
-        恭喜你加入GO健康會員
+        忘記密碼
     </div>
     <div class="card-body">
-        <h5 class="card-title">這是你註冊時用的Email</h5>
-        <p class="card-text" id="memberemail">@m.MemberEmail</p>
 
-        <p class="card-text">系統已同時寄送一封郵件至您的信箱，請點擊信箱中的連結繼續。</p>
+        <input type="hidden" id="memberemail" value="@ViewBag.MemberEmail" />
+        <p class="card-title">系統已寄送一封郵件至您的信箱，請點擊信箱中的連結繼續。</p>
 
         <p class="card-text">若您沒有收到驗證信，請點擊下方按鈕重新寄送驗證信。</p>
         <button class="btn btn-primary" id="reverify">重新寄送驗證信</button>
@@ -63,12 +54,12 @@
 
     async function postEmail(ver) {
         let apiUrl = 'https://localhost:7078/api/Email';
-        let address = document.getElementById('memberemail').innerText;
+        let address = "@ViewBag.MemberEmail";
         console.log(ver);
         var data = {
             address: address,
             subject: '【GO健康】帳號驗證通知信',
-            body: `<img src=\"https://i.imgur.com/l1mgvEG.png\"><br/>親愛的新會員您好<br/><br/>很榮幸你加入GO健康的會員，請點擊以下連結驗證您的GO健康帳號。<br/><br/> https://localhost:7203/Accout/ver?key=${ver}`,
+            body: `<img src=\"https://i.imgur.com/l1mgvEG.png\"><br/>會員您好<br/><br/>請點擊以下連結驗證您的GO健康帳號，並修改密碼。<br/><br/> https://localhost:7203/Accout/forgetpwdver?key=${ver}`,
         };
 
         const response = await fetch(apiUrl, {

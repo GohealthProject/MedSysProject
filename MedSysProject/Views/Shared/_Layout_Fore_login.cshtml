@@ -24,6 +24,11 @@
     <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <!-- Custom fonts for this template-->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
@@ -42,12 +47,12 @@
         }
 
         .g_id_signin {
-            display:flex;
+            display: flex;
             justify-content: center;
         }
 
         .fb-login-button {
-            display:flex;
+            display: flex;
             justify-content: center;
         }
 
@@ -62,6 +67,9 @@
     ======================================================== -->
     @await RenderSectionAsync("LinkStyle", required: false)
     <script src="@Url.Content("~/js-Account/LayoutFore.js")"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -95,16 +103,17 @@
                     <li>
                         <a asp-action="Index" asp-controller="Shopping">購健康商城</a>
                     </li>
-                    <li><a class="nav-link scrollto" href="~/blogs">健康部落格</a>
-                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
-                    {
+                    <li>
+                        <a class="nav-link scrollto" href="~/blogs">健康部落格</a>
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        {
                         <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto" })</li>
-                    }
-                    else
-                    {
-                        string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                        Member m = new Member();
-                        m = JsonSerializer.Deserialize<Member>(json);
+                        }
+                        else
+                        {
+                            string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                            Member m = new Member();
+                            m = JsonSerializer.Deserialize<Member>(json);
                         <li class="dropdown">
                             <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                             <ul>
@@ -112,7 +121,7 @@
                                 <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
                             </ul>
                         </li>
-                    }
+                        }
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
@@ -122,7 +131,7 @@
     <main id="main" style="background-color:#F2F9F8">
         @RenderBody()
         <!-- ======= Footer ======= -->
-        <footer class="fixed-bottom"  id="footer">
+        <footer class="fixed-bottom" id="footer">
             <div class="container">
                 <div class="copyright">
                     <strong><span>GO健康 版權所有</span></strong>
@@ -147,6 +156,7 @@
     <script src="~/forevendor/php-email-form/validate.js"></script>
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

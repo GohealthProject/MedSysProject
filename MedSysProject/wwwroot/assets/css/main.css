@@ -159,11 +159,11 @@ h6 {
   transition: 0.3s all ease;
   visibility: hidden;
   opacity: 0;
-}
+}(v)
 
 .search-form-wrap .search-form {
   position: relative;
-}
+}(v)
 
 .search-form-wrap .search-form .form-control {
   width: 300px;

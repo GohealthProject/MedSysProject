@@ -10,9 +10,9 @@ a {
   /*能否取用全域變數?可以，所以不需要在上面引用*/
   /* color:var(--color-links);*/
   /* &:hover {
-       color: var(--color-links);
-       text-decoration: none;
-   }*/
+      color: var(--color-links);
+      text-decoration: none;
+  }*/
 }
 a:hover {
   color: #fff;
@@ -70,6 +70,10 @@ section .section-header p {
   visibility: hidden;
   opacity: 0;
 }
+.header .search-form-wrap.active {
+  visibility: visible;
+  opacity: 1;
+}
 .header .search-form-wrap .search-form {
   position: relative;
 }
@@ -86,18 +90,18 @@ section .section-header p {
 .header .search-form-wrap .search-form .icon {
   position: absolute;
   left: 0;
-  top: 0px;
+  top: 2px;
   opacity: 0.5;
   left: 10px;
 }
 .header .search-form-wrap .search-form .btn {
   position: absolute;
-  top: 0px;
+  top: -2px;
   right: 4px;
   padding: 0;
   margin: 0;
   line-height: 1;
-  font-size: 25px;
+  font-size: 30px;
   opacity: 0.5;
 }
 .header .search-form-wrap .search-form .btn:active, .header .search-form-wrap .search-form .btn:focus {
@@ -889,4 +893,54 @@ Safari 7+ */
 .scroll-top.active {
   visibility: visible;
   opacity: 1;
+}
+
+/* 回复表单容器 */
+.reply-form-wrap {
+  position: relative;
+  z-index: 9;
+  transition: 0.3s all ease;
+  visibility: hidden;
+  opacity: 0;
+  display: none;
+}
+
+/* 显示回复表单的类 */
+.reply-form-wrap.active {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+
+/* 回复表单样式 */
+.reply-form {
+  position: relative;
+}
+
+/* 回复输入框样式 */
+.reply-form .form-control {
+  width: 500px;
+  border: none;
+  box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb), 0.5);
+  padding: 0 40px; /* 上下 左右 */
+}
+
+/* 放大镜图标样式 */
+.reply-form .icon {
+  position: absolute;
+  left: 10px;
+  top: 2px;
+  opacity: 0.5;
+}
+
+/* 关闭按钮样式 */
+.reply-form .btn {
+  position: absolute;
+  top: -2px;
+  right: 500px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  font-size: 30px;
+  opacity: 0.5;
 }

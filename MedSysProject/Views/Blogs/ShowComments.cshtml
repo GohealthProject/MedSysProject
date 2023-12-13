@@ -52,8 +52,19 @@
                     @comment.Content
                 </div>
                 <!--回覆按鈕-->
-                <div class="d-flex">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                <div>
+                    <button type="button" class="replyBtn btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                </div> 
+                @* <a href="#" class="mx-2 replyBtn btn-outline-secondary btn-sm" style="color:black;"><span class="bi-reply">回覆</span></a> *@
+                <!--塞輸入方塊-->
+                <div class="reply-form-wrap js-reply-form-wrap">
+                    <form class="reply-form" action="#">
+                        <span class="icon bi-reply"></span>
+                        <input class="form-control" type="text" placeholder="回覆...">
+                        <button class="btn js-end-reply" style="position:absolute; right:280px;"><span class="bi-x"></span>
+
+        </button>
+                    </form>
                 </div>
 
                 <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">

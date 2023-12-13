@@ -303,8 +303,8 @@
                                         <span class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="formFile" class="form-label">照片</label>
-                                        <input type="file" class="form-control" id="formFile" name="formFile" />
+                                        <label for="imgformFile" class="form-label">照片</label>
+                                        <input type="file" class="form-control" id="imgformFile" name="formFile" />
                                     </div>
                                 </form>
                             </div>
@@ -404,6 +404,8 @@
             });
             const status = await response.status;
             if (response.ok) {
+                UploadImg()
+
                 $('#modalEdit').modal('hide');
 
                 Swal.fire({
@@ -424,6 +426,28 @@
                 icon: "error",
             });
         }
+    }
+
+    function UploadImg() {
+        var fileInput = document.getElementById('imgformFile');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        console.log(formData)
+        $.ajax({
+            url: 'https://localhost:7203/api/Upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+
     }
 
     //把資料印到彈出來的視窗
@@ -540,60 +564,60 @@
 
             let s =
                 `
-        <tr>
-            <td>
-                ${count}
-                <input type="hidden" value=${id} />
-            </td>
-            <td>
+                                                    <tr>
+                                                        <td>
+                                                            ${count}
+                                                            <input type="hidden" value=${id} />
+                                                        </td>
+                                                        <td>
     @*image*@
-            </td>
-            <td>
-                ${name}
-            </td>
-            <td>
-                ${gender}
-            </td>
-            <td>
-                ${date}
-            </td>
-            <td>
-                ${phone}
-            </td>
-            <td>
-                ${email}
-            </td>
-            <td style="display:none;">
-                ${pwd}
-            </td>
-            <td style="display:none;">
-                ${address}
-            </td>
-            <td style="display:none;">
-                ${contact}
-            </td>
-            <td style="display:none;">
-                ${nick}
-            </td>
+                                                        </td>
+                                                        <td>
+                                                            ${name}
+                                                        </td>
+                                                        <td>
+                                                            ${gender}
+                                                        </td>
+                                                        <td>
+                                                            ${date}
+                                                        </td>
+                                                        <td>
+                                                            ${phone}
+                                                        </td>
+                                                        <td>
+                                                            ${email}
+                                                        </td>
+                                                        <td style="display:none;">
+                                                            ${pwd}
+                                                        </td>
+                                                        <td style="display:none;">
+                                                            ${address}
+                                                        </td>
+                                                        <td style="display:none;">
+                                                            ${contact}
+                                                        </td>
+                                                        <td style="display:none;">
+                                                            ${nick}
+                                                        </td>
 
-            <td>
-                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal"
-                    data-target="#modalEdit">
-                    <i class="fas fa-user-edit"></i>
-                </a>
+                                                        <td>
+                                                            <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal"
+                                                                data-target="#modalEdit">
+                                                                <i class="fas fa-user-edit"></i>
+                                                            </a>
 
-                <a onclick="detail(this)" class="btn btn-info" data-toggle="modal"
-                    data-target="#modalDetail">
-                    <i class="fas fa-info-circle"></i>
-                </a>
+                                                            <a onclick="detail(this)" class="btn btn-info" data-toggle="modal"
+                                                                data-target="#modalDetail">
+                                                                <i class="fas fa-info-circle"></i>
+                                                            </a>
 
-                <a class="btn btn-danger" onclick="get(this)">
+                                                            <a class="btn btn-danger" onclick="get(this)">
     @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                    <i class="fas fa-user-times"></i>
-                </a>
-            </td>
-        </tr>
-                `
+                                                                <i class="fas fa-user-times"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                            `
             count++;
             console.log(count);
             return s;

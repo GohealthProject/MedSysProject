@@ -262,11 +262,17 @@ namespace MedSysProject.Controllers
                                                   .OrderByDescending(blog => blog.BlogId).Take(1)
                               select blog).ToList();
             }
-
+            _db.Blogs.FirstOrDefault(blog => blog.BlogId == singleBlogID).Views++;
+            _db.SaveChanges();
 
             return View(singlePost);
         }
         #endregion
+
+        public IActionResult TestUploadImage()
+        {
+            return View();
+        }
     }
 
     //internal class ImageCompressionService
