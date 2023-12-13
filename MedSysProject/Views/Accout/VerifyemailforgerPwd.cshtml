@@ -1,0 +1,110 @@
+﻿@using System.Text.Json;
+
+
+@{
+    ViewData["Title"] = "Verifyemail";
+    Layout = "~/Views/Shared/_Layout_Fore_login.cshtml";
+}
+
+
+@section LinkStyle {
+    <link rel="stylesheet" href="~/css/AccoutVerifyemail.css" />
+}
+
+
+<div class="card mainVerify">
+    <div class="card-header">
+        忘記密碼
+    </div>
+    <div class="card-body">
+
+        <input type="hidden" id="memberemail" value="@ViewBag.MemberEmail" />
+        <p class="card-title">系統已寄送一封郵件至您的信箱，請點擊信箱中的連結繼續。</p>
+
+        <p class="card-text">若您沒有收到驗證信，請點擊下方按鈕重新寄送驗證信。</p>
+        <button class="btn btn-primary" id="reverify">重新寄送驗證信</button>
+
+        @* @Html.ActionLink("點擊這裡到電子郵件取信", "UpdataMember", "Accout", new { id = m.MemberId }, new { Class = "btn btn-primary" }) *@
+    </div>
+</div>
+
+
+<script>
+
+    let ver = "@ViewBag.ver";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        postEmail(ver);
+        countDownTimer = setInterval(countDown, 1000);
+    })
+    // async function postemail() {
+    //     let apiurl = `https://localhost:7078/api/Email`
+    //     let address = document.getElementById("memberemail").innerText;
+    //     var data = {
+    //         "address": address,
+    //         "subject": "【GO健康】帳號驗證通知信",
+    //         "body": "<img src=\"https://i.imgur.com/l1mgvEG.png\"><br/>親愛的新會員您好<br/><br/>很榮幸你加入GO健康的會員，請點擊以下連結驗證您的GO健康帳號。<br/><br/>  https://localhost:7203/Accout/"
+    //     };
+    //     const response = await fetch(apiurl, {
+    //         method: 'POST',
+    //         body: data
+    //     });
+
+    //     postemail();
+
+    async function postEmail(ver) {
+        let apiUrl = 'https://localhost:7078/api/Email';
+        let address = "@ViewBag.MemberEmail";
+        console.log(ver);
+        var data = {
+            address: address,
+            subject: '【GO健康】帳號驗證通知信',
+            body: `<img src=\"https://i.imgur.com/l1mgvEG.png\"><br/>會員您好<br/><br/>請點擊以下連結驗證您的GO健康帳號，並修改密碼。<br/><br/> https://localhost:7203/Accout/forgetpwdver?key=${ver}`,
+        };
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 根據需要添加其他標頭
+            },
+            body: JSON.stringify(data)
+        });
+
+        // 處理響應
+        if (!response.ok) {
+            throw new Error(`HTTP 錯誤！狀態碼：${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('響應數據：', responseData);
+    }
+
+    // 調用函數
+
+    //set reverify countdown timer
+    var num = 30;
+    var reverify = document.getElementById("reverify");
+    reverify.addEventListener("click", function () {
+        postEmail(ver);
+        countDownTimer = setInterval(countDown, 1000);
+    })
+
+    function countDown() {
+        num--;
+        if (num == 0) {
+            reverify.disabled = false;
+            $("#reverify").attr('class', 'btn btn-primary');
+            reverify.innerText = "重新寄送驗證信";
+            num = 30;
+            clearInterval(countDownTimer);
+        } else {
+            reverify.disabled = true;
+            $("#reverify").attr('class', 'btn btn-secondary');
+            reverify.innerText = "重新寄送驗證信(" + num + ")";
+        }
+    }
+
+
+
+</script>
