@@ -267,6 +267,11 @@ namespace MedSysProject.Controllers
             return View(singlePost);
         }
         #endregion
+
+        public IActionResult TestUploadImage()
+        {
+            return View();
+        }
     }
 
     //internal class ImageCompressionService
