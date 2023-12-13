@@ -1,6 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     "use strict";
-    
+
     /*sticky header效果*/
     const header = document.querySelector('#header');
     //console.log(header);
@@ -28,7 +28,7 @@
 
     console.log(what);//F12可以用小箭頭看具體是那些元素
 
-    //選擇 class .navbar .dropdown > a，修改箭頭上下
+    //下拉式選單，點擊後箭頭朝上
     const navDropdowns = document.querySelectorAll('.navbar .dropdown >a');
     navDropdowns.forEach(el => {
         el.addEventListener('click', function (event) {
@@ -40,7 +40,7 @@
                 dropDownIndicator.classList.toggle('bi-chevron-up');
                 dropDownIndicator.classList.toggle('bi-chevron-down');
             }
-        })    
+        })
     })
 
     /*輪播牆*/
@@ -77,4 +77,27 @@
             behavior: 'smooth'
         }));
     }
+
+    /**
+ * Initiate glightbox
+ */
+    const glightbox = GLightbox({
+        selector: '.glightbox'
+    });
+
+    const searchOpen = document.querySelector('.js-search-open');
+    console.log(searchOpen);//抓到了
+    const searchClose = document.querySelector('.js-search-close');
+    const searchWrap = document.querySelector(".js-search-form-wrap");
+
+    searchOpen.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("Hi");
+        searchWrap.classList.add("active");
+    });
+
+    searchClose.addEventListener("click", (e) => {
+        e.preventDefault();
+        searchWrap.classList.remove("active");
+    });
 });

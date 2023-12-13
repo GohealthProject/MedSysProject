@@ -73,7 +73,10 @@ section {
         transition: 0.3s all ease;
         visibility: hidden;
         opacity: 0;
-
+        &.active {
+            visibility: visible;
+            opacity: 1;
+        }
         .search-form {
             position: relative;
 
@@ -91,19 +94,19 @@ section {
             .icon {
                 position: absolute;
                 left: 0; //貼左邊
-                top: 0px;
+                top: 2px;
                 opacity: 0.5;
                 left: 10px;
             }
 
             .btn {
                 position: absolute;
-                top: 0px;
+                top: -2px;
                 right: 4px;
                 padding: 0;
                 margin: 0;
                 line-height: 1;
-                font-size: 25px;
+                font-size: 30px;
                 opacity: 0.5;
 
                 &:active, &:focus {
