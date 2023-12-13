@@ -18,6 +18,10 @@ builder.Services.AddDbContext<MedSysContext>(
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -37,7 +41,8 @@ app.UseSession();
 app.UseAuthorization();
 app.MapHub<ChatHub>("/chatHub");
 
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllerRoute(
     name: "default",
