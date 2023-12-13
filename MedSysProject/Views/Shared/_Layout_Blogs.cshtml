@@ -66,10 +66,10 @@
                     </span>
                 </a>
                 <!--要改小鈴鐺-->
-                <a href="#" class="mx-2 js-seacrh-open"><span class="bi-search"></span></a>
+                <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
                 <!--導覽列收折按鍵-->
-                <i class="bi bi-list mobile-nav-toggle" style="color:#d2ece9; i:hover="#fff"></i>
-                <!--搜尋-->
+                <i class="bi bi-list mobile-nav-toggle" style="color:#d2ece9; i:hover=#fff"></i>
+                <!--搜尋的表單-->
                 <div class="search-form-wrap js-search-form-wrap">
                     <form class="search-form" action="#">
                         <!--放大鏡按鍵-->
@@ -169,7 +169,7 @@
                 </div>
             </div>
         </div>
-
+        <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
         <div class="footer-legal">
             <div class="container">
 
@@ -206,9 +206,8 @@
         </div>
 
     </footer>
-
-
-    @await RenderSectionAsync("Scripts", false);
+    
+    @await RenderSectionAsync("Scripts", false)
     <!-- Vendor JS Files -->
     <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/vendor/swiper/swiper-bundle.min.js"></script>
