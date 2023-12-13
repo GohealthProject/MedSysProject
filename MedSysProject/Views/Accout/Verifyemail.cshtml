@@ -14,7 +14,12 @@
 @{
     string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
     MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+    var notverify = TempData["notverify"] as string;
 }
+
+@Html.Raw(notverify)
+
 <div class="card mainVerify">
     <div class="card-header">
         恭喜你加入GO健康會員

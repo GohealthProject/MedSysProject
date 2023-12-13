@@ -12,6 +12,7 @@
 @{
     var expired = TempData["expired"] as string;
     var resetLogin = TempData["resetLogin"] as string;
+    var loginfail = TempData["loginfail"] as string;
 }
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -43,6 +44,7 @@
   
                 @Html.Raw(expired)
                 @Html.Raw(resetLogin)
+                @Html.Raw(loginfail)
                 <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
                 @* <span class="rounded rounded-3 bg-warning text-dark p-3">aaaaaaaaaaa</span> *@
                 
@@ -63,7 +65,7 @@
                         <label class="form-check-label" for="flexCheckDefault">
                             記住我
                         </label>
-                        @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:160px" })
+                        @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:150px" })
                         @Html.ActionLink("忘記密碼", "ForgetPassword", "Accout", new { }, new { style = "margin-left:10px" })
                     </div>
                 </div>

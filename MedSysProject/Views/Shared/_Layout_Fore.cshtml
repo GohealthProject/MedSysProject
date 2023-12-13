@@ -41,6 +41,9 @@
     ======================================================== -->
     @await RenderSectionAsync("LinkStyle", required: false)
     <script src="@Url.Content("~/js-Account/LayoutFore.js")"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -140,6 +143,8 @@
     <script src="~/forevendor/php-email-form/validate.js"></script>
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
+
+
   
     @await RenderSectionAsync("Scripts", required: false)
     <script>

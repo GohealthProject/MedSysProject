@@ -55,21 +55,25 @@ namespace MedSysProject.Controllers
                 }
                 else if (m.member.MemberPassword == c.txtPassWord && !m.IsVerified)
                 {
+                    string json = JsonSerializer.Serialize(q);
+                    HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                    TempData["notverify"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 你的帳號尚未驗證，請至信箱收取驗證信。</div>";
                     return RedirectToAction("Verifyemail");
                 }
                 else
                 {
-                    ViewBag.Msg = "<i class=\"fas fa-times\"></i> 電子信箱或密碼錯誤";
+                    TempData["loginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 電子信箱或密碼錯誤</div>";
                     return View();
                 }
             }
-            ViewBag.Msg = "<i class=\"fas fa-times\"></i> 電子信箱或密碼錯誤";
+            TempData["loginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 電子信箱或密碼錯誤</div>";
             return View();
         } //登入
         public IActionResult UpdataMember()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                 return RedirectToAction("Login");
+
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             return View(m);
@@ -100,6 +104,60 @@ namespace MedSysProject.Controllers
 
             return RedirectToAction("MemberCenter", "Accout");
         }
+
+        public IActionResult ResetPasswordLogined()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Login");
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            return View(m);
+        }
+
+        [HttpPost]
+        public IActionResult ResetPasswordLogined(MemberWarp m, CResetPasswordViewModel vm)
+        {
+            //修改密碼
+            if (vm == null)
+                return View();
+
+            var oldpwd = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId).MemberPassword;
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk == vm.newPwd && vm.oldPwd == oldpwd)
+            {
+                //todo 這裡要修復
+                string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp nown = new MemberWarp();
+                nown.member = JsonSerializer.Deserialize<Member>(json);
+                var q = _db.Members.FirstOrDefault(n => n.MemberId == nown.MemberId);
+                q.MemberPassword = vm.newPwd;
+                _db.SaveChanges();
+
+                TempData["alertResetPwdSuccess"] = "Swal.fire({title: \"修改成功!\",text: \"你已成功修改密碼!\",icon: \"success\",showConfirmButton: false,timer: 1500});";
+
+                return RedirectToAction("MemberCenter");
+            }
+            else if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk != vm.newPwd && vm.oldPwd == oldpwd)
+            {
+                TempData["alertResetPwdFail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-times\"></i> 新密碼不一致</div>";
+                return View(m);
+            }
+            else if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk == vm.newPwd && vm.oldPwd != oldpwd)
+            {
+                TempData["alertResetPwdFail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-times\"></i> 原密碼輸入錯誤</div>";
+                return View(m);
+            }
+            else if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk != vm.newPwd && vm.oldPwd != oldpwd)
+            {
+                TempData["alertResetPwdFail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-times\"></i> 舊密碼輸入錯誤，新密碼不一致</div>";
+                return View(m);
+            }
+            TempData["expired"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 連結已失效，請再試一次。</div>";
+            return RedirectToAction("Login");
+        }
+
+
+
         public IActionResult Register()
         {
 
@@ -182,12 +240,20 @@ namespace MedSysProject.Controllers
 
             if (key == keys)
             {
+                string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp nown = new MemberWarp();
+                nown.member = JsonSerializer.Deserialize<Member>(json);
+                var q = _db.Members.FirstOrDefault(n => n.MemberId == nown.MemberId);
+
                 //database is verifed = true
-                var q = _db.Members.FirstOrDefault(n => n.MemberEmail == HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN));
                 q.IsVerified = true;
                 _db.SaveChanges();
 
-                return RedirectToAction("UpdataMember");
+                //remove session
+                HttpContext.Session.Remove(CDictionary.SK_MEMBER_VERIFY);
+
+                TempData["alertResetPwdSuccess"] = "Swal.fire({title: \"已完成!\",text: \"此帳號已成功驗證!\",icon: \"success\",showConfirmButton: false,timer: 1500});";
+                return RedirectToAction("MemberCenter");
 
 
             }
@@ -207,6 +273,8 @@ namespace MedSysProject.Controllers
 
             if (key == keys)
             {
+                //remove session
+                HttpContext.Session.Remove(CDictionary.SK_FPWD_VERIFY);
                 return RedirectToAction("ResetPassword");
             }
             else
@@ -218,6 +286,12 @@ namespace MedSysProject.Controllers
 
         public IActionResult ResetPassword()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_VERIFY) || !HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_SUBMIT))
+            {
+                TempData["expired"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 連結已失效，請再試一次。</div>";
+                return RedirectToAction("Login");
+            }
+
             return View();
         }
 
@@ -231,14 +305,22 @@ namespace MedSysProject.Controllers
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_SUBMIT) && vm.newPwdChk == vm.newPwd)
             {
                 //todo 這裡要修復
-                var q = _db.Members.FirstOrDefault(n => n.MemberEmail == HttpContext.Session.GetString(CDictionary.SK_FPWD_SUBMIT));
+                string email = JsonSerializer.Deserialize<string>(HttpContext.Session.GetString(CDictionary.SK_FPWD_SUBMIT));
+                var q = _db.Members.FirstOrDefault(n => n.MemberEmail == email);
                 q.MemberPassword = vm.newPwd;
                 _db.SaveChanges();
 
                 TempData["resetLogin"] = "<div class=\"rounded rounded-3 bg-success text-light p-3 mb-2\"><i class=\"fas fa-check-circle\"></i> 密碼修改成功，請重新登入。</div>";
-                
+
                 return RedirectToAction("Login");
             }
+            else if (HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_SUBMIT) && vm.newPwdChk != vm.newPwd)
+            {
+                TempData["resetLoginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-times\"></i> 密碼不一致，請再試一次。</div>";
+                return View();
+            }
+
+
             TempData["expired"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 連結已失效，請再試一次。</div>";
             return RedirectToAction("Login");
         }
