@@ -9,6 +9,11 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 }
 
+@{
+    var expired = TempData["expired"] as string;
+    var resetLogin = TempData["resetLogin"] as string;
+}
+
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <div id="g_id_onload"
      data-client_id="641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com"
@@ -24,7 +29,7 @@
             <img src="~/img/Login2.png" class="img-fluid" />
         </div>
 
-        <div class="col-4 shadow p-3 mb-5 mt-4 bg-white rounded" >
+        <div class="col-4 shadow p-3 mb-5 mt-4 bg-white rounded">
             <form method="post" id="from" style="padding-top:0px;">
                 <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
                 @* @Html.ActionLink("後台登入", "index", "Admin", new { }, new { }) *@
@@ -35,8 +40,14 @@
                 <div class="row">
                     <hr class="line" />
                 </div>
+  
+                @Html.Raw(expired)
+                @Html.Raw(resetLogin)
+                <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
+                @* <span class="rounded rounded-3 bg-warning text-dark p-3">aaaaaaaaaaa</span> *@
+                
 
-                <div class="  px-1 form-floating">
+                <div class="px-1 form-floating">
                     <input type="text" class="form-control" id="txtAccout" name="txtEmail">
                     <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
                 </div>
@@ -50,20 +61,23 @@
                     <div class="form-check text-start my-3">
                         <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">
-                            Remember me
+                            記住我
                         </label>
                         @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:160px" })
+                        @Html.ActionLink("忘記密碼", "ForgetPassword", "Accout", new { }, new { style = "margin-left:10px" })
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3  col-5"></div>
                     <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
                 </div>
-                <div class="row">
-                    <div class="mb-3  col-12"><button id="testButton" type="button" class="btn btn-primary w-100 py-2">測試</button></div>
+                <div class="btn-group d-flex justify-content-center">
+                    <button id="testButtonA" type="button" class="btn btn-primary w-100 py-2">DEMO1(功能)</button>
+                    <button id="testButtonB" type="button" class="btn btn-primary w-100 py-2">DEMO2(註冊)</button>
+                    <button id="testButtonC" type="button" class="btn btn-primary w-100 py-2">DEMO3(G)</button>
                 </div>
                 <div class="row">
-                    <div class="mb-3  col-12"><a href="~/admin" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
+                    <div class="mb-3 mt-1 col-12"><a href="~/admin" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
                 </div>
             </form>
         </div>
@@ -72,15 +86,25 @@
 
 @section Scripts {
 
-<script>
+    <script>
 
-    $('#footer').css("margin-top","150px");
+        $('#footer').css("margin-top", "150px");
 
 
-    $('#testLabel').css("font-size", "15px");
-    $('#testButton').on('click', () => {
-        $('#txtAccout').val('night90810@gmail.com');
-        $('#txtPassWord').val('Test');
-    });
-</script>
+        $('#testLabel').css("font-size", "15px");
+        $('#testButtonA').on('click', () => {
+            $('#txtAccout').val('night90810@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
+
+        $('#testButtonB').on('click', () => {
+            $('#txtAccout').val('jacky56542@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
+
+        $('#testButtonC').on('click', () => {
+            $('#txtAccout').val('night90810@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
+    </script>
 }
