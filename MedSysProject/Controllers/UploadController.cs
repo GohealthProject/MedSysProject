@@ -36,6 +36,9 @@ namespace MedSysProject.Controllers
         public IActionResult Post()
         {
             var fail = Request.Form;
+            
+            IFormFile file = Request.Form.Files[0];
+
 
             //upload image 
 

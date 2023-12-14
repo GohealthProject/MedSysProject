@@ -250,7 +250,7 @@
 
                         <div class="row">
                             <div class="col-md-10">
-                                <form asp-action="MemberCreate" id="myUpdataform">
+                                <form asp-action="MemberCreate" id="myUpdataform" enctype="multipart/form-data">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
                                         <input type="hidden" id="inputId" value="" name="MemberId" />
@@ -369,6 +369,9 @@
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    
+
+
     document.querySelector("#back").addEventListener("click", () => {
         window.location.href = "/Admin/MemberManager";
     });
@@ -416,42 +419,43 @@
                     timer: 1500
                 });
 
-                research();
+                // research();
             }
         } catch {
-            const status = await response.status;
-            Swal.fire({
-                title: "有錯誤發生!",
-                text: status,
-                icon: "error",
-            });
+            // const status = await response.status;
+            // Swal.fire({
+            //     title: "有錯誤發生!",
+            //     text: status,
+            //     icon: "error",
+            // });
         }
     }
 
-    function UploadImg() {
+    async function UploadImg() {
         var fileInput = document.getElementById('imgformFile');
         var file = fileInput.files[0];
+        var myForm = document.getElementById("myUpdataform");
+        var data = new FormData(myForm);
+        console.log(data)
         
-        console.log(file);
-
-        let filejson = JSON.stringify(file);
-        console.log("asasasasasa");
-        console.log(filejson);
-        var formData = new FormData();
-        formData.append('file', file);
-        console.log(formData)
-        $.ajax({
-            url: 'https://localhost:7203/api/Upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (data) {
-                console.log(data);
-            }
+        const response= await fetch('https://localhost:7203/api/Upload', {
+            method: 'POST',
+            body: data
         });
+        const res =await  response.text();
+        console.log(res);
+
+        // $.ajax({
+        //     url: 'https://localhost:7203/api/Upload',
+        //     type: 'POST',
+        //     data: data,
+        //     success: function (data) {
+        //         console.log(data);
+        //     },
+        //     error: function (data) {
+        //         console.log(data);
+        //     }
+        // });
 
     }
 
