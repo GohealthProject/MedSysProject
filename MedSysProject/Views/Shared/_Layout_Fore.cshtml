@@ -118,21 +118,22 @@
     <main id="main" style="background-color:#F2F9F8">
     @RenderBody()
     <!-- ======= Footer ======= -->
-    <footer id="footer">
-    <div class="container">
-      <div class="copyright">
-        <strong><span>GO健康 版權所有</span></strong>
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-                    <a href="~/">GO健康</a>
-      </div>
-    </div>
-  </footer><!-- End #footer -->
+    
     </main>
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                <strong><span>GO健康 版權所有</span></strong>
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+                <a href="~/">GO健康</a>
+            </div>
+        </div>
+    </footer><!-- End #footer -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -157,7 +158,9 @@
         }
         document.addEventListener('DOMContentLoaded', () => {
             getcartList()
+            document.querySelector("#footer").style.margin = "";
         })
+        
     </script>
 </body>
 
