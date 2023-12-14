@@ -122,12 +122,12 @@
                                 @{
                                     if (item.MemberImage == null)
                                     {
-                                        <img src="~/img/no_member_image.jpg" width="100px" />
+                                        <img src="~/img/no_member_image.jpg" style="width:100px;height:100px;" />
                                     }
 
                                     else
                                     {
-                                        <img src="~/img/MemberImg/@item.MemberImage" width="100px" />
+                                        <img src="~/img/MemberImg/@item.MemberImage" style="width:100px;height:100px;" />
                                     }
                                 }
                             </td>
@@ -419,7 +419,7 @@
                     timer: 1500
                 });
 
-                // research();
+                research();
             }
         } catch {
             // const status = await response.status;
