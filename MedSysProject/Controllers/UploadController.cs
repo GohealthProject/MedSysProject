@@ -33,13 +33,23 @@ namespace MedSysProject.Controllers
 
         // POST api/<UploadController>
         [HttpPost]
-        public IActionResult Post(IFormFile fileN)
+        public IActionResult Post()
         {
-            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
-            using (var fileStream = new FileStream(webPath, FileMode.Create))
-            {
-                fileN.CopyTo(fileStream);
-            }
+            var fail = Request.Form;
+
+            //upload image 
+
+
+
+
+
+
+
+            //string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+            //using (var fileStream = new FileStream(webPath, FileMode.Create))
+            //{
+            //    fileN.CopyTo(fileStream);
+            //}
 
             return Ok();
 
@@ -47,13 +57,14 @@ namespace MedSysProject.Controllers
 
         // PUT api/<UploadController>/5
         [HttpPut("Up/")]
-        public IActionResult Puttt(IFormFile fileN)
+        public IActionResult Puttt()
         {
-            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
-            using (var fileStream = new FileStream(webPath, FileMode.Create))
-            {
-                fileN.CopyTo(fileStream);
-            }
+            var fail = Request.Form;
+            //string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+            //using (var fileStream = new FileStream(webPath, FileMode.Create))
+            //{
+            //    fileN.CopyTo(fileStream);
+            //}
 
             return Ok();
         }
