@@ -9,30 +9,21 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 
 <!-- Button trigger modal -->
+<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
 </button>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-xl" id="btn">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h5>我是內容</h5>
-                <table id="tableD">
-                    <thead>
-                        <tr>
-                            <th>reportDetailId</th>
-                            <th>reportId</th>
-                            <th>itemId</th>
-                            <th>rs</th>
-                        </tr>
-                    </thead>
-                </table>
+                ...
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -41,6 +32,7 @@
         </div>
     </div>
 </div>
+
 <table id="tableM" class="">
     <thead>
         <tr>
@@ -52,6 +44,18 @@
     </thead>
 </table>
 
+    <h5>我是內容</h5>
+    <table id="tableD">
+        <thead>
+            <tr>
+                <th>reportDetailId</th>
+                <th>reportId</th>
+                <th>itemId</th>
+                <th>rs</th>
+            </tr>
+        </thead>
+    </table>
+</div>
 
 
 
@@ -85,8 +89,27 @@
     var tableM = document.querySelector("#tableM")
     var tableD = document.querySelector("#tableD")
     var btn = document.querySelector("#btn")
+    ////不報錯///
+    //$.fn.dataTable.ext.errMode = 'throw';
+    /////////////
+    var ttt = $('#tableD').DataTable({
+        "ajax": {
+            "url": "https://localhost:7203/admin/test1/",
+            //默认为data,这里定义为空，则只需要传不带属性的数据
+            "dataSrc": ""
+        },
+        columns: [
+            { data: 'reportDetailId' },
+            { data: 'reportId' },
+            { data: 'itemId' },
+            { data: 'result' },
+        ]
+    });
+
+   
+
     //console.log(event.target.closest('tr').children[0].innerHTML)///該選取欄位之ID
-    btn.addEventListener("click",()=>{
+    tableM.addEventListener("click", () => {
         
         
         //btn.setAttribute("data-ajax", "ajaxRequest2")
@@ -96,15 +119,28 @@
         //table.ajax.reload();
 
         //bs
-        var table = document.querySelector('#table');
-        var $button = $('#button')
+        //var table = document.querySelector('#table');
+        //var $button = $('#button')
+        
+        //$.ajax({
+        //    url: 'https://localhost:7203/admin/test1',
+        //    data: data,
+        //    success: success,
+        //    dataType: dataType
+        //});
+        var datasss = $.get('https://localhost:7203/admin/test1/')
+       
 
-        alert("hello")
+        //$('#myModal').on('shown.bs.modal', function () {
+        //    alert("00")
+        //})
+        var id = (event.target.closest('tr').children[0].innerHTML)
+        console.log(id)
+        ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
+      
+
         //$('#tableD').DataTable({
-        //    ajax: {
-        //        url: 'https://localhost:7203/admin/test1',
-        //        dataSrc: ''
-        //    },
+        //    "ajax": "data.json",
         //    columns: [
         //        { data: 'reportDetailId' },
         //        { data: 'reportId' },
@@ -112,27 +148,42 @@
         //        { data: 'result' },
         //    ]
         //})
-      
+        //   }
         
        
         
 
     })
 
-   
-    $('#tableD').DataTable({
-        ajax: {
-            url: 'https://localhost:7203/admin/test1',
-            dataSrc: ''
-        },
-        columns: [
-            { data: 'reportDetailId' },
-            { data: 'reportId' },
-            { data: 'itemId' },
-            { data: 'result' },
-        ]
-    })
+    //$('#tableD').DataTable({
+    //    ajax: {
+    //        url: 'https://localhost:7203/admin/test1',
+    //        dataSrc: ''
+    //    },
+    //    columns: [
+    //        { data: 'reportDetailId' },
+    //        { data: 'reportId' },
+    //        { data: 'itemId' },
+    //        { data: 'result' },
+    //    ]
+    //})
+    //   }
 
+   //function abc(){
+   //     alert("hello")
+   // $('#tableD').DataTable({
+   //     ajax: {
+   //         url: 'https://localhost:7203/admin/test1',
+   //         dataSrc: ''
+   //     },
+   //     columns: [
+   //         { data: 'reportDetailId' },
+   //         { data: 'reportId' },
+   //         { data: 'itemId' },
+   //         { data: 'result' },
+   //     ]
+   // })
+   //}
 
 
 
