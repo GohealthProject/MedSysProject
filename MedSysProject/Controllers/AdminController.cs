@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Humanizer;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Azure;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 namespace MedSysProject.Controllers
 {
@@ -870,19 +871,19 @@ namespace MedSysProject.Controllers
 
         }
 
-        public IActionResult test1(CKeywordViewModel vm)
+        public IActionResult test1(int id=0)
         {
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+            if (id==0)
                 datas = from s in _db.ReportDetails
                         orderby s.ReportId
                         select s;
 
-            //else
-            //    datas = _db.ReportDetails.Where(p =>
-            //    p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            else
+                datas = _db.ReportDetails.Where(p =>
+                p.Report.MemberId.Equals(id));
             return Json(datas);
 
         }
