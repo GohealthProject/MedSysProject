@@ -15,85 +15,86 @@
             Member whoLogIn = JsonSerializer.Deserialize<Member>(Json);
             memLogIn = whoLogIn.MemberId;
         }
-        else
-        {
-            memLogIn = null;    
-        }
+            // else
+            // {
+        //     memLogIn = null;
+        // }
     }
     @{
-                                    <section class="single-post-content">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+            <section class="single-post-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
 
-                                                    <!-- ======= Single Post Content ======= -->
-                                                    <div class="single-post">
-                                                        <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
-                                                        <h1 class="mb-5">@Model[0].Title</h1>
-                                                        @{
+                            <!-- ======= Single Post Content ======= -->
+                            <div class="single-post">
+                                <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                                <h1 class="mb-5">@Model[0].Title</h1>
+                                @{
                                 if (Model[0].BlogImage != null)
                                 {
-                                                                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
-                                                                                                 alt=""
-                                                                                                 class="img-fluid" />
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
+                                                 alt=""
+                                                 class="img-fluid" />
                                 }
-                                                        }
-                                                        @Html.Raw(Model[0].Content)
-                                                    </div><!-- End Single Post Content -->
-                                                    <!-- ======= Comments ======= -->
-                                                    <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
+                                }
+                                @Html.Raw(Model[0].Content)
+                            </div><!-- End Single Post Content -->
+                            <!-- ======= Comments ======= -->
+                            <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
 
-                                                    <div class="Comments" id="putIn">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <!-- ======= 側面欄位丟這 ======= -->
-                                                    <div class="aside-block">
+                            <div class="Comments" id="putIn">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <!-- ======= 側面欄位丟這 ======= -->
+                            <div class="aside-block">
 
-                                                        <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true" onclick="loadSidePopular()">Popular</button>
-                                                            </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideLatest()">Latest</button>
-                                                            </li>
-                                                            <li class="nav-item" role="presentation">
-                                                                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideThisCat()">Latest</button>
-                                                            </li>
-                                                        </ul>
+                                <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true" onclick="loadSidePopular()">Popular</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideLatest()">Latest</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideThisCat()">Latest</button>
+                                    </li>
+                                </ul>
 
-                                                        <div class="tab-content" id="pills-tabContent">
-                                                            <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                            </div>
-                                                            <div class="tab-pane fade show active" id="pills-latest" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                            </div>
-                                                            <div class="tab-pane fade show active" id="pills-thisCat" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                            </div>
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                    </div>
+                                    <div class="tab-pane fade show active" id="pills-latest" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                    </div>
+                                    <div class="tab-pane fade show active" id="pills-thisCat" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                    </div>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="aside-block">
-                                                        <h3 class="aside-title">文章類別</h3>
-                                                        <ul class="aside-links list-unstyled">
-                                                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
-                                                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
-                                                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
-                                                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
-                                                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <!-- End Categories -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
+                                </div>
+                            </div>
+                            <div class="aside-block">
+                                <h3 class="aside-title">文章類別</h3>
+                                <ul class="aside-links list-unstyled">
+                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
+                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
+                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
+                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
+                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
+                                </ul>
+                            </div>
+                            <!-- End Categories -->
+                        </div>
+                    </div>
+                </div>
+            </section>
     }
 </main>
 @section Scripts {
     <script>
 
-        
+
         let memberLogIn = @memLogIn;
+        console.log(typeof memberLogIn);
         //console.log("我是singlePost");
         //為了不要跑版，使用者輸入的圖片會自動被包上figure以限制版面
         var postContentElements = document.getElementsByClassName('single-post');
@@ -123,7 +124,7 @@
             await loadSidePopular();
             const InputTextArea = document.querySelector('#comment-message');
             console.log(InputTextArea);
-            InputTextArea.addEventListener('keydown', function (event) {
+            InputTextArea.addEventListener('keydown', async function (event) {
                 console.log(typeof event.keyCode);
                 if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault();//防止textarea換行
@@ -134,9 +135,9 @@
                     const apiUrl = 'https://localhost:7078/api/Comments/memberAddComment';
                     const data =
                     {
-                        blogId: blogId,
-                        memberId: memberLogIn,
-                        comment: InputTextArea.value
+                        BlogId: blogId,
+                        MemberId: memberLogIn,
+                        Content: InputTextArea.value
                     };
                     const requestOption =
                     {
@@ -145,9 +146,9 @@
                         body: JSON.stringify(data)
                     };
                     fetch(apiUrl, requestOption)
-                    .then(response => { 
-                        if (!response.ok) 
-                        { 
+                    .then(response => {
+                        if (!response.ok)
+                        {
                             throw new Error('Network response was not ok.');
                         }
                         }).catch(error => {
@@ -155,15 +156,18 @@
                             // 處理錯誤
                         });
                     InputTextArea.value = '';
+
+                     await loadPrimeComments();
+                     await processReplies();
+                     toggleLinkEvent();
+                     initButtons();
+                    //enter按鈕preventDefault不見了?
                 }
             });
-            //await loadSideLatest();
-            //await loadSideThisCat();
         });
 
-        async function addNewComment() 
-        { 
-            
+        async function addNewComment() {
+
         }
 
         //定義方法
@@ -196,8 +200,9 @@
         async function loadPrimeComments() {
             const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
             const data = await response.text();
-            let putIn = document.querySelector('.post-content');
+            let putIn = document.querySelector('#putIn');
             //console.log(putIn);
+            putIn.innerHTML = '';
             putIn.innerHTML += data;
         }
         async function processReplies() {
@@ -216,6 +221,7 @@
             const subResponse = await fetch(`@Url.Content("~/Blogs/ShowReplies")?mainCommentId=${commentId}`);
             const subData = await subResponse.text();
             let subPutIn = comment.querySelector('.subPutIn');
+            subPutIn.innerHTML = '';
             subPutIn.innerHTML += subData;
 
             //如何取得?<h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
@@ -247,16 +253,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                 <div class="post-meta">
-                                   <span class="date">${articleClass}</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>${formattedDate}</span>
-                                </div>
-                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                               <span class="author mb-3 d-block">${author}</span>
-                           </div>
+                                         <div class="post-meta">
+                                           <span class="date">${articleClass}</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>${formattedDate}</span>
+                                        </div>
+                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                       <span class="author mb-3 d-block">${author}</span>
+                                   </div>
 
-                        `
+                                `
             })
             popularContainer.innerHTML = popular6.join('');
         }
@@ -277,16 +283,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                 <div class="post-meta">
-                                   <span class="date">${articleClass}</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>${formattedDate}</span>
-                                </div>
-                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                               <span class="author mb-3 d-block">${author}</span>
-                           </div>
+                                         <div class="post-meta">
+                                           <span class="date">${articleClass}</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>${formattedDate}</span>
+                                        </div>
+                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                       <span class="author mb-3 d-block">${author}</span>
+                                   </div>
 
-                        `
+                                `
             })
             latestContainer.innerHTML = latest6.join('');
         }
@@ -307,16 +313,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                 <div class="post-meta">
-                                   <span class="date">${articleClass}</span>
-                                    <span class="mx-1">&bullet;</span>
-                                    <span>${formattedDate}</span>
-                                </div>
-                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                               <span class="author mb-3 d-block">${author}</span>
-                           </div>
+                                         <div class="post-meta">
+                                           <span class="date">${articleClass}</span>
+                                            <span class="mx-1">&bullet;</span>
+                                            <span>${formattedDate}</span>
+                                        </div>
+                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                       <span class="author mb-3 d-block">${author}</span>
+                                   </div>
 
-                        `
+                                `
             })
             thisCarContainer.innerHTML = thisCat6.join('');
             //const thisCat6
