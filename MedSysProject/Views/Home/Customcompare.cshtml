@@ -296,6 +296,7 @@
 
 @section Scripts{
     <script>
+        var count=0;///不能點太快
         const items = [];
         //todo 選後enable
         let btn = document.querySelectorAll(".ibtn");
@@ -318,13 +319,15 @@
             console.log(event.target.this);
             //var t = dtr.removeChild(event.target.parentNode);
             var del =list.removeChild(event.target.parentNode.parentNode);
-            var tar = event.target.nextSibling;
+            var tar = event.target.nextElementSibling.id;
             //console.log(t.innerHTML)
             var index = items.indexOf(event.target)
             console.log(tar)
-            items.splice()(index,1)
+            console.log(tar)
+            items.splice(tar, 1)
             console.log(index);
             console.log(items);
+            count--;
         }
         function itemadd (event){
             console.log(event.target);
@@ -347,15 +350,16 @@
                                     </td>
                                     <td>
                                        <img src="/img/icon/x.png" onclick="imgdelete()"/>
-                                       <p id="${iid.innerHTML}">${iid.innerHTML}</p>
+                                       <p id="${count}">${iid.innerHTML}</p>
                                     </td>
                      </tr>
             `;
             list.innerHTML +=show;
             
-
+            
             items.push(iid.innerHTML)
             console.log(items);
+            count++
         }
 
         function submit()

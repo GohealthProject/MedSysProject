@@ -104,6 +104,36 @@
                 </div>
             </div>
             @* ---新增彈窗結束--- *@
+
+            @* ---詳細資料彈窗開始--- *@
+            <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">文章內容</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <!--Body-->
+                        <div class="modal-body">
+
+
+                            @* 詳細資料 *@
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* ---詳細資料彈窗結束--- *@
+
+
             <table class="table">
                 <thead>
                     <tr>
@@ -157,6 +187,9 @@
                                 </td>
                                 <td>
                                     @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
+                                    <button asp-action="Detail" asp-route-id="@item.BlogId" onclick="detail(this)" class="btn btn-outline-info" data-toggle="modal" data-target="#modalDetail">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
                                     @if (item.EmployeeId == empID)
                                     {
                                         <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">

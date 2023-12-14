@@ -5,6 +5,9 @@ using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using static System.Net.WebRequestMethods;
+using MedSysProject.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedSysProject.Controllers
 {
@@ -22,6 +25,19 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult members()
+        {
+            //IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+           
+            var datas = from s in _context.Members.AsEnumerable()
+                        
+                        select  new { ID =s.MemberId , name =s.MemberName  };
+
+            return Json(datas);
+
+        }
         public IActionResult rp2(int id)
         {
 
@@ -43,15 +59,17 @@ namespace MedSysProject.Controllers
             return Content("rsyes");
         }
         [HttpPost]
-        public IActionResult reservesub(ReservedSub rsb)
+        public IActionResult reservesub()
         {
-
-            _context.Add(rsb);
-            _context.SaveChanges();
+            var form = Request.Form;
+            var rss = form["reservesub"];
+            ReservedSub rsb =JsonSerializer.Deserialize<ReservedSub>(rss);
+            //_context.Add(rsb);
+            //_context.SaveChanges();
             return Content("rsbyes");
         }
         [HttpPost]
-        public IActionResult healthreport(HealthReport hrp)
+        public IActionResult healthreport()
         {
             //var items = Request.Form;
 
@@ -67,16 +85,22 @@ namespace MedSysProject.Controllers
             //    r.Reserved = re;
             //    r.Item = item;
             //}
+            var form = Request.Form;
+            var htrp = form["healthreport"];
+            HealthReport hrp = JsonSerializer.Deserialize<HealthReport>(htrp);
 
-            _context.Add(hrp);
-            _context.SaveChanges();
+            //_context.Add(hrp);
+            //_context.SaveChanges();
             return Content("hrpyes");
         }
         [HttpPost]
-        public IActionResult reportdetail(ReportDetail rdl)
+        public IActionResult reportdetail()
         {
-            _context.Add(rdl);
-            _context.SaveChanges();
+            var form = Request.Form;
+            var rpdt = form["reportdetail"];
+            ReportDetail hrp = JsonSerializer.Deserialize<ReportDetail>(rpdt);
+            //_context.Add(hrp);
+            //_context.SaveChanges();
             return Content("rdlyes");
         }
 

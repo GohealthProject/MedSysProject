@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "EmpManager";
     Layout = "_Layout_Admin2";
-    
+
 }
 
 @* 這邊是確保左側邊欄的目前區域標亮 *@
@@ -40,41 +40,48 @@
 
                     else
                     {
+                        string PPath = "~/Admin/EmpManager?page=";
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.maxpage - 4));
+                        int endPage = Math.Min(ViewBag.maxpage, startPage + 4);
+
                         if (ViewBag.page == 1)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.maxpage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                <li class="page-item active"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.maxpage)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
 
                     }
@@ -261,41 +268,48 @@
 
                     else
                     {
+                        string PPath = "~/Admin/EmpManager?page=";
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.maxpage - 4));
+                        int endPage = Math.Min(ViewBag.maxpage, startPage + 4);
+
                         if (ViewBag.page == 1)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=1">首頁</a></li>
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@previous">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.maxpage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                <li class="page-item active"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@i">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.maxpage)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@next">下一頁</a></li>
-                            <li class="page-item"><a class="page-link" href="~/admin/EmpManager?page=@ViewBag.maxpage">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
 
                     }
@@ -471,7 +485,7 @@
     function showTogget(element) {
         let par = element.parentNode.parentNode;
         var hidd = par.querySelector('input[type="hidden"]');
-        console.log("主ID是"+hidd.value);
+        console.log("主ID是" + hidd.value);
         var name = par.querySelector('td:nth-child(3)');
         var classid = par.querySelector('#hiddenclassid');
         console.log("類別ID是" + classid.value);
@@ -545,51 +559,59 @@
             };
             let s =
                 `
-                                                                                                             <tr>
-                                                                                                                <td>
-                                                                                                                     <input type="hidden" value=${id}>
-                                                                                                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                      ${count}
-                                                                                                                 </td>
-                                                                                                                 <td>
-                                                                                                                         <img src="${imgurl}" width="100">
-                                                                                                                  </td>
-                                                                                                                  <td>
-                                                                                                                       ${name}
-                                                                                                                  </td>
-                                                                                                                  <td>
-                                                                                                                       ${cid}
-                                                                                                                  </td>
-                                                                                                                  <td>
-                                                                                                                                   ${valuedate}
-                                                                                                                   </td>
-                                                                                                                   <td>
-                                                                                                                        ${phone}
-                                                                                                                   </td>
-                                                                                                                   <td>
-                                                                                                                        ${email}
+                                                                                                                 <tr>
+                                                                                                                    <td>
+                                                                                                                         <input type="hidden" value=${id}>
+                                                                                                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                                                                                                     </td>
                                                                                                                     <td>
-                                                                                                                        ${pwd}
-                                                                                                                    </td>
-                                                                                                                    <td>
-                                                                                                                             <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                                                                                         <i class="fas fa-user-edit"></i>
-                                                                                                                         </a>
-                                                                                                                         <a class="btn btn-danger" onclick="get(this)">
-                                                                                                                         <i class="fas fa-user-times"></i>
-                                                                                                                         </a>
+                                                                                                                          ${count}
+                                                                                                                     </td>
+                                                                                                                     <td>
+                                                                                                                             <img src="${imgurl}" width="100">
                                                                                                                       </td>
-                                                                                                                </tr>
-                                                                                                            `
+                                                                                                                      <td>
+                                                                                                                           ${name}
+                                                                                                                      </td>
+                                                                                                                      <td>
+                                                                                                                           ${cid}
+                                                                                                                      </td>
+                                                                                                                      <td>
+                                                                                                                                       ${valuedate}
+                                                                                                                       </td>
+                                                                                                                       <td>
+                                                                                                                            ${phone}
+                                                                                                                       </td>
+                                                                                                                       <td>
+                                                                                                                            ${email}
+                                                                                                                        </td>
+                                                                                                                        <td>
+                                                                                                                            ${pwd}
+                                                                                                                        </td>
+                                                                                                                        <td>
+                                                                                                                                 <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                             <i class="fas fa-user-edit"></i>
+                                                                                                                             </a>
+                                                                                                                             <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                             <i class="fas fa-user-times"></i>
+                                                                                                                             </a>
+                                                                                                                          </td>
+                                                                                                                    </tr>
+                                                                                                                `
             count++;
             console.log(count);
             return s
 
         })
         document.querySelector("#go").innerHTML = value.join("");
+
+
+        //wait 2sec
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, 2000);
+        });
         window.location.reload();
     }
     async function del(id) {
