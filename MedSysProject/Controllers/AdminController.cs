@@ -250,6 +250,7 @@ namespace MedSysProject.Controllers
             else
             {
                 datas = _db.Plans.Where(p => p.PlanName.Contains(vm.txtKeyword));
+                ViewBag.key = vm.txtKeyword;
             }
 
             return View(datas);
@@ -423,7 +424,7 @@ namespace MedSysProject.Controllers
                 int maxpage = (total % pagesize == 0 ? total / pagesize : total / pagesize + 1);
                 datas = _db.ReportDetails.Include(p => p.Item).OrderByDescending(p => p.ReportId).Skip((page - 1) * pagesize).Take(pagesize);
                 ViewBag.page = page; //目前頁數
-                ViewBag.TotalPage = maxpage; //總頁數
+                ViewBag.maxpage = maxpage; //總頁數
                 ViewBag.total = total; //資料總筆數
                 ViewBag.pagesize = pagesize; //每頁顯示幾筆資料
             }
@@ -857,15 +858,15 @@ namespace MedSysProject.Controllers
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails
-                        orderby s.ReportId
-                        select s;
+            //if (string.IsNullOrEmpty(vm.txtKeyword))
+            //    datas = from s in _db.ReportDetails
+            //            orderby s.ReportId
+            //            select s;
 
-            else
-                datas = _db.ReportDetails.Where(p =>
-                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
-            return View(datas);
+            //else
+            //    datas = _db.ReportDetails.Where(p =>
+            //    p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return View(/*datas*/);
 
         }
 
@@ -879,12 +880,14 @@ namespace MedSysProject.Controllers
                         orderby s.ReportId
                         select s;
 
-            else
-                datas = _db.ReportDetails.Where(p =>
-                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            //else
+            //    datas = _db.ReportDetails.Where(p =>
+            //    p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
             return Json(datas);
 
         }
+
+      
 
     }
 }

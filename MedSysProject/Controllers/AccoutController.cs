@@ -273,8 +273,6 @@ namespace MedSysProject.Controllers
 
             if (key == keys)
             {
-                //remove session
-                HttpContext.Session.Remove(CDictionary.SK_FPWD_VERIFY);
                 return RedirectToAction("ResetPassword");
             }
             else
@@ -309,6 +307,8 @@ namespace MedSysProject.Controllers
                 var q = _db.Members.FirstOrDefault(n => n.MemberEmail == email);
                 q.MemberPassword = vm.newPwd;
                 _db.SaveChanges();
+
+                HttpContext.Session.Remove(CDictionary.SK_FPWD_VERIFY);
 
                 TempData["resetLogin"] = "<div class=\"rounded rounded-3 bg-success text-light p-3 mb-2\"><i class=\"fas fa-check-circle\"></i> 密碼修改成功，請重新登入。</div>";
 
