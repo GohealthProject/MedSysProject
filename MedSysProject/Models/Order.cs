@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MedSysProject.Models;
 
@@ -22,14 +23,14 @@ public partial class Order
     public DateTime? ShipDate { get; set; }
 
     public DateTime? DeliveryDate { get; set; }
-
+    [JsonIgnore]
     public virtual Member Member { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
+    [JsonIgnore]
     public virtual OrderPay Pay { get; set; }
-
+    [JsonIgnore]
     public virtual OrderShip Ship { get; set; }
-
+    [JsonIgnore]
     public virtual OrderState State { get; set; }
 }

@@ -113,34 +113,38 @@ namespace MedSysProject.Controllers
 
             foreach (Plan plans in plan2)
             {
-                data.Add(new CPlanViewModel()
+                test.Add(new CPlanViewModel()
                 {
-                    PlanName = plans.PlanName,
-                    PlanDescription = plans.PlanDescription,
+                    //PlanName = plans.PlanName,
+                    //PlanDescription = plans.PlanDescription,
                     PlanId = plans.PlanId,
 
                 });
-                
-            }
-            var project = from pj in _context.PlanRefs.Include(p=>p.Project).Where(n => list.Contains(n.PlanId))
+
+                }
+                var project = from pj in _context.PlanRefs.Include(p=>p.Project).Where(n => list.Contains(n.PlanId))
                           select pj;
             foreach (PlanRef projects in project)
             {
                 data.Add(new CPlanViewModel()
-                {PlanId= projects.PlanId,
+                {
                     ProjectId = (int)projects.ProjectId,
                     ProjectName = projects.Project.ProjectName,
                     ProjectPrice = projects.Project.ProjectPrice,
                     PlanDescription=projects.Plan.PlanDescription,
                     PlanName=projects.Plan.PlanName,
-                    
+                    PlanId= projects.PlanId,
                 });
               
             }
-           
-            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
+
+            var item = from it in _context.Items
                        select it;
-            //int dp = 4;
+            //var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
+            //           select it;
+            int dp = 4;
+            //var itemsss2 = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items.Select(o => new { o.ItemId, o.ItemName }), l => new { (int)l.ProjectId,(int)l.PlanId})
+            //));
             //var itemsss = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items)).Select(p => new
             //{
             //    PlanDescription = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanDescription),
@@ -178,16 +182,42 @@ namespace MedSysProject.Controllers
                     
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                   
+                  ProjectId= (int)items.ProjectId 
                   
                 });
                 
             }
+            //-----------------------list轉datatable
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("planId"));
+            dt.Columns.Add(new DataColumn("planName"));
+            dt.Columns.Add(new DataColumn("PlanDescription"));
+            dt.Columns.Add(new DataColumn("projectid"));
+            dt.Columns.Add(new DataColumn("ProjectName"));
+            dt.Columns.Add(new DataColumn("ProjectPrice"));
+            dt.Columns.Add(new DataColumn("itemId"));
+            dt.Columns.Add(new DataColumn("ItemName"));
+            foreach (var t in data)
+            {
+                DataRow dr = dt.NewRow();
+
+                dr["planId"] = t.PlanId;
+                dr["PlanName"] = t.PlanName;
+                dr["PlanDescription"] = t.PlanDescription;
+                dr["projectid"] = t.ProjectId;
+                dr["ProjectName"] = t.ProjectName;
+                dr["ProjectPrice"] = t.ProjectPrice;
+                dr["itemId"] = t.ItemId;
+                dr["ItemName"] = t.ItemName;
+                dt.Rows.Add(dr);
+            }
+
+           
 
 
 
             //return View(itemsss);
-            return View(data);
+            return View(dt);
 
         }
 

@@ -3,19 +3,23 @@
 *@
 @{
 }
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script><script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 
+<!-- Button trigger modal -->
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
 </button>
+<button  id="e04">123</button>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-xl" id="btn">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
@@ -41,6 +45,7 @@
         </div>
     </div>
 </div>
+
 <table id="tableM" class="">
     <thead>
         <tr>
@@ -51,6 +56,8 @@
         </tr>
     </thead>
 </table>
+
+   
 
 
 
@@ -82,11 +89,51 @@
 <script>
     //test
     //$table.bootstrapTable('refresh')
+    var myModal = document.getElementById('e04');
+    var fku = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    myModal.addEventListener("click",(e)=>{
+    fku.show();
+    })
+    
+    //var errorModal = document.getElementById('e04'); //Modal的id
+    //console.log(errorModal)
+    //var modal = Modal.getOrCreateInstance(errorModal); //創建或取得modal實例
+    //myModal.show();
+
     var tableM = document.querySelector("#tableM")
     var tableD = document.querySelector("#tableD")
     var btn = document.querySelector("#btn")
+    ////不報錯///
+    //$.fn.dataTable.ext.errMode = 'throw';
+    /////////////
+    var ttt = $('#tableD').DataTable({
+        "ajax": {
+            "url": "https://localhost:7203/admin/test1/",
+            //默认为data,这里定义为空，则只需要传不带属性的数据
+            "dataSrc": ""
+        },
+        columns: [
+            { data: 'reportDetailId' },
+            { data: 'reportId' },
+            { data: 'itemId' },
+            { data: 'result' },
+        ]
+    });
+    function aaa(){
+    console.log("確定");
+        //.querySelector("tbody").querySelectorAll("tr");
+    let tr = document.querySelector("#tableM").querySelector("tbody").querySelectorAll("tr");
+    console.log(tr);
+    //tr.forEach(item=>{
+    //    item.querySelector("td").addEventListener("click",(event)=>{
+    //        console.log(event.target);
+    //    })
+    
+    }
+   
+
     //console.log(event.target.closest('tr').children[0].innerHTML)///該選取欄位之ID
-    btn.addEventListener("click",()=>{
+    tableM.addEventListener("click", () => {
         
         
         //btn.setAttribute("data-ajax", "ajaxRequest2")
@@ -96,15 +143,28 @@
         //table.ajax.reload();
 
         //bs
-        var table = document.querySelector('#table');
-        var $button = $('#button')
+        //var table = document.querySelector('#table');
+        //var $button = $('#button')
+        
+        //$.ajax({
+        //    url: 'https://localhost:7203/admin/test1',
+        //    data: data,
+        //    success: success,
+        //    dataType: dataType
+        //});
+        var datasss = $.get('https://localhost:7203/admin/test1/')
+       
 
-        alert("hello")
+        //$('#myModal').on('shown.bs.modal', function () {
+        //    alert("00")
+        //})
+        var id = (event.target.closest('tr').children[0].innerHTML)
+        console.log(id)
+        ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
+      
+
         //$('#tableD').DataTable({
-        //    ajax: {
-        //        url: 'https://localhost:7203/admin/test1',
-        //        dataSrc: ''
-        //    },
+        //    "ajax": "data.json",
         //    columns: [
         //        { data: 'reportDetailId' },
         //        { data: 'reportId' },
@@ -112,30 +172,45 @@
         //        { data: 'result' },
         //    ]
         //})
-      
-        
-       
+        //   }
+        $('#myModal').modal('show')
+        aaa()
         
 
     })
+   
+    //$('#tableD').DataTable({
+    //    ajax: {
+    //        url: 'https://localhost:7203/admin/test1',
+    //        dataSrc: ''
+    //    },
+    //    columns: [
+    //        { data: 'reportDetailId' },
+    //        { data: 'reportId' },
+    //        { data: 'itemId' },
+    //        { data: 'result' },
+    //    ]
+    //})
+    //   }
+
+   //function abc(){
+   //     alert("hello")
+   // $('#tableD').DataTable({
+   //     ajax: {
+   //         url: 'https://localhost:7203/admin/test1',
+   //         dataSrc: ''
+   //     },
+   //     columns: [
+   //         { data: 'reportDetailId' },
+   //         { data: 'reportId' },
+   //         { data: 'itemId' },
+   //         { data: 'result' },
+   //     ]
+   // })
+   //}
+
 
    
-    $('#tableD').DataTable({
-        ajax: {
-            url: 'https://localhost:7203/admin/test1',
-            dataSrc: ''
-        },
-        columns: [
-            { data: 'reportDetailId' },
-            { data: 'reportId' },
-            { data: 'itemId' },
-            { data: 'result' },
-        ]
-    })
-
-
-
-
 
     function g8(){
 
@@ -208,6 +283,7 @@
                     //{ data: 'extn' }
                 ]
        })
+    
        ////////XXXXXX
     //$('#tableD').DataTable({
     //    ajax: {
