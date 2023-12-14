@@ -431,6 +431,12 @@
     function UploadImg() {
         var fileInput = document.getElementById('imgformFile');
         var file = fileInput.files[0];
+        
+        console.log(file);
+
+        let filejson = JSON.stringify(file);
+        console.log("asasasasasa");
+        console.log(filejson);
         var formData = new FormData();
         formData.append('file', file);
         console.log(formData)
@@ -438,7 +444,6 @@
             url: 'https://localhost:7203/api/Upload',
             type: 'POST',
             data: formData,
-            contentType: false,
             processData: false,
             success: function (data) {
                 console.log(data);
