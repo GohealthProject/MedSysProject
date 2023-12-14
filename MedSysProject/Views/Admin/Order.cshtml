@@ -111,46 +111,48 @@
                     else
                     {
                         string PPath = "~/Admin/Order?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.TotalPage - 4)); // Changed ViewBag.maxpage to ViewBag.TotalPage
+                        int endPage = Math.Min(ViewBag.TotalPage, startPage + 4); // Changed ViewBag.maxpage to ViewBag.TotalPage
+
                         if (ViewBag.page == 1)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.TotalPage)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
-
                     }
                 }
             </ul>
@@ -306,7 +308,7 @@
             </tbody>
         </table>
 
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" style="margin-top:1em;">
             <ul class="pagination pagination-sm">
                 @{
                     if (ViewBag.page == null)
@@ -317,46 +319,48 @@
                     else
                     {
                         string PPath = "~/Admin/Order?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.TotalPage - 4)); // Changed ViewBag.maxpage to ViewBag.TotalPage
+                        int endPage = Math.Min(ViewBag.TotalPage, startPage + 4); // Changed ViewBag.maxpage to ViewBag.TotalPage
+
                         if (ViewBag.page == 1)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.TotalPage)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
-
                     }
                 }
             </ul>
