@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using static System.Net.WebRequestMethods;
+using MedSysProject.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedSysProject.Controllers
 {
@@ -23,6 +25,19 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult members()
+        {
+            //IEnumerable<ReportDetail> datas = null;
+            //List<CReportWrap> datas2 = null;
+            //datas2 = new CReportWrap().Report();
+           
+            var datas = from s in _context.Members.AsEnumerable()
+                        
+                        select  new { ID =s.MemberId , name =s.MemberName  };
+
+            return Json(datas);
+
+        }
         public IActionResult rp2(int id)
         {
 
