@@ -19,8 +19,9 @@
 <div id="g_id_onload"
      data-client_id="641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com"
      data-login_uri="/Accout/ValidGoogleLogin"
-     data-auto_prompt="false">
+     data-auto_prompt="false"> 
 </div>
+
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v18.0" nonce="XWFh9EQT"></script>
 
@@ -33,27 +34,32 @@
         <div class="col-4 shadow p-3 mb-5 mt-4 bg-white rounded">
             <form method="post" id="from" style="padding-top:0px;">
                 <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
-                @* @Html.ActionLink("後台登入", "index", "Admin", new { }, new { }) *@
 
                 <div class="g_id_signin py-1" data-type="standard"></div>
-                <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div>
+                
 
-                <div class="row">
-                    <hr class="line" />
+                @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
+
+                <div class="d-flex justify-content-center">
+                    <button id="btnGoogleLogin" type="button" class="btn btn-danger w-100 py-2 mx-1"><i class="fab fa-google" style="font-size:larger;"></i></button>
+                    <button id="btnFacebookLogin" type="button" class="btn btn-primary w-100 py-2 mx-1"><i class="fab fa-facebook-f" style="font-size:larger;"></i></button>
+                    <button id="btnLineLogin" type="button" class="btn btn-success w-100 py-2 mx-1"><i class="fab fa-line" style="font-size:x-large;"></i></button>
                 </div>
-  
+                <script>startApp();</script>
+
+                <div class="mt-2 mx-2 title">或</div>
+
                 @Html.Raw(expired)
                 @Html.Raw(resetLogin)
                 @Html.Raw(loginfail)
                 <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
-                @* <span class="rounded rounded-3 bg-warning text-dark p-3">aaaaaaaaaaa</span> *@
-                
 
-                <div class="px-1 form-floating">
+
+                <div class="px-1 my-2 form-floating">
                     <input type="text" class="form-control" id="txtAccout" name="txtEmail">
                     <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
                 </div>
-                <div class="px-1 form-floating">
+                <div class="px-1 my-2 form-floating">
 
                     <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
                     <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
@@ -73,13 +79,13 @@
                     <div class="mb-3  col-5"></div>
                     <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
                 </div>
-                <div class="btn-group d-flex justify-content-center">
-                    <button id="testButtonA" type="button" class="btn btn-primary w-100 py-2">DEMO1(功能)</button>
-                    <button id="testButtonB" type="button" class="btn btn-primary w-100 py-2">DEMO2(註冊)</button>
-                    <button id="testButtonC" type="button" class="btn btn-primary w-100 py-2">DEMO3(G)</button>
+                <div class="btn-group d-flex justify-content-center mt-3">
+                    <button id="testButtonA" type="button" class="btn btn-secondary w-100 py-2">DEMO1(功能)</button>
+                    <button id="testButtonB" type="button" class="btn btn-secondary w-100 py-2">DEMO2(註冊)</button>
+                    <button id="testButtonC" type="button" class="btn btn-secondary w-100 py-2">DEMO3(G)</button>
                 </div>
                 <div class="row">
-                    <div class="mb-3 mt-1 col-12"><a href="~/admin" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
+                    <div class="mb-1 mt-1 col-12"><a href="@Url.Content("~/admin")" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
                 </div>
             </form>
         </div>
@@ -89,6 +95,10 @@
 @section Scripts {
 
     <script>
+        const btnGoogleLogin = document.querySelector('#btnGoogleLogin');
+        const btnFacebookLogin = document.querySelector('#btnFacebookLogin');
+        const btnLineLogin = document.querySelector('#btnLineLogin');
+
 
         $('#footer').css("margin-top", "150px");
 

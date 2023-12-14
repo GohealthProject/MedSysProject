@@ -32,19 +32,71 @@
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
+    <!-- google -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script>
+        var googleUser = {};
+        var startApp = function () {
+            gapi.load('auth2', function () {
+                // Retrieve the singleton for the GoogleAuth library and set up the client.
+                auth2 = gapi.auth2.init({
+                    client_id: '641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com',
+                    cookiepolicy: 'single_host_origin',
+                    // Request scopes in addition to 'profile' and 'email'
+                    //scope: 'additional_scope'
+                });
+                attachSignin(document.getElementById('btnGoogleLogin'));
+            });
+        };
+
+        function attachSignin(element) {
+            console.log(element.id);
+            auth2.attachClickHandler(element, {},
+                function (googleUser) {
+
+                }, function (error) {
+                    console.error(JSON.stringify(error, undefined, 2));
+                });
+        }
+    </script>
+
+    <!-- end Google -->
+
+
     <style>
         .mt-4 {
-            margin-top: 7.5em !important;
+            margin-top: 10.5em !important;
         }
 
-        hr {
+
+        .title {
+            position: relative;
             text-align: center;
+            overflow: hidden;
+            font-size: 14px;
+            color: #999;
         }
 
-        .line {
-            display: inline-block;
-            margin-top: 10px;
-        }
+            .title::before, .title::after {
+                content: '';
+                display: inline-block;
+                width: 100%;
+                height: 1px;
+                position: absolute;
+                background: #ccc;
+                top: 50%;
+            }
+
+            .title::before {
+                margin-left: -10px;
+                transform: translateX(-100%);
+            }
+
+            .title::after {
+                margin-left: 10px;
+            }
 
         .g_id_signin {
             display: flex;
@@ -72,7 +124,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body>
+<body style="background-color:#F2F9F8">
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center">
@@ -128,24 +180,24 @@
 
         </div>
     </header><!-- End #header -->
-    <main id="main" style="background-color:#F2F9F8">
-        @RenderBody()
-        <!-- ======= Footer ======= -->
-        <footer class="fixed-bottom" id="footer">
-            <div class="container">
-                <div class="copyright">
-                    <strong><span>GO健康 版權所有</span></strong>
-                </div>
-                <div class="credits">
-                    <!-- All the links in the footer should remain intact. -->
-                    <!-- You can delete the links only if you purchased the pro version. -->
-                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-                    <a href="~/">GO健康</a>
-                </div>
+    @* <main id="main"> *@
+    @RenderBody()
+@*     <!-- ======= Footer ======= -->
+    <footer class="fixed-bottom" id="footer">
+        <div class="container">
+            <div class="copyright">
+                <strong><span>GO健康 版權所有</span></strong>
             </div>
-        </footer><!-- End #footer -->
-    </main>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+                <a href="~/">GO健康</a>
+            </div>
+        </div>
+    </footer><!-- End #footer --> *@
+    @* </main> *@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
