@@ -23,7 +23,7 @@ namespace MedSysProject.Controllers
         public IActionResult Index()
         {
             List<CProductWarp> list = new List<CProductWarp>();
-            var q = _db.Products.OrderByDescending(n => n.ProductId).Select(n => n).Take(6);
+            var q = _db.Products.Where(n=>n.Discontinued==true).OrderByDescending(n => n.ProductId).Select(n => n).Take(6);
             foreach(var product in q)
             {
                 CProductWarp item = new CProductWarp();
