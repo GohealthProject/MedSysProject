@@ -39,20 +39,11 @@ namespace MedSysProject.Controllers
             
             IFormFile file = Request.Form.Files[0];
 
-
-            //upload image 
-
-
-
-
-
-
-
-            //string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
-            //using (var fileStream = new FileStream(webPath, FileMode.Create))
-            //{
-            //    fileN.CopyTo(fileStream);
-            //}
+            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", file.FileName);
+            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
 
             return Ok();
 
