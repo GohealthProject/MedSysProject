@@ -250,6 +250,7 @@ namespace MedSysProject.Controllers
             else
             {
                 datas = _db.Plans.Where(p => p.PlanName.Contains(vm.txtKeyword));
+                ViewBag.key = vm.txtKeyword;
             }
 
             return View(datas);
@@ -423,7 +424,7 @@ namespace MedSysProject.Controllers
                 int maxpage = (total % pagesize == 0 ? total / pagesize : total / pagesize + 1);
                 datas = _db.ReportDetails.Include(p => p.Item).OrderByDescending(p => p.ReportId).Skip((page - 1) * pagesize).Take(pagesize);
                 ViewBag.page = page; //目前頁數
-                ViewBag.TotalPage = maxpage; //總頁數
+                ViewBag.maxpage = maxpage; //總頁數
                 ViewBag.total = total; //資料總筆數
                 ViewBag.pagesize = pagesize; //每頁顯示幾筆資料
             }

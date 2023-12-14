@@ -40,24 +40,27 @@
                     else
                     {
                         string PPath = "~/Admin/Report?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.maxpage - 4));
+                        int endPage = Math.Min(ViewBag.maxpage, startPage + 4);
+
                         if (ViewBag.page == 1)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
                             <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
                             <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
@@ -69,15 +72,15 @@
                             }
                         }
 
-                        if (ViewBag.page == ViewBag.TotalPage)
+                        if (ViewBag.page == ViewBag.maxpage)
                         {
                             <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
                         else
                         {
                             <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
 
                     }
@@ -153,24 +156,27 @@
                     else
                     {
                         string PPath = "~/Admin/Report?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.maxpage - 4));
+                        int endPage = Math.Min(ViewBag.maxpage, startPage + 4);
+
                         if (ViewBag.page == 1)
                         {
-                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
                             <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
                             <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
@@ -182,15 +188,15 @@
                             }
                         }
 
-                        if (ViewBag.page == ViewBag.TotalPage)
+                        if (ViewBag.page == ViewBag.maxpage)
                         {
                             <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
                         else
                         {
                             <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.maxpage)">末頁</a></li>
                         }
 
                     }
