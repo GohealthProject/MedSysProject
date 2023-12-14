@@ -33,9 +33,9 @@
                             int count = 0;
                             foreach(var img in Model.Path)
                             {
-                                                <div class="swiper-slide">
-                                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
-                                                </div>
+                                                                                    <div class="swiper-slide">
+                                                                                        <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
+                                                                                    </div>
                                 count++;
                             }
                         } 
@@ -66,10 +66,10 @@
                                 @{
                                     for(int i = 1; i <= Model.UnitsInStock; i++)
                                     {
-                                                        <option value="@i">@i</option>
+                                                                                            <option value="@i">@i</option>
                                         if (i >= 50)
                                         {
-                                                            <option>...</option>
+                                                                                                <option>...</option>
                                             break;
                                         }
                                     }
@@ -80,7 +80,7 @@
                             @{
                                 if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                                 {
-                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                                                        <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
@@ -89,11 +89,11 @@
                                 var q = Model.Product.TrackingLists.Where(n => n.ProductId == Model.ProductId && n.MemberId == member.MemberId);
                                 if (!q.Any())
                                 {
-                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                                                        <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
-                                    <img src="~/img/heart.png" id="ProductTracking" />
+                                                                        <img src="~/img/heart.png" id="ProductTracking" />
                                 }
                                 }
                                 
@@ -108,60 +108,43 @@
 
     </div>
 </section><!-- End Portfolio Details Section -->
-<div class="container">
-<div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <p>This is the first item's accordion body.</p> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
+<div class="container" id="reviewList">
+    <div>
+    <span class="input-group-text" id="inputGroup-sizing-lg"><img src="~/img/Login1.jpg" style="height:40px;height:40px;margin-right:10px" />內容</span>
+    <input type="hidden"  id="memberID" />
+    </div>  
+    <div>
+    <span class="input-group-text" id="inputGroup-sizing-lg"><img src="~/img/Login1.jpg" style="height:40px;height:40px;margin-right:10px" />內容</span>
+    <input type="hidden"  id="memberID" />
+    </div>  
+
+  
+  
         <div class="input-group input-group-lg">
             @{
-                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
-                <span class="input-group-text" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@member.MemberImage" style="height:40px;height:40px;"/></span>
-            }
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"placeholder="輸入留言">
-        </div>
-</div>
-</div>
+                if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                {
 
+                }
+                else
+                {
+                    string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                    MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
+                    <span class="input-group-text" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@member.MemberImage" style="height:40px;height:40px;" /></span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="輸入留言" id="review">
+                    <input type="hidden" value="@member.MemberId" id="memberID" />
+                }
+                   }
+               </div>
+</div>
 @section Scripts{
     <script>
+        const reviewList = document.querySelector("#reviewList");
         const item = document.querySelector("#datas");
-        const id = @Model.ProductId;
-        console.log(id);
+        const Pid = @Model.ProductId;
+        const Mid= document.querySelector("#memberID").value;
+        let reviewInput = "";
+        console.log(`產品ID${Pid}會員ID${Mid}`);
         var data = new FormData(item);
         let heart = document.querySelector("#ProductTracking");
         heart.addEventListener("click", ProductTracking);
@@ -211,6 +194,62 @@
             const src = imgElement.src;
             document.querySelector("#mainImg").src = src;
             imgElement.style.border = "1px dashed red";
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("keydown", process);
+            document.addEventListener("input", updateInput);
+        })
+        function updateInput() {
+            reviewInput=document.querySelector("#review").value;
+        }
+
+        async function process(event){
+            review(event)
+            
+        }
+        async function reviewSearch() {
+            const url = `https://localhost:7078/api/ProductReviews/pid=${Pid}`
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data);
+            const value = data.map(reviewItem => {
+                const content = reviewItem.reviewContent;
+                const member = reviewItem.member.memberImage;
+                const memberid = reviewItem.memberId;
+                console.log(member);
+                console.log(content);
+                let html =
+                `
+                        <div>
+                            <span class="input-group-text" id="inputGroup-sizing-lg"><img src="/img/MemberImg/${member}" style="height:40px;height:40px;margin-right:10px" />${content}</span>
+                            <input type="hidden"  id="memberID" value="${memberid}"/>
+                        </div>
+                `
+                return html;
+            })
+            reviewList.innerHTML = value.join("");
+        }
+        async function review(event) {
+            if(event.key=="Enter"){
+                if (reviewInput == "") {
+                    return;
+                }else {
+                    const url = `https://localhost:7078/api/ProductReviews/mid=${Mid}&pid=${Pid}`
+                    console.log(url);
+                    console.log(JSON.stringify(reviewInput));
+                    let form = new FormData();
+                    form.append("review", reviewInput);
+                    const response = await fetch(url, {
+                        method:"POST",
+                        body: form,
+                    })
+                    const data = await response.text();
+                    console.log(data)
+                    reviewSearch();
+                    return;
+                }
+            }
+            
         }
     </script>
 }

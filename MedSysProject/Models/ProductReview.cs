@@ -18,4 +18,8 @@ public partial class ProductReview
     public DateTime? Timestamp { get; set; }
 
     public bool? IsLike { get; set; }
+
+    public virtual Member Member { get; set; }
+
+    public virtual Product Product { get; set; }
 }
