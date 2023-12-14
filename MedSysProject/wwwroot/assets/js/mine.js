@@ -3,7 +3,6 @@
 
     /*sticky header效果*/
     const header = document.querySelector('#header');
-    //console.log(header);
     console.log("我是layout");
     if (header) {
         document.addEventListener('scroll', () => {
@@ -26,7 +25,7 @@
     }
     let what = document.querySelectorAll('#navbar a');
 
-    console.log(what);//F12可以用小箭頭看具體是那些元素
+    //console.log(what);//F12可以用小箭頭看具體是那些元素
 
     //下拉式選單，點擊後箭頭朝上
     const navDropdowns = document.querySelectorAll('.navbar .dropdown >a');
