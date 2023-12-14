@@ -38,13 +38,13 @@
 
                                 <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true">Popular</button>
+                                        <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true" onclick="loadSidePopular()">Popular</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
+                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideLatest()">Latest</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
+                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideThisCat()">Latest</button>
                                     </li>
                                 </ul>
 
@@ -93,8 +93,8 @@
             toggleLinkEvent();
             initButtons();
             await loadSidePopular();
-            await loadSideLatest();
-            await loadSideThisCat();
+            //await loadSideLatest();
+            //await loadSideThisCat();
         });
 
         //定義方法
