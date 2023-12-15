@@ -302,10 +302,7 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
         ///// ====end這裡是partialview區=====
-        public IActionResult testplan()
-        { //plan 企業版，待更改CONTROLL名稱
-            return View();
-        }
+
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
@@ -532,6 +529,12 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+
+        public IActionResult testplan()
+        { //plan 企業版
+            return View();
+        }
+
         public async Task<IActionResult> GetPlansAndProjects()
         {//企業方案API
             try
@@ -559,6 +562,23 @@ namespace MedSysProject.Controllers
             }
         }
 
+
+        public async Task<IActionResult> GetAllProjects()
+        {//企業方案API2
+            try
+            {
+                var projects = await _context.Projects
+                    .Select(p => new { p.ProjectId, p.ProjectName })
+                    .ToListAsync();
+
+                return Json(projects);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching projects: " + ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
     }
 }

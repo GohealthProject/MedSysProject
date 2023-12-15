@@ -3,7 +3,8 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
     string img = "";
-
+    List<int>catList = new List<int>();
+    catList=ViewBag.carCount;
     
 }
 <div style="" class="container">
@@ -17,21 +18,22 @@
         <div style="height:90%;width:100%">
             <div class="  h-100 " style="float:left ;width:20%">
                 <div class="list-group" id="btnList">
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="0">最新消息</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="1">胃腸道功能改善</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="2">調節血脂</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="3">護肝</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="4">骨質保健</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="5">免疫調節</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="6">輔助調整過敏體質</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="7">不易形成體脂肪</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="8">調節血糖</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="9">輔助調節血壓</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="10" ">抗疲勞</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="11">延緩衰老</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="12">促進鐵可利用率</button>
-                    <button type="button" class="list-group-item list-group-item-action border-0" value="13">牙齒保健</button>
-                </div>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="0">最新消息 </button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="1">胃腸道功能改善 (@catList[0])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="2">調節血脂 (@catList[1])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="3">護肝 (@catList[2])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="4">骨質保健 (@catList[3])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="5">免疫調節 (@catList[4])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="6">輔助調整過敏體質 (@catList[5])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="7">不易形成體脂肪 (@catList[6])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="8">調節血糖 (@catList[7])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="9">輔助調節血壓 (@catList[8])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="10" ">抗疲勞 (@catList[9])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="11">延緩衰老 (@catList[10])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="12">促進鐵可利用率 (@catList[11])</button>
+                    <button type="button" class="list-group-item list-group-item-action border-0" value="13">牙齒保健 (0)</button>
+                    </div>
+                    
             </div>
             <div class="  h-100  border-start border-success" style="display:inline-block ;width:80%; padding:20px" id="inhere">
                     @{
@@ -152,7 +154,7 @@
             const response = await fetch("https://localhost:7078/api/Products/category/"+id);
             const data = await response.json()
             console.log(data);
-            $("#divTitle").children().first().html(data[0].categoriesName+"("+data[0].productsClassifications.$values.length+")");
+            $("#divTitle").children().first().html(data[0].categoriesName);
             document.querySelector("#more").href=`@Url.Content("~/Shopping/CatProduct/")${id}`;
             const datas = data[0].productsClassifications.$values
             const info = datas.map(product=>{

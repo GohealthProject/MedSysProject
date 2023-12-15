@@ -21,6 +21,10 @@
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="~/css/Admin-iframe.css" rel="stylesheet">
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
+    <link href="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.css" rel="stylesheet">
+
     <!--文字編輯器-->
     <script src="https://cdn.tiny.cloud/1/b28bwm26rz9ry64nn5n351uce6944auxt8eorcif07y5uxa9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
@@ -37,8 +41,8 @@
 
         tinymce.init({
             selector: '#mytextarea',
-            height:1000,
-            width:1107,
+            height: 1000,
+            width: 1107,
             plugins: 'advlist link image lists',
             toolbar: 'undo redo| image',
             image_caption: true,
@@ -118,11 +122,11 @@
                 </a>
             </li>
 
-@*             <li class="nav-item" id="li-EmpClass">
-                <a class="nav-link" href="~/Admin/EmpClass">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>員工類別管理</span>
-                </a>
+            @*             <li class="nav-item" id="li-EmpClass">
+            <a class="nav-link" href="~/Admin/EmpClass">
+            <i class="fas fa-fw fa-users"></i>
+            <span>員工類別管理</span>
+            </a>
             </li> *@
 
             <!-- Nav Item - Charts -->
@@ -182,10 +186,10 @@
             </div>
 
             <!-- Sidebar Message -->
-@*             <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="~/img-admin/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+            @*             <div class="sidebar-card d-none d-lg-flex">
+            <img class="sidebar-card-illustration mb-2" src="~/img-admin/undraw_rocket.svg" alt="...">
+            <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+            <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
             </div> *@
 
         </ul>
@@ -205,10 +209,10 @@
                     </button>
 
                     <!-- Topbar Search 搜尋 -->
-@*                     @using (Html.BeginForm())
+                    @*                     @using (Html.BeginForm())
                     {
-                        @:關鍵字 @Html.TextBox("txtKeyword")
-                        <input type="submit" value="查詢" />
+                    @:關鍵字 @Html.TextBox("txtKeyword")
+                    <input type="submit" value="查詢" />
                     } *@
 
                     <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -218,9 +222,9 @@
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
-                                    
+
                                 </button>
-                                <button class="btn btn-danger" type="button" id="back" >
+                                <button class="btn btn-danger" type="button" id="back">
                                     <i class="fas fa-times fa-sm"></i>
                                 </button>
                             </div>
@@ -247,7 +251,7 @@
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="submit">
                                                 <i class="fas fa-search fa-sm"></i>
-                                                
+
                                             </button>
                                         </div>
                                     </div>
@@ -307,78 +311,78 @@
                         </li>
 
                         <!-- Nav Item - Messages -->
-@*                         <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <!-- 未讀訊息 -->
-                                <!-- <span class="badge badge-danger badge-counter">7</span> -->
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    訊息
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img-admin/undraw_profile_1.svg"
-                                             alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">
-                                            Hi there! I am wondering if you can help me with a
-                                            problem I've been having.
-                                        </div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img-admin/undraw_profile_2.svg"
-                                             alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            I have the photos that you ordered last month, how
-                                            would you like them sent to you?
-                                        </div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img-admin/undraw_profile_3.svg"
-                                             alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!
-                                        </div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                             alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...
-                                        </div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
+                        @*                         <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-envelope fa-fw"></i>
+                        <!-- Counter - Messages -->
+                        <!-- 未讀訊息 -->
+                        <!-- <span class="badge badge-danger badge-counter">7</span> -->
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                        aria-labelledby="messagesDropdown">
+                        <h6 class="dropdown-header">
+                        訊息
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="~/img-admin/undraw_profile_1.svg"
+                        alt="...">
+                        <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div class="font-weight-bold">
+                        <div class="text-truncate">
+                        Hi there! I am wondering if you can help me with a
+                        problem I've been having.
+                        </div>
+                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                        </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="~/img-admin/undraw_profile_2.svg"
+                        alt="...">
+                        <div class="status-indicator"></div>
+                        </div>
+                        <div>
+                        <div class="text-truncate">
+                        I have the photos that you ordered last month, how
+                        would you like them sent to you?
+                        </div>
+                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                        </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="~/img-admin/undraw_profile_3.svg"
+                        alt="...">
+                        <div class="status-indicator bg-warning"></div>
+                        </div>
+                        <div>
+                        <div class="text-truncate">
+                        Last month's report looks great, I am very happy with
+                        the progress so far, keep up the good work!
+                        </div>
+                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                        </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                        alt="...">
+                        <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div>
+                        <div class="text-truncate">
+                        Am I a good boy? The reason I ask is because someone
+                        told me that people say this to all dogs, even if they aren't good...
+                        </div>
+                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                        </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                        </div>
                         </li> *@
 
                         @* <div class="topbar-divider d-none d-sm-block"></div> *@
@@ -496,8 +500,13 @@
     <!-- Custom scripts for all pages-->
     <script src="~/js-admin/sb-admin-2.min.js"></script>
 
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+    <!-- Latest compiled and minified Locales -->
+    <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+
     <!-- Page level plugins -->
-  @*  <script src="~/vendor/chart.js/Chart.min.js"></script>
+    @*  <script src="~/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="~/js-admin/demo/chart-area-demo.js"></script>
@@ -505,6 +514,12 @@
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.js"></script>
+
+    <!-- Page Scripts -->
+    @RenderSection("Scripts", required: false)
 
 </body>
 
