@@ -128,6 +128,18 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult MemberDetail(int id)
+        {
+            IEnumerable<Member> data = null;
+
+            data = _db.Members.Where(p => p.MemberId == id);
+
+            if (data == null)
+                return RedirectToAction("MemberManager");
+
+            return PartialView("MemberDetail",data);
+        }
+
         public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))

@@ -25,8 +25,8 @@
     <div class="card-body">
 
 
-        <div>
-            <table id="dataTable" width="100%" cellspacing="0">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>會員編號</th>
@@ -48,7 +48,8 @@
     <script>
         var ttt = $('#dataTable').DataTable({
             "ajax": {
-                "url": "https://localhost:7203/TestAdmin/MemberJSON"
+                "url": "https://localhost:7203/TestAdmin/MemberJSON",
+                "dataSrc": ""
             },
             columns: [
                 { data: "memberId" },
