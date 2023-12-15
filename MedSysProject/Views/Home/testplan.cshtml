@@ -8,10 +8,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
+        h4.bg-green {
+            text-align: center; /* 使標題水平居中 */
+            margin-top: 20px; /* 頂部留白 */
+            margin-bottom: 20px; /* 底部留白 */
+            background-color: aliceblue; /* 設定背景顏色 */
+            padding: 10px; /* 內部上下留白 */
+            border-radius: 10px; /* 可選：添加圓角 */
+        }
+
         h5 {
             font-size: 32px;
             font-weight: bold;
@@ -49,21 +59,58 @@
         .table tbody tr td {
                 vertical-align: middle; /* 垂直居中 */
             }
+
+        .table-button-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .table-container {
+            width: 75%; /* 表格佔整體容器的75% */
+            margin-right: 20px; /* 為按鈕和表格之間添加一些空間 */
+        }
+
+        .btn-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+            .btn-section .btn {
+                margin-bottom: 10px; /* 為按鈕添加一些底部邊距 */
+            }
+
+        th, td {
+            text-align: center; /* 水平居中 */
+        }
+
+        .fa-check-circle, .fa-times-circle {
+            display: inline-block; /* 確保圖標可以正確居中 */
+        }
+
+        .centered-select {
+            text-align-last: center; /* 適用於最新的瀏覽器 */
+            -moz-text-align-last: center; /* 適用於 Firefox */
+            text-align: center; /* 作為後備選項 */
+        }
+
+
+
     </style>
   
     </head>
 <body>
     <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
-    <section class="text-center">
-        <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
-    </section>
-
-    <table class="table table-bordered">
+    <div class="table-button-container">
+        <div class="table-container">
+            <table class="table table-success table-striped table-hover">
         <thead>
             <tr>
                 <th>健檢項目</th>
                 <th id="plansHeader">
-                    <select id="planSelect" class="form-control">
+                    <select id="planSelect" class="form-control centered-select">
                         <!-- 選項將動態添加 -->
                     </select>
                 </th>
@@ -72,7 +119,12 @@
         <tbody id="comparisonTableBody">
             <!-- 動態添加項目和方案比較的行 -->
         </tbody>
-    </table>
+            </table>
+        </div>
+        <div class="btn-section">
+            <button id="addPlanButton" class="btn btn-outline-success">增加比較方案</button>
+        </div>
+    </div>
 
 
     <script>
@@ -114,7 +166,9 @@
                 return;
             }
 
-            var newSelect = $('<select/>', { class: 'form-control plan-select' });
+            var newSelect = $('<select/>', {
+                class: 'form-control plan-select centered-select'
+            });
             initPlanSelect(newSelect);
             var newTh = $('<th></th>').append(newSelect);
 
@@ -134,8 +188,11 @@
             tableBody.find('tr').each(function (index, tr) {
                 var project = globalProjects[index];
                 var includesProject = plan.projects.some(p => p.projectId === project.projectId);
-                var symbol = includesProject ? 'O' : 'X';
-                var newTd = $('<td></td>').text(symbol);
+
+                // 使用 Font Awesome 圖標來替換原本的文字
+                var symbol = includesProject ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+
+                var newTd = $('<td></td>').html(symbol); // 使用 .html() 來添加 HTML 內容
                 $(tr).append(newTd); // 添加新列
             });
         }
