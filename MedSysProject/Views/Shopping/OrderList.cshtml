@@ -12,24 +12,29 @@
 
 <div class="container">
     <div class="article-feed">
-        <form method="post">
+        
             <div class=" p-3">
                 @{
                     <div class="fs-1 ">購買清單(本頁有 @count 筆資料，共 @ViewBag.Total 筆資料)</div>
                     // <span class="fs-2">訂單查詢</span>
                     <div class="row g-3">
-                        <input type="hidden" value="keyword" name="Key" id="go" />
-                        <div class="col-auto">
-                            <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." />
+                    <form method="post" class="col-3">
+                        <div style="display:inline">
+                            <input type="hidden" value="keyword" name="Key" id="go" />
+                            <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." style="width:200px;display:inline"/>
+                            <input class="btn btn-primary" type="submit" value="查詢" style="display:inline" />
                         </div>
-
-                        <div class="col-auto">
-                            <input class="btn btn-primary" type="submit" value="查詢" />
+                    </form>
+                    <form method="post" class="col-9">
+                        <div class="col-3">
+                            <input type="hidden" value="monthKey" name="Key"/>
+                            <input class="btn btn-primary" type="submit" value="近一個月訂單" />
                         </div>
+                    </form>
                     </div>
                 }
             </div>
-        </form>
+            
         <form method="post">
             @{
                 <input type="hidden" value="dateKey" name="key" />

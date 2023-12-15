@@ -35,7 +35,19 @@ namespace MedSysProject.Controllers
                 item.Path = item.FimagePath.Split(',');
                 list.Add(item);
             }
-
+            List<int> catList = new List<int>();
+            catList  = _db.ProductsCategories.Select(n=>n.CategoriesId).ToList();
+            var qq = _db.ProductsClassifications.Where(n => catList.Contains((int)n.CategoriesId)).GroupBy(n => n.CategoriesId).Select(n => new
+            {
+                n.Key,
+                count = n.Count()
+            });
+            List<int> cat = new List<int>();
+            foreach(var item in qq)
+            {
+                cat.Add(item.count);
+            }
+            ViewBag.carCount= cat;
             return View(list);
         }
         public IActionResult CatProduct(int id)
@@ -298,7 +310,7 @@ namespace MedSysProject.Controllers
                     }
                     return View(list);
                 }
-                else
+                else 
                 {
                     string? keyword = Request.Form["keyword"];
                     List<int> pids = new List<int>();
@@ -368,6 +380,20 @@ namespace MedSysProject.Controllers
                     od.order = o;
                     list.Add(od);
                 }
+                return View(list);
+            }
+            else if(key == "monthKey")
+            {
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year);
+                List<COrderWarp> list = new List<COrderWarp>();
+                foreach (var o in q)
+                {
+                    COrderWarp od = new COrderWarp();
+                    od.order = o;
+                    list.Add(od);
+                }
+                int total = list.Count();
+                ViewBag.Total = total;
                 return View(list);
             }
             else

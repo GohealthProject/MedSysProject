@@ -33,9 +33,9 @@
                             int count = 0;
                             foreach(var img in Model.Path)
                             {
-                                                                                                                                                                                <div class="swiper-slide">
-                                                                                                                                                                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
-                                                                                                                                                                                </div>
+                                                                                                                                                                                                <div class="swiper-slide">
+                                                                                                                                                                                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
+                                                                                                                                                                                                </div>
                                 count++;
                             }
                         } 
@@ -66,10 +66,10 @@
                                 @{
                                     for(int i = 1; i <= Model.UnitsInStock; i++)
                                     {
-                                                                                                                                                                                        <option value="@i">@i</option>
+                                                                                                                                                                                                        <option value="@i">@i</option>
                                         if (i >= 50)
                                         {
-                                                                                                                                                                                            <option>...</option>
+                                                                                                                                                                                                            <option>...</option>
                                             break;
                                         }
                                     }
@@ -80,7 +80,7 @@
                             @{
                                 if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                                 {
-                                                                                                                                                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                                                                                                                                                                    <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
@@ -89,11 +89,11 @@
                                 var q = Model.Product.TrackingLists.Where(n => n.ProductId == Model.ProductId && n.MemberId == member.MemberId);
                                 if (!q.Any())
                                 {
-                                                                                                                                                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                                                                                                                                                                    <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
-                                                                                                                                                                    <img src="~/img/heart.png" id="ProductTracking" />
+                                                                                                                                                                                    <img src="~/img/heart.png" id="ProductTracking" />
                                 }
                                 }
                                 
@@ -115,7 +115,7 @@
             <span class="fs-1 ps-4">你可能對這個有興趣</span>
         </div>
         <div style="height:350px">
-            <div class="row ps-3">
+                <div class="row ps-3" id="Suggestedhere">
                         <div class="col p-3  ">
                             <img src="~/img/Login1.jpg" style="height:150px; width:200px;"><br />
                             <a href="" class="fs-3"> 產品A </a><br />
@@ -200,39 +200,34 @@
             let imgName = imgPath.substring(img + 1);
 
             if (imgName === "Noheart.png") {
-                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${Pid}&heart=${imgName}`
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
                 if(data === "請先登入"){
-                    alert(data);
                     return;
                 }
                 event.target.src= "/img/heart.png";
-                alert(data);
             } else if(imgName === "heart.png") {
-                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${Pid}&heart=${imgName}`
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
                 if(data === "請先登入"){
-                    alert(data);
                     return;
                 }
                 event.target.src = "/img/Noheart.png";
-                alert(data);
             }
         }
         document.addEventListener("DOMContentLoaded", () => {
             reviewSearch();
             document.addEventListener("keydown", process);
             document.addEventListener("input", updateInput);
+            SuggestedItems();
         })
         function updateInput() {
             reviewInput=document.querySelector("#review").value;
         }
-        
-        
         async function changeLike(event) {
             let ReviewID = event.target.parentNode.parentNode.querySelector(".reviewID").value;
             console.log(ReviewID);
@@ -399,6 +394,32 @@
                 }
             }
             
+        }
+
+        async function SuggestedItems() {
+            let url = `https://localhost:7078/api/Products/Suggested/${Pid}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data);
+            const value = data.$values.map(item => {
+                console.log(item);
+                const productID = item.productId;
+                const productName = item.productName;
+                const productPrice = item.unitPrice;
+                const productImage = item.fimagePath.split(",")[0];
+                console.log(productImage);
+                let html =
+                    `
+                        <div class="col p-3  ">
+                               <img src="/img-product/${productImage}" style="height:150px; width:200px;"><br />
+                               <a href="/Shopping/selectProduct/${productID}" class="fs-3"> ${productName} </a><br />
+                               <span class="fs-3 text-danger">$${productPrice}</span>
+                        </div>
+                `
+                return html;
+            });
+            document.querySelector("#Suggestedhere").innerHTML= value.join("");
+            console.log(value);
         }
     </script>
 }
