@@ -48,15 +48,15 @@
                                 <!-- End Comments -->
                                 <!-- ======= Comments Form ======= -->
                                 <div class="row justify-content-center mt-5">
-                                <div class="col-lg-12">
-                                    <h5 class="comment-title">留言</h5>
-                                    <div class="row">
-                                        <div class="col-12 mb-3">
-                                            <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                    <div class="col-lg-12">
+                                        <h5 class="comment-title">留言</h5>
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                                <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                                 <!-- End Comments Form -->
                             </div>
                             <div class="col-md-3">
@@ -100,13 +100,91 @@
                         </div>
                     </div>
                 </section>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="visibility: hidden;">
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">還沒登入嗎?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="p-3 mb-5 mt-4 bg-white rounded">
+                                    <form method="post" id="from" style="padding-top:0px;">
+                                        <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
+
+                                        <div class="g_id_signin py-1" data-type="standard"></div>
+
+
+                                        @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
+
+                                        <div class="d-flex justify-content-center">
+                                            <button id="btnGoogleLogin" type="button" class="btn btn-danger w-100 py-2 mx-1"><i class="fab fa-google" style="font-size:larger;"></i></button>
+                                            <button id="btnFacebookLogin" type="button" class="btn btn-primary w-100 py-2 mx-1"><i class="fab fa-facebook-f" style="font-size:larger;"></i></button>
+                                            <button id="btnLineLogin" type="button" class="btn btn-success w-100 py-2 mx-1"><i class="fab fa-line" style="font-size:x-large;"></i></button>
+                                        </div>
+                                        <script>startApp();</script>
+
+                                        <div class="mt-2 mx-2 title">或</div>
+
+                                         @*@Html.Raw(expired)
+                                @Html.Raw(resetLogin)
+                                 @Html.Raw(loginfail)*@
+                                        <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
+
+
+                                        <div class="px-1 my-2 form-floating">
+                                            <input type="text" class="form-control" id="txtAccout" name="txtEmail">
+                                            <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
+                                        </div>
+                                        <div class="px-1 my-2 form-floating">
+
+                                            <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
+                                            <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
+
+                                        </div>
+                                        <div class="mb-3 px-3">
+                                            <div class="form-check text-start my-3">
+                                                <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    記住我
+                                                </label>
+                                                @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:150px" })
+                                                @Html.ActionLink("忘記密碼", "ForgetPassword", "Accout", new { }, new { style = "margin-left:10px" })
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3  col-5"></div>
+                                            <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
+                                        </div>
+                                        <div class="btn-group d-flex justify-content-center mt-3">
+                                            <button id="testButtonA" type="button" class="btn btn-secondary w-100 py-2">DEMO1(功能)</button>
+                                            <button id="testButtonB" type="button" class="btn btn-secondary w-100 py-2">DEMO2(註冊)</button>
+                                            <button id="testButtonC" type="button" class="btn btn-secondary w-100 py-2">DEMO3(G)</button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-1 mt-1 col-12"><a href="@Url.Content("~/admin")" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Understood</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     }
 </main>
 @section Scripts {
     <script>
-
-
         let memberLogIn = @memLogIn;
+        let commentTable = document.querySelector('#putIn');//放留言的地方
         console.log(typeof memberLogIn);
         //console.log("我是singlePost");
         //為了不要跑版，使用者輸入的圖片會自動被包上figure以限制版面
@@ -121,15 +199,20 @@
             }
         }
         const InputTextArea = document.querySelector('#comment-message');
-        console.log(InputTextArea);
+        
         InputTextArea.addEventListener('keydown', async function (event) {
             console.log(typeof event.keyCode);
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();//防止textarea換行
-                console.log(`文章id:${blogId}`);
+                if (memberLogIn === 0) 
+                {
+                    const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
+                    invisibleButton.dispatchEvent(new Event('click'));
+                }
+                //console.log(`文章id:${blogId}`);
                 //console.log(`文章類別:${blogClassId}`);
-                console.log(`當前登入者:${memberLogIn}`);
-                console.log(InputTextArea.value);
+                //console.log(`當前登入者:${memberLogIn}`);
+                //console.log(InputTextArea.value);
                 const apiUrl = 'https://localhost:7078/api/Comments/memberAddComment';
                 const data =
                 {
@@ -143,8 +226,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 };
-                try 
-                {
+                try {
                     const response = await fetch(apiUrl, requestOption);
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
@@ -159,33 +241,8 @@
                     console.error('There was a problem saving the comment:', error);
                     // 處理錯誤
                 }
-                // fetch(apiUrl, requestOption)
-                //     .then(response => {
-                //         if (!response.ok) {
-                //             throw new Error('Network response was not ok.');
-                //         }
-                //         await loadPrimeComments();
-                //         await processReplies();
-                //         toggleLinkEvent();
-                //         initButtons();
-                //         InputTextArea.value = '';
-                //         //enter按鈕preventDefault不見了?
-                //     }).catch(error => {
-                //         console.error('There was a problem saving the comment:', error);
-                //         // 處理錯誤
-                //     });
-               
-
-                
             }
         });
-        document.addEventListener("keydown", key);
-        let input = document.querySelector("#comment-message");
-        function key(event) {
-            if (event.key == "Enter") {
-
-            }
-        }
 
         //!async await必須要在一起
         document.addEventListener('DOMContentLoaded', async () => {
@@ -194,14 +251,29 @@
             toggleLinkEvent();
             initButtons();
             await loadSidePopular();
-            
+            window.addEventListener('scroll', scrollHandler);
         });
+        let modalShown = false; // 设置标志，表示模态窗口是否已经显示过
+        function scrollHandler() {
+            const commentTablePosition = commentTable.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+            if (commentTablePosition <= windowHeight && memberLogIn === 0 && !modalShown) {
+                const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
+                invisibleButton.dispatchEvent(new Event('click'));
+                modalShown = true; // 设置标志为 true，表示模态窗口已经显示过
+
+                // 在条件满足时移除滚动事件监听器
+                window.removeEventListener('scroll', scrollHandler);
+            }
+        }
 
         async function addNewComment() {
 
         }
 
         //定義方法
+        
         function initButtons() {
             let replyButtons = document.querySelectorAll('.replyBtn');//回覆按鈕
             console.log(replyButtons);
@@ -231,10 +303,10 @@
         async function loadPrimeComments() {
             const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
             const data = await response.text();
-            let putIn = document.querySelector('#putIn');
+
             //console.log(putIn);
-            putIn.innerHTML = '';
-            putIn.innerHTML += data;
+            commentTable.innerHTML = '';
+            commentTable.innerHTML += data;
         }
         async function processReplies() {
             let mainComment = document.querySelectorAll('.mainComment');
@@ -284,16 +356,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                         <div class="post-meta">
-                                           <span class="date">${articleClass}</span>
-                                            <span class="mx-1">&bullet;</span>
-                                            <span>${formattedDate}</span>
-                                        </div>
-                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                       <span class="author mb-3 d-block">${author}</span>
-                                   </div>
+                                                 <div class="post-meta">
+                                                   <span class="date">${articleClass}</span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span>${formattedDate}</span>
+                                                </div>
+                                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                               <span class="author mb-3 d-block">${author}</span>
+                                           </div>
 
-                                `
+                                        `
             })
             popularContainer.innerHTML = popular6.join('');
         }
@@ -314,16 +386,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                         <div class="post-meta">
-                                           <span class="date">${articleClass}</span>
-                                            <span class="mx-1">&bullet;</span>
-                                            <span>${formattedDate}</span>
-                                        </div>
-                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                       <span class="author mb-3 d-block">${author}</span>
-                                   </div>
+                                                 <div class="post-meta">
+                                                   <span class="date">${articleClass}</span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span>${formattedDate}</span>
+                                                </div>
+                                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                               <span class="author mb-3 d-block">${author}</span>
+                                           </div>
 
-                                `
+                                        `
             })
             latestContainer.innerHTML = latest6.join('');
         }
@@ -344,16 +416,16 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return ` <div class="post-entry-1 border-bottom">
-                                         <div class="post-meta">
-                                           <span class="date">${articleClass}</span>
-                                            <span class="mx-1">&bullet;</span>
-                                            <span>${formattedDate}</span>
-                                        </div>
-                                    <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                       <span class="author mb-3 d-block">${author}</span>
-                                   </div>
+                                                 <div class="post-meta">
+                                                   <span class="date">${articleClass}</span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span>${formattedDate}</span>
+                                                </div>
+                                            <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
+                                               <span class="author mb-3 d-block">${author}</span>
+                                           </div>
 
-                                `
+                                        `
             })
             thisCarContainer.innerHTML = thisCat6.join('');
             //const thisCat6
