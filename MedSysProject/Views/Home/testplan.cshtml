@@ -32,64 +32,59 @@
         }
 
         .card {
-            background-color: #2F8927;
             background-position: center;
             background-size: contain;
-            border: solid;
-            border-color: #2F8927;
             flex: 0 0 auto;
             margin: 0; /* 移除外邊距，使每個卡片之間沒有留白 */
             padding: 0; /* 移除內邊距，確保內容填滿整個卡片 */
             min-width: 0;
-            width: 80%;
+            width: 60%;
             box-sizing: border-box;
         }
     </style>
   
     </head>
     <body>
-        <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
-            <section class="text-center">
-            <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
-            </section>
-            <div @* class="row gx-lg-6" *@ id="plansSection">
+    <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
+    <section class="text-center">
+        <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
+    </section>
+
+    <!-- 新增的容器來包裹兩個區塊 -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 所有項目的列表 -->
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header bg-white py-3">
+                        所有項目
+                    </div>
+                    <ul class="list-group list-group-flush" id="allProjectsList"></ul>
+                </div>
             </div>
+
+            <!-- 方案比較區 -->
+            <div class="col-lg-9" id="plansSection"></div>
+        </div>
+    </div>
+
+
+
     <script>
-        var selectedPlanIds = []; // 儲存已選擇的方案 ID
         var globalPlans; // 全局變數儲存所有方案
+        var globalProjects; // 全局變數儲存所有項目
 
-        // 函數：更新項目列表
-        function updateProjectsList(projects, projectsList) {
-            projectsList.empty(); // 清空現有項目
-            projects.forEach(function (project) {
-                projectsList.append('<li class="list-group-item">' + project.projectName + '</li>');
-            });
-        }
+        $(document).ready(function () {
+            loadData();
+        });
 
-        // 函數：初始化方案選擇下拉列表和對應的項目列表
-        function initPlanSelect(planSelect, projectsList) {
-            planSelect.empty(); // 清空現有選項
-            planSelect.append(new Option('---請選擇方案---', '', true, true));
+            // 綁定按鈕點擊事件
+            $('#addPlanButton').click(addNewPlanComparison);
+        
 
-            globalPlans.forEach(function (plan) {
-                if (plan.planName !== "非套餐方案" && !selectedPlanIds.includes(plan.planId)) {
-                    planSelect.append(new Option(plan.planName, plan.planId));
-                }
-            });
-
-            planSelect.change(function () {
-                var selectedPlanId = $(this).val();
-                if (!selectedPlanIds.includes(selectedPlanId) && selectedPlanId) {
-                    selectedPlanIds.push(selectedPlanId);
-                    var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
-                    updateProjectsList(selectedPlan ? selectedPlan.projects : [], projectsList);
-                }
-            });
-        }
-
-        // 函數：新增方案比較區域
         function addNewPlanComparison() {
-            if ($('#plansSection').children().length < globalPlans.length - 1) {
+            var planCount = $('#plansSection').children().length;
+            if (planCount < globalPlans.length) {
                 var newPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
                 var newCard = $('<div/>', { class: 'card' }).appendTo(newPlanDiv);
                 var newCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(newCard);
@@ -103,29 +98,73 @@
             }
         }
 
+        // 函數：更新項目列表
+        function updateProjectsList(planProjects, projectsList) {
+            projectsList.empty();
+            globalProjects.forEach(function (project) {
+                var includesProject = planProjects.some(p => p.projectId === project.projectId);
+                var symbol = includesProject ? 'O' : 'X';
+                projectsList.append('<li class="list-group-item">' + symbol + '</li>');
+            });
+        }
+
+        // 函數：初始化方案選擇下拉列表
+        function initPlanSelect(planSelect, projectsList) {
+            planSelect.empty(); // 清空現有選項
+            planSelect.append(new Option('---請選擇方案---', '', true, true));
+
+            globalPlans.forEach(function (plan) {
+                if (plan.planName !== "非套餐方案") {
+                    planSelect.append(new Option(plan.planName, plan.planId));
+                }
+            });
+
+            planSelect.change(function () {
+                var selectedPlanId = $(this).val();
+                var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
+                updateProjectsList(selectedPlan ? selectedPlan.projects : [], projectsList);
+            });
+        }
+
         // Ajax 請求獲取方案和項目數據
-        $.ajax({
-            url: '@Url.Action("GetPlansAndProjects", "Home")',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                globalPlans = data.plans;
+        function loadData() {
+            $.ajax({
+                url: '@Url.Action("GetPlansAndProjects", "Home")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    globalPlans = data.plans;
+                    initPlanSelect($('#planSelect'), $('#projectsList'));
+                },
+                error: function (error) {
+                    console.error("獲取方案時發生錯誤: ", error);
+                }
+            });
 
-                // 初始化第一個方案比較區域
-                var firstPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
-                var firstCard = $('<div/>', { class: 'card' }).appendTo(firstPlanDiv);
-                var firstCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(firstCard);
-                var firstPlanSelect = $('<select/>', { class: 'form-control', id: 'planSelect' }).appendTo(firstCardHeader);
-                var firstCardBody = $('<div/>', { class: 'card-body' }).appendTo(firstCard);
-                var firstProjectsList = $('<ul/>', { class: 'list-group list-group-flush', id: 'projectsList' }).appendTo(firstCardBody);
+            $.ajax({
+                url: '@Url.Action("GetAllProjects", "Home")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    globalProjects = data;
+                    updateAllProjectsList(); // 新增函數呼叫
+                },
+                error: function (error) {
+                    console.error("獲取項目時發生錯誤: ", error);
+                }
+            });
+        }
+        function updateAllProjectsList() {
+            var allProjectsList = $('#allProjectsList');
+            allProjectsList.empty();
+            globalProjects.forEach(function (project) {
+                allProjectsList.append('<li class="list-group-item">' + project.projectName + '</li>');
+            });
+        };
 
-                initPlanSelect(firstPlanSelect, firstProjectsList);
 
-                $('#addPlanButton').click(addNewPlanComparison);
-            },
-            error: function (error) {
-                console.error("獲取方案和項目時發生錯誤: ", error);
-            }
+        $(document).ready(function () {
+            loadData();
         });
     </script>
 
