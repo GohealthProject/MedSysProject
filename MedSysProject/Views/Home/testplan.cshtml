@@ -96,6 +96,28 @@
             text-align: center; /* 作為後備選項 */
         }
 
+        .fade-in {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+            .fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .icon-fade-in {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+            .icon-fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
 
 
     </style>
@@ -125,7 +147,6 @@
             <button id="addPlanButton" class="btn btn-outline-success">增加比較方案</button>
         </div>
     </div>
-
 
     <script>
         var globalPlans; // 全局變數儲存所有方案
@@ -166,18 +187,14 @@
                 return;
             }
 
-            var newSelect = $('<select/>', {
-                class: 'form-control plan-select centered-select'
-            });
+            var newSelect = $('<select/>', { class: 'form-control plan-select centered-select' });
             initPlanSelect(newSelect);
             var newTh = $('<th></th>').append(newSelect);
 
             var lastPlanSelectTh = $('th:has(.plan-select)').last();
             if (lastPlanSelectTh.length === 0) {
-                // 如果還沒有添加過下拉選單，則將其添加到初始下拉選單之後
                 $('#plansHeader').after(newTh);
             } else {
-                // 否則添加到最後一個下拉選單之後
                 lastPlanSelectTh.after(newTh);
             }
         }
@@ -189,38 +206,37 @@
                 var project = globalProjects[index];
                 var includesProject = plan.projects.some(p => p.projectId === project.projectId);
 
-                // 使用 Font Awesome 圖標來替換原本的文字
-                var symbol = includesProject ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                var symbol = includesProject ? '<i class="fas fa-check-circle text-success icon-fade-in"></i>' : '<i class="fas fa-times-circle text-danger icon-fade-in"></i>';
+                var newTd = $('<td></td>').html(symbol);
+                $(tr).append(newTd);
+            });
 
-                var newTd = $('<td></td>').html(symbol); // 使用 .html() 來添加 HTML 內容
-                $(tr).append(newTd); // 添加新列
+            animateIconElements(); // 應用動畫於圖標
+        }
+
+        function animateIconElements() {
+            $('.icon-fade-in').each(function (i) {
+                var element = $(this);
+                setTimeout(function () {
+                    element.addClass('visible');
+                }, i * 100); // 每個圖標之間延遲100毫秒
             });
         }
 
         function loadData() {
-            $.ajax({
+            return $.ajax({ // 確保這裡返回一個 Promise 對象
                 url: '@Url.Action("GetPlansAndProjects", "Home")',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    globalPlans = data.plans;
+                    globalPlans = data.plans; // 確認這裡正確設置了 globalPlans
+                    globalProjects = data.projects; // 確認這裡正確設置了 globalProjects
                     initPlanSelect($('#planSelect'));
+                    createComparisonTableRows(); // 創建行
+                    animateElements(); // 應用動畫
                 },
                 error: function (error) {
                     console.error("獲取方案時發生錯誤: ", error);
-                }
-            });
-
-            $.ajax({
-                url: '@Url.Action("GetAllProjects", "Home")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    globalProjects = data;
-                    createComparisonTableRows(); // 創建項目行
-                },
-                error: function (error) {
-                    console.error("獲取項目時發生錯誤: ", error);
                 }
             });
         }
@@ -229,12 +245,24 @@
             var tableBody = $('#comparisonTableBody');
             tableBody.empty();
             globalProjects.forEach(function (project) {
-                var row = $('<tr></tr>');
-                row.append('<td>' + project.projectName + '</td>'); // 項目名稱
+                var row = $('<tr></tr>').addClass('fade-in'); // 添加 fade-in 類
+                row.append('<td>' + project.projectName + '</td>');
                 tableBody.append(row);
             });
         }
+
+        // 添加動畫效果
+        function animateElements() {
+            $('.fade-in').each(function (i) {
+                var element = $(this);
+                setTimeout(function () {
+                    element.addClass('visible');
+                }, i * 100); // 每個元素之間延遲100毫秒
+            });
+        }
     </script>
+
+ 
 
     
 
