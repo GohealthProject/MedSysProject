@@ -19,7 +19,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
@@ -34,6 +34,7 @@
                             <th>reportId</th>
                             <th>itemId</th>
                             <th>rs</th>
+                            <th>empty</th>
                         </tr>
                     </thead>
                 </table>
@@ -107,17 +108,36 @@
     //$.fn.dataTable.ext.errMode = 'throw';
     /////////////
     var ttt = $('#tableD').DataTable({
+        "autoWidth": false,
         "ajax": {
             "url": "https://localhost:7203/admin/test1/",
             //默认为data,这里定义为空，则只需要传不带属性的数据
             "dataSrc": ""
         },
+        //給table內自定義按鈕
+        "columnDefs": [
+            {
+                // targets用於指定操作的列，從第0列開始，-1爲最後一列，這裏第六列
+                // return後邊是我們希望在指定列填入的按鈕代碼
+                "targets": -1,
+                "render": function (data, type, full, meta) {
+                    return "<button class='btn btn-primary' id = 'testButton'>點擊我！</button>"
+                }
+            }
+        ],
         columns: [
-            { data: 'reportDetailId' },
-            { data: 'reportId' },
-            { data: 'itemId' },
-            { data: 'result' },
-        ]
+            { data: 'reportDetailId', title: "健檢詳細ID" },
+            { data: 'reportId', title: "健檢報告ID" },
+            { data: 'itemId', title: "項目" },
+            { data: 'result', title: "結果" },
+            { data: null },
+            
+            
+        ],
+       
+        
+    
+    
 
     });
     function aaa(){
