@@ -62,7 +62,7 @@
                     </li>
 
                     <li class="dropdown">
-                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li><a href="~/Home/planComeparison">方案比較</a></li>
                             <li class="dropdown">
@@ -79,9 +79,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+                        <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
-                    <li><a class="nav-link scrollto" asp-action="index"asp-controller="blogs">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li><a class="nav-link scrollto fs-4" asp-action="index" asp-controller="blogs" >健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:20px">
                         <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
                         <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></a>
@@ -89,7 +89,7 @@
                     </li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                     {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                        <li class="fs-4">@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto" })</li>
                     }
                     else
                     {
@@ -97,7 +97,7 @@
                         Member m = new Member();
                         m = JsonSerializer.Deserialize<Member>(json);
                         <li class="dropdown">
-                            <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                            <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                             <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
