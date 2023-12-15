@@ -3,6 +3,7 @@ using MedSysProject.Models;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace MedSysProject.Controllers
@@ -28,7 +29,17 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                return View();
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                Member? m = JsonSerializer.Deserialize<Member>(json);
+                var q = _db.TrackingLists.Where(n => n.MemberId == m.MemberId).Include(n=>n.Product).Take(5);
+                List<CProductWarp> list = new List<CProductWarp>();
+                foreach (var item in q)
+                {
+                    CProductWarp p = new CProductWarp();
+                    p.Product = item.Product;
+                    list.Add(p);
+                }
+                return View(list);
             }
         }//會員中心
 
@@ -482,6 +493,35 @@ namespace MedSysProject.Controllers
         public IActionResult MemberLive()
         {
             return View();
+        }
+
+        public IActionResult TrackingList()
+        {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Login");
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+            List<int?> list = _db.TrackingLists.Where(n => n.MemberId == m.MemberId).Select(n => n.ProductId).ToList();
+
+            //var TrackProduct =_db.Products.Where(n=>list.Contains(n.ProductId)).Include(n=>n.TrackingLists).ToList();
+            var TrackProduct = _db.TrackingLists.Where(n => n.MemberId == m.MemberId).Include(n => n.Product).Select(n => new
+            {
+                product = n.Product,
+                Tid = n.TrackingListId
+            });
+            List<CProductWarp> list2 = new List<CProductWarp>();
+            List<int> Tids = new List<int>();
+            foreach(var item in TrackProduct)
+            {
+                CProductWarp p = new CProductWarp();
+                p.Product = item.product;
+                p.Path = item.product.FimagePath.Split(",");
+                list2.Add(p);
+                Tids.Add(item.Tid);
+            }
+            ViewBag.Tids= Tids;
+            return View(list2);
         }
     }
 

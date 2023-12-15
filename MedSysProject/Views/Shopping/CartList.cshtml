@@ -46,8 +46,28 @@
                                                                         @Html.DisplayFor(modelItem => item.小計)
                                                                     </td>
                                                                     <td>
-                                                                        <input type="hidden" value="@item.count" name="ProductQta" />
-                                                                        @Html.DisplayFor(modelItem => item.count)
+                                                                        
+                            <select name="ProductQta">
+                                @{
+                                    for(int i =0; i < item.Product.UnitsInStock; i++)
+                                    {
+                                        
+                                        if(item.count == i)
+                                        {
+                                            <option value="@i" selected>@i</option>
+                                        }
+                                        else{
+                                            <option value="@i">@i</option>
+                                        }
+                                        if (i == 50)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    
+                                                                            }
+                                                                            
+                                                                        </select>
                                                                     </td>
                                                                     <td>
                                                                             <img src="~/img/trash.png" class="trash"/>

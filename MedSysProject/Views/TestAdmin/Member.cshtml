@@ -1,0 +1,64 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Member
+@model IEnumerable<MedSysProject.Models.Member>
+
+@{
+    ViewData["Title"] = "MemberManager";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const MemberManager = document.getElementById("li-MemberManager");
+    const Index = document.getElementById("li-index");
+    MemberManager.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">會員管理</h6>
+    </div>
+    <div class="card-body">
+
+
+        <div>
+            <table id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>會員編號</th>
+                        <th>會員姓名</th>
+                        <th>會員性別</th>
+                        <th>會員生日</th>
+                        <th>會員電話</th>
+                        <th>會員信箱</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        var ttt = $('#dataTable').DataTable({
+            "ajax": {
+                "url": "https://localhost:7203/TestAdmin/MemberJSON",
+                 "dataSrc": "",
+            },
+            columns: [
+                { data: "memberId" },
+                { data: "memberName" },
+                { data: "memberGender" },
+                { data: "memberBirthdate" },
+                { data: "memberPhone" },
+                { data: "memberEmail" },
+            ]
+        });
+    </script>
+}

@@ -60,18 +60,22 @@
       <nav id="navbar" class="navbar">
                 <!-- =======最上方欄位 ======= -->
         <ul>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#about" >關於GO健康</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#services">GO健康與您</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#team">GO健康團隊</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#contact">意見反映與交通資訊</a>
-
+                    <li class="dropdown fs-4">
+                        <a href="~/Home/Index#about"><span class="fs-4">關於GO健康</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            <li><a href="~/Home/Index#services">GO健康與您</a></li>
+                            <li><a href="~/Home/Index#team">GO健康團隊</a></li>
+                            <li><a href="~/Home/Index#contact">意見反映與交通資訊</a></li>
+                        </ul>
+                    </li>
+                    <li>
                     
-                    <li class="dropdown fs-5">
-                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                    <li class="dropdown fs-4">
+                        <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             
-                            <li class="dropdown fs-5">
-                                <a href="#"><span>線上預約</span> <i class="bi bi-chevron-right"></i></a>
+                            <li class="dropdown fs-4">
+                                <a href="#"><span class="fs-4">線上預約</span> <i class="bi bi-chevron-right"></i></a>
                                 <ul>
                                     <li><a href="~/Home/planComeparison">個人方案選擇與比較</a></li>
                                     <li><a href="~/Home/testplan">企業健檢方案選擇</a></li>
@@ -84,9 +88,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+                        <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
-                    <li><a class="nav-link scrollto" href="/blogs/index">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li><a class="nav-link scrollto fs-4" href="/blogs/index" >健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:35px">
                         <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
                         <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping">
@@ -94,13 +98,12 @@
                     </li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto fs-4"})</li>
                         }else{
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                            Member m = new Member();
-                            m = JsonSerializer.Deserialize<Member>(json);
+                            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
                                 <li class="dropdown">
-                                    <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                            <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                                     <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
@@ -138,7 +141,9 @@
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+   @* <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>*@
+    @*<script src="https://code.jquery.com/jquery-3.7.0.min.js"   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="   crossorigin="anonymous"></script>*@
+   
     <script src="~/forevendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/forevendor/swiper/swiper-bundle.min.js"></script>
     <script src="~/forevendor/php-email-form/validate.js"></script>

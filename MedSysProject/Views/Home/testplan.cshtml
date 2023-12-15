@@ -32,106 +32,154 @@
         }
 
         .card {
-            background-color: #2F8927;
             background-position: center;
             background-size: contain;
-            border: solid;
-            border-color: #2F8927;
             flex: 0 0 auto;
             margin: 0; /* 移除外邊距，使每個卡片之間沒有留白 */
             padding: 0; /* 移除內邊距，確保內容填滿整個卡片 */
             min-width: 0;
-            width: 80%;
+            width: 60%;
             box-sizing: border-box;
         }
+
+        .table tbody tr {
+            height: auto; /* 調整行高 */
+        }
+
+        .table tbody tr td {
+                vertical-align: middle; /* 垂直居中 */
+            }
     </style>
   
     </head>
-    <body>
-        <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
-            <section class="text-center">
-            <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
-            </section>
-            <div @* class="row gx-lg-6" *@ id="plansSection">
-            </div>
+<body>
+    <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
+    <section class="text-center">
+        <button id="addPlanButton" class="btn btn-primary">增加比較方案</button>
+    </section>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>健檢項目</th>
+                <th id="plansHeader">
+                    <select id="planSelect" class="form-control">
+                        <!-- 選項將動態添加 -->
+                    </select>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="comparisonTableBody">
+            <!-- 動態添加項目和方案比較的行 -->
+        </tbody>
+    </table>
+
+
     <script>
-        var selectedPlanIds = []; // 儲存已選擇的方案 ID
         var globalPlans; // 全局變數儲存所有方案
+        var globalProjects; // 全局變數儲存所有項目
+        var addedPlans = []; // 儲存已添加的方案
 
-        // 函數：更新項目列表
-        function updateProjectsList(projects, projectsList) {
-            projectsList.empty(); // 清空現有項目
-            projects.forEach(function (project) {
-                projectsList.append('<li class="list-group-item">' + project.projectName + '</li>');
-            });
-        }
+        $(document).ready(function () {
+            loadData();
+            $('#addPlanButton').click(addPlanSelectColumn); // 綁定按鈕點擊事件
+        });
 
-        // 函數：初始化方案選擇下拉列表和對應的項目列表
-        function initPlanSelect(planSelect, projectsList) {
-            planSelect.empty(); // 清空現有選項
+        // 初始化下拉選單
+        function initPlanSelect(planSelect) {
+            planSelect.empty();
             planSelect.append(new Option('---請選擇方案---', '', true, true));
 
             globalPlans.forEach(function (plan) {
-                if (plan.planName !== "非套餐方案" && !selectedPlanIds.includes(plan.planId)) {
+                if (plan.planName !== "非套餐方案" && !addedPlans.includes(plan.planId.toString())) {
                     planSelect.append(new Option(plan.planName, plan.planId));
                 }
             });
 
             planSelect.change(function () {
                 var selectedPlanId = $(this).val();
-                if (!selectedPlanIds.includes(selectedPlanId) && selectedPlanId) {
-                    selectedPlanIds.push(selectedPlanId);
-                    var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
-                    updateProjectsList(selectedPlan ? selectedPlan.projects : [], projectsList);
+                if (!selectedPlanId) return; // 避免空選項觸發
+
+                var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
+                addPlanColumn(selectedPlan);
+                addedPlans.push(selectedPlanId); // 將選擇的方案ID添加到陣列中
+                $(this).prop('disabled', true); // 禁用選擇過的選單
+            });
+        }
+
+        // 在表頭添加新的下拉選單
+        function addPlanSelectColumn() {
+            if (addedPlans.length >= globalPlans.length - 1) {
+                alert("已達最大方案比較量！");
+                return;
+            }
+
+            var newSelect = $('<select/>', { class: 'form-control plan-select' });
+            initPlanSelect(newSelect);
+            var newTh = $('<th></th>').append(newSelect);
+
+            var lastPlanSelectTh = $('th:has(.plan-select)').last();
+            if (lastPlanSelectTh.length === 0) {
+                // 如果還沒有添加過下拉選單，則將其添加到初始下拉選單之後
+                $('#plansHeader').after(newTh);
+            } else {
+                // 否則添加到最後一個下拉選單之後
+                lastPlanSelectTh.after(newTh);
+            }
+        }
+
+        // 添加方案比較列
+        function addPlanColumn(plan) {
+            var tableBody = $('#comparisonTableBody');
+            tableBody.find('tr').each(function (index, tr) {
+                var project = globalProjects[index];
+                var includesProject = plan.projects.some(p => p.projectId === project.projectId);
+                var symbol = includesProject ? 'O' : 'X';
+                var newTd = $('<td></td>').text(symbol);
+                $(tr).append(newTd); // 添加新列
+            });
+        }
+
+        function loadData() {
+            $.ajax({
+                url: '@Url.Action("GetPlansAndProjects", "Home")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    globalPlans = data.plans;
+                    initPlanSelect($('#planSelect'));
+                },
+                error: function (error) {
+                    console.error("獲取方案時發生錯誤: ", error);
+                }
+            });
+
+            $.ajax({
+                url: '@Url.Action("GetAllProjects", "Home")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    globalProjects = data;
+                    createComparisonTableRows(); // 創建項目行
+                },
+                error: function (error) {
+                    console.error("獲取項目時發生錯誤: ", error);
                 }
             });
         }
 
-        // 函數：新增方案比較區域
-        function addNewPlanComparison() {
-            if ($('#plansSection').children().length < globalPlans.length - 1) {
-                var newPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
-                var newCard = $('<div/>', { class: 'card' }).appendTo(newPlanDiv);
-                var newCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(newCard);
-                var newSelect = $('<select/>', { class: 'form-control' }).appendTo(newCardHeader);
-                var newCardBody = $('<div/>', { class: 'card-body' }).appendTo(newCard);
-                var newProjectsList = $('<ul/>', { class: 'list-group list-group-flush' }).appendTo(newCardBody);
-
-                initPlanSelect(newSelect, newProjectsList);
-            } else {
-                alert('已達最大方案比較數量');
-            }
+        function createComparisonTableRows() {
+            var tableBody = $('#comparisonTableBody');
+            tableBody.empty();
+            globalProjects.forEach(function (project) {
+                var row = $('<tr></tr>');
+                row.append('<td>' + project.projectName + '</td>'); // 項目名稱
+                tableBody.append(row);
+            });
         }
-
-        // Ajax 請求獲取方案和項目數據
-        $.ajax({
-            url: '@Url.Action("GetPlansAndProjects", "Home")',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                globalPlans = data.plans;
-
-                // 初始化第一個方案比較區域
-                var firstPlanDiv = $('<div/>', { class: 'col-lg-3' }).appendTo('#plansSection');
-                var firstCard = $('<div/>', { class: 'card' }).appendTo(firstPlanDiv);
-                var firstCardHeader = $('<div/>', { class: 'card-header bg-white py-3' }).appendTo(firstCard);
-                var firstPlanSelect = $('<select/>', { class: 'form-control', id: 'planSelect' }).appendTo(firstCardHeader);
-                var firstCardBody = $('<div/>', { class: 'card-body' }).appendTo(firstCard);
-                var firstProjectsList = $('<ul/>', { class: 'list-group list-group-flush', id: 'projectsList' }).appendTo(firstCardBody);
-
-                initPlanSelect(firstPlanSelect, firstProjectsList);
-
-                $('#addPlanButton').click(addNewPlanComparison);
-            },
-            error: function (error) {
-                console.error("獲取方案和項目時發生錯誤: ", error);
-            }
-        });
     </script>
 
-
-  
-
+    
 
 
 
