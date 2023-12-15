@@ -1,0 +1,105 @@
+﻿@using System.Text.Json;
+
+@model List<CProductWarp>
+@{
+    ViewData["Title"] = "TrackingList";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+    List<int>Tids = ViewBag.Tids;
+}
+
+<div class="container">
+    <div class="py-5">
+        <span class="fs-4">你的追蹤清單</span>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">序</th>
+                <th scope="col">照片</th>
+                <th scope="col">產品名稱</th>
+                <th scope="col">產品價格(原價)</th>
+                <th scope="col">產品價格(特價)</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 0;
+                int RegularPrice = 0;
+                int SpecialPrice = 0;
+                foreach(var item in Model)
+                {
+                    RegularPrice = (int)item.UnitPrice;
+                    SpecialPrice = (int)item.UnitPrice-200;
+                    count++;
+                                            <tr style="vertical-align: middle">
+                                                
+                                                <td style="vertical-align: middle" class="fs-4">@count</td>
+                                                <td ><img src="@Url.Content("~/img-product/")@item.Path[0]" style="height:200px;width:200px" /></td>
+                                                <td style="vertical-align: middle " class="fs-4">@item.ProductName</td>
+                                                <td class="text-danger fs-4" style="text-decoration:line-through;vertical-align: middle">$@RegularPrice.ToString("N0")</td>
+                                                <td class="text-danger fs-4" style="vertical-align: middle">$@SpecialPrice.ToString("N0")</td>
+                                                <td style="vertical-align: middle"><button class="btn btn-danger delbtn"value="@Tids[count-1]" >刪除</button></td>
+                                            </tr>
+                }
+                
+            }
+            
+        </tbody>
+    </table>
+
+    
+    
+</div>
+@section Scripts{
+    <script>
+        @{
+            string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+        }        
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            EventAdd();
+        })
+        async function DeleteTrack(event) {
+            let count = 0;
+            let Tid=event.target.value;
+            let Mid = @m.MemberId;
+            let url = `https://localhost:7078/api/TrackingLists/Delete/${Mid}&${Tid}`
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const value = data.$values.map(Track => {
+                count++;
+                const TTid = Track.trackingListId;
+                const Image =Track.product.fimagePath.split(",")[0];
+                const ProductName = Track.product.productName;
+                const UnitPrice = Track.product.unitPrice;
+                const RegularPrice = UnitPrice.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                const SpecialPrice = (UnitPrice - 200).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                const html = 
+                `
+                            <tr style="vertical-align: middle">
+                                 <td style="vertical-align: middle" class="fs-4">${count}</td>
+                                 <td ><img src="/img-product/${Image}" style="height:200px;width:200px" /></td>
+                                 <td style="vertical-align: middle " class="fs-4">${ProductName}</td>
+                                 <td class="text-danger fs-4" style="text-decoration:line-through;vertical-align: middle">$${RegularPrice}</td>
+                                 <td class="text-danger fs-4" style="vertical-align: middle">$${SpecialPrice}</td>
+                                 <td style="vertical-align: middle"><button class="btn btn-danger delbtn"value="${TTid}" >刪除</button></td>
+                            </tr>
+                `
+                return html;
+            })
+            document.querySelector("tbody").innerHTML = value.join("");
+            document.querySelectorAll(".delbtn").forEach(btn => {
+                btn.addEventListener("click", DeleteTrack);
+            })
+        }
+        function EventAdd(){
+            let btn = document.querySelectorAll(".delbtn");
+            btn.forEach(btn => {
+                btn.addEventListener("click", DeleteTrack);
+            })
+        }
+    </script>
+}
