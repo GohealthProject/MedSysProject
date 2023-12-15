@@ -101,8 +101,7 @@
                         <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto fs-4"})</li>
                         }else{
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                            Member m = new Member();
-                            m = JsonSerializer.Deserialize<Member>(json);
+                            Member m = JsonSerializer.Deserialize<Member>(json);
                                 <li class="dropdown">
                             <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                                     <ul>
