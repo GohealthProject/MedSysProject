@@ -48,7 +48,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult planComeparison()
-        {////方案比較(設計filter篩選方案)
+        {////方案比較(設計filter篩選方案)+更換圖片+加中文名稱
             //_context.Projects.Load();
             //_context.Plans.Load();
             //調整planname個數
@@ -83,7 +83,7 @@ namespace MedSysProject.Controllers
         
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
-        {////方案比較總計(總項+PDF產生)
+        {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認+資料匯出
             //int id = 3;
             //-----------datatable
             //DataSet ds = new DataSet();
@@ -205,10 +205,10 @@ namespace MedSysProject.Controllers
                 dr["PlanName"] = t.PlanName;
                 dr["PlanDescription"] = t.PlanDescription;
                 dr["projectid"] = t.ProjectId;
-                dr["ProjectName"] = t.ProjectName;
+                dr["ProjectName"] = t.ProjectName + t.ItemName;
                 dr["ProjectPrice"] = t.ProjectPrice;
                 dr["itemId"] = t.ItemId;
-                dr["ItemName"] = t.ItemName;
+                dr["ItemName"] = t.ItemName +$"{t.ItemId }";
                 dt.Rows.Add(dr);
             }
 
@@ -222,7 +222,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  篩對應project和item(以viewModel解決)
+        { //放方案介紹  固定item高度+男女差異+價格
 
             //vm方法
             List<CPlanViewModel> data = new List<CPlanViewModel>();
@@ -302,14 +302,11 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
         ///// ====end這裡是partialview區=====
-        public IActionResult testplan()
-        { //plan 企業版，待更改CONTROLL名稱
-            return View();
-        }
+
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { //預約總覽
+        { //預約總覽   尚未完成:日曆限制人數+第三方金流
 
             //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
@@ -333,7 +330,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult report(int id)
-        {
+        {          //尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
             ViewData["id"] = 55;
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
@@ -348,7 +345,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult Customcompare()
 
-        {
+        {//尚未完成:  測試比較後傳送資料
             //IEnumerable<Item> datas = null;
             //var datas = from s in (_context.Items.Include(p=>p.Project).ThenInclude(p=>p.PlanRefs).ThenInclude(p=>p.Plan)).AsEnumerable().Distinct()
             //            select s;
@@ -532,6 +529,12 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+
+        public IActionResult testplan()
+        { //plan 企業版
+            return View();
+        }
+
         public async Task<IActionResult> GetPlansAndProjects()
         {//企業方案API
             try
@@ -559,6 +562,23 @@ namespace MedSysProject.Controllers
             }
         }
 
+
+        public async Task<IActionResult> GetAllProjects()
+        {//企業方案API2
+            try
+            {
+                var projects = await _context.Projects
+                    .Select(p => new { p.ProjectId, p.ProjectName })
+                    .ToListAsync();
+
+                return Json(projects);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching projects: " + ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
     }
 }
