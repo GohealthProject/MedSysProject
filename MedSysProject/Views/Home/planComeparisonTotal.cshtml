@@ -6,25 +6,24 @@
 @using System.Data
 <head>
     <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    
+   
     @*datatable區*@
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
     <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  
    @*  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script> *@
     @*test區*@
-    <script src=" https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    @*<script src=" https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src=""></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>*@
+    @*<script src=""></script>*@
    
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-   @*  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-  
-    <script src=""></script>
-    *@
+  @*  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>*@
+   
     
     <style>
        /*  .text-custom-truncate {
@@ -112,15 +111,16 @@
            
             <thead>
                 <tr>
-                     <th> </th>
-                    <th>planId</th>
-                    <th>planName</th>
-                   
-                    <th>ProjectName </th>
-                    <th>ProjectPrice</th>
-                  
-                    <th>ItemName</th>
+                    <th rowspan="2">方案選取</th>
+                    <th colspan="5">方案詳細</th>
+                </tr>
+                <tr>
                     
+                    <th>planId</th>
+                    <th>planName</th>                   
+                    <th>ProjectName </th>
+                    <th>ProjectPrice</th>                  
+                    <th>ItemName</th>                    
                 </tr>
             </thead>
             <tbody id="myTable">
@@ -153,7 +153,15 @@
     <script>
         
        let table = new DataTable('#datatable');
+     
         const table2 = document.querySelector("#datatable");
+       
+            $("#datatable").datatable({
+           
+        });
+      
+       
+
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -163,50 +171,13 @@
             });
         });
     //---------------------------------------------test
-         function load(){
-            const tbPlan = $("#datatable>tbody");
-            $.getJSON(tbPlan, function (datas) {
-        const docFrag=$(document.createDocumentFragment())
-        $.each(datas,function(index,plan){
-                    const cell1 = $('<td></td>').text(plan.planId);
-                    const cell2 = $('<td></td>').text(plan.projectd);
-                    const cell3 = $('<td></td>').text(plan.itemId);
-                    const row = $('<tr></tr>').append([cell1,cell2,cell3])
-                    docFrag.append(row)
+        document.addEventListener("keydown",(p)=>{
+        console.log(table2);
         })
-        tbPlan.html(docFrag)
-        })
-        
-        }
-        load();
         //-----------------------------------------------------
-        
+       
         //----------------datatable資料
-        $(document).ready(function () {
-        var data=[{
-        "方案名稱":"樂活",
-        "方案價格":"nt",
-        "類別名稱":"一般檢查",
-        "細項名稱":"身高",
-            }, {
-                "方案名稱": "樂活",
-                "方案價格": "nt",
-                "類別名稱": "一般檢查",
-                "細項名稱": "身高",
-            }
-          
-        ];   
-            $('#datatable').DataTable({
-            "data":data,
-            "colums":[
-                    { data: '方案名稱',title: "方案"},
-                    { data: '方案價格', title: "方方案" },
-                    { data: '類別名稱', title: "方方案案" },
-                    { data: '細項名稱', title: "暗暗方芳" }
-
-            ]
-            })
-        })
+        
 
     </script>
 
