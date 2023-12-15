@@ -412,6 +412,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult Report(CKeywordViewModel vm,int page=1)
         {
+           //尚未完成 :報告寄出提示功能(次要)
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
