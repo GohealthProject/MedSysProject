@@ -944,3 +944,12 @@ Safari 7+ */
   font-size: 30px;
   opacity: 0.5;
 }
+
+#putIn {
+  height: 500px;
+  overflow-y: scroll;
+}
+
+#putIn::-webkit-scrollbar {
+  display: none;
+}
