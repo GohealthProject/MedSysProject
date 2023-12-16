@@ -292,7 +292,7 @@ function updateFooterColspan() {
         function updateFooterColspan() {
             var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
             var totalCells = $('#comparisonTableBody tr:first td').length;
-            var buttonCells = footerRow.find('td').length - 1; // 不計算 "健檢項目" 列
+            var buttonCells = footerRow.find('td').length - 1; 
             var colspan = totalCells - buttonCells;
             footerRow.find('td:first').attr('colspan', colspan);
         }
