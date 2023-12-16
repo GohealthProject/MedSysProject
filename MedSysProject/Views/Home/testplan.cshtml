@@ -161,7 +161,7 @@
 
         $(document).ready(function () {
             loadData();
-            $('#addPlanButton').click(addPlanSelectColumn); // 綁定按鈕點擊事件
+            $('#addPlanButton').click(addPlanSelectColumn);
         });
 
         // 初始化下拉選單
@@ -207,51 +207,97 @@
             }
         }
 
-     function addSelectButtonToFooter(planId) {
-    var footer = $('#comparisonTableBody').closest('table').find('tfoot');
-    var footerRow = footer.find('tr');
+   function addSelectButtonToFooter(planId) {
+    var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+    var footerCell = footerRow.find('td:first');
 
-    // 確保 footer 行存在
-    if (footerRow.length === 0) {
-        createFooterCell(); // 如果不存在，創建一個
-        footerRow = footer.find('tr'); // 重新獲取創建後的行
-    }
+    // 在現有的 footerRow 中添加新按鈕的單元格
+    var newFooterCell = $('<td></td>').attr('plan-id', planId);
+    var selectButton = $('<button></button>').addClass('btn btn-primary').text('選擇');
+    newFooterCell.append(selectButton);
+    footerRow.append(newFooterCell);
 
-    // 檢查對應計劃列下是否已存在按鈕
-    if (footerRow.find('td[plan-id="' + planId + '"]').length === 0) {
-        var footerCell = $('<td></td>').attr('plan-id', planId);
-        var selectButton = $('<button></button>').addClass('btn btn-primary').text('選擇');
-        footerCell.append(selectButton);
-        footerRow.append(footerCell);
-    }
+    // 更新 colspan 為當前列數減去按鈕數量加一
+    var colspanCount = $('#comparisonTableBody tr:first td').length - footerRow.find('td').length + 1;
+    footerCell.attr('colspan', colspanCount);
+}
+
+function updateFooterColspan() {
+    var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+    var colspanCount = $('#comparisonTableBody tr:first td').length - footerRow.find('td').length + 1;
+    footerRow.find('td:first').attr('colspan', colspanCount);
 }
 
 
         // 添加方案比較列
-       function addPlanColumn(plan) {
+      function addPlanColumn(plan) {
     var tableBody = $('#comparisonTableBody');
     tableBody.find('tr').each(function (index, tr) {
         var project = globalProjects[index];
         var includesProject = plan.projects.some(p => p.projectId === project.projectId);
-
         var symbol = includesProject ? '<i class="fas fa-check-circle text-success icon-fade-in"></i>' : '<i class="fas fa-times-circle text-danger icon-fade-in"></i>';
         var newTd = $('<td></td>').html(symbol);
         $(tr).append(newTd);
     });
-
-    animateIconElements(); // 應用動畫於圖標
+    animateIconElements();
 }
 
-        function animateIconElements() {
-            $('.icon-fade-in').each(function (i) {
-                var element = $(this);
-                setTimeout(function () {
-                    element.addClass('visible');
-                }, i * 100); // 每個圖標之間延遲100毫秒
+     
+
+       
+
+        function createComparisonTableRows() {
+            var tableBody = $('#comparisonTableBody');
+            tableBody.empty();
+            globalProjects.forEach(function (project) {
+                var row = $('<tr></tr>').addClass('fade-in'); // 添加 fade-in 類
+                row.append('<td>' + project.projectName + '</td>');
+                tableBody.append(row);
             });
         }
 
-        function loadData() {
+  function createFooterCell() {
+            var footer = $('#comparisonTableBody').closest('table').find('tfoot');
+            var footerRow = footer.find('tr');
+
+            if (footerRow.length === 0) {
+                footerRow = $('<tr></tr>');
+                var footerCell = $('<td></td>').text('請選擇方案');
+                footerCell.attr('colspan', 2);
+                footerRow.append(footerCell);
+                footer.append(footerRow);
+            }
+        }
+
+        function addSelectButtonToFooter(planId) {
+            var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+            var planIndex = addedPlans.indexOf(planId.toString()) + 1; // 獲取當前計劃的索引
+
+            // 確保 footerRow 存在
+            if (footerRow.length === 0) {
+                footerRow = $('<tr></tr>').appendTo($('#comparisonTableBody').closest('table').find('tfoot'));
+            }
+
+            // 確保 footerRow 有足夠的單元格（包括 "健檢項目" 列和所有計劃列）
+            while (footerRow.find('td').length < $('#comparisonTableBody tr:first td').length) {
+                footerRow.append('<td></td>');
+            }
+
+            // 添加按鈕到正確的位置
+            var newFooterCell = footerRow.find('td').eq(planIndex);
+            var selectButton = $('<button></button>').addClass('btn btn-primary').text('選擇');
+            newFooterCell.html(selectButton);
+        }
+
+        function updateFooterColspan() {
+            var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+            var totalCells = $('#comparisonTableBody tr:first td').length;
+            var buttonCells = footerRow.find('td').length - 1; // 不計算 "健檢項目" 列
+            var colspan = totalCells - buttonCells;
+            footerRow.find('td:first').attr('colspan', colspan);
+        }
+
+         function loadData() {
             return $.ajax({ // 確保這裡返回一個 Promise 對象
                 url: '@Url.Action("GetPlansAndProjects", "Home")',
                 type: 'GET',
@@ -270,24 +316,14 @@
             });
         }
 
-        function createComparisonTableRows() {
-            var tableBody = $('#comparisonTableBody');
-            tableBody.empty();
-            globalProjects.forEach(function (project) {
-                var row = $('<tr></tr>').addClass('fade-in'); // 添加 fade-in 類
-                row.append('<td>' + project.projectName + '</td>');
-                tableBody.append(row);
-            });
-        }
-
-     function createFooterCell() {
-    var footerRow = $('<tr></tr>'); // 創建一個新的 tr 元素
-    var footerCell = $('<td></td>').text('請選擇方案'); // 創建 td 元素並添加文本
-    footerCell.attr('colspan', 1); // 將 colspan 設為 1，以與 "ProjectName" 對齊
-    footerRow.append(footerCell); // 將 td 添加到 tr
-    $('#comparisonTableBody').closest('table').find('tfoot').append(footerRow); // 將 tr 添加到 tfoot
+          function animateIconElements() {
+    $('.icon-fade-in').each(function (i) {
+        var element = $(this);
+        setTimeout(function () {
+            element.addClass('visible');
+        }, i * 100);
+    });
 }
-
 
         // 添加動畫效果
         function animateElements() {
