@@ -21,164 +21,164 @@
         // }
     }
     @{
-                                <section class="single-post-content">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+                                                                            <section class="single-post-content">
+                                                                                <div class="container">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
 
-                                                <!-- ======= Single Post Content ======= -->
-                                                <div class="single-post">
-                                                    <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
-                                                    <h1 class="mb-5">@Model[0].Title</h1>
-                                                    @{
+                                                                                            <!-- ======= Single Post Content ======= -->
+                                                                                            <div class="single-post">
+                                                                                                <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                                                                                                <h1 class="mb-5">@Model[0].Title</h1>
+                                                                                                @{
                                 if (Model[0].BlogImage != null)
                                 {
-                                                                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
-                                                                                         alt=""
-                                                                                         class="img-fluid" />
+                                                                                                                                                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
+                                                                                                                                                                                 alt=""
+                                                                                                                                                                                 class="img-fluid" />
                                 }
-                                                    }
-                                                    @Html.Raw(Model[0].Content)
-                                                </div><!-- End Single Post Content -->
-                                                <!-- ======= Comments ======= -->
-                                                <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
+                                                                                                }
+                                                                                                @Html.Raw(Model[0].Content)
+                                                                                            </div><!-- End Single Post Content -->
+                                                                                            <!-- ======= Comments ======= -->
+                                                                                            <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
 
-                                                <div class="Comments" id="putIn">
-                                                </div>
-                                                <!-- End Comments -->
-                                                <!-- ======= Comments Form ======= -->
-                                                <div class="row justify-content-center mt-5">
-                                                    <div class="col-lg-12">
-                                                        <h5 class="comment-title">留言</h5>
-                                                        <div class="row">
-                                                            <div class="col-12 mb-3">
-                                                                <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- End Comments Form -->
-                                            </div>
-                                            <div class="col-md-3">
-                                                <!-- ======= 側面欄位丟這 ======= -->
-                                                <div class="aside-block">
+                                                                                            <div class="Comments" id="putIn">
+                                                                                            </div>
+                                                                                            <!-- End Comments -->
+                                                                                            <!-- ======= Comments Form ======= -->
+                                                                                            <div class="row justify-content-center mt-5">
+                                                                                                <div class="col-lg-12">
+                                                                                                    <h5 class="comment-title">留言</h5>
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-12 mb-3">
+                                                                                                            <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- End Comments Form -->
+                                                                                        </div>
+                                                                                        <div class="col-md-3">
+                                                                                            <!-- ======= 側面欄位丟這 ======= -->
+                                                                                            <div class="aside-block">
 
-                                                    <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true" onclick="loadSidePopular()">最多觀看</button>
-                                                        </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideLatest()">最新貼文</button>
-                                                        </li>
-                                                        <li class="nav-item" role="presentation">
-                                                            <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideThisCat()">相關貼文</button>
-                                                        </li>
-                                                    </ul>
+                                                                                                <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+                                                                                                    <li class="nav-item" role="presentation">
+                                                                                                        <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true" onclick="loadSidePopular()">最多觀看</button>
+                                                                                                    </li>
+                                                                                                    <li class="nav-item" role="presentation">
+                                                                                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideLatest()">最新貼文</button>
+                                                                                                    </li>
+                                                                                                    <li class="nav-item" role="presentation">
+                                                                                                        <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-thisCat" type="button" role="tab" aria-controls="pills-latest" aria-selected="false" onclick="loadSideThisCat()">相關貼文</button>
+                                                                                                    </li>
+                                                                                                </ul>
 
-                                                    <div class="tab-content" id="pills-tabContent">
-                                                        <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                        </div>
-                                                        <div class="tab-pane fade show active" id="pills-latest" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                        </div>
-                                                        <div class="tab-pane fade show active" id="pills-thisCat" role="tabpanel" aria-labelledby="pills-popular-tab">
-                                                        </div>
+                                                                                                <div class="tab-content" id="pills-tabContent">
+                                                                                                    <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                                                                                    </div>
+                                                                                                    <div class="tab-pane fade show active" id="pills-latest" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                                                                                    </div>
+                                                                                                    <div class="tab-pane fade show active" id="pills-thisCat" role="tabpanel" aria-labelledby="pills-popular-tab">
+                                                                                                    </div>
 
-                                                    </div>
-                                                </div>
-                                                <div class="aside-block">
-                                                    <h3 class="aside-title">文章類別</h3>
-                                                    <ul class="aside-links list-unstyled">
-                                                        <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
-                                                        <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
-                                                        <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
-                                                        <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
-                                                        <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
-                                                    </ul>
-                                                </div>
-                                                <!-- End Categories -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="visibility: hidden;">
-                                </button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="aside-block">
+                                                                                                <h3 class="aside-title">文章類別</h3>
+                                                                                                <ul class="aside-links list-unstyled">
+                                                                                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
+                                                                                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
+                                                                                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
+                                                                                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
+                                                                                                    <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
+                                                                                                </ul>
+                                                                                            </div>
+                                                                                            <!-- End Categories -->
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </section>
+                                                                            <!-- Button trigger modal -->
+                                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="visibility: hidden;">
+                                                                            </button>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">還沒登入嗎?</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="p-3 mb-5 mt-4 bg-white rounded">
-                                                    <form method="post" id="from" style="padding-top:0px;">
-                                                        <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
+                                                                            <!-- Modal -->
+                                                                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                                                <div class="modal-dialog">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h5 class="modal-title" id="staticBackdropLabel">還沒登入嗎?</h5>
+                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            <div class="p-3 mb-5 mt-4 bg-white rounded">
+                                                                                                <form method="post" id="from" style="padding-top:0px;">
+                                                                                                    <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
 
-                                                        <div class="g_id_signin py-1" data-type="standard"></div>
+                                                                                                    <div class="g_id_signin py-1" data-type="standard"></div>
 
 
-                                                        @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
+                                                                                                    @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
 
-                                                        <div class="d-flex justify-content-center">
-                                                            <button id="btnGoogleLogin" type="button" class="btn btn-danger w-100 py-2 mx-1"><i class="fab fa-google" style="font-size:larger;"></i></button>
-                                                            <button id="btnFacebookLogin" type="button" class="btn btn-primary w-100 py-2 mx-1"><i class="fab fa-facebook-f" style="font-size:larger;"></i></button>
-                                                            <button id="btnLineLogin" type="button" class="btn btn-success w-100 py-2 mx-1"><i class="fab fa-line" style="font-size:x-large;"></i></button>
-                                                        </div>
-                                                        
+                                                                                                    <div class="d-flex justify-content-center">
+                                                                                                        <button id="btnGoogleLogin" type="button" class="btn btn-danger w-100 py-2 mx-1"><i class="fab fa-google" style="font-size:larger;"></i></button>
+                                                                                                        <button id="btnFacebookLogin" type="button" class="btn btn-primary w-100 py-2 mx-1"><i class="fab fa-facebook-f" style="font-size:larger;"></i></button>
+                                                                                                        <button id="btnLineLogin" type="button" class="btn btn-success w-100 py-2 mx-1"><i class="fab fa-line" style="font-size:x-large;"></i></button>
+                                                                                                    </div>
+                                                                                                    
 
-                                                        <div class="mt-2 mx-2 title">或</div>
+                                                                                                    <div class="mt-2 mx-2 title">或</div>
 
-                                                         @*@Html.Raw(expired)
+                                                                                                     @*@Html.Raw(expired)
                                 @Html.Raw(resetLogin)
                                  @Html.Raw(loginfail)*@
-                                                        <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
+                                                                                                    <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
 
 
-                                                        <div class="px-1 my-2 form-floating">
-                                                            <input type="text" class="form-control" id="txtAccout" name="txtEmail">
-                                                            <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
-                                                        </div>
-                                                        <div class="px-1 my-2 form-floating">
+                                                                                                    <div class="px-1 my-2 form-floating">
+                                                                                                        <input type="text" class="form-control" id="txtAccout" name="txtEmail">
+                                                                                                        <label for="inputName" class="form-label" name="txtEmail">電子信箱</label>
+                                                                                                    </div>
+                                                                                                    <div class="px-1 my-2 form-floating">
 
-                                                            <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
-                                                            <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
+                                                                                                        <input type="Password" class="form-control" id="txtPassWord" name="txtPassWord">
+                                                                                                        <label for="inputEmail" class="form-label" name="txtPassWord">密碼</label>
 
-                                                        </div>
-                                                        <div class="mb-3 px-3">
-                                                            <div class="form-check text-start my-3">
-                                                                <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-                                                                <label class="form-check-label" for="flexCheckDefault">
-                                                                    記住我
-                                                                </label>
-                                                                @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:150px" })
-                                                                @Html.ActionLink("忘記密碼", "ForgetPassword", "Accout", new { }, new { style = "margin-left:10px" })
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="mb-3  col-5"></div>
-                                                            <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
-                                                        </div>
-                                                        <div class="btn-group d-flex justify-content-center mt-3">
-                                                            <button id="testButtonA" type="button" class="btn btn-secondary w-100 py-2">DEMO1(功能)</button>
-                                                            <button id="testButtonB" type="button" class="btn btn-secondary w-100 py-2">DEMO2(註冊)</button>
-                                                            <button id="testButtonC" type="button" class="btn btn-secondary w-100 py-2">DEMO3(G)</button>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="mb-1 mt-1 col-12"><a href="@Url.Content("~/admin")" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Understood</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                                                                    </div>
+                                                                                                    <div class="mb-3 px-3">
+                                                                                                        <div class="form-check text-start my-3">
+                                                                                                            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+                                                                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                                                                記住我
+                                                                                                            </label>
+                                                                                                            @Html.ActionLink("註冊會員", "Register", "Accout", new { }, new { style = "margin-left:150px" })
+                                                                                                            @Html.ActionLink("忘記密碼", "ForgetPassword", "Accout", new { }, new { style = "margin-left:10px" })
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="mb-3  col-5"></div>
+                                                                                                        <div class="mb-1  col-12"><button id="buttonSubmit" type="submit" class="btn btn-success w-100 py-2">登入</button></div>
+                                                                                                    </div>
+                                                                                                    <div class="btn-group d-flex justify-content-center mt-3">
+                                                                                                        <button id="testButtonA" type="button" class="btn btn-secondary w-100 py-2">DEMO1(功能)</button>
+                                                                                                        <button id="testButtonB" type="button" class="btn btn-secondary w-100 py-2">DEMO2(註冊)</button>
+                                                                                                        <button id="testButtonC" type="button" class="btn btn-secondary w-100 py-2">DEMO3(G)</button>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                        <div class="mb-1 mt-1 col-12"><a href="@Url.Content("~/admin")" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
+                                                                                                    </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                            <button type="button" class="btn btn-primary">Understood</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
     }
 </main>
 @section Scripts {
@@ -208,7 +208,6 @@
        
         
         InputTextArea.addEventListener('keydown', async function (event) {
-            console.log(typeof event.keyCode);
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();//防止textarea換行
                 if (memberLogIn === 0) 
@@ -259,12 +258,8 @@
        
         document.addEventListener('DOMContentLoaded', async () => {
             window.addEventListener('scroll', scrollHandler);
-            await loadPrimeComments();
-            await processReplies();
-            toggleLinkEvent();
-            initButtons();
-            await loadSidePopular();
-           
+            refreshCommentTable();
+            await loadSidePopular(); 
         });
         
           
@@ -279,7 +274,7 @@
             if (commentTablePosition <= windowHeight && memberLogIn === 0 && !modalShown) {
                 const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
                 invisibleButton.dispatchEvent(new Event('click'));
-                modalShown = true; // 设置标志为 true，表示模态窗口已经显示过
+                modalShown = true; //true，表示模态窗口已经显示过
 
                 // 在条件满足时移除滚动事件监听器
                 window.removeEventListener('scroll', scrollHandler);
@@ -293,11 +288,47 @@
             replyButtons.forEach(function (rplyBtn) {
                 rplyBtn.addEventListener('click', function (event) {
                     event.preventDefault();
-                    console.log('Hi');//測試用，能操作回覆按鈕
                     const comment = rplyBtn.parentNode.parentNode;
-                    console.log(comment);//測試用，能抓到按鈕對應留言區塊
+                    const parentCommentId = comment.getAttribute('data-comment-id');
+                    console.log(parentCommentId);//測試用，能抓到按鈕對應留言區塊
                     const replyFormWrap = comment.querySelector('.js-reply-form-wrap');
                     replyFormWrap.classList.add("active");
+                    let inputReply = document.querySelector('input.form-control[type="text"][placeholder="回覆..."]')
+                    console.log(inputReply);
+                    inputReply.addEventListener('keydown', async function (event) {
+                        if (event.key === "Enter" && !event.shiftKey) 
+                        { 
+                            console.log('回復訊息');
+                            if (memberLogIn === 0) 
+                            {
+                                const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
+                                invisibleButton.dispatchEvent(new Event('click'));
+                            }
+                            const apiUrl = 'https://localhost:7078/api/Comments/memberAddReply';
+                            const data = {
+                                BlogId:blogId,
+                                MemberId : memberLogIn,
+                                ParentCommentId :parentCommentId,
+                                Content:inputReply.value
+                            }
+                            const requestOption = 
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            }
+                            try 
+                            { 
+                                const response = await fetch(apiUrl, requestOption);
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok.');
+                                }
+                                await refreshCommentTable();
+                                inputReply.value = '';
+                            } 
+                            catch (error) { console.error('There was a problem saving the comment:', error); }
+                        }
+                    });
 
                 });
             });
