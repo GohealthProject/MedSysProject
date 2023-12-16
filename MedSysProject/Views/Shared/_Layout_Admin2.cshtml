@@ -23,7 +23,9 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
-    <link href="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.css" rel="stylesheet">
+
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
 
     @RenderSection("Styles", required: false)
 
@@ -219,16 +221,16 @@
 
                     <form method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" name="txtKeyword" class="form-control bg-light border-0 small" placeholder="搜尋..."
+                            <input type="search" name="txtKeyword" id="txtKeyword" class="form-control bg-light border-0 small" placeholder="搜尋..."
                                    aria-label="Search" aria-describedby="basic-addon2" value="@ViewBag.key">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
 
                                 </button>
-                                <button class="btn btn-danger" type="button" id="back">
-                                    <i class="fas fa-times fa-sm"></i>
-                                </button>
+                                @*                                 <button class="btn btn-danger" type="button" id="back">
+                                <i class="fas fa-times fa-sm"></i>
+                                </button> *@
                             </div>
                         </div>
                     </form>
@@ -518,7 +520,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- DataTables -->
-    <script src="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
+
+    <!-- Moments -->
+    <script src="~/js/moment.js"></script>
 
     <!-- Page Scripts -->
     @RenderSection("Scripts", required: false)
