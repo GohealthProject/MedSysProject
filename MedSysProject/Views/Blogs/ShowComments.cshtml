@@ -14,7 +14,7 @@
     {
         string id ="c"+comment.CommentId ;
         <!--data-comment-id自訂義屬性-->
-        <div id="@id" class="comment d-flex mb-4 mainComment" data-comment-id="@comment.CommentId">
+        <div id="@id" class="comment d-flex mb-4 mainComment pcId" data-comment-id="@comment.CommentId">
             <!--放使用者照片的位置-->
             <div class="flex-shrink-0">
                 <div class="avatar avatar-sm rounded-circle">
@@ -32,7 +32,7 @@
             </div>
 
             <!--放使用者名字、留言-->
-            <div class="flex-grow-1 ms-2 ms-sm-3">
+            <div class="flex-grow-1 ms-2 ms-sm-3" data-comment-id="@comment.CommentId">
                 <div class="comment-meta d-flex  align-item-center">
                     @{
                         if (comment.EmployeeId == null)
