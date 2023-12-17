@@ -88,15 +88,31 @@
     console.log(searchOpen);//抓到了
     const searchClose = document.querySelector('.js-search-close');
     const searchWrap = document.querySelector(".js-search-form-wrap");
-
+    const searchForm = document.querySelector('.search-form');
     searchOpen.addEventListener("click", (e) => {
         e.preventDefault();
         console.log("Hi");
         searchWrap.classList.add("active");
+        searchForm.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter')
+            {
+                e.preventDefault();
+                searchForm.submit();
+            }
+        });
     });
 
     searchClose.addEventListener("click", (e) => {
         e.preventDefault();
         searchWrap.classList.remove("active");
     });
+
+    function aos_init() {
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false
+        });
+    }
 });

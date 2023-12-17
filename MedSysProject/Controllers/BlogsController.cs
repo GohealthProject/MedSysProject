@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using TinifyAPI;
+using MedSysProject.ViewModels;
+using System.Runtime.Intrinsics.X86;
 
 namespace MedSysProject.Controllers
 {
@@ -77,6 +79,11 @@ namespace MedSysProject.Controllers
             return View(post);
         }
 
+        public IActionResult IndexNew() 
+        {
+            return View();
+        }
+
         //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
@@ -122,7 +129,7 @@ namespace MedSysProject.Controllers
                 //    .Include(e => e.ArticleClass)
                 //    select blog;
 
-                ViewBag.Cate = "";
+                ViewBag.Cate = "";//沒有類別
             }
 
             else
@@ -155,6 +162,60 @@ namespace MedSysProject.Controllers
             return View(q);
         }
 
+        /// <summary>
+        ///關鍵字搜尋 
+        /// </summary>
+        /// <param name="vm">關鍵字</param>
+        /// <param name="page">分頁標籤</param>
+        /// <returns></returns>
+        public IActionResult QueryByKeyword(CKeywordViewModel? vm,int page=1)  
+        {//可能要檢查輸入是否為人名
+            IEnumerable<Blog> blogs = null;
+            int perPageCount = 5;
+            int total;
+            var author = _db.Employees.FirstOrDefault(employee => employee.EmployeeName == vm.txtKeyword);
+            if (author != null)
+            {
+                total = _db.Blogs.Count(blog => blog.Employee.EmployeeName == author.EmployeeName);
+                blogs = _db.Blogs.Include(blog => blog.Employee)
+                                 .Include(blog => blog.ArticleClass)
+                                 .Where(blog => blog.Employee.EmployeeName == author.EmployeeName)
+                                 .OrderByDescending(blog => blog.BlogId)
+                                 .Skip((page - 1) * perPageCount)
+                                 .Take(perPageCount);
+            }
+            else 
+            {
+                var t = _db.Blogs.Include(blog => blog.Employee)
+                            .Include(blog => blog.ArticleClass)
+                            .Where(blog => blog.Title.Contains(vm.txtKeyword) ||
+                            blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword) ||
+                            blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                            blog.Content.Contains(vm.txtKeyword));
+                total = t.Count();//關鍵字搜尋總數
+                blogs = _db.Blogs.Include(blog => blog.Employee)
+                                 .Include(blog => blog.ArticleClass)
+                                 .Where(blog => blog.Title.Contains(vm.txtKeyword) ||
+                                 blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword) ||
+                                 blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                 blog.Content.Contains(vm.txtKeyword))
+                                 .OrderByDescending(blog => blog.BlogId)
+                                 .Skip((page - 1) * perPageCount)
+                                 .Take(perPageCount);//take5
+            }
+           
+            int maxPage = total%perPageCount==0?total/perPageCount:total/perPageCount+1;
+            if (page < 1) { page = 1; }
+            if (page > maxPage) { page = maxPage; }
+            ViewBag.Page = page;
+            ViewBag.MaxPage = maxPage;
+            ViewBag.Total = total;
+            ViewBag.PerPageCount = perPageCount;
+            ViewBag.Key = vm.txtKeyword;
+            return View(blogs);
+
+        }
+
         public IActionResult GetBlogImageByte(int? id)
         {
             Blog emp = _db.Blogs.Find(id);
@@ -178,14 +239,7 @@ namespace MedSysProject.Controllers
             }
             return NotFound();
         }
-        /// <summary>
-        /// 測試partial View用
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Index2() 
-        {
-            return View();
-        }
+     
         public IActionResult Slider() 
         {
 
@@ -240,5 +294,37 @@ namespace MedSysProject.Controllers
             }             
         }
         #endregion
+
+        public IActionResult LoadRecentPost() 
+        {
+            var recent = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .OrderByDescending(blog => blog.BlogId)
+                                               .Take(7)
+                          select blog;
+            
+            return PartialView("_RecentPost",recent.ToList());
+        }
+
+        public IActionResult LoadNewActivity() 
+        { 
+            var newAct = from blog in _db.Blogs.Include(blog=>blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .Where(blog=>blog.ArticleClassId==1)
+                                               .OrderByDescending (blog=>blog.BlogId)
+                                               .Take(4)
+                                               select blog;
+            return PartialView("_NewActivity",newAct.ToList());
+        }
+        public IActionResult LoadMedicalNews()
+        {
+            var medical = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                                .Include(blog => blog.ArticleClass)
+                                                .Where(blog => blog.ArticleClassId == 2)
+                                                .OrderByDescending(blog => blog.BlogId)
+                                                .Take(4)
+                          select blog;
+            return PartialView("_MedicalNews", medical.ToList());
+        }
     }
 }

@@ -953,3 +953,84 @@ Safari 7+ */
 #putIn::-webkit-scrollbar {
   display: none;
 }
+
+/* custom tab nav on sidebar */
+.aside-block {
+    margin-bottom: 30px;
+}
+
+    .aside-block .custom-tab-nav .nav-item {
+        display: inline-block;
+    }
+
+        .aside-block .custom-tab-nav .nav-item button {
+            color: var(--color-black);
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 0;
+            padding-left: 0;
+            padding-right: 0;
+            margin-right: 20px;
+        }
+
+            .aside-block .custom-tab-nav .nav-item button.active {
+                background-color: var(--color-black) !important;
+                background-color: transparent !important;
+                color: var(--color-black);
+                border-bottom: 2px solid var(--color-black);
+            }
+
+.link-video {
+    position: relative;
+}
+
+    .link-video span {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        display: inline-block;
+        background-color: rgba(var(--color-black-rgb), 0.2);
+        color: var(--color-white);
+    }
+
+.aside-links li {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
+}
+
+    .aside-links li a {
+        display: block;
+        color: rgba(var(--color-black-rgb), 0.7);
+    }
+
+        .aside-links li a:hover,
+        .aside-links li a:focus {
+            color: rgba(var(--color-black-rgb), 1);
+        }
+
+.aside-tags li {
+    display: inline-block;
+}
+
+    .aside-tags li a {
+        display: inline-block;
+        color: rgba(var(--color-black-rgb), 0.7);
+        padding: 7px 10px;
+        border: 1px solid rgba(var(--color-black-rgb), 0.1);
+        margin-bottom: 3px;
+        transition: 0.3s all ease;
+    }
+
+        .aside-tags li a:hover,
+        .aside-tags li a:focus {
+            color: rgba(var(--color-black-rgb), 1);
+            border: 1px solid rgba(var(--color-black-rgb), 0.5);
