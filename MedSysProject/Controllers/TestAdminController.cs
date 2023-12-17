@@ -17,21 +17,57 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        //會員管理區塊--------------------------------------------------------------
         public IActionResult Member()
         {
             return View();
         }
 
         //Member Json
-        public IActionResult MemberJson()
+        public IActionResult MemberJson(int? id)
         {
-            return Json(_db.Members);
+            if (id != null)
+            {
+                return Json(_db.Members.Find(id));
+            }
+            else
+            {
+                return Json(_db.Members);
+            }
         }
+        //會員管理區塊--------------------------------------------------------------
 
+        //員工管理區塊--------------------------------------------------------------
         public IActionResult Employee()
         {
             return View();
         }
+
+        //Employee Json
+        public IActionResult EmployeeJson(int? id)
+        {
+            if (id != null)
+            {
+                return Json(_db.Employees.Find(id));
+            }
+            else
+            {
+                return Json(_db.Employees);
+            }
+        }
+
+        public IActionResult EmployeeImage(int? id)
+        {
+            Employee emp = _db.Employees.Find(id);
+            byte[]? img = emp?.EmployeePhoto;
+
+            if (img != null)
+            {
+                return File(img, "image/jpeg");
+            }
+            return NotFound();
+        }
+        //員工管理區塊--------------------------------------------------------------
 
         public IActionResult Plan()
         {
