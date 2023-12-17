@@ -199,7 +199,7 @@
         let count = 0;
         var ttt = $('#dataTable').DataTable({
             "ajax": {
-                "url": "https://localhost:7203/TestAdmin/MemberJSON",
+                "url": "https://localhost:7203/Admin/MemberJSON",
                 "dataSrc": ""
             },
             columns: [
@@ -262,22 +262,22 @@
                     data: null,
                     render: function (data, type, row) {
                         return `
-                                                                                                                                                                                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                                                                                                                                                                            <i class="fas fa-user-edit"></i>
-                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                                                                                                                    <i class="fas fa-user-edit"></i>
+                                                                                                                                                                                                                </a>
 
-                                                                                                                                                                                                        <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
-                                                                                                                                                                                                            <i class="fas fa-info-circle"></i>
-                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
+                                                                                                                                                                                                                    <i class="fas fa-info-circle"></i>
+                                                                                                                                                                                                                </a>
 
-                                                                                                                                                                                                        <a class="btn btn-warning" onclick="ban(this)">
-                                                                                                                                                                                                             <i class="fas fa-user-lock"></i>
-                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                <a class="btn btn-warning" onclick="ban(this)">
+                                                                                                                                                                                                                     <i class="fas fa-user-lock"></i>
+                                                                                                                                                                                                                </a>
 
-                                                                                                                                                                                                        <a class="btn btn-danger" onclick="get(this)">
-                                                                                                                                                                                                            <i class="fas fa-user-times"></i>
-                                                                                                                                                                                                        </a>
-                                                                                                                                                                                                        `;
+                                                                                                                                                                                                                <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                                                                                                                    <i class="fas fa-user-times"></i>
+                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                `;
                     }
                 }
             ],
@@ -383,7 +383,7 @@
         //把資料印到修改視窗
         function showTogget(element) {
             const id = element.parentNode.parentNode.children[1].innerHTML;
-            const url = `https://localhost:7203/TestAdmin/MemberJSON/${id}`;
+            const url = `https://localhost:7203/Admin/MemberJSON/${id}`;
 
             fetch(url)
                 .then(res => res.json())
@@ -613,7 +613,7 @@
                 research();
             }
         }
-        
+
         //顯示密碼(這裡是詳細資料內彈窗的按鈕)--------------
         function showpwd() {
             const password = document.getElementById('pwd');

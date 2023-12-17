@@ -72,21 +72,6 @@
     </style>
 } *@
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Active</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled">Disabled</a>
-    </li>
-</ul>
-
 
 <div class="detail-container">
     <div class="main-body">
@@ -119,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-@*                 <div class="card mt-3"> </div> *@
+                @*                 <div class="card mt-3"> </div> *@
             </div>
             <div class="col-md-8">
                 <div class="card shadow mb-3">
@@ -149,9 +134,9 @@
 
                             @{
                                 string date = item.MemberBirthdate.ToString().Split(" ")[0];
-                            <div class="col-sm-9 text-secondary">
-                                @date
-                            </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @date
+                                </div>
                             }
 
 
@@ -208,7 +193,10 @@
                                 <h6 class="mb-0">登入密碼</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                @item.MemberPassword
+                                <input type="password" value="@item.MemberPassword" id="pwd" disabled />
+                                <!-- Show Password button -->
+                                <a class="btn btn-link" id="showpwd" onclick="showpwd()"><i class="fas fa-eye"></i></a>
+
                             </div>
                         </div>
                         <hr>
@@ -264,3 +252,4 @@
 
     </div>
 </div>
+

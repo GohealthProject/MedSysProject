@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>GO健康 後台管理系統</title>
+    <title>GO健康 後台管理系統 - @ViewData["Title"]</title>
 
     <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -28,6 +28,12 @@
     <link href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
 
     @RenderSection("Styles", required: false)
+
+    <!-- jQuery -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!--文字編輯器-->
     <script src="https://cdn.tiny.cloud/1/b28bwm26rz9ry64nn5n351uce6944auxt8eorcif07y5uxa9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -497,6 +503,8 @@
     <!-- Bootstrap core JavaScript-->
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/vendor/popperjs/popper.min.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -523,7 +531,7 @@
     <script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
 
     <!-- Moments -->
-    <script src="~/js/moment.js"></script>
+    <script src="~/vendor/moment/moment.js"></script>
 
     <!-- Page Scripts -->
     @RenderSection("Scripts", required: false)
