@@ -88,11 +88,11 @@
                         <div class="aside-block">
                             <h3 class="aside-title">文章類別</h3>
                             <ul class="aside-links list-unstyled">
-                                <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
-                                <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
-                                <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
-                                <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
-                                <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
+                                <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=1"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
+                                <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=2"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
+                                <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=3"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
+                                <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=4"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
+                                <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=5"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
                             </ul>
                         </div>
                         <!-- End Categories -->
@@ -114,7 +114,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="p-3 mb-5 mt-4 bg-white rounded">
-                            <form method="post" id="from" style="padding-top:0px;">
+                            <form method="post" action="/Accout/BlogLogIn" id="from" style="padding-top:0px;">
                                 <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
 
                                 <div class="g_id_signin py-1" data-type="standard"></div>
@@ -135,7 +135,9 @@
                             @Html.Raw(resetLogin)
                             @Html.Raw(loginfail)*@
                                 <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
-
+                                <div class="px-1 my-2 form-floating">
+                                    <input type="text" class="form-control" id="hiddenBlogId" name="blogId" value="@Model[0].BlogId">
+                                </div>
 
                                 <div class="px-1 my-2 form-floating">
                                     <input type="text" class="form-control" id="txtAccout" name="txtEmail">
@@ -182,7 +184,27 @@
     }
 </main>
 @section Scripts {
-    <script>
+     <script>
+        const btnGoogleLogin = document.querySelector('#btnGoogleLogin');
+        const btnFacebookLogin = document.querySelector('#btnFacebookLogin');
+        const btnLineLogin = document.querySelector('#btnLineLogin');
+
+
+        $('#testLabel').css("font-size", "15px");
+        $('#testButtonA').on('click', () => {
+            $('#txtAccout').val('night90810@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
+
+        $('#testButtonB').on('click', () => {
+            $('#txtAccout').val('jacky56542@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
+
+        $('#testButtonC').on('click', () => {
+            $('#txtAccout').val('night90810@gmail.com');
+            $('#txtPassWord').val('Test');
+        });
         //全域變數 由Razor獲得
         let memberLogIn = @memLogIn;
         let blogId = @Model[0].BlogId;//可以直接塞razor?
@@ -254,10 +276,10 @@
             } catch (error) { console.error('There was a problem refreshing the comment', error); }
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded',() => {
             window.addEventListener('scroll', scrollHandler);
             refreshCommentTable();
-            await loadSidePopular();
+            loadSidePopular();
         });
 
 
