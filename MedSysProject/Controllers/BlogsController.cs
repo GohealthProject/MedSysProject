@@ -77,6 +77,11 @@ namespace MedSysProject.Controllers
             return View(post);
         }
 
+        public IActionResult IndexNew() 
+        {
+            return View();
+        }
+
         //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
@@ -178,14 +183,7 @@ namespace MedSysProject.Controllers
             }
             return NotFound();
         }
-        /// <summary>
-        /// 測試partial View用
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Index2() 
-        {
-            return View();
-        }
+     
         public IActionResult Slider() 
         {
 
@@ -240,5 +238,16 @@ namespace MedSysProject.Controllers
             }             
         }
         #endregion
+
+        public IActionResult LoadRecentPost() 
+        {
+            var recent = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .OrderByDescending(blog => blog.BlogId)
+                                               .Take(7)
+                          select blog;
+            
+            return PartialView("_RecentPost",recent.ToList());
+        }
     }
 }

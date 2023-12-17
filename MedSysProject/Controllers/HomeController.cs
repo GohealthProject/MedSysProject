@@ -536,7 +536,7 @@ namespace MedSysProject.Controllers
         }
 
         public async Task<IActionResult> GetPlansAndProjects()
-        {//企業方案API
+        {
             try
             {
                 var plans = await _context.Plans
@@ -548,9 +548,14 @@ namespace MedSysProject.Controllers
                     })
                     .ToListAsync();
 
+                var projects = await _context.Projects
+                    .Select(p => new { p.ProjectId, p.ProjectName })
+                    .ToListAsync();
+
                 var viewModel = new
                 {
-                    Plans = plans
+                    Plans = plans,
+                    Projects = projects
                 };
 
                 return Json(viewModel);
@@ -561,6 +566,7 @@ namespace MedSysProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
 
         public async Task<IActionResult> GetAllProjects()
