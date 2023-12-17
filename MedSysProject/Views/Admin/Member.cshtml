@@ -452,6 +452,10 @@
                     });
 
                     research();
+                    //wait 1.5 sec
+                    await new Promise(resolve => setTimeout(resolve, 1600));
+                    window.location.reload();
+
                 }
             } catch {
                 // const status = await response.status;
