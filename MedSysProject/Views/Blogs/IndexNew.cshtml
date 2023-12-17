@@ -31,9 +31,10 @@
         {
             const response = await fetch(`https://localhost:7078/api/Blogs/popular6`);
             const data = await response.json();
+            const take5 = data.$values.slice(0, 5);
             console.log(data);
             const popularContainer = document.querySelector('.trending-post');
-            const popular6 = data.$values.map((blog,index) => { 
+            const popular5 = take5.map((blog,index) => { 
                 const { blogId, title, author, articleClass, createdAt, views } = blog;
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -53,7 +54,7 @@
                             </li>
                         `
             })
-            popularContainer.innerHTML = popular6.join('');
+            popularContainer.innerHTML = popular5.join('');
 
         }
         async function loadMedicalNews() 

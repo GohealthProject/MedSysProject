@@ -72,10 +72,11 @@
                 <i class="bi bi-list mobile-nav-toggle" style="color:#d2ece9; i:hover=#fff"></i>
                 <!--搜尋的表單-->
                 <div class="search-form-wrap js-search-form-wrap">
-                    <form class="search-form" action="#">
+                    <form class="search-form" action="/Blogs/QueryByKeyword" method="get">
                         <!--放大鏡按鍵-->
                         <span class="icon bi-search"></span>
-                        <input class="form-control" type="text" placeholder="Search">
+                        <!--參數自動對應-->
+                        <input class="form-control" name="vm.txtKeyword"type="text" placeholder="Search" id="searchInput">
                         <button class="btn js-search-close"><span class="bi-x"></span></button>
                     </form>
                 </div>
