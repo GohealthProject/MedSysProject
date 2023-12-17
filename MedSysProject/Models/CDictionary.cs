@@ -15,6 +15,7 @@
         public static readonly string SK_FPWD_SUBMIT = "SK_FPWD_SUBMIT";
         public static readonly string SK_FPWD_VERIFY = "SK_FPWD_VERIFY";
 
+        public static readonly string SK_PLAN_COMPARERE_RESULT = "SK_PLAN_COMPARERE_RESULT";
 
     }
 }

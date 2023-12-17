@@ -18,6 +18,11 @@ using System.Web;
 using System.Data;
 using System.ComponentModel;
 using System.Reflection;
+using Org.BouncyCastle.Tls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.CodeAnalysis;
+using Microsoft.Build.Evaluation;
+using System.Text.Json.Serialization.Metadata;
 
 namespace MedSysProject.Controllers
 {
@@ -83,20 +88,11 @@ namespace MedSysProject.Controllers
         
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
-        {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認+資料匯出
+        {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認(在post已找出完整資料，可複製貼上)+資料匯出
             //int id = 3;
-            //-----------datatable
-            //DataSet ds = new DataSet();
-            //ds.Locale = CultureInfo.InvariantCulture;
-            //DataTable plan = ds.Tables["compareplan"];
-            //IEnumerable<DataRow> itemsss = (IEnumerable<DataRow>)_context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items));
-            
-            //foreach (DataRow i in itemsss)
-            //{
-            //    i.Field<string>("方案");
-            //}
-            //--------------------
-            List<int> list = new List<int>();
+            if (planlist != null)
+            {
+ List<int> list = new List<int>();
 
             foreach(var item2 in planlist.Split(','))
             {
@@ -212,17 +208,80 @@ namespace MedSysProject.Controllers
                 dt.Rows.Add(dr);
             }
 
-           
+          
 
 
 
-            //return View(itemsss);
+            
             return View(dt);
 
+            }
+            else {
+                return RedirectToAction("planComeparison");
+            }
+           
+
+        }
+        
+      [HttpPost]
+        public IActionResult planComeparisonTotal(int? planid)
+        {//測試方案暫定planid=3
+
+            var pl = _context.Plans.Where(p => p.PlanId == planid)
+                .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => p.project.PlanId == planid)
+                .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
+
+                //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+                .Select(t => new
+                {
+                    planId = t.Project.PlanRefs.First().PlanId,
+                    planName = t.Project.PlanRefs.First().Plan.PlanName,
+                    projectid = t.Project.ProjectId,
+                    ProjectName = (string)t.Project.ProjectName,
+                    ProjectPrice = (double)t.Project.ProjectPrice,
+                    itemId = t.it.ItemId,
+                    ItemName = (string)t.it.ItemName,
+                   
+                }) ;
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("planId"));
+            dt.Columns.Add(new DataColumn("planName"));
+           
+            dt.Columns.Add(new DataColumn("projectid"));
+            dt.Columns.Add(new DataColumn("ProjectName"));
+            dt.Columns.Add(new DataColumn("ProjectPrice"));
+            dt.Columns.Add(new DataColumn("itemId"));
+            dt.Columns.Add(new DataColumn("ItemName"));
+            foreach (var t in pl)
+            {
+                DataRow dr = dt.NewRow();
+
+                dr["planId"] = t.planId;
+                dr["PlanName"] = t.planName;
+                
+                dr["projectid"] = t.projectid;
+                dr["ProjectName"] = t.ProjectName;
+                dr["ProjectPrice"] = t.ProjectPrice;
+                dr["itemId"] = t.itemId;
+                dr["ItemName"] = t.ItemName ;
+                dt.Rows.Add(dr);
+            }
+
+
+            
+            if (dt != null)
+            {string json=JsonSerializer.Serialize(pl);
+                HttpContext.Session.SetString(CDictionary.SK_PLAN_COMPARERE_RESULT,json);
+                
+                return Json(json); }
+            else
+            {  return View(); }
+           
         }
 
         public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  固定item高度+男女差異+價格
+        { //放方案介紹  固定item高度+男女差異+價格+修資料傳送型態(datatable)
 
             //vm方法
             List<CPlanViewModel> data = new List<CPlanViewModel>();
