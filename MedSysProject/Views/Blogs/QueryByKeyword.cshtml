@@ -10,7 +10,7 @@
             <div class="row">
 
                 <div class="col-md-9">
-                    @*<h3 class="category-title">@ViewBag.Cate</h3>*@
+                    <h3 class="category-title">搜尋結果共:@ViewBag.total 筆</h3>
 
                     @* ---------開始區塊-------- *@
 
@@ -146,7 +146,7 @@
             console.log(data);
             const popularContainer = document.querySelector('#pills-popular');
             const popular6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt,views } = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -160,7 +160,7 @@
                                                                     <span>${formattedDate}</span>
                                                                 </div>
                                                             <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                               <span class="author mb-3 d-block">${author}</span>
+                                                                       <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                            </div>
 
                                                         `
@@ -174,7 +174,7 @@
             const latestContainer = document.querySelector('#pills-latest');
 
             const latest6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt ,views} = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -188,7 +188,7 @@
                                                                     <span>${formattedDate}</span>
                                                                 </div>
                                                             <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                               <span class="author mb-3 d-block">${author}</span>
+                                                                       <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                            </div>
 
                                                         `
@@ -203,7 +203,7 @@
             console.log(data);
             const thisCarContainer = document.querySelector('#pills-thisCat');
             const thisCat6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt ,views} = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -217,7 +217,7 @@
                                                                     <span>${formattedDate}</span>
                                                                 </div>
                                                             <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                               <span class="author mb-3 d-block">${author}</span>
+                                                                       <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                            </div>
 
                                                         `

@@ -11,9 +11,10 @@
 @section Scripts{
     <script>
         const main = document.querySelector('#main');
-        document.addEventListener('DOMContentLoaded', async() => { 
+        document.addEventListener('DOMContentLoaded', async() => {
             await loadRecentPost();
             loadSidePopular();
+         
             
         })
 
@@ -57,14 +58,15 @@
             popularContainer.innerHTML = popular5.join('');
 
         }
+        async function loadNewActivity() {
+
+        }
+
         async function loadMedicalNews() 
         { 
         
         }
-        async function loadNewActivity() 
-        { 
-        
-        }
+       
         async function loadCelebrity() 
         { 
         

@@ -305,5 +305,26 @@ namespace MedSysProject.Controllers
             
             return PartialView("_RecentPost",recent.ToList());
         }
+
+        public IActionResult LoadNewActivity() 
+        { 
+            var newAct = from blog in _db.Blogs.Include(blog=>blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .Where(blog=>blog.ArticleClassId==1)
+                                               .OrderByDescending (blog=>blog.BlogId)
+                                               .Take(4)
+                                               select blog;
+            return PartialView("_NewActivity",newAct.ToList());
+        }
+        public IActionResult LoadMedicalNews()
+        {
+            var medical = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                                .Include(blog => blog.ArticleClass)
+                                                .Where(blog => blog.ArticleClassId == 2)
+                                                .OrderByDescending(blog => blog.BlogId)
+                                                .Take(4)
+                          select blog;
+            return PartialView("_MedicalNews", medical.ToList());
+        }
     }
 }

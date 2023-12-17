@@ -106,4 +106,13 @@
         e.preventDefault();
         searchWrap.classList.remove("active");
     });
+
+    function aos_init() {
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false
+        });
+    }
 });
