@@ -126,7 +126,7 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item" id="li-EmpManager">
-                <a class="nav-link" href="~/Admin/EmpManager">
+                <a class="nav-link" href="~/Admin/Employee">
                     <i class="fas fa-fw fa-user"></i>
                     <span>員工管理</span>
                 </a>
@@ -191,9 +191,27 @@
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
+            <li class="nav-item" id="li-Data">
+                <a class="nav-link" href="@Url.Content("~/")">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>回首頁</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item" id="li-Data">
+                <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>系統登出</span>
+                </a>
+            </li>
+
+
+            @* 這是左側欄縮放 *@
+            @*             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div> *@
 
             <!-- Sidebar Message -->
             @*             <div class="sidebar-card d-none d-lg-flex">

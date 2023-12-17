@@ -443,6 +443,9 @@
 
                     $('#modalEdit').modal('hide');
 
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    $(".modal-backdrop").remove();
+
                     Swal.fire({
                         title: "修改成功!",
                         text: status,

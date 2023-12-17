@@ -131,6 +131,9 @@ namespace MedSysProject.Controllers
         //會員管理區塊--------------------------------------------------------------
         public IActionResult Member()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+                return RedirectToAction("Login");
+
             return View();
         }
 
@@ -160,53 +163,77 @@ namespace MedSysProject.Controllers
         }
         //會員管理區塊--------------------------------------------------------------
 
-        public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        //public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        //{
+        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+        //        return RedirectToAction("Login");
+
+        //    IEnumerable<Employee> datas = null;
+
+        //    if (string.IsNullOrEmpty(vm.txtKeyword))
+        //    {
+
+        //        int pgsize = 5;
+        //        int total = _db.Employees.Count();
+        //        int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+        //        if (page < 1) page = 1;
+        //        if (page > maxpage) page = maxpage;
+        //        datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
+        //        ViewBag.page = page;
+        //        ViewBag.maxpage = maxpage;
+        //        ViewBag.total = total;
+        //        ViewBag.pgsize = pgsize;
+
+
+        //        //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+        //        //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+        //        //        select t;
+
+        //    }
+
+        //    else
+        //    {
+        //        datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
+        //        p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
+        //        p.EmployeeEmail.Contains(vm.txtKeyword));
+
+        //        ViewBag.key = vm.txtKeyword;
+        //    }
+
+        //    return View(datas);
+        //}
+
+        //員工管理區塊--------------------------------------------------------------
+        public IActionResult Employee()
         {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
+            return View();
+        }
 
-            IEnumerable<Employee> datas = null;
-
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+        //Employee Json
+        public IActionResult EmployeeJson(int? id)
+        {
+            if (id != null)
             {
-
-                int pgsize = 5;
-                int total = _db.Employees.Count();
-                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
-                if (page < 1) page = 1;
-                if (page > maxpage) page = maxpage;
-                datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
-                ViewBag.page = page;
-                ViewBag.maxpage = maxpage;
-                ViewBag.total = total;
-                ViewBag.pgsize = pgsize;
-
-
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                //        select t;
-
+                return Json(_db.Employees.Find(id));
             }
-
             else
             {
-                datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
-                p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
-                p.EmployeeEmail.Contains(vm.txtKeyword));
-
-                ViewBag.key = vm.txtKeyword;
+                return Json(_db.Employees);
             }
-
-            return View(datas);
         }
 
-        public IActionResult EmpJSON()
+        public IActionResult EmployeeImage(int? id)
         {
-            IEnumerable<Employee> datas = null;
-            datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                    select t;
-            return Json(datas);
+            Employee emp = _db.Employees.Find(id);
+            byte[]? img = emp?.EmployeePhoto;
+
+            if (img != null)
+            {
+                return File(img, "image/jpeg");
+            }
+            return NotFound();
         }
+        //員工管理區塊--------------------------------------------------------------
 
         public IActionResult EmpCreate()
         {
