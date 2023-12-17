@@ -16,6 +16,7 @@
         }
         <button type="submit" id="checkoutBtn">送出</button>
     </form>
+    <button class="btn btn-danger" id="ttest">123</button>
     <!-- js套件 -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -45,6 +46,28 @@
                 error: function (err) { console.log(err); },
             });
         });
+        $("#ttest").on('click', (e) =>{
+            //e.preventDefault(); //因為送出就跳轉到綠界，這個可以停住確認自己的console.log的內容
+            let formData = $("#form").serializeArray();
+            var json = {};
+            $.each(formData, function () {
+                json[this.name] = this.value || "";
+            });
+            console.log(json);
+            //step3 : 新增訂單到資料庫
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:7203/Transaction/addOrders',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(json),
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (err) { console.log(err); },
+            });
+            $("#form").submit();
+        })
+
     </script>
 </body>
 

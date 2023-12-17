@@ -30,10 +30,13 @@ namespace MedSysProject.Controllers
             //IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-           
-            var datas = from s in _context.Members.AsEnumerable()
-                        
-                        select  new { ID =s.MemberId , name =s.MemberName  };
+
+            var datas = from s in _context.Members.Include(p => p.HealthReports)
+
+                        select s;
+            //_context.Members.Load();
+            //var datass = _context.Members.Include(q => q.HealthReports).SelectMany(p => new {p,p.HealthReports});
+                         
 
             return Json(datas);
 
@@ -107,7 +110,7 @@ namespace MedSysProject.Controllers
         public IActionResult payment()
         {
             //step1 : 網頁導入傳值到前端
-
+            //
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             //需填入你的網址
             var website = $"https://localhost:7203";
@@ -117,7 +120,7 @@ namespace MedSysProject.Controllers
 
         //必填
         { "MerchantID",  "3002599"},//特店編號
-        { "MerchantTradeNo",  orderId},//特店訂單編號
+        { "MerchantTradeNo",  orderId},//特店訂單編號 不可重複使用
         { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
         { "PaymentType",  "aio"},//交易類型(固定aio)
         { "TotalAmount",  "1450"},//交易金額
@@ -181,29 +184,29 @@ namespace MedSysProject.Controllers
 
 
             string num = "0";
-            try
-            {
+            //try
+            //{
 
-                EcpayOrder Orders = new EcpayOrder();
-                Orders.MemberId = "1";
-                Orders.MerchantTradeNo = "10";
-                Orders.RtnCode = 0; //未付款
-                Orders.RtnMsg = "訂單成功尚未付款";
-                //Orders.TradeNo = json.MerchantID.ToString();
-                //Orders.TradeAmt = json.TotalAmount;
-                //Orders.PaymentDate = Convert.ToDateTime(json.MerchantTradeDate);
-                //Orders.PaymentType = json.PaymentType;
-                //Orders.PaymentTypeChargeFee = "0";
-                //Orders.TradeDate = json.MerchantTradeDate;
-                //Orders.SimulatePaid = 0;
-                _context.EcpayOrders.Add(Orders);
-                _context.SaveChanges();
+            //    EcpayOrder Orders = new EcpayOrder();
+            //    Orders.MemberId = json.MemberId;
+            //    Orders.MerchantTradeNo = "12";
+            //    Orders.RtnCode = 0; //未付款
+            //    Orders.RtnMsg = "訂單成功尚未付款";
+            //    //Orders.TradeNo = json.MemberId.ToString();
+            //    //Orders.TradeAmt = json.TradeAmt;
+            //    //Orders.PaymentDate = Convert.ToDateTime(json.MerchantTradeDate);
+            //    //Orders.PaymentType = json.PaymentType;
+            //    //Orders.PaymentTypeChargeFee = "0";
+            //    //Orders.TradeDate = json.MerchantTradeDate;
+            //    /// Orders.SimulatePaid = 0;
+            //    _context.EcpayOrders.Add(Orders);
+            //    _context.SaveChanges();
                 num = "OK";
-            }
-            catch (Exception ex)
-            {
-                num = ex.ToString();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    num = ex.ToString();
+            //}
             return num;
         }
 
@@ -217,16 +220,48 @@ namespace MedSysProject.Controllers
             }
 
             string temp = id["MerchantTradeNo"]; //寫在LINQ(下一行)會出錯，
-            var ecpayOrder = _context.EcpayOrders.Where(m => m.MerchantTradeNo == temp).FirstOrDefault();
-            if (ecpayOrder != null)
+            EcpayOrder ecpayOrder = new EcpayOrder();
+
+            ecpayOrder.MerchantTradeNo = temp;
+            ecpayOrder.MemberId = "00";
+            ecpayOrder.RtnCode = int.Parse(id["RtnCode"]);
+            if (id["RtnMsg"] == "Succeeded")
             {
-                ecpayOrder.RtnCode = int.Parse(id["RtnCode"]);
-                if (id["RtnMsg"] == "Succeeded") ecpayOrder.RtnMsg = "已付款";
-                //ecpayOrder.PaymentDate = Convert.ToDateTime(id["PaymentDate"]);
-                //ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
-                _context.SaveChanges();
+                ecpayOrder.RtnMsg = "已付款";
             }
-            return View(data);
+            else {
+                ecpayOrder.RtnMsg = "未付款";
+            }
+            ecpayOrder.TradeNo = id["TradeNo"];
+            ecpayOrder.TradeAmt = int.Parse(id["TradeAmt"]);
+            ecpayOrder.TradeDate = id["TradeDate"];
+
+            ecpayOrder.PaymentDate = Convert.ToDateTime(id["PaymentDate"]);
+            ecpayOrder.PaymentType = id["PaymentType"];
+            ecpayOrder.PaymentTypeChargeFee = id["PaymentTypeChargeFee"];
+            ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
+            _context.EcpayOrders.Add(ecpayOrder);
+            _context.SaveChanges();
+            
+
+            //var data = new Dictionary<string, string>();
+            //foreach (string key in id.Keys)
+            //{
+            //    data.Add(key, id[key]);
+            //}
+
+            //string temp = id["MerchantTradeNo"]; //寫在LINQ(下一行)會出錯，
+            //var ecpayOrder = _context.EcpayOrders.Where(m => m.MerchantTradeNo == temp).FirstOrDefault();
+            //if (ecpayOrder != null)
+            //{
+            //    ecpayOrder.RtnCode = int.Parse(id["RtnCode"]);
+            //    if (id["RtnMsg"] == "Succeeded") 
+            //        ecpayOrder.RtnMsg = "已付款";
+            //    //ecpayOrder.PaymentDate = Convert.ToDateTime(id["PaymentDate"]);
+            //    //ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
+            //    _context.SaveChanges();
+            //}
+            return View("EcpayView", data);
         }
         /// step5 : 取得虛擬帳號 資訊
         //[HttpPost]
