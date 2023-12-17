@@ -101,14 +101,22 @@
         <br>
        
     </div>
-   
+   <div>
+        <p>
+            <button id="submit" class="btn btn-light">
+           選取後跳至自選方案            
+            </button>
+            <input  type="submit"/>
+       </p>
+   </div>
     
 
 
     @*移動區*@
     <div class="container-fluid navbar-nav-scroll">
+        <form id="formdata">
         <table class="table table-striped  table-bordered " id="datatable" cellspacing="0" width="100%">
-           
+          
             <thead>
                 <tr>
                     <th rowspan="2">方案選取</th>
@@ -127,7 +135,9 @@
                @foreach(DataRow i in Model.Rows){
                       <tr>
                     <td>
-                        <i class="bi bi-flower1" style="color:goldenrod"></i>
+                        <i class="bi bi-flower1" style="color:goldenrod">
+                          
+                        </i>
                     </td>
                         <td>@i["planId"]</td>
                         <td>@i["PlanName"]</td>                      
@@ -141,6 +151,7 @@
                  </tbody>
             <tfoot></tfoot>
         </table>
+        </form>
     </div>    
 </div>
 <div class="table-responsive table container-fluid navbar-nav-scroll">
@@ -151,17 +162,39 @@
 </div>
 @section Scripts{
     <script>
-        
+        //---變數區
        let table = new DataTable('#datatable');
-     
+        const btnSubmit = document.querySelector("#submit");
         const table2 = document.querySelector("#datatable");
-       
-            $("#datatable").datatable({
+        const formdata = new FormData(document.querySelector("#formdata"));
+        const xhr = new XMLHttpRequest();
+        //     $("#datatable").datatable({
            
+        // });
+      //----傳送區
+        btnSubmit.addEventListener('click', event => {
+            event.preventDefault();
+            async function send() {
+             alert("傳送")
+                const response = await fetch('@Url.Content("~/Home/planComeparisonTotal?planid=3")');//選取方案id
+                window.location.href = ('@Url.Content("~/Home/Customcompare")');
+            };
+            send();
+            // fetch('@Url.Content("~/Home/planComeparisonTotal?planid=3")', {
+            //     method: 'POST',
+            //     body: FormData
+            // })
+            //     .then(response => {
+            //         if (response.ok) {
+            //             alert("成功");
+            //           window.location.href=('@Url.Content("~/Home/Customcompare")');
+            //             alert("123")
+            //         }
+            //     });
+            // xhr.open('POST','@Url.Content("~/Home/Customcompare")');
+            // xhr.send(formdata);
         });
-      
-       
-
+      //-----傳送區
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
