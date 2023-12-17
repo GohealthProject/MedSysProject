@@ -31,7 +31,7 @@ namespace MedSysProject.Controllers
             {
                 string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                 Member? m = JsonSerializer.Deserialize<Member>(json);
-                var q = _db.TrackingLists.Where(n => n.MemberId == m.MemberId).Include(n=>n.Product).Take(5);
+                var q = _db.TrackingLists.Where(n => n.MemberId == m.MemberId).Include(n => n.Product).Take(5);
                 List<CProductWarp> list = new List<CProductWarp>();
                 foreach (var item in q)
                 {
@@ -80,6 +80,36 @@ namespace MedSysProject.Controllers
             TempData["loginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 電子信箱或密碼錯誤</div>";
             return View();
         } //登入
+        public IActionResult BlogLogIn(CLoginViewModel blogReader,int blogId) 
+        {
+            if (blogReader == null) { return RedirectToAction("SinglePost", "Blogs", new {SingleBlogId=blogId }); }
+            var member = _db.Members.FirstOrDefault(member => member.MemberEmail == blogReader.txtEmail);
+            MemberWarp mem = new MemberWarp();
+            mem.member = member;
+            if (member != null) 
+            {
+                if (mem.member.MemberPassword == blogReader.txtPassWord && mem.IsVerified)
+                {
+                    string json = JsonSerializer.Serialize(member);
+                    HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                    return RedirectToAction("SinglePost", "Blogs", new { SingleBlogId = blogId });
+                }
+                else if (mem.member.MemberPassword == blogReader.txtPassWord && !mem.IsVerified) 
+                { 
+                    string json =JsonSerializer.Serialize(member);
+                    HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                    TempData["notverify"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 你的帳號尚未驗證，請至信箱收取驗證信。</div>";
+                    return RedirectToAction("Verifyemail");
+                }
+                else
+                {
+                    TempData["loginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 電子信箱或密碼錯誤</div>";
+                    return RedirectToAction("SinglePost", "Blogs", new { SingleBlogId = blogId });
+                }
+            }
+            TempData["loginfail"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 電子信箱或密碼錯誤</div>";
+            return RedirectToAction("SinglePost", "Blogs", new { SingleBlogId = blogId });
+        }
         public IActionResult UpdataMember()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))

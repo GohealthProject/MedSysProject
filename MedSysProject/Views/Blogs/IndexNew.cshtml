@@ -11,8 +11,8 @@
 @section Scripts{
     <script>
         const main = document.querySelector('#main');
-        document.addEventListener('DOMContentLoaded', () => { 
-            loadRecentPost();
+        document.addEventListener('DOMContentLoaded', async() => { 
+            await loadRecentPost();
             loadSidePopular();
             
         })
@@ -31,9 +31,10 @@
         {
             const response = await fetch(`https://localhost:7078/api/Blogs/popular6`);
             const data = await response.json();
+            const take5 = data.$values.slice(0, 5);
             console.log(data);
             const popularContainer = document.querySelector('.trending-post');
-            const popular6 = data.$values.map((blog,index) => { 
+            const popular5 = take5.map((blog, index) => {
                 const { blogId, title, author, articleClass, createdAt, views } = blog;
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -41,19 +42,19 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
                 return `
-                            <li>
-                                 <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=${blogId}">
-                                     <span class="number">${index+1}</span>
-                                              <h3>
-                                              ${title}
-                                              </h3>
-                                              <h6>瀏覽人次:${views}</h6>
-                                              <span class="author">${author}</span>
-                                 </a>
-                            </li>
-                        `
+                                    <li>
+                                         <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=${blogId}">
+                                             <span class="number">${index + 1}</span>
+                                                      <h3>
+                                                      ${title}
+                                                      </h3>
+                                                      <h6>瀏覽人次:${views}</h6>
+                                                      <span class="author">${author}</span>
+                                         </a>
+                                    </li>
+                                `
             })
-            popularContainer.innerHTML = popular6.join('');
+            popularContainer.innerHTML = popular5.join('');
 
         }
         async function loadMedicalNews() 
