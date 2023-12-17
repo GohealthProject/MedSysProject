@@ -1,4 +1,5 @@
-﻿@model List<CProductWarp>
+﻿@using System.Text.Json;
+@model List<CProductWarp>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
@@ -39,31 +40,31 @@
                     @{
                         for(int i = 0; i < Model.Count; i++)
                         {
-                                @if (Model[i].Path[0] == null)
+                                                                        @if (Model[i].Path[0] == null)
                             {
                                 
                             }
-                                @if (i % 3 == 0)
+                                                                        @if (i % 3 == 0)
                         {
                             if (i != 0)
                             {
-                                    @:</div>
+                                                                            @:</div>
                             }
-                                @:<div class='row'>
+                                                                        @:<div class='row'>
                             }
                             int maxPrice = ((int)Model[i].UnitPrice + 200);
                             string? max =maxPrice.ToString("N0");
                             int price = (int)Model[i].UnitPrice;
                             string s = price.ToString("N0");
-                                <div class=" col " style="height:300px;width:300px">
-                                <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:150px; width:300px;"  />
-                                <div class="mt-3">
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                    <span class="fs-3 text-danger" style="text-decoration:line-through">$@max</span><span class="fs-3 text-danger ms-5">$@s</span>
-                                </div>
-                            </div>
-                            @if(i!=0&&i+i%3==0||i==Model.Count-1){
-                                @:</div>
+                                                                        <div class=" col " style="height:300px;width:300px">
+                                                                        <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:150px; width:300px;"  />
+                                                                        <div class="mt-3">
+                                                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                                                            <span class="fs-3 text-danger" style="text-decoration:line-through">$@max</span><span class="fs-3 text-danger ms-5">$@s</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    @if(i!=0&&i+i%3==0||i==Model.Count-1){
+                                                                        @:</div>
                         }
                     }
                 }
@@ -89,11 +90,33 @@
                         for(int i = 0; i<5; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                                <div class="col p-3  ">
-                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                </div>
+                                                                        <div class="col p-3  ">
+                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
+                                                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                        </div>
+                        }
+                    }     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height:430px;width:100%;" class="border mt-3" id="TrackList">
+                <div style="height:400px" class="">
+                    <div style="height:100px"  class=" d-flex align-items-center border-bottom">
+                        <span class="fs-1 ps-4" >最多人觀看 TOP5</span>
+                    </div>
+                    <div style="height:350px">
+                        <div class="row ps-3">
+                    @{
+                        for(int i = 0; i<5; i++)
+                        {
+                            string? s = Model[i].UnitPrice.ToString();
+                                                                        <div class="col p-3  ">
+                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
+                                                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                        </div>
                         }
                     }     
                         </div>
@@ -111,33 +134,11 @@
                         for(int i = 0; i<5; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                                <div class="col p-3  ">
-                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                </div>
-                        }
-                    }     
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="height:430px;width:100%;" class="border mt-3">
-                <div style="height:400px" class="">
-                    <div style="height:100px"  class=" d-flex align-items-center border-bottom">
-                        <span class="fs-1 ps-4" >最多人觀看 TOP5</span>
-                    </div>
-                    <div style="height:350px">
-                        <div class="row ps-3">
-                    @{
-                        for(int i = 0; i<5; i++)
-                        {
-                            string? s = Model[i].UnitPrice.ToString();
-                                <div class="col p-3  ">
-                                    <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                    <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                </div>
+                                                                        <div class="col p-3  ">
+                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:150px; width:200px;"><hr>
+                                                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                        </div>
                         }
                     }     
                         </div>
@@ -147,7 +148,7 @@
 
  @section Scripts{
      <script>
-        
+        const TrackList = document.querySelector("#TrackList");
         const divHere = document.querySelector("#inhere");
 
          async function CatByProduct(id){
@@ -197,6 +198,65 @@
             })
         })
 
+         let Mid = 0;
+        @{
+            int id = 0;
+            if (Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN)){
+                string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+                id= m.MemberId;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", getTrackProduct);
         
+        async function getTrackProduct(){
+            Mid = @id;
+            console.log(TrackList)
+            let htmls = "";
+            if (Mid != 0) {
+                let url = `https://localhost:7078/api/Products/Tracking/${Mid}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+                const value = data.$values.map(product => {
+                    const Name = product.productName.substring(0, 8);
+                    const maxPrice = (product.unitPrice + 200).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                    const Price = product.unitPrice.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                    const Path = product.fimagePath;
+                    const imgIndex = Path.indexOf(",");
+                    const img = Path.substring(0, imgIndex);
+                    const id = product.productId;
+                    console.log(`產品名稱${Name},產品價格${Price},產品圖片${img},產品ID${id},照片${img},${id}`)
+                    const html =
+                        `
+                        <div class="col p-3  ">
+                               <img src="/img-product/${img}" style="height:150px; width:200px;"><hr>
+                               <a href="/Shopping/selectProduct/${id}" class="fs-3"> ${Name} </a><br />
+                               <div class=""><span class="fs-3 text-danger">$${Price}</span><span class="fs-3 text-danger" style="text-decoration:line-through">$${maxPrice}</span></div>
+                        </div>
+                    `
+                    return html;
+                });
+                console.log(value.join(""));
+                htmls +=
+                    `
+                    <div style="height:400px" class="">
+                        <div style="height:100px"  class=" d-flex align-items-center border-bottom">
+                        <span class="fs-1 ps-4" >你追蹤的產品</span>
+                    </div>
+                    <div style="height:350px">
+                        <div class="row ps-3">
+                `;
+                htmls += value.join("");
+                htmls+=
+                `
+                    </div>
+                    </div>
+                </div>
+            </div>
+                `
+                   TrackList.innerHTML = htmls;
+            }
+        }
      </script>
  }
