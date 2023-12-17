@@ -88,93 +88,152 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult MemberManager(CKeywordViewModel? vm, int page = 1)
+        //public IActionResult MemberManager(CKeywordViewModel? vm, int page = 1)
+        //{
+        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+        //        return RedirectToAction("Login");
+
+        //    IEnumerable<Member> datas = null;
+
+        //    if (string.IsNullOrEmpty(vm.txtKeyword))
+        //    {
+
+        //        int pgsize = 5;
+        //        int total = _db.Members.Count();
+        //        int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+        //        if (page < 1) page = 1;
+        //        if (page > maxpage) page = maxpage;
+        //        datas = _db.Members.Skip((page - 1) * pgsize).Take(pgsize);
+        //        ViewBag.page = page;
+        //        ViewBag.maxpage = maxpage;
+        //        ViewBag.total = total;
+        //        ViewBag.pgsize = pgsize;
+
+
+        //        //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+        //        //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+        //        //        select t;
+
+        //    }
+
+        //    else
+        //    {
+        //        datas = _db.Members.Where(p => p.MemberName.Contains(vm.txtKeyword) ||
+        //        p.MemberPhone.Contains(vm.txtKeyword) ||
+        //        p.MemberEmail.Contains(vm.txtKeyword));
+
+        //        ViewBag.key = vm.txtKeyword;
+        //    }
+
+        //    return View(datas);
+        //}
+
+        //會員管理區塊--------------------------------------------------------------
+        public IActionResult Member()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
-            IEnumerable<Member> datas = null;
+            return View();
+        }
 
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+        //Member Json
+        public IActionResult MemberJson(int? id)
+        {
+            if (id != null)
             {
-
-                int pgsize = 5;
-                int total = _db.Members.Count();
-                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
-                if (page < 1) page = 1;
-                if (page > maxpage) page = maxpage;
-                datas = _db.Members.Skip((page - 1) * pgsize).Take(pgsize);
-                ViewBag.page = page;
-                ViewBag.maxpage = maxpage;
-                ViewBag.total = total;
-                ViewBag.pgsize = pgsize;
-
-
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                //        select t;
-
+                return Json(_db.Members.Find(id));
             }
-
             else
             {
-                datas = _db.Members.Where(p => p.MemberName.Contains(vm.txtKeyword) ||
-                p.MemberPhone.Contains(vm.txtKeyword) ||
-                p.MemberEmail.Contains(vm.txtKeyword));
-
-                ViewBag.key = vm.txtKeyword;
+                return Json(_db.Members);
             }
-
-            return View(datas);
         }
 
-        public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        public IActionResult MemberDetail(int id)
         {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
+            IEnumerable<Member> data = null;
 
-            IEnumerable<Employee> datas = null;
+            data = _db.Members.Where(p => p.MemberId == id);
 
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+            if (data == null)
+                return RedirectToAction("MemberManager");
+
+            return PartialView("MemberDetail",data);
+        }
+        //會員管理區塊--------------------------------------------------------------
+
+        //public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        //{
+        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+        //        return RedirectToAction("Login");
+
+        //    IEnumerable<Employee> datas = null;
+
+        //    if (string.IsNullOrEmpty(vm.txtKeyword))
+        //    {
+
+        //        int pgsize = 5;
+        //        int total = _db.Employees.Count();
+        //        int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+        //        if (page < 1) page = 1;
+        //        if (page > maxpage) page = maxpage;
+        //        datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
+        //        ViewBag.page = page;
+        //        ViewBag.maxpage = maxpage;
+        //        ViewBag.total = total;
+        //        ViewBag.pgsize = pgsize;
+
+
+        //        //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+        //        //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+        //        //        select t;
+
+        //    }
+
+        //    else
+        //    {
+        //        datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
+        //        p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
+        //        p.EmployeeEmail.Contains(vm.txtKeyword));
+
+        //        ViewBag.key = vm.txtKeyword;
+        //    }
+
+        //    return View(datas);
+        //}
+
+        //員工管理區塊--------------------------------------------------------------
+        public IActionResult Employee()
+        {
+            return View();
+        }
+
+        //Employee Json
+        public IActionResult EmployeeJson(int? id)
+        {
+            if (id != null)
             {
-
-                int pgsize = 5;
-                int total = _db.Employees.Count();
-                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
-                if (page < 1) page = 1;
-                if (page > maxpage) page = maxpage;
-                datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
-                ViewBag.page = page;
-                ViewBag.maxpage = maxpage;
-                ViewBag.total = total;
-                ViewBag.pgsize = pgsize;
-
-
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                //        select t;
-
+                return Json(_db.Employees.Find(id));
             }
-
             else
             {
-                datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
-                p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
-                p.EmployeeEmail.Contains(vm.txtKeyword));
-
-                ViewBag.key = vm.txtKeyword;
+                return Json(_db.Employees);
             }
-
-            return View(datas);
         }
 
-        public IActionResult EmpJSON()
+        public IActionResult EmployeeImage(int? id)
         {
-            IEnumerable<Employee> datas = null;
-            datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                    select t;
-            return Json(datas);
+            Employee emp = _db.Employees.Find(id);
+            byte[]? img = emp?.EmployeePhoto;
+
+            if (img != null)
+            {
+                return File(img, "image/jpeg");
+            }
+            return NotFound();
         }
+        //員工管理區塊--------------------------------------------------------------
 
         public IActionResult EmpCreate()
         {

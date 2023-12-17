@@ -105,7 +105,7 @@
                                 <div class="invalid-feedback">請輸入方案描述</div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="Cprjchoose">
                                 <label class="control-label">方案選擇</label>
                                 <br />
                                 @{
@@ -121,6 +121,7 @@
                                         <br />
                                     }
                                 }
+                                <a class="btn btn-link" onclick="Caddprj()"><i class="fas fa-plus"></i> 新增其他項目</a>
                                 <div class="invalid-feedback">請至少勾選一項</div>
                             </div>
 
@@ -170,7 +171,7 @@
                                 <div class="invalid-feedback">請輸入方案描述</div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="prjchoose">
                                 <label class="control-label">方案選擇</label>
                                 <br />
                                 @{
@@ -186,6 +187,7 @@
                                         <br />
                                     }
                                 }
+                                <a class="btn btn-link" onclick="addprj"><i class="fas fa-plus"></i> 新增其他項目</a>
                                 <div class="invalid-feedback">請至少勾選一項</div>
                             </div>
 
@@ -204,9 +206,6 @@
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
-    document.querySelector("#back").addEventListener("click", () => {
-        window.location.href = "/Admin/PlanAdd";
-    });
 
     document.querySelector("#Cbtn").addEventListener("click", () => {
         console.log("hello")
@@ -433,6 +432,27 @@
             }
             research()
         }
+    }
+
+    //新增其他項目
+    function Caddprj() {
+        var choose = document.getElementById("Cprjchoose");
+        console.log("------------" + choose + "------------")
+        //找到choose裡面的最後一個checkbox的value
+
+        let prjid = choose.lastChild.querySelector('input[type="checkbox"]').value; //找到最後一個checkbox的value
+
+        //插入新的chkbox，value為最後一個的value+1
+        const newprjid = parseInt(prjid) + 1;
+        choose.innerHTML += `                                        <div class="form-check-inline" style="margin-left:1em;">
+                                                                        <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
+                                                                    <label class="form-check-label" for="${newprjid}">
+                                                                <input class="form-control" id="CinputName" name="CPlanName" required />
+                                                            </label>
+                                                        </div>
+
+                                                        <br />`;
+
     }
 
     async function research() {
