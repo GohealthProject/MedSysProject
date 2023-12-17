@@ -92,9 +92,13 @@
                     </li>
                     <li><a class="nav-link scrollto fs-4" href="/blogs/index" >健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:35px">
-                        <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
-                        <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping">
-                        </a>
+                        <button type="button" class="btn  position-relative" asp-action="CartList" asp-controller="Shopping">
+                            <img src="@Url.Content("~/img/shopping-cart.png")" alt="Inbox Image" class="img-fluid" id="CartListImg" />
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span class=" p-1" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></span>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
                     </li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
@@ -164,6 +168,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             getcartList()
             document.querySelector("#footer").style.margin = "";
+            document.querySelector("#CartListImg").addEventListener("click", () => {
+
+                window.location.href = "@Url.Content("~/Shopping/CartList")";
+            })
         })
         
     </script>
