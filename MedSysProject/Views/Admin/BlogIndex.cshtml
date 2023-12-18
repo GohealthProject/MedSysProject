@@ -30,213 +30,201 @@
                 empID = emp.EmployeeId;
             }
 
-                    <p>
-                        <!--@Html.ActionLink("我的貼文", "BlogList", "Admin", new { id = empID }, new { @class = "btn btn-primary", style = "margin-left:10px" })-->
-                        <a href="@Url.Content("~/Admin/BlogIndex")?id=@empID" class="btn btn-primary" style="margin-left:10px">我的貼文</a>
-                        <a href="@Url.Content("~/Admin/BlogIndex")" class="btn btn-primary" style="margin-left:10px">貼文總表</a>
-                        <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" style="margin-left:1200px">
-                            <i class="fas fa-plus">新貼文</i>
-                        </a>
-                    </p>
-                    @* ---新增彈窗開始--- *@
-                    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-xl" role="document">
-                            <div class="modal-content">
-                                <!--Header-->
-                                <div class="modal-header">
-                                    <h4 class="modal-title" id="myModalLabel">新增文章</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <!--Body-->
-                                <div class="modal-body">
-                                    <form id="myCreatedataform" novalidate class="needs-validation">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="previewImage" style="margin-bottom:20px;">
-                                                    <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
-                                                </div>
-                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                                                <div class="form-group" style="margin-bottom:20px;">
-                                                    <label for="titleInput" class="control-label">文章標題:</label>
-                                                    <input id="titleInput" class="form-control" name="Title" required />
-
-                                                </div>
-
-                                                <div style="margin-bottom:20px;">
-                                                    <label for="articleClass" class="control-label">文章類別:</label>
-                                                    <!--選項要包在select標籤裡面-->
-                                                    <select id="articleClass" class="form-control" name="ArticleClassId" required>
-                                                        <option value="1">活動快訊</option>
-                                                        <option value="2">醫療新知</option>
-                                                        <option value="3">名人分享會</option>
-                                                        <option value="4">媒體報導</option>
-                                                        <option value="5">企業責任</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group" style="margin-bottom:20px;">
-                                                    <label for="mytextarea" class="control-label">文章內容:</label>
-                                                    <!--注意文字編輯器不要加required屬性，會炸掉-->
-                                                    <textarea id="mytextarea" class="form-control" name="Content"></textarea>
-                                                </div>
-                                                <div class="form-group" style="margin-bottom:20px;">
-                                                    <label for="mainPhoto" class="control-label">選擇主題相片:</label>
-                                                    <input id="mainPhoto" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImage(event)" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="form-control" value="@empID" type="hidden" name="EmployeeId" />
-
-                                                </div>
-                                            </div>
+                            <p>
+                                <!--@Html.ActionLink("我的貼文", "BlogList", "Admin", new { id = empID }, new { @class = "btn btn-primary", style = "margin-left:10px" })-->
+                                <a href="@Url.Content("~/Admin/BlogIndex")?id=@empID" class="btn btn-primary" style="margin-left:10px">我的貼文</a>
+                                <a href="@Url.Content("~/Admin/BlogIndex")" class="btn btn-primary" style="margin-left:10px">貼文總表</a>
+                                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" style="margin-left:1200px">
+                                    <i class="fas fa-plus">新貼文</i>
+                                </a>
+                            </p>
+                            @* ---新增彈窗開始--- *@
+                            <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <!--Header-->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">新增文章</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
                                         </div>
-                                    </form>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
-                                        <button type="button" class="btn btn-success" onclick="newPost()" id="Cbtn">確定新增</button>
-                                        <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @* ---新增彈窗結束--- *@
-
-                    @* ---詳細資料彈窗開始--- *@
-                    <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-xl" role="document">
-                            <div class="modal-content">
-                                <!--Header-->
-                                <div class="modal-header">
-                                    <h4 class="modal-title" id="myModalLabel">文章內容</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <!--Body-->
-                                <div class="modal-body">
-
-
-                                    @* 詳細資料 *@
-                                    <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
-
-                                        <!-- ======= Single Post Content ======= -->
-                                        <div class="single-post">
-                                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>貼文時間</span></div>
-                                            <h1 class="mb-5">文章標題</h1>
-                                            <div class="previewImage" style="margin-bottom:20px;">
-                                                <img id="imagePreviewDetail" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
-                                            </div>
-                                             @{
-                                        //     if (Model[0].BlogImage != null)
-                                        //     {
-                                        //         <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
-                                        //              alt=""
-                                        //              class="img-fluid" />
-                                        //     }
-                                            }
-                                            @* @Html.Raw(Model[0].Content)*@
-                                        </div>
-                                        <!-- ======= Comments ======= -->
-                                        <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
-
-                                        <div class="Comments" id="putIn">
-                                        </div>
-                                        <!-- End Comments -->
-                                        <!-- ======= Comments Form ======= -->
-                                        <div class="row justify-content-center mt-5">
-                                            <div class="col-lg-12">
-                                                <h5 class="comment-title">留言</h5>
+                                        <!--Body-->
+                                        <div class="modal-body">
+                                            <form id="myCreatedataform" novalidate class="needs-validation">
                                                 <div class="row">
-                                                    <div class="col-12 mb-3">
-                                                        <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                                    <div class="col-md-10">
+                                                        <div class="previewImage" style="margin-bottom:20px;">
+                                                            <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                        </div>
+                                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                                        <div class="form-group" style="margin-bottom:20px;">
+                                                            <label for="titleInput" class="control-label">文章標題:</label>
+                                                            <input id="titleInput" class="form-control" name="Title" required />
+
+                                                        </div>
+
+                                                        <div style="margin-bottom:20px;">
+                                                            <label for="articleClass" class="control-label">文章類別:</label>
+                                                            <!--選項要包在select標籤裡面-->
+                                                            <select id="articleClass" class="form-control" name="ArticleClassId" required>
+                                                                <option value="1">活動快訊</option>
+                                                                <option value="2">醫療新知</option>
+                                                                <option value="3">名人分享會</option>
+                                                                <option value="4">媒體報導</option>
+                                                                <option value="5">企業責任</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group" style="margin-bottom:20px;">
+                                                            <label for="mytextarea" class="control-label">文章內容:</label>
+                                                            <!--注意文字編輯器不要加required屬性，會炸掉-->
+                                                            <textarea id="mytextarea" class="form-control" name="Content"></textarea>
+                                                        </div>
+                                                        <div class="form-group" style="margin-bottom:20px;">
+                                                            <label for="mainPhoto" class="control-label">選擇主題相片:</label>
+                                                            <input id="mainPhoto" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImage(event)" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input class="form-control" value="@empID" type="hidden" name="EmployeeId" />
+
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </form>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                                                <button type="button" class="btn btn-success" onclick="newPost()" id="Cbtn">確定新增</button>
+                                                <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
                                             </div>
                                         </div>
-                                        <!-- End Comments Form -->
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    @* ---詳細資料彈窗結束--- *@
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    序號
-                                </th>
-                                <th style="width:250px;">
-                                    文章標題
-                                </th>
-                                <th>
-                                    文章類別
-                                </th>
-                                <th>
-                                    瀏覽人次
-                                </th>
-                                <th>
-                                    建立時間
-                                </th>
-                                <th>
-                                    作者
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
+                            @* ---新增彈窗結束--- *@
+
+                            @* ---詳細資料彈窗開始--- *@
+                            <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <!--Header-->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">文章內容</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <!--Body-->
+                                        <div class="modal-body">
+
+
+                                            @* 詳細資料 *@
+                                            <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+                                
+                                                <!-- ======= Single Post Content ======= -->
+                                                <div class="single-post">
+                                                   
+                                    
+                                                </div>
+                                                <!-- ======= Comments ======= -->
+                                                
+
+                                                <div class="Comments" id="putIn">
+                                                </div>
+                                                <!-- End Comments -->
+                                                <!-- ======= Comments Form ======= -->
+                                                <div class="row justify-content-center mt-5">
+                                                    <div class="col-lg-12">
+                                                        <h5 class="comment-title">留言</h5>
+                                                        <div class="row">
+                                                            <div class="col-12 mb-3">
+                                                                <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- End Comments Form -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* ---詳細資料彈窗結束--- *@
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            序號
+                                        </th>
+                                        <th style="width:250px;">
+                                            文章標題
+                                        </th>
+                                        <th>
+                                            文章類別
+                                        </th>
+                                        <th>
+                                            瀏覽人次
+                                        </th>
+                                        <th>
+                                            建立時間
+                                        </th>
+                                        <th>
+                                            作者
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
                         int count = 0;
                         foreach (var item in Model)
                         {
                             count++;
-                                            <tr>
-                                                <td>
-                                                    @count
-                                                    <input type="hidden" value="@item.BlogId" />
-                                                </td>
-                                                <td style="width:250px;">
-                                                    @Html.DisplayFor(modelItem => item.Title)
-                                                </td>
+                                                            <tr>
+                                                                <td>
+                                                                    @count
+                                                                    <input type="hidden" value="@item.BlogId" />
+                                                                </td>
+                                                                <td style="width:250px;">
+                                                                    @Html.DisplayFor(modelItem => item.Title)
+                                                                </td>
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Views)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
-                                                </td>
-                                                <td>
-                                                    @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
-                                                    @*顯示詳細按鈕*@
-                                                    <button asp-action="Detail" asp-route-id="@item.BlogId" onclick="detail(this)" data-blog-id="@item.BlogId" class="btn btn-outline-info" data-toggle="modal" data-target="#modalDetail">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </button>
-                                                    @if (item.EmployeeId == empID)
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Views)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                                </td>
+                                                                <td>
+                                                                    @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
+                                                                    @*顯示詳細按鈕*@
+                                                                    <button asp-action="Detail" asp-route-id="@item.BlogId" onclick="detail(this)" data-blog-id="@item.BlogId" class="btn btn-outline-info" data-toggle="modal" data-target="#modalDetail">
+                                                                        <i class="fas fa-info-circle"></i>
+                                                                    </button>
+                                                                    @if (item.EmployeeId == empID)
                                     {
-                                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <button asp-action="Delete" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
+                                                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </button>
+                                                                        <button asp-action="Delete" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
                                     }
-                                                </td>
-                                            </tr>
+                                                                </td>
+                                                            </tr>
                         }
-                            }
-                        </tbody>
-                    </table>
+                                    }
+                                </tbody>
+                            </table>
         }
     </div>
 </div>
@@ -325,18 +313,34 @@
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const day = String(date.getDate()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}`;
-
                 const detailContain = `
                         <div class="single-post">
                             <div class="post-meta">
                                 <span class="date">${formattedDate}</span>
                             </div>
                             <h1 class="mb-5">${title}</h1>
+                                <div class="previewImage" style="margin-bottom:20px;">
+                                        <img id="imagePreviewDetail" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                    </div>
                             ${content}
                         </div>
                     `;
 
                 detailContainer.innerHTML = detailContain;
+                if (data.blogImage == null) {
+                    document.querySelector('#imagePreviewDetail').style.display = 'none';
+                }
+                else { 
+                    var binary = atob(data.blogImage);
+                    var byteArray = new Uint8Array(binary.length);
+                    for (var i = 0; i < binary.length; i++) {
+                        byteArray[i] = binary.charCodeAt(i);
+                    }
+                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    var imageUrl = URL.createObjectURL(blob);
+                    document.querySelector('#imagePreviewDetail').src = imageUrl;
+                    document.querySelector('#imagePreviewDetail').style.display = 'block';
+                }
                 restrictContent();
                 
             })
