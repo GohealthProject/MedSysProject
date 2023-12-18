@@ -13,6 +13,7 @@
 *@
 <!-- Button trigger modal -->
 <!-- Button trigger modal -->
+<meta charset="UTF-8">
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
 </button>
@@ -91,9 +92,6 @@
 
 <script>
    
-  
-   
-    
     //test
     //$table.bootstrapTable('refresh')
     var myModal = document.getElementById('e04');
@@ -155,6 +153,7 @@
             
             
         ],
+
        
         
     
@@ -164,24 +163,19 @@
     //外表//
     var table = $('#tableM').DataTable({
        
-        //ajax: {
-        //    url: 'https://localhost:7203/transaction/members',
-        //    dataSrc: ''
-        //},
-        //columns: [
-        //    { data: 'memberId', title: "會員編號" },
-        //    { data: 'memberName', title: "姓名" },
-        //    //{ data: "healthReports", title: "mid" },
-        //    //{ data: 'state_date' },
-        //    //{ data: 'office' },
-        //    //{ data: 'extn' }
-        //],
-        dom: 'Bfrtip',
-        buttons: [
-            'colvis',
-            'excel',
-            'print'
-        ]
+        ajax: {
+            url: 'https://localhost:7203/transaction/members',
+            dataSrc: ''
+        },
+        columns: [
+            { data: 'memberId', title: "會員編號" },
+            { data: 'memberName', title: "姓名" },
+            //{ data: "healthReports", title: "mid" },
+            //{ data: 'state_date' },
+            //{ data: 'office' },
+            //{ data: 'extn' }
+        ],
+       
     })
 
     //dd.addEventListener("click", () => {
