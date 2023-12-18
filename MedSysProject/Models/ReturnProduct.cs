@@ -18,4 +18,6 @@ public partial class ReturnProduct
     public DateTime? ProcessedDate { get; set; }
 
     public decimal? RefundAmount { get; set; }
+
+    public virtual Order Order { get; set; }
 }
