@@ -389,7 +389,7 @@ namespace MedSysProject.Controllers
             ViewBag.item = item["item"];
             ViewBag.mid = item["Mid"];
             ViewBag.pid = item["Pid"];
-            ViewBag.member = HttpContext.Session.Get(CDictionary.SK_PLAN_COMPARERE_RESULT);
+            ViewBag.member = HttpContext.Session.Get(CDictionary.SK_MEMBER_LOGIN);
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 

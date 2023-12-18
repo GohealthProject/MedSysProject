@@ -3,6 +3,7 @@
 
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
+@using System.Text.Json;
 @*@model IEnumerable<MedSysProject.Models.Plan>*@
 @model IFormCollection
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -342,6 +343,17 @@
 </html>
 
 <script>
+    @{
+        MemberWarp m = new MemberWarp();
+        string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+        if (!string.IsNullOrEmpty(json))
+        {
+             m = JsonSerializer.Deserialize<MemberWarp>(json);
+        }
+    }
+    
+     mid = @m.MemberId;
+    console.log(mid);
     $("reservesubmit").click(()=>{
         $('#detail').modal('hide');
         $('#reserve').modal('hide');
