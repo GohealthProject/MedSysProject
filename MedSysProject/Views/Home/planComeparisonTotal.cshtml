@@ -176,7 +176,7 @@
             event.preventDefault();
             async function send() {
              alert("傳送")
-                const response = await fetch('@Url.Content("~/Home/planComeparisonTotal?planid=3")');//選取方案id
+                const response = await fetch('@Url.Content("https://localhost:7078/api/CPlan/3?planid=3")');//選取方案id
                 window.location.href = ('@Url.Content("~/Home/Customcompare")');
             };
             send();
