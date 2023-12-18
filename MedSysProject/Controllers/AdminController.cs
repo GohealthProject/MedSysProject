@@ -794,12 +794,22 @@ namespace MedSysProject.Controllers
 
                 if (pDb != null)
                 {
+                    // 刪除舊圖片
+                    if (!string.IsNullOrEmpty(pDb.FimagePath))
+                    {
+                        string[] oldImages = pDb.FimagePath.Split(',');
+                        foreach (var image in oldImages)
+                        {
+                            string oldFilePath = Path.Combine(_host.WebRootPath, "img-product", image);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+                    }
 
-                    pDb.FimagePath = string.Empty;
-
+                    // 上傳新圖片並更新路徑
                     var newImagePaths = new List<string>();
-
-
                     if (model.FormFiles != null && model.FormFiles.Count > 0)
                     {
                         foreach (var formFile in model.FormFiles)
@@ -815,6 +825,7 @@ namespace MedSysProject.Controllers
                             newImagePaths.Add(photoName);
                         }
                     }
+                    pDb.FimagePath = string.Join(",", newImagePaths);
 
 
                     pDb.FimagePath = string.Join(",", newImagePaths);
@@ -871,13 +882,26 @@ namespace MedSysProject.Controllers
 
 
 
-
         public IActionResult Delete(int? id)
         {
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
-                // 刪除相關聯的 ProductsClassification 記錄
+                // 刪除與產品相關的圖片
+                if (!string.IsNullOrEmpty(x.FimagePath))
+                {
+                    string[] images = x.FimagePath.Split(',');
+                    foreach (var image in images)
+                    {
+                        string filePath = Path.Combine(_host.WebRootPath, "img-product", image);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                }
+
+                // 刪除產品和相關聯的 ProductsClassification 記錄
                 var relatedClassifications = _db.ProductsClassifications
                     .Where(pc => pc.ProductId == id)
                     .ToList();
