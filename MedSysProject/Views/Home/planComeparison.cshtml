@@ -166,9 +166,13 @@
                     if (plan.PlanPrice == 25550)
                     {
                         <div class="col-lg-4 col-md-6 portfolio-item filter-AMA">
-                            <div class="portfolio-wrap">
+                            <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
+                                <p>
+                                    @plan.PlanName 價格NT$ @plan.PlanPrice   <i class="bi bi-arrow-down-circle"></i><br>
+                                </p>
                                 <img src="~/img/PersonalPlan/p1-@{@plan.PlanId}.jpg" class="img-fluid" alt="">
                                 <div class="portfolio-info">
+                                    
                                     <div>
 
                                         <h3 style="color:#bd93e8" id="PlanName">@plan.PlanName</h3>

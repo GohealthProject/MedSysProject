@@ -1,0 +1,482 @@
+﻿@model IEnumerable<MedSysProject.Models.CProductsWrap>
+@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Product
+
+@{
+    ViewData["Title"] = "產品管理";
+    Layout = "_Layout_Admin2";
+}
+
+<style>
+    .custom-modal-dialog {
+        max-width: 100%;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const Product = document.getElementById("li-Product");
+    const Index = document.getElementById("li-index");
+    Product.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">產品管理</h6>
+    </div>
+    <div class="card-body">
+        <div>
+            <p class="mt-3">
+                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </p>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>序</th>
+                        <th style="display:none">產品ID</th>
+                        <th>單價</th>
+                        <th>核准證號</th>
+                        <th>有效成分</th>
+                        <th>圖片</th>
+                        <th>庫存量</th>
+                        <th>上架狀態</th>
+                        <th>執行動作</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- ---新增彈窗開始--- -->
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document">
+        <!-- 添加自定義 CSS 類別 -->
+        <div class="modal-content">
+            <!-- 主體 -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">新增產品</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 使用AJAX載入_CreateProductModal.cshtml的內容 -->
+                <div id="createProductModalContent"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ---新增彈窗結束--- -->
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="category_div">
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+@section Scripts
+{
+    <script>
+        var ttt = $('#dataTable').DataTable({
+            "ajax": {
+                "url": "https://localhost:7203/testAdmin/ProductJSON",
+                "dataSrc": ""
+            },
+            columns: [
+                {
+                    data: null,
+                    width: "20px",
+                    render: function (data, type, row) {
+                        count++;
+                        return count;
+                    }
+                }, //序
+                {
+                    data: "productId",
+                    className: "d-none"
+                }, //產品ID
+                {
+                    data: "employeeId",
+                    //欄位寬度
+                    width: "100px",
+                    render: function (data, type, row) {
+                        return "<img src='" + '@Url.Content("~/Admin/EmployeeImage/")' + data + "' width='100' height='100'>";
+                    }
+                }, //照片
+                { data: "employeeName", width: "150px" }, //姓名
+                {
+                    data: "employeeClassId",
+                    width: "100px",
+                    render: function (data, type, row) {
+                        if (data == 1) {
+                            return "醫生";
+                        } else if (data == 2) {
+                            return "護理師";
+                        } else if (data == 3) {
+                            return "行政人員";
+                        } else if (data == 19) {
+                            return "系統管理員";
+                        }
+                    }
+                }, //職位
+                { data: "employeeBirthDate" }, //生日
+                { data: "employeePhoneNum" }, //電話
+                { data: "employeeEmail" }, //信箱
+                { data: "employeePassWord" }, //密碼
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `
+                                                                                                                                                                                                                                                                                                                                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                                                                                                                                                                                                                                                    <i class="fas fa-user-edit"></i>
+                                                                                                                                                                                                                                                                                                                                                </a>
+
+                                                                                                                                                                                                                                                                                                                                                <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                                                                                                                                                                                                                                                    <i class="fas fa-user-times"></i>
+                                                                                                                                                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                                                                                                                                                `;
+                    }
+                }
+            ],
+            //設定欄位寬度
+            "columnDefs": [{
+                "className": "dt-center align-middle",
+                "targets": "_all"
+            },
+            {
+                "targets": 5,
+                "render": function (data, type, row) {
+                    // 这里的data是日期的原始数据
+                    // 使用moment.js或其他日期库来格式化日期
+                    return moment(data).format('YYYY/MM/DD');
+                }
+            }],
+            //設定語言
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "每頁 _MENU_ 位員工",
+                "zeroRecords": "沒有符合的員工",
+                "info": "顯示第 _START_ 至 _END_ 位員工，共 _TOTAL_ 位",
+                "infoEmpty": "顯示第 0 至 0 位員工，共 0 位",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            },
+            //移除預設的搜尋框
+            "dom": '<"top"lpB>rt<"bottom"ip>',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: '匯出Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '列印',
+                    className: 'btn btn-info',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+            ],
+        });
+
+        //用#txtKeyword的值來搜尋
+        $("#txtKeyword").keyup(function () {
+            ttt.search($(this).val()).draw();
+        });
+
+
+
+        function submitForm() {
+            $.ajax({
+                url: '@Url.Action("Create", "Admin")',
+                type: 'POST',
+                data: new FormData($('#productForm')[0]),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    // 使用 SweetAlert2 顯示成功提示
+                    Swal.fire({
+                        title: '成功!',
+                        text: '新增產品成功',
+                        icon: 'success',
+                        confirmButtonText: '確定'
+                    }).then((result) => {
+                        // 在用戶點擊確定後的操作
+                        $('#modalCreate').modal('hide');
+                        $('.modal-backdrop').remove();
+                        location.reload(); // 重新加載頁面
+                    });
+                },
+                error: function (error) {
+                    // 使用 SweetAlert2 顯示錯誤提示
+                    Swal.fire({
+                        title: '提交失敗',
+                        text: '錯誤：' + error.statusText,
+                        icon: 'error',
+                        confirmButtonText: '關閉'
+                    });
+                }
+            });
+        }
+
+
+        function loadCreateProductModal() {
+            $.ajax({
+                url: '@Url.Action("Create", "Admin")',
+                type: 'GET',
+                success: function (data) {
+                    $('#createProductModalContent').html(data);
+                    $('#modalCreate').modal('show');
+                    bindImageUploadEvent(); // 呼叫綁定事件的函數
+                },
+                error: function (error) {
+                    alert('載入_CreateProductModal 失敗：' + error.statusText);
+                }
+            });
+        }
+        function bindImageUploadEvent() {
+            var fileInput = document.getElementById('formFileForCreate');
+            if (fileInput) {
+                fileInput.addEventListener('change', function (e) {
+                    var files = e.target.files;
+                    var imagePreviewContainer = document.getElementById('imagePreviewForCreate');
+                    imagePreviewContainer.innerHTML = '';
+
+                    for (let i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var imgElement = document.createElement('img');
+                            imgElement.src = e.target.result;
+                            imgElement.style.maxWidth = '100px';
+                            imgElement.style.maxHeight = '100px';
+                            imgElement.style.marginRight = '10px';
+                            imagePreviewContainer.appendChild(imgElement);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                console.error('找不到ID為 formFileForCreate 的文件輸入元素。');
+            }
+        }
+
+        // 加載編輯產品模態的函數
+        function getProductDetails(productId) {
+            $.ajax({
+                url: '@Url.Action("Edit", "Admin")',
+                type: 'GET',
+                data: { productId: productId },
+                success: function (data) {
+                    $('#category_div').html(data);
+                    // 呼叫綁定圖像上傳事件的函數
+                    bindImageUploadEventForEdit();
+                },
+                error: function (error) {
+                    alert('獲取產品資訊失敗：' + error.statusText);
+                }
+            });
+        }
+
+        // 綁定圖像上傳事件的函數
+        function bindImageUploadEventForEdit() {
+            var fileInput = document.getElementById('formFileForEdit');
+            if (fileInput) {
+                fileInput.addEventListener('change', function (e) {
+                    var files = e.target.files;
+                    var imagePreviewContainer = document.getElementById('imagePreviewForEdit');
+                    imagePreviewContainer.innerHTML = ''; // 清空現有預覽
+
+                    for (let i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var imgElement = document.createElement('img');
+                            imgElement.src = e.target.result;
+                            imgElement.style.maxWidth = '100px';
+                            imgElement.style.maxHeight = '100px';
+                            imagePreviewContainer.appendChild(imgElement);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                console.error('找不到ID為 formFileForEdit 的檔案輸入元素。');
+            }
+        }
+
+
+        function displayProductDetails(data) {
+            $('#editProductName').val(data.WrappedProductName);
+            $('#inputPrice').val(data.WrappedUnitPrice);
+            $('#inputLicense').val(data.WrappedLicense);
+            $('#inputIngredient').val(data.WrappedIngredient);
+            $('#inputDescription').val(data.WrappedDescription);
+            $('#inputDiscontinued').val(data.WrappedDiscontinued ? 'true' : 'false');
+
+            // 初始化 SelectedCategories 為空陣列
+            var selectedCategories = data.SelectedCategories && Array.isArray(data.SelectedCategories) ? data.SelectedCategories : [];
+
+            selectedCategories.forEach(function (categoryId) {
+                $('#category' + categoryId).prop('checked', true);
+            });
+
+            if (data && data.FimagePath) {
+                $('#previewImage').attr('src', data.FimagePath);
+            }
+        }
+
+
+        function getProductDetails(productId) {
+            $.ajax({
+                url: '@Url.Action("Edit", "Admin")',
+                type: 'GET',
+                data: { productId: productId }, // 使用productId而不是id
+                success: function (data) {
+                    $('#category_div').empty().append(data)
+                    // 處理成功的回應，填充產品資訊到表單
+                    displayProductDetails(data);
+                },
+                error: function (error) {
+                    // 處理 AJAX 請求失敗的情況
+                    alert('獲取產品資訊失敗：' + error.statusText);
+                }
+            });
+        }
+
+        async function deleteProduct(productId) {
+            // 確認是否真的要刪除
+            const result = await Swal.fire({
+                title: "確定要刪除嗎？",
+                text: "此步驟將無法復原！",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "確定刪除"
+            });
+
+            if (result.isConfirmed) {
+                // 使用 AJAX 向伺服器發送刪除請求
+                $.ajax({
+                    url: '@Url.Action("Delete", "Admin")',
+                    type: 'POST',
+                    data: { id: productId },
+                    success: function (data) {
+                        Swal.fire({
+                            title: "刪除成功!",
+                            text: "產品已被成功刪除。", // 只顯示簡單的文本消息
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        //等待 1.5 秒後，重新載入頁面
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function (error) {
+                        // 處理 AJAX 請求失敗的情況
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "操作失敗: " + error.statusText // 顯示錯誤的狀態文字
+                        });
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            $(document).on('click', '#submitEdit', function (e) {
+                e.preventDefault();
+
+                // 發送 AJAX 請求
+                $.ajax({
+                    url: '@Url.Action("Edit", "Admin")', // 確保 URL 正確
+                    type: 'POST',
+                    data: new FormData($('#editProductForm')[0]),
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // 處理成功回應
+                            Swal.fire({
+                                title: '修改成功!',
+                                text: '產品資料已更新',
+                                icon: 'success',
+                                confirmButtonText: '確定'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            // 處理失敗回應
+                            Swal.fire({
+                                title: '修改失敗',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonText: '關閉'
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        // 處理請求錯誤
+                        Swal.fire({
+                            title: '錯誤',
+                            text: '發生錯誤：' + error.statusText,
+                            icon: 'error',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                });
+            });
+        });
+
+
+
+
+    </script>
+}
