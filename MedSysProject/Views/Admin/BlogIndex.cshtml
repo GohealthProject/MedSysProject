@@ -448,7 +448,64 @@
 
 
         }
-        
+        function initButtons() {
+            let replyButtons = document.querySelectorAll('.replyBtn');//回覆按鈕
+            console.log(replyButtons);
+            replyButtons.forEach(function (rplyBtn) {
+                rplyBtn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const comment = rplyBtn.parentNode.parentNode;
+                    console.log(comment);
+                    const parentCommentId = comment.getAttribute('data-comment-id');
+                    console.log(parentCommentId);//測試用，能抓到按鈕對應留言區塊
+                    const replyFormWrap = comment.querySelector('.js-reply-form-wrap');
+                    replyFormWrap.classList.add("active");
+                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]');
+                    console.log(inputReply);
+                    inputReply.addEventListener('keydown', async function (event) {
+                        if (event.key === "Enter" && !event.shiftKey) {
+                            console.log('回復訊息');
+                            if (memberLogIn === 0) {
+                                const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
+                                invisibleButton.dispatchEvent(new Event('click'));
+                            }
+                            const apiUrl = 'https://localhost:7078/api/Comments/memberAddReply';
+                            const data = {
+                                BlogId: blogId,
+                                MemberId: memberLogIn,
+                                ParentCommentId: parentCommentId,
+                                Content: inputReply.value
+                            }
+                            const requestOption =
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            }
+                            try {
+                                const response = await fetch(apiUrl, requestOption);
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok.');
+                                }
+                                await refreshCommentTable();
+                                inputReply.value = '';
+                            }
+                            catch (error) { console.error('There was a problem saving the comment:', error); }
+                        }
+                    });
+
+                });
+            });
+            let closeButtons = document.querySelectorAll('.js-end-reply');
+            console.log(closeButtons);//測試用，能抓到關閉按鈕
+            closeButtons.forEach(closeBtn => {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const replyFormWrap = closeBtn.closest('.js-reply-form-wrap');
+                    replyFormWrap.classList.remove('active');
+                });
+            });
+        }
         
         //修改文章相關
         //(1)讓資料可以顯示在修改彈窗上
