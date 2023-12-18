@@ -249,7 +249,7 @@
             success: function (data) {
                 // 提交成功後，關閉 Modal
                 $('#modalCreate').modal('hide');
-                // 在這裡可以添加其他你需要的處理邏輯
+                $('.modal-backdrop').remove(); // 這行代碼會移除遮罩層
             },
             error: function (error) {
                 alert('提交失敗：' + error.statusText);
