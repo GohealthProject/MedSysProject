@@ -250,6 +250,8 @@
                 // 提交成功後，關閉 Modal
                 $('#modalCreate').modal('hide');
                 $('.modal-backdrop').remove(); // 這行代碼會移除遮罩層
+                
+                location.reload();// 重新加載頁面
             },
             error: function (error) {
                 alert('提交失敗：' + error.statusText);
