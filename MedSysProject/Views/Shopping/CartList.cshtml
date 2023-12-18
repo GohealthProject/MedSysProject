@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "CartList";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    var order = ViewBag.order as Dictionary<string, string>;
+
 }
-<form method="post">
+
 <div class="container" style="margin-top:30px">
     <img src="~/img/Login2.png" style="margin:auto"/>
     <div style="margin-top:20px"><span class="fs-1">購物車</span></div>
-    
+        
 <table class="table">
         <tr>
             <th>
@@ -32,32 +34,32 @@
             foreach (var item in Model)
             {
                 總計 += item.小計;
-                                                                <tr>
-                                                                    <td>
-                                                                        <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
-                                                                        @Html.DisplayFor(modelItem => item.ProductName)
-                                                                    </td>
-                                                                    <td>
-                                                                        
-                                                                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                                                                    </td>
-                                                                    <td>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
+                                                                                        <span class="items">@item.ProductName</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        
+                                                                                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                                                                                    </td>
+                                                                                    <td>
 
-                                                                        @Html.DisplayFor(modelItem => item.小計)
-                                                                    </td>
-                                                                    <td>
-                                                                        
-                            <select name="ProductQta">
-                                @{
+                                                                                        @Html.DisplayFor(modelItem => item.小計)
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        
+                                            <select name="ProductQta">
+                                                @{
                                     for(int i =0; i < item.Product.UnitsInStock; i++)
                                     {
                                         
                                         if(item.count == i)
                                         {
-                                            <option value="@i" selected>@i</option>
+                                                                            <option value="@i" selected>@i</option>
                                         }
                                         else{
-                                            <option value="@i">@i</option>
+                                                                            <option value="@i">@i</option>
                                         }
                                         if (i == 50)
                                         {
@@ -65,35 +67,50 @@
                                         }
                                     }
                                     
-                                                                            }
-                                                                            
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                            <img src="~/img/trash.png" class="trash"/>
-                                                                    </td>
-                                                                </tr>
+                                                                                            }
+                                                                                            
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                            <img src="~/img/trash.png" class="trash"/>
+                                                                                    </td>
+                                                                                </tr>
             }
             稅 = (int)(總計 * 0.05);
             應付金額 = 總計 + 稅;
-                                                            <tr>
-                                                                <td>
-                                                                </td>
-                                                                <td>
-                                                                </td>
-                                                                <td>
-                                                                    訂單總計:@總計
-                                                                </td>
-                                                                <td>
-                                                                    稅額:@稅
-                                                                </td>
-                                                                <td>
-                                                                應付金額:@應付金額
-                                                                </td>
-                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                </td>
+                                                                                <td>
+                                                                                </td>
+                                                                                <td>
+                                                                                    訂單總計:@總計
+                                                                                </td>
+                                                                                <td>
+                                                                                    稅額:@稅
+                                                                                </td>
+                                                                                <td>
+                                                                                應付金額:@應付金額
+                                                                                </td>
+                                                                            </tr>
+            }
+        </table>
+    <form id="payform" method="Post" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+        
+    
+      @{
+            order["TotalAmount"] = 應付金額.ToString();
+      }
+        @{
+            foreach (var Key in order.Keys.ToList())
+            {
+                                <input type="hidden" name="@Key" value="@order[Key]" />
+            }
+                    
         }
-            </table>
-      
+        <input type="submit" value="送出" />
+        <input type="submit" value="綠界測試" />
+    </form>
 </div>
 <div class="container " style="margin-top:30px">
     <span class="fs-1">宅配方式</span>
@@ -117,8 +134,8 @@
         <label><input type="radio" value="7" name="odPay" />貨到付款</label>
 </div>
 
-<input type="submit" value="送出" />
-</form>
+
+
 
    @section Scripts {
         <script>
@@ -133,6 +150,7 @@
                         }
                     })
                 })
+                payinfo()
             })
             
             async function delCart(id) {
@@ -143,5 +161,33 @@
                 }
                 
             }
+
+            function payinfo(){
+            var ProductList = "";
+            let itemList = document.querySelectorAll(".items");
+            itemList.forEach(item => {
+                console.log(item.innerText);
+                ProductList += `#${item.innerText}`
+            })
+
+            // document.querySelector("input[name='ItemName']").value = ProductList.substring(1)
+            // document.querySelector("input[name='TradeDesc']").value = "產品訂單";
+            // MacCheck()
+            };
+            async function MacCheck(){
+                let url = `/Shopping/CheckMac`;
+            const form = document.querySelector("#payform");
+                const formData = new FormData(form);
+                
+                const response = await fetch(url, {
+                    body:formData,
+                    method:"POST",
+                });
+                const data = await response.json();
+                console.log(data);
+                document.querySelector("input[name='CheckMacValue']").value = data.CheckMacValue;
+            }
+        
+
         </script>
         }
