@@ -79,6 +79,24 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult Product()
+        {
+            return View();
+        }
+
+        public IActionResult ProductJSON(int? id)
+        {
+            if (id != null)
+            {
+                return Json(_db.Products.Find(id));
+            }
+            else
+            {
+                return Json(_db.Products);
+            }
+        }
+
+
         
     }
 }

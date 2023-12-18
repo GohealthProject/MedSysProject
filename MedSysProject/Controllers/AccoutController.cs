@@ -169,7 +169,6 @@ namespace MedSysProject.Controllers
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk == vm.newPwd && vm.oldPwd == oldpwd)
             {
-                //todo 這裡要修復
                 string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                 MemberWarp nown = new MemberWarp();
                 nown.member = JsonSerializer.Deserialize<Member>(json);
@@ -346,7 +345,6 @@ namespace MedSysProject.Controllers
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_SUBMIT) && vm.newPwdChk == vm.newPwd)
             {
-                //todo 這裡要修復
                 string email = JsonSerializer.Deserialize<string>(HttpContext.Session.GetString(CDictionary.SK_FPWD_SUBMIT));
                 var q = _db.Members.FirstOrDefault(n => n.MemberEmail == email);
                 q.MemberPassword = vm.newPwd;
