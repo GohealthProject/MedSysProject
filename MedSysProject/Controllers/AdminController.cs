@@ -464,35 +464,35 @@ namespace MedSysProject.Controllers
 
         public IActionResult OrderDetail(int id)
         {
-            //IEnumerable<Order> data = null;
+            IEnumerable<Order> data = null;
 
-            //data = _db.Orders.Where(p => p.OrderId == id)
-            //        .Include(m => m.Member)
-            //        .Include(s => s.State)
-            //        .Include(h => h.Ship)
-            //        .Include(p => p.Pay)
-            //        .Include(n => n.OrderDetails)
-            //        .ThenInclude(n => n.Product)
-            //        .ToList();
+            data = _db.Orders.Where(p => p.OrderId == id)
+                    .Include(m => m.Member)
+                    .Include(s => s.State)
+                    .Include(h => h.Ship)
+                    .Include(p => p.Pay)
+                    .Include(n => n.OrderDetails)
+                    .ThenInclude(n => n.Product)
+                    .ToList();
 
 
 
-            List<COrderWarp> data = new List<COrderWarp>();
-            var q = _db.Orders
-                .Include(n => n.Member)
-                .Include(n => n.Pay)
-                .Include(n => n.Ship)
-                .Include(n => n.State)
-                .Include(n => n.OrderDetails)
-                .ThenInclude(n => n.Product)
-                .Where(n => n.OrderId == id);
+            //List<COrderWarp> data = new List<COrderWarp>();
+            //var q = _db.Orders
+            //    .Include(n => n.Member)
+            //    .Include(n => n.Pay)
+            //    .Include(n => n.Ship)
+            //    .Include(n => n.State)
+            //    .Include(n => n.OrderDetails)
+            //    .ThenInclude(n => n.Product)
+            //    .Where(n => n.OrderId == id);
 
-            foreach (var item in q)
-            {
-                COrderWarp od = new COrderWarp();
-                od.order = item;
-                data.Add(od);
-            }
+            //foreach (var item in q)
+            //{
+            //    COrderWarp od = new COrderWarp();
+            //    od.order = item;
+            //    data.Add(od);
+            //}
 
             if (data == null)
                 return RedirectToAction("Order");
@@ -535,6 +535,13 @@ namespace MedSysProject.Controllers
             if (data == null)
                 return RedirectToAction("Order");
 
+            return Json(data);
+        }
+
+        //todo 順哥幫我做
+        public IActionResult ODProductsJSON(int id)
+        {
+            IEnumerable<OrderDetail> data = null;
             return Json(data);
         }
 
