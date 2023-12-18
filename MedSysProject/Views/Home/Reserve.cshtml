@@ -330,11 +330,12 @@
     }
     <form id="form" method="post">
             <input type="text" value="@ViewBag.item" id="forminput" name="item">
-            <input type="text" value="@jsonreserve" id="ttt" name="reserve">
-            <input type="text" value="@jsonreservedsub" id="ttt" name="reservesub">
-        <input type="text" value="@jsonhealthreport" id="ttt" name="healthreport">
-        <input type="text" value="@jsonreportdetail" id="ttt" name="reportdetail">
+        <input type="text" value="@jsonreserve" id="reserve" name="reserve">
+        <input type="text" value="@jsonreservedsub" id="reservesub" name="reservesub">
+        <input type="text" value="@jsonhealthreport" id="healthreport" name="healthreport">
+        <input type="text" value="@jsonreportdetail" id="reportdetail" name="reportdetail">
     </form>
+    <button id="ttb">123</button>
  
 </body>
 </html>
@@ -350,44 +351,52 @@
     
     var table = document.querySelector("#show")
     table.innerHTML = forminput;
-    console.log(forminput)
-    console.log(table.innerHTML)
+    //console.log(forminput)
+    //console.log(table.innerHTML)
+    ttb.addEventListener("click", () => {
+       pricecount()
+    
+    })
+    function pricecount(){
+    var ttb = document.querySelector("#ttb")
+    
+    
+        var price = 0;
+        var tbody = document.querySelector("#show")
+        var tfoot = document.querySelector("tfoot")
+        for (var i = 0; i <= tbody.childElementCount - 1; i++) {
+            
+            price = price+parseInt(tbody.childNodes[i].children[2].innerText)
+        }
+        console.log(tfoot.children[0].children[2].children[0].innerHTML)
+        //價格
+        tfoot.children[0].children[2].children[0].innerHTML = price;
+        //數量
+        tfoot.children[0].children[1].children[0].innerHTML = tbody.childElementCount;
+
+
+        //console.log(Int16Array(tbody.childNodes[i].children[2].innerText))
+        //console.log(price)
+        //console.log(tbody.childNodes[0].children[2].innerText)
+        //console.log(tbody.childElementCount - 1)
+
+
+
+    
+   }
+
+
   ////reservesubmit////
     var rsvsbm = document.querySelector("#reservesubmit")
     rsvsbm.addEventListener("click",()=>{
-        
 
-    @{
+
+
+        //var reserve = document.querySelector("#reserve")
      
-
-        //[reportdetail]
-        // reportID new
-        //itemID
-        //result null?
-
-        // [healthreport]
-        //memberID
-        //reportdate?
-        //planID
-        //reserveID new
-        //payment
-
-        //[reserve]
-        //mID
-        //pID
-        //Reservestatus new
-        //reservedate new
-
-        //[reservesub]
-        //reserveID new
-        //itemID
-    }
-   
-         var t3 = document.querySelector("#ttt")
-     
-        console.log(t3)
-        console.log(t3.value)
-        gg(t3);
+        console.log(reserve)
+        console.log(reserve.value)
+        gg();
 
     //    fetch('@Url.Content("~/Transaction/reserve")', {
     //        method: "POST",
@@ -420,42 +429,42 @@
 
     }
 
-    function TTT() {
-        var formData = new FormData();
-        var date = new Date()
-        var now = date.toLocaleDateString()
-        //reserve
-        formData.append("MemberId", @ViewBag.mid);
-        formData.append("PlanId", @ViewBag.pid);
-        formData.append("ReserveDate", now)
-        formData.append("ReserveState", "預約中");
-        //reservesub
-        formData.append("ReservedID", 2);//serch
-        formData.append("ItemID", 6);
-        //healthreport
-        //formData.append("MemberId", 2);
-        formData.append("ReportDate", 6); 
-        //formData.append("PlanID", now)
-        //formData.append("ReserveID", "預約中");
-        formData.append("Paymentstatus", "預約中");
-        //reportdetail
-        formData.append("ReportID", 2);//serch
-        //formData.append("itemID", 6);
-        formData.append("result", now)
+    //function TTT() {
+    //    var formData = new FormData();
+    //    var date = new Date()
+    //    var now = date.toLocaleDateString()
+    //    //reserve
+    //    formData.append("MemberId", @ViewBag.mid);
+    //    formData.append("PlanId", @ViewBag.pid);
+    //    formData.append("ReserveDate", now)
+    //    formData.append("ReserveState", "預約中");
+    //    //reservesub
+    //    formData.append("ReservedID", 2);//serch
+    //    formData.append("ItemID", 6);
+    //    //healthreport
+    //    //formData.append("MemberId", 2);
+    //    formData.append("ReportDate", 6); 
+    //    //formData.append("PlanID", now)
+    //    //formData.append("ReserveID", "預約中");
+    //    formData.append("Paymentstatus", "預約中");
+    //    //reportdetail
+    //    formData.append("ReportID", 2);//serch
+    //    //formData.append("itemID", 6);
+    //    formData.append("result", now)
 
-        fetch('@Url.Content("~/Transaction/reservesub")', {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("新增成功");
-                    //location.href = '@Url.Content("~/home/members")';
-                }
-            })
-            .catch((error) => console.error("Error:", error))
-            .then((response) => console.log("Success:", response));
-    }
+    //    fetch('@Url.Content("~/Transaction/reservesub")', {
+    //        method: "POST",
+    //        body: formData,
+    //    })
+    //        .then((response) => {
+    //            if (response.ok) {
+    //                alert("新增成功");
+    //                //location.href = '@Url.Content("~/home/members")';
+    //            }
+    //        })
+    //        .catch((error) => console.error("Error:", error))
+    //        .then((response) => console.log("Success:", response));
+    //}
 
     function reserve() {
         var formData = new FormData();
@@ -574,6 +583,9 @@
       return sum + i
             console(sum)
     }, 0)+" 元"
+
+    
+
   }
     ////////////
 
@@ -597,6 +609,7 @@
         body.removeChild(event.target.parentNode.parentNode);
         //priceFormatter(1000);
         //console.log(t.innerHTML)
+        pricecount()
     }
 
 

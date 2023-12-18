@@ -365,7 +365,7 @@ namespace MedSysProject.Controllers
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { //預約總覽   尚未完成:日曆限制人數+第三方金流
+        { //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
 
             //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
@@ -389,7 +389,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult report(int id)
-        {          //尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
+        {          //todo 尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
             ViewData["id"] = 55;
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
@@ -402,7 +402,26 @@ namespace MedSysProject.Controllers
             return View(j);
         }
 
-        public IActionResult Customcompare()
+        public IActionResult Customcompare0(string json)
+        {
+            
+            var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
+            return Json(data);
+        }
+        public IActionResult Customcompare(string json)
+        {
+            //todo 尚未完成:  測試比較後傳送資料
+
+            var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
+            _context.Plans.Load();
+
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
+
+
+            return View(data);
+        }
+
+        public IActionResult Customcompare2()
 
         {//尚未完成:  測試比較後傳送資料
             //IEnumerable<Item> datas = null;
@@ -426,16 +445,6 @@ namespace MedSysProject.Controllers
             //}
 
             return View(datass.ToList());
-        }
-
-        public IActionResult Customcompare2()
-
-        {
-            //IEnumerable<Item> datas = null;
-            var datas = from s in (_context.Items.Include(p => p.Project)).AsEnumerable()
-                        select s.Project.ProjectName;
-
-            return Ok(datas);
         }
 
 
