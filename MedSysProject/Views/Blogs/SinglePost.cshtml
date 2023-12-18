@@ -387,7 +387,7 @@
             const subData = await subResponse.text();
             let subPutIn = comment.querySelector('.subPutIn');
             subPutIn.innerHTML = '';
-            subPutIn.innerHTML += subData;
+            subPutIn.innerHTML = subData;
 
             //如何取得?<h6 class="comment-replies-title mb-4 text-muted text-uppercase" data-reply-count="@Model.Count()">@Model.Count() 則回覆</h6>
             let replyCountElement = subPutIn.querySelector('.comment-replies-title');
@@ -502,6 +502,7 @@
                     var icon = link.querySelector('.bi');
                     var parentDiv = icon.parentNode.parentNode;
                     var repliesSection = parentDiv.parentNode;
+                    console.log(repliesSection);
                     var replySections = repliesSection.querySelectorAll('.reply');
                     console.log(replySections);
                     replySections.forEach(function (reply) {

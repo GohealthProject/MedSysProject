@@ -265,22 +265,22 @@
                     data: null,
                     render: function (data, type, row) {
                         return `
-                                                                                                                                                                                                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                                                                                                                                                                                                    <i class="fas fa-user-edit"></i>
-                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                                                                                                                                                            <i class="fas fa-user-edit"></i>
+                                                                                                                                                                                                                                                        </a>
 
-                                                                                                                                                                                                                <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
-                                                                                                                                                                                                                    <i class="fas fa-info-circle"></i>
-                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                                                        <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
+                                                                                                                                                                                                                                                            <i class="fas fa-info-circle"></i>
+                                                                                                                                                                                                                                                        </a>
 
-                                                                                                                                                                                                                <a class="btn btn-warning" onclick="ban(this)">
-                                                                                                                                                                                                                     <i class="fas fa-user-lock"></i>
-                                                                                                                                                                                                                </a>
+                                                                                                                                                                                                                                                        <a class="btn btn-warning" onclick="ban(this)">
+                                                                                                                                                                                                                                                             <i class="fas fa-user-lock"></i>
+                                                                                                                                                                                                                                                        </a>
 
-                                                                                                                                                                                                                <a class="btn btn-danger" onclick="get(this)">
-                                                                                                                                                                                                                    <i class="fas fa-user-times"></i>
-                                                                                                                                                                                                                </a>
-                                                                                                                                                                                                                `;
+                                                                                                                                                                                                                                                        <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                                                                                                                                                            <i class="fas fa-user-times"></i>
+                                                                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                                                        `;
                     }
                 }
             ],
@@ -340,6 +340,19 @@
                         modifier: {
                             page: 'all'
                         }
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '匯出PDF',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    },
+                    customize: function (doc) {
+                        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
                     }
                 }
             ],

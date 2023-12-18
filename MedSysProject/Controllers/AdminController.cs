@@ -541,8 +541,10 @@ namespace MedSysProject.Controllers
         //todo 順哥幫我做
         public IActionResult ODProductsJSON(int id)
         {
-            IEnumerable<OrderDetail> data = null;
-            return Json(data);
+            IEnumerable<OrderDetail> data = new List<OrderDetail>();
+            List<OrderDetail> dataList = _db.OrderDetails.Where(n => n.OrderId == id).Include(n => n.Product).ToList();
+
+            return Json(dataList);
         }
 
         public IActionResult Data()
