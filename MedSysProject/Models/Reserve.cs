@@ -17,6 +17,8 @@ public partial class Reserve
 
     public string ReserveState { get; set; }
 
+    public int? PaymentStatus { get; set; }
+
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new List<HealthReport>();
 
     public virtual Member Member { get; set; }

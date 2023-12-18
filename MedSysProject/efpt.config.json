@@ -60,6 +60,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MembersStatus]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Order]",
          "ObjectType": 0
       },
@@ -117,6 +121,10 @@
       },
       {
          "Name": "[dbo].[ReservedSub]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnProduct]",
          "ObjectType": 0
       },
       {
