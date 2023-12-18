@@ -12,6 +12,7 @@ using Humanizer;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Azure;
 using Microsoft.CodeAnalysis.FlowAnalysis;
+using System.Collections.Generic;
 
 namespace MedSysProject.Controllers
 {
@@ -157,9 +158,9 @@ namespace MedSysProject.Controllers
             data = _db.Members.Where(p => p.MemberId == id);
 
             if (data == null)
-                return RedirectToAction("MemberManager");
+                return RedirectToAction("Member");
 
-            return PartialView("MemberDetail",data);
+            return PartialView("MemberDetail", data);
         }
         //會員管理區塊--------------------------------------------------------------
 
@@ -461,6 +462,82 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult OrderDetail(int id)
+        {
+            //IEnumerable<Order> data = null;
+
+            //data = _db.Orders.Where(p => p.OrderId == id)
+            //        .Include(m => m.Member)
+            //        .Include(s => s.State)
+            //        .Include(h => h.Ship)
+            //        .Include(p => p.Pay)
+            //        .Include(n => n.OrderDetails)
+            //        .ThenInclude(n => n.Product)
+            //        .ToList();
+
+
+
+            List<COrderWarp> data = new List<COrderWarp>();
+            var q = _db.Orders
+                .Include(n => n.Member)
+                .Include(n => n.Pay)
+                .Include(n => n.Ship)
+                .Include(n => n.State)
+                .Include(n => n.OrderDetails)
+                .ThenInclude(n => n.Product)
+                .Where(n => n.OrderId == id);
+
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                data.Add(od);
+            }
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return PartialView("OrderDetail", data);
+        }
+
+        public IActionResult OrderDetailJSON(int id)
+        {
+            //IEnumerable<Order> data = null;
+
+            //data = _db.Orders.Where(p => p.OrderId == id)
+            //        .Include(m => m.Member)
+            //        .Include(s => s.State)
+            //        .Include(h => h.Ship)
+            //        .Include(p => p.Pay)
+            //        .Include(n => n.OrderDetails)
+            //        .ThenInclude(n => n.Product);
+
+            List<COrderWarp> data = new List<COrderWarp>();
+            var q = _db.Orders
+                .Include(n => n.Member)
+                .Include(n => n.Pay)
+                .Include(n => n.Ship)
+                .Include(n => n.State)
+                .Include(n => n.OrderDetails)
+                .ThenInclude(n => n.Product)
+                .Where(n => n.OrderId == id);
+
+            //這個訂單有哪些產品
+
+
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                data.Add(od);
+            }
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return Json(data);
+        }
+
         public IActionResult Data()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -469,9 +546,9 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report(CKeywordViewModel vm,int page=1)
+        public IActionResult Report(CKeywordViewModel vm, int page = 1)
         {
-           //尚未完成 :報告寄出提示功能(次要)
+            //尚未完成 :報告寄出提示功能(次要)
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
@@ -753,85 +830,31 @@ namespace MedSysProject.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    // 記錄或處理錯誤...
-                    // 輸出所有錯誤信息到控制台
-                    foreach (var key in ModelState.Keys)
+                    if (IsAjaxRequest())
                     {
-                        var errors = ModelState[key].Errors;
-                        foreach (var error in errors)
-                        {
-                            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
-                        }
+                        // 對 AJAX 請求返回 JSON 錯誤信息
+                        return Json(new { success = false, message = "模型驗證失敗" });
                     }
-
+                    // 非 AJAX 請求重定向
                     return RedirectToAction("Product");
                 }
 
-                // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
-                if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    var product = _db.Products
-                        .Where(p => p.ProductId == model.WrappedProductId)
-                        .Select(p => new
-                        {
-                            p.ProductId,
-                            p.ProductName,
-                            p.UnitPrice,
-                            p.License,
-                            p.Ingredient,
-                            p.Description,
-                            p.UnitsInStock,
-                            p.Discontinued,
-                            p.FimagePath
-                        })
-                        .FirstOrDefault();
+                // 查找產品
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == wrappedProductId);
 
-                    return Json(new { success = true, product });
+                if (pDb == null)
+                {
+                    if (IsAjaxRequest())
+                    {
+                        // 對 AJAX 請求返回 JSON 錯誤信息
+                        return Json(new { success = false, message = "找不到產品" });
+                    }
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
                 }
 
-                // 非 AJAX 請求，執行原有的編輯邏輯
-                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
-
-                if (pDb != null)
-                {
-                    // 刪除舊圖片
-                    if (!string.IsNullOrEmpty(pDb.FimagePath))
-                    {
-                        string[] oldImages = pDb.FimagePath.Split(',');
-                        foreach (var image in oldImages)
-                        {
-                            string oldFilePath = Path.Combine(_host.WebRootPath, "img-product", image);
-                            if (System.IO.File.Exists(oldFilePath))
-                            {
-                                System.IO.File.Delete(oldFilePath);
-                            }
-                        }
-                    }
-
-                    // 上傳新圖片並更新路徑
-                    var newImagePaths = new List<string>();
-                    if (model.FormFiles != null && model.FormFiles.Count > 0)
-                    {
-                        foreach (var formFile in model.FormFiles)
-                        {
-                            string photoName = Guid.NewGuid().ToString() + ".jpg";
-                            string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await formFile.CopyToAsync(fileStream);
-                            }
-
-                            newImagePaths.Add(photoName);
-                        }
-                    }
-                    pDb.FimagePath = string.Join(",", newImagePaths);
-
-
-                    pDb.FimagePath = string.Join(",", newImagePaths);
-
-                    // 處理其他欄位
-                    pDb.ProductName = model.WrappedProductName;
+                // 更新產品資料
+                pDb.ProductName = model.WrappedProductName;
                     pDb.UnitsInStock = model.WrappedUnitsInStock;
                     pDb.License = model.WrappedLicense;
                     pDb.UnitPrice = model.WrappedUnitPrice;
@@ -858,24 +881,45 @@ namespace MedSysProject.Controllers
                         }
                     }
 
-                    try
+                try
+                {
+                    // 保存變更
+                    _db.SaveChanges();
+
+                    if (IsAjaxRequest())
                     {
-                        _db.SaveChanges();
-                        return RedirectToAction("Product");
+                        // 對 AJAX 請求返回 JSON 成功信息
+                        return Json(new { success = true, message = "產品資料已更新" });
                     }
-                    catch (Exception ex)
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
+                }
+                catch (Exception ex)
+                {
+                    if (IsAjaxRequest())
                     {
-                        // 處理異常，例如記錄日誌
+                        // 對 AJAX 請求返回 JSON 錯誤信息
                         return Json(new { success = false, message = ex.Message });
                     }
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
                 }
-
-                return RedirectToAction("Product");
             }
             catch (Exception ex)
-            {  // 處理異常，例如記錄日誌
-                return Json(new { success = false, message = ex.Message });
+            {
+                if (IsAjaxRequest())
+                {
+                    // 對 AJAX 請求返回 JSON 錯誤信息
+                    return Json(new { success = false, message = ex.Message });
+                }
+                // 非 AJAX 請求重定向
+                return RedirectToAction("Product");
             }
+        }
+
+        private bool IsAjaxRequest()
+        {
+            return HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
 
 
@@ -955,12 +999,12 @@ namespace MedSysProject.Controllers
 
         }
 
-        public IActionResult test1(int id=0)
+        public IActionResult test1(int id = 0)
         {
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (id==0)
+            if (id == 0)
                 datas = from s in _db.ReportDetails
                         orderby s.ReportId
                         select s;
@@ -972,7 +1016,7 @@ namespace MedSysProject.Controllers
 
         }
 
-      
+
 
     }
 }
