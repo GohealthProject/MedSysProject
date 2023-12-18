@@ -121,7 +121,7 @@
                                         <br />
                                     }
                                 }
-                                <a class="btn btn-link" onclick="Caddprj()"><i class="fas fa-plus"></i> 新增其他項目</a>
+                                <a class="btn btn-link" onclick="addcheck()"><i class="fas fa-plus"></i> 新增其他項目</a>
                                 <div class="invalid-feedback">請至少勾選一項</div>
                             </div>
 
@@ -206,6 +206,36 @@
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
+    function addcheck() {
+        // Find the last checkbox within the form group
+        var lastCheckbox = document.querySelector('#Cprjchoose input[type="checkbox"]:last-child');
+
+        // Determine the last ID used
+        var lastId = lastCheckbox ? parseInt(lastCheckbox.id) : 0;
+        console.log(lastId);
+
+        // Increment the ID for the new checkbox
+        var newId = lastId + 1;
+
+        // Create a new checkbox element
+        var newCheckbox = document.createElement('div');
+        newCheckbox.className = 'form-check-inline';
+        newCheckbox.style.marginLeft = '1em';
+        newCheckbox.innerHTML = `
+            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+            <label class="form-check-label" for="${newId}">
+                <input type="text" class="form-control" placeholder="自定義方案...">
+            </label>
+        `;
+
+        // Create a new line break element
+        var lineBreak = document.createElement('br');
+
+        // Append the new checkbox and line break to the existing form group
+        var formGroup = document.getElementById('Cprjchoose');
+        formGroup.appendChild(newCheckbox);
+        formGroup.appendChild(lineBreak);
+    }
 
     document.querySelector("#Cbtn").addEventListener("click", () => {
         console.log("hello")
@@ -445,13 +475,13 @@
         //插入新的chkbox，value為最後一個的value+1
         const newprjid = parseInt(prjid) + 1;
         choose.innerHTML += `                                        <div class="form-check-inline" style="margin-left:1em;">
-                                                                        <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
-                                                                    <label class="form-check-label" for="${newprjid}">
-                                                                <input class="form-control" id="CinputName" name="CPlanName" required />
-                                                            </label>
-                                                        </div>
+                                                                                                                    <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
+                                                                                                                <label class="form-check-label" for="${newprjid}">
+                                                                                                            <input class="form-control" id="CinputName" name="CPlanName" required />
+                                                                                                        </label>
+                                                                                                    </div>
 
-                                                        <br />`;
+                                                                                                    <br />`;
 
     }
 

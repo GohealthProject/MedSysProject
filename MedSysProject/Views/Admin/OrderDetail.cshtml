@@ -2,11 +2,11 @@
 @using MedSysProject.Controllers
 @using static MedSysProject.Models.Order
 @using static MedSysProject.Models.Product
-@model List<COrderWarp>
-@* @model IEnumerable<MedSysProject.Models.Order> *@
+@* @model List<COrderWarp> *@
+@model IEnumerable<MedSysProject.Models.Order>
 
 @{
-    var item = Model[0];
+    var item = Model.FirstOrDefault();
 }
 
 @* <style>
@@ -148,8 +148,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                foreach (var PDitem in Model[0].OrderDetails)
+@*                             @{
+                                foreach (var PDitem in Model)
                                 {
                                     if (PDitem.Product.FimagePath == null)
                                     {
@@ -173,7 +173,7 @@
                                         </tr>
                                     }
                                 }
-                            }
+                            } *@
                         </tbody>
                     </table>
                 </div>

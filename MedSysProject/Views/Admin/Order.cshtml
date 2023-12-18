@@ -189,7 +189,7 @@
                     <th>
                     @Html.DisplayNameFor(model => model.DeliveryDate)
                     </th> *@
-                    <th></th>
+                    <th>訂單詳細</th>
                 </tr>
             </thead>
             <tbody>
@@ -293,10 +293,6 @@
                             <td>
                                 <a onclick="DetailTogget(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
                                     <i class="fas fa-info-circle"></i>
-                                </a>
-                                <a class="btn btn-danger" id="btnDel" onclick="get(this)">
-                                    @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                    <i class="fas fa-trash-alt"></i>
                                 </a>
                                 @*                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
