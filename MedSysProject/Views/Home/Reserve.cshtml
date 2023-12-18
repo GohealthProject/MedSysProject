@@ -109,9 +109,9 @@
    /* div{border:dashed 3px red;}*/
    
 </style>
-
-<h1 class="container">Reserve</h1>
 <!doctype html>
+<h1 class="container">Reserve @ViewBag.member @ViewBag.mid</h1>
+
 <html lang="zh-hant">
 
 <body>
@@ -284,6 +284,7 @@
 </div>
     @{
         //reserve//
+        var mid = ViewBag.member;
         Reserve rs = new Reserve();
         rs.MemberId = 9;
         rs.PlanId = 6;

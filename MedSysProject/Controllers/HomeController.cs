@@ -400,6 +400,7 @@ namespace MedSysProject.Controllers
                      select s);
 
             return View(j);
+            
         }
 
         public IActionResult Customcompare0(string json)
@@ -418,7 +419,7 @@ namespace MedSysProject.Controllers
             var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
 
 
-            return View(data);
+            return View(datass.ToList());
         }
 
         public IActionResult Customcompare2()

@@ -379,8 +379,16 @@
             form.submit();
 
         }
+        //取得
+        $("#button").click(function () {
+            $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
 
 
+
+
+            });
+        });
 
         //$("#btng:has(#ibtn)").click(()=>{
         //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
