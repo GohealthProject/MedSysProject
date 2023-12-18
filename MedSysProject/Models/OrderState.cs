@@ -13,5 +13,7 @@ public partial class OrderState
 
     public string StateDetailed { get; set; }
 
+    public int? OrderStatus { get; set; }
+
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

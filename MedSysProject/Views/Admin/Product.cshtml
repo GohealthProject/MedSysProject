@@ -14,6 +14,7 @@
     }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const Product = document.getElementById("li-Product");
     const Index = document.getElementById("li-index");
@@ -126,107 +127,19 @@
                         <!-- 使用AJAX載入_CreateProductModal.cshtml的內容 -->
                         <div id="createProductModalContent"></div>
                     </div>
-                    @*                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-                    </div> *@
+                  
                 </div>
             </div>
         </div>
         <!-- ---新增彈窗結束--- -->
-        <!-- ---新增彈窗開始--- -->
-        @*  <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content"> *@
-        @*         <!--標頭-->
-        <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">新增產品</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">×</span>
-        </button>
-        </div>
-        <!--主體-->
-        <div class="modal-body">
-        <td>
-        @foreach (var imagePath in Model.FirstOrDefault()?.FimagePaths ?? Enumerable.Empty<string>())
-        {
-        <img src="@Url.Content(imagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-        }
-        </td>
-        </div>
-        <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-        </div>
-        </div> *@
+      
     </div>
 </div>
 
-<!-- ---新增彈窗結束--- -->
 @* ---修改彈窗開始--- *@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" id="category_div">
-            <!--Header-->
-            @*              <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">修改產品</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-            </button>
-            </div> *@
-            <!--Body-->
-            @*            <div class="modal-body">
-            <form id="editProductForm" method="post" enctype="multipart/form-data" action="@Url.Action("Edit", "Admin")">
-            <div class="mb-3">
-            <label for="editProductName" class="form-label">產品名稱</label>
-            <input type="text" class="form-control" id="editProductName" name="WrappedProductName">
-            </div>
-            <div class="mb-3">
-            <label for="inputPrice" class="form-label">單價</label>
-            <input type="text" class="form-control" id="inputPrice" name="UnitPrice">
-            </div>
-            <div class="mb-3">
-            <label for="inputLicense" class="form-label">認證字號</label>
-            <input type="text" class="form-control" id="inputLicense" name="License">
-            </div>
-            <div class="mb-3">
-            <label for="inputIngredient" class="form-label">有效成分</label>
-            <input type="text" class="form-control" id="inputIngredient" name="Ingredient">
-            </div>
-            <div class="mb-3">
-            <label for="inputDescription" class="form-label">產品描述</label>
-            <textarea class="form-control" id="inputDescription" name="Description" rows="4"></textarea>
-            </div>
-            <div class="mb-3">
-            <label for="inputDiscontinued" class="form-label">上架狀態</label>
-            <select class="form-control" id="inputDiscontinued" name="Discontinued">
-            <option value="true" selected="">上架中</option>
-            <option value="false" selected="">已下架</option>
-            </select>
-            </div>
-            <div class="mb-3">
-            <label for="categories" class="form-label">產品分類</label>
-            @foreach (var category in ViewBag.Categories)
-            {
-            <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId">
-            <label class="form-check-label" for="category@(category.CategoriesId)">
-            @category.CategoriesName
-            </label>
-            </div>
-            }
-            </div>
-            <div class="mb-3">
-            <label for="formFile" class="form-label">產品圖片上傳</label>
-            <input class="form-control" type="file" id="formFile" name="FormFile">
-            </div>
-            <div id="imagePreviewContainer" class="mb-3">
-            <label for="inputDescription" class="form-label">圖片預覽</label>
-            <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
-            </div>
-            </form>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="updateProduct()">確認修改</button>
-            </div>
-            </div> *@
         </div>
     </div>
 </div>
@@ -247,12 +160,27 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                // 提交成功後，關閉 Modal
-                $('#modalCreate').modal('hide');
-                $('.modal-backdrop').remove(); // 這行代碼會移除遮罩層
+                // 使用 SweetAlert2 顯示成功提示
+                Swal.fire({
+                    title: '成功!',
+                    text: '新增產品成功',
+                    icon: 'success',
+                    confirmButtonText: '確定'
+                }).then((result) => {
+                    // 在用戶點擊確定後的操作
+                    $('#modalCreate').modal('hide');
+                    $('.modal-backdrop').remove();
+                    location.reload(); // 重新加載頁面
+                });
             },
             error: function (error) {
-                alert('提交失敗：' + error.statusText);
+                // 使用 SweetAlert2 顯示錯誤提示
+                Swal.fire({
+                    title: '提交失敗',
+                    text: '錯誤：' + error.statusText,
+                    icon: 'error',
+                    confirmButtonText: '關閉'
+                });
             }
         });
     }
@@ -429,7 +357,60 @@
             });
         }
     }
-   
+
+    $(document).ready(function () {
+        $(document).on('click', '#submitEdit', function (e) {
+            e.preventDefault();
+
+            // 發送 AJAX 請求
+            $.ajax({
+                url: '@Url.Action("Edit", "Admin")', // 確保 URL 正確
+                type: 'POST',
+                data: new FormData($('#editProductForm')[0]),
+                processData: false,
+                contentType: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // 處理成功回應
+                        Swal.fire({
+                            title: '修改成功!',
+                            text: '產品資料已更新',
+                            icon: 'success',
+                            confirmButtonText: '確定'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        // 處理失敗回應
+                        Swal.fire({
+                            title: '修改失敗',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                },
+                error: function (error) {
+                    // 處理請求錯誤
+                    Swal.fire({
+                        title: '錯誤',
+                        text: '發生錯誤：' + error.statusText,
+                        icon: 'error',
+                        confirmButtonText: '關閉'
+                    });
+                }
+            });
+        });
+    });
+
+
+
+
     
 </script>
 

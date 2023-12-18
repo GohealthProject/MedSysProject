@@ -35,6 +35,8 @@ public partial class Member
 
     public bool IsVerified { get; set; }
 
+    public int StatusId { get; set; }
+
     public string VieifiedId { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
@@ -46,6 +48,8 @@ public partial class Member
     public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
 
     public virtual ICollection<Reserve> Reserves { get; set; } = new List<Reserve>();
+
+    public virtual MembersStatus Status { get; set; }
 
     public virtual Corporation Tax { get; set; }
 
