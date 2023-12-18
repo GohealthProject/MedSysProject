@@ -67,7 +67,7 @@
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">訂單資訊</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">訂單商品明細</a>
+            <a class="nav-link loadDetail" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" >訂單商品明細</a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -97,6 +97,7 @@
                                         <h5 class="card-title">@item.Member.MemberName</h5>
                                         <p class="card-text">下訂日期: @item.OrderDate.ToShortDateString()</p>
                                         <p class="card-text">預計到達日期: @item.DeliveryDate.ToString()</p>
+                                        <input type="hidden" id="oid" value="@item.OrderId" />
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +148,7 @@
                                 <th scope="col">小計</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="InOd">
 @*                             @{
                                 foreach (var PDitem in Model)
                                 {

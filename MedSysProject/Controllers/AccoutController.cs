@@ -125,13 +125,18 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m, IFormFile fileN)
         {
-            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
-            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            if (fileN != null)
             {
-                fileN.CopyTo(fileStream);
+                string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+                using (var fileStream = new FileStream(webPath, FileMode.Create))
+                {
+                    fileN.CopyTo(fileStream);
+                }
             }
+            
             Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
-            Upm.MemberImage = fileN.FileName;
+            if(fileN!=null)
+                Upm.MemberImage = fileN.FileName;
             Upm.MemberEmail = m.MemberEmail;
             Upm.MemberName = m.MemberName;
             Upm.MemberBirthdate = m.MemberBirthdate;
