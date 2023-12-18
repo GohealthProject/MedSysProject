@@ -34,26 +34,26 @@
     }
 
     /* div {
-                word-wrap: break-word;
-                border:solid 3px;
-            }*/
+            word-wrap: break-word;
+            border:solid 3px;
+        }*/
     /*.open .main {
-                transform: translateX(270px);
-                 // 點了 .header 會讓 .menu 往右推 270 px 以容納滑出來的選單
-            }
+            transform: translateX(270px);
+             // 點了 .header 會讓 .menu 往右推 270 px 以容納滑出來的選單
+        }
 
-            .open .aside {
-                transform: translateX(0px);
-                  // 點了 .header 會讓選單滑入視窗中
-            }*/
+        .open .aside {
+            transform: translateX(0px);
+              // 點了 .header 會讓選單滑入視窗中
+        }*/
 
     #1 {
         padding-top: 100px;
     }
 
     /*   .offcanvas-body{
-                height:8%;
-            }*/
+            height:8%;
+        }*/
 
     table,
     td {
@@ -97,31 +97,28 @@
         margin-bottom: 3px;
     }
     /*#bigC{
-                position:relative;
-            }*/
+            position:relative;
+        }*/
 
     /* #sbmbtn{
-                position:absolute;
-                bottom:3px;
-                left:40%;
-            }*/
+            position:absolute;
+            bottom:3px;
+            left:40%;
+        }*/
     /* div{border:dashed 3px red;}*/
 
 </style>
 
 <h1 class="container">Reserve</h1>
 <!doctype html>
-
-<h1 class="container">Reserve @ViewBag.member @ViewBag.mid</h1>
-
 <html lang="zh-hant">
 
 <body>
 
 
-  
-   
-   
+
+
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-5"></div>
@@ -134,8 +131,8 @@
                         <thead>
                             <tr>
                                 <th data-field="id" data-falign="center" data-footer-formatter="idFormatter" class="col-1">
-                                編號
-                            </th>
+                                    編號
+                                </th>
                                 <th data-field="name" data-falign="center" data-footer-formatter="nameFormatter" class="col-8">
                                     項目
                                 </th>
@@ -148,26 +145,24 @@
                             </tr>
                         </thead>
                         <tbody class="show " id="show">
-                     
-                           
                         </tbody>
-                        
-                            
 
-                       
+
+
+
                     </table>
-                  
-                 </div>
-                
-             </div>
-            
+
+                </div>
+
+            </div>
+
             <div class="col-5 id=btndiv"></div>
             <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>
             <div class="col-5"></div>
             <div class="col-5"></div>
 
 
-    </div>
+        </div>
 
         @*預約詳細*@
         <div class="modal" tabindex="-1" id="detail">
@@ -180,7 +175,7 @@
                     <div class="modal-body">
                         <div id="rsdiv" class="container-fluid"></div>
                         <form class="form">
-                            
+
                             <label class="mb-2 mt-2">
                                 預約日期:
                                 <input type="date"
@@ -221,69 +216,69 @@
                 </div>
             </div>
         </div>
-       
+
 
         @* 預約確認final*@
-    <div class="modal fade" id="reserve" aria-hidden="true" aria-labelledby="reservelbl" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reservelbl">確定要預約嗎?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" >
-                    預約日期:2023/12/01 付費方式:現場付款
-                </div>
-                <div class="modal-footer">
+        <div class="modal fade" id="reserve" aria-hidden="true" aria-labelledby="reservelbl" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reservelbl">確定要預約嗎?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        預約日期:2023/12/01 付費方式:現場付款
+                    </div>
+                    <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal" id="reservesubmit">確定</button>
                         <button class="btn btn-danger" data-bs-target="#cancel" data-bs-toggle="modal">取消</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
         @* 預約確認final>ok*@
-    <div class="modal fade" id="confirm" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalToggleLabel3">預約已完成</h5>
+        <div class="modal fade" id="confirm" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel3">預約已完成</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @*TODO動態更新*@
-                    預約日期:2023/12/01 付費方式:現場付款
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal" >確定</button>
+                    </div>
+                    <div class="modal-body">
+                        @*TODO動態更新*@
+                        預約日期:2023/12/01 付費方式:現場付款
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal">確定</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
         @* 預約確認final>no*@
-    <div class="modal fade" id="cancel" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalToggleLabel2">預約未完成</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="moda2-body">
-                    預約未完成
-                </div>
-                <div class="modal-footer">
+        <div class="modal fade" id="cancel" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalToggleLabel2">預約未完成</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="moda2-body">
+                        預約未完成
+                    </div>
+                    <div class="modal-footer">
                         <button class="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal">返回</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-5"></div>
+        <div class="row">
+            <div class="col-5"></div>
             @*<a class="btn btn-primary but col-2 sticky-bottom" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>*@
-        <div class="col-5"></div>
-    </div>
-       
+            <div class="col-5"></div>
+        </div>
 
-</div>
+
+    </div>
     @{
         //reserve//
         var mid = ViewBag.member;
@@ -297,7 +292,7 @@
         //reservedsub//
         List<ReservedSub> listrss = new List<ReservedSub>();
 
-        for (int i =0; i<99; i++)
+        for (int i = 0; i < 99; i++)
         {
 
             ReservedSub rss = new ReservedSub();
@@ -313,7 +308,7 @@
         hrp.MemberId = 9;
         hrp.ReportDate = null;
         hrp.PlanId = 6;
-        //serch ReserveId 
+        //serch ReserveId
         hrp.Paymentstatus = 0;
         string jsonhealthreport = System.Text.Json.JsonSerializer.Serialize(hrp);
 
@@ -329,19 +324,20 @@
             listrpd.Add(rpd);
         }
         string jsonreportdetail = System.Text.Json.JsonSerializer.Serialize(listrpd);
-       
+
     }
     <form id="form" method="post">
-            <input type="text" value="@ViewBag.item" id="forminput" name="item">
+        <input type="text" value="@ViewBag.item" id="forminput" name="item">
         <input type="text" value="@jsonreserve" id="reserve" name="reserve">
         <input type="text" value="@jsonreservedsub" id="reservesub" name="reservesub">
         <input type="text" value="@jsonhealthreport" id="healthreport" name="healthreport">
         <input type="text" value="@jsonreportdetail" id="reportdetail" name="reportdetail">
     </form>
     <button id="ttb">123</button>
- 
+
 </body>
 </html>
+
 
 <script>
     @{
@@ -633,5 +629,6 @@
 
 
   
+ 
 </script>
 
