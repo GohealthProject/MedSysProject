@@ -7,9 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using NuGet.Packaging.Signing;
+using OxyPlot;
 using System.Collections.Generic;
 using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using System.Web;
 
 namespace MedSysProject.Controllers
 {
@@ -162,8 +166,172 @@ namespace MedSysProject.Controllers
             }
             
         }
+
+        public IActionResult paySussess(IFormCollection id)
+        {
+            var data = new Dictionary<string, string>();
+            foreach (string key in id.Keys)
+            {
+                data.Add(key, id[key]);
+            }
+            return View();
+        }
+        [HttpPost]
+         public async Task<IActionResult> CheckMacAsync()
+        {
+            var form = Request.Form;
+            var order = new Dictionary<string, string>();
+            foreach(var item in form.Keys)
+            {
+                order.Add(item, form[item]);
+            }
+            order["CheckMacValue"] = PayMethod.GetCheckMacValue(order);
+
+
+            return Ok(order);
+        }
+
+
+
+
+        public static string GetCheckMacValue(Dictionary<string, string> order)
+        {
+            var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
+            string checkValue = string.Join("&", param);
+            //測試用的 HashKey
+            var hashKey = "5294y06JbISpM5x9";
+            //測試用的 HashIV
+            var HashIV = "v77hoKGq4kWxNNIS";
+            checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
+            checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
+            checkValue = GetSHA256(checkValue);
+            return checkValue.ToUpper();
+        }
+        private static string GetSHA256(string value)
+        {
+            var result = new StringBuilder();
+            var sha256 = SHA256.Create();
+            var bts = Encoding.UTF8.GetBytes(value);
+            var hash = sha256.ComputeHash(bts);
+            for (int i = 0; i < hash.Length; i++)
+            {
+                result.Append(hash[i].ToString("X2"));
+            }
+            return result.ToString();
+        }
+
+
+
+
+        public IActionResult testPay222()
+        {
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            List<CCartItem> cartList = new List<CCartItem>();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cartList = JsonSerializer.Deserialize<List<CCartItem>>(json);
+            string mjson = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(mjson);
+
+            int total = 0;
+            string proName= "";
+            foreach(var pro in cartList)
+            {
+                proName += pro.ProductName + "#";
+                total+=pro.UnitPrice*pro.count;
+            }
+            proName = proName.Substring(0, proName.Length - 1);
+            
+
+            //需填入你的網址
+            var website = $"https://localhost:7203/";
+
+            var order = new Dictionary<string, string>
+    {
+        //綠界需要的參數
+        { "MerchantTradeNo",  orderId},
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
+        { "TotalAmount",  total.ToString()},
+        { "TradeDesc",  "無"},
+        { "ItemName", proName},
+        { "ExpireDate",  "3"},
+        { "CustomField1",  ""},
+        { "CustomField2",  ""},
+        { "CustomField3",  ""},
+        { "CustomField4",  ""},
+        //{ "ReturnURL",  $"{website}/Shopping/paymethodinfo"},
+        { "OrderResultURL", $"{website}/Shopping/paySussess/{orderId}"},
+        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
+        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
+        { "MerchantID",  "2000132"},
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
+        { "PaymentType",  "aio"},
+        { "ChoosePayment",  "ALL"},
+        { "EncryptType",  "1"},
+    };
+            //檢查碼
+            order["CheckMacValue"] = GetCheckMacValue(order);
+            ViewBag.order= order;
+
+            Order o = new Order();
+            o.OrderDate = DateTime.Now;
+            o.ShipDate = DateTime.Now.AddDays(2);
+            o.DeliveryDate = DateTime.Now.AddDays(3);
+            o.MemberId = m.MemberId;
+            o.PayId = 1;
+            o.ShipId = 1;
+            o.StateId = 13;
+
+            _db.Orders.Add(o);
+            
+            _db.SaveChanges();
+
+            return View();
+        }
+
+
         public IActionResult CartList()
         {
+            //step1 : 網頁導入傳值到前端
+            //
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            //需填入你的網址
+            var website = $"https://localhost:7203/";
+            var order = new Dictionary<string, string>
+    {
+        //綠界需要的參數
+
+        //必填
+        { "MerchantID",  "3002599"},//特店編號
+        { "MerchantTradeNo",  orderId},//特店訂單編號 不可重複使用
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
+        { "PaymentType",  "aio"},//交易類型(固定aio)
+        { "TotalAmount",  "1450"},//交易金額
+        { "TradeDesc",  "Test"},//交易描述
+        { "ItemName",  "測試商品"},//商品名稱
+        { "ReturnURL",  $"{website}/Transaction/addOrders"},//付款完成通知回傳網址
+        { "ChoosePayment",  "ALL"},//選擇預設付款方式
+        { "EncryptType",  "1"},//CheckMacValue加密類型
+
+        //選填
+        /*{ "ExpireDate",  "3"},*///分期
+        { "CustomField1",  ""},//自訂名稱欄位1
+        { "CustomField2",  ""},
+        { "CustomField3",  ""},
+        { "CustomField4",  ""},
+        { "OrderResultURL", $"{website}/Transaction/payInfo/{orderId}"},//Client端回傳付款結果網址
+        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
+        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},//隱藏付款方式
+        
+        
+        
+    };
+            //檢查碼
+            order["CheckMacValue"] = GetCheckMacValue(order);
+
+            ViewBag.order = order;
+
+
             if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
             {
                 return RedirectToAction("Login", "Accout");
@@ -182,6 +350,13 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult CartLIst()
         {
+
+
+
+
+
+
+
             int count = 0;
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
@@ -273,6 +448,26 @@ namespace MedSysProject.Controllers
              
             return View(list);
         }
+
+        public IActionResult OrderListJSON(int id)
+        {
+
+            List<COrderWarp> list = new List<COrderWarp>();
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == id);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                list.Add(od);
+            }
+
+            return Json(list);
+        }
+
         [HttpPost]
         public IActionResult OrderList(string key,int page=1)
         {
@@ -429,5 +624,11 @@ namespace MedSysProject.Controllers
                 return Ok("移除追蹤清單成功");
             }
         }
+
+        public IActionResult payMethod()
+        {
+            return View();
+        }
+
     }
 }
