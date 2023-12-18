@@ -266,6 +266,8 @@ namespace MedSysProject.Controllers
 
         public IActionResult CartList()
         {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+                return RedirectToAction("Index");
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             List<CCartItem> cartList = new List<CCartItem>();
             string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
