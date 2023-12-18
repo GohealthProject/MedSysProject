@@ -1,0 +1,183 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Order
+@using static MedSysProject.Models.Product
+@model List<COrderWarp>
+@* @model IEnumerable<MedSysProject.Models.Order> *@
+
+@{
+    var item = Model[0];
+}
+
+@* <style>
+        body {
+            margin-top: 20px;
+            color: #1a202c;
+            text-align: left;
+            background-color: #e2e8f0;
+        }
+
+        .main-body {
+            padding: 15px;
+        }
+
+        .card {
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0,0,0,.125);
+            border-radius: .25rem;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1rem;
+        }
+
+        .gutters-sm {
+            margin-right: -8px;
+            margin-left: -8px;
+        }
+
+            .gutters-sm > .col, .gutters-sm > [class*=col-] {
+                padding-right: 8px;
+                padding-left: 8px;
+            }
+
+        .mb-3, .my-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .bg-gray-300 {
+            background-color: #e2e8f0;
+        }
+    </style> *@
+<div class="detail-container">
+    <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">訂單資訊</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">訂單商品明細</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!--card-body內容，照片在左邊，旁邊寫名字。右邊是下訂日期及預計到達日期-->
+                    <div class="container mt-4">
+                        <div class="card">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    @* <img src="~/img/no_member_image.jpg" alt="User Photo" class="img-fluid rounded-start"> *@
+                                    @{
+                                        if (item.Member.MemberImage == null)
+                                        {
+                                            <img src="@Url.Content("~/img/no_member_image.jpg")" alt="@item.Member.MemberName" class="img-fluid rounded-start" width="150">
+                                        }
+                                        else
+                                        {
+                                            <img src="@Url.Content("~/img/MemberImg/" + item.Member.MemberImage)" alt="@item.Member.MemberName" class="img-fluid rounded-start" width="150">
+                                        }
+                                    }
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Member.MemberName</h5>
+                                        <p class="card-text">下訂日期: @item.OrderDate.ToShortDateString()</p>
+                                        <p class="card-text">預計到達日期: @item.DeliveryDate.ToString()</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow my-3">
+                <div class="card-body">
+                    <p>
+                        訂單狀態：@item.State.StateName
+                    </p>
+
+                    @{
+                        var orderid = item.OrderDate.ToString("yyyyMMdd") + item.OrderId.ToString("00");
+                        <p>訂單編號：@orderid</p>
+                    }
+
+                    <p>
+                        訂購人：@item.Member.MemberName
+                    </p>
+                    <p>
+                        訂購人電話：@item.Member.MemberPhone
+                    </p>
+                    <p>
+                        配送地址：@item.Member.MemberAddress
+                    </p>
+                    <p>
+                        付款方式：@item.Pay.PayName
+                    </p>
+                    <p>
+                        配送方式：@item.Ship.ShipName
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="card shadow">
+                <div class="card-body">
+                    訂單商品明細
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">商品圖片</th>
+                                <th scope="col">商品名稱</th>
+                                <th scope="col">商品單價</th>
+                                <th scope="col">商品數量</th>
+                                <th scope="col">小計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var PDitem in Model[0].OrderDetails)
+                                {
+                                    if (PDitem.Product.FimagePath == null)
+                                    {
+                                        <tr>
+                                            <td>@PDitem.Product.ProductName</td>
+                                            <td>@PDitem.Product.UnitPrice</td>
+                                            <td>@PDitem.Quantity</td>
+                                            <td>@(PDitem.Product.UnitPrice * PDitem.Quantity)</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="@Url.Content("~/img/ProductImg/" + PDitem.Product.FimagePath)" alt="@PDitem.Product.ProductName" class="img-fluid rounded-start" width="150">
+                                                @PDitem.Product.ProductName
+                                            </td>
+                                            <td>@PDitem.Product.UnitPrice</td>
+                                            <td>@PDitem.Quantity</td>
+                                            <td>@(PDitem.Product.UnitPrice * PDitem.Quantity)</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -249,7 +249,9 @@
             success: function (data) {
                 // 提交成功後，關閉 Modal
                 $('#modalCreate').modal('hide');
-                // 在這裡可以添加其他你需要的處理邏輯
+                $('.modal-backdrop').remove(); // 這行代碼會移除遮罩層
+                
+                location.reload();// 重新加載頁面
             },
             error: function (error) {
                 alert('提交失敗：' + error.statusText);
@@ -386,7 +388,6 @@
         });
     }
 
-
     async function deleteProduct(productId) {
         // 確認是否真的要刪除
         const result = await Swal.fire({
@@ -409,7 +410,7 @@
                 success: function (data) {
                     Swal.fire({
                         title: "刪除成功!",
-                        text: data,
+                        text: "產品已被成功刪除。", // 只顯示簡單的文本消息
                         icon: "success",
                         showConfirmButton: false,
                         timer: 1500
@@ -424,12 +425,14 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "有錯誤發生!" + error.statusText
+                        text: "操作失敗: " + error.statusText // 顯示錯誤的狀態文字
                     });
                 }
             });
         }
     }
+   
+    
 </script>
 
 

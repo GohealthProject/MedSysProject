@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using NuGet.Packaging.Signing;
+using OxyPlot;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Security.Cryptography;
@@ -447,6 +448,26 @@ namespace MedSysProject.Controllers
              
             return View(list);
         }
+
+        public IActionResult OrderListJSON(int id)
+        {
+
+            List<COrderWarp> list = new List<COrderWarp>();
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == id);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                list.Add(od);
+            }
+
+            return Json(list);
+        }
+
         [HttpPost]
         public IActionResult OrderList(string key,int page=1)
         {

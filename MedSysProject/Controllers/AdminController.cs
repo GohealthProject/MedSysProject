@@ -12,6 +12,7 @@ using Humanizer;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Azure;
 using Microsoft.CodeAnalysis.FlowAnalysis;
+using System.Collections.Generic;
 
 namespace MedSysProject.Controllers
 {
@@ -157,9 +158,9 @@ namespace MedSysProject.Controllers
             data = _db.Members.Where(p => p.MemberId == id);
 
             if (data == null)
-                return RedirectToAction("MemberManager");
+                return RedirectToAction("Member");
 
-            return PartialView("MemberDetail",data);
+            return PartialView("MemberDetail", data);
         }
         //會員管理區塊--------------------------------------------------------------
 
@@ -461,6 +462,82 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult OrderDetail(int id)
+        {
+            //IEnumerable<Order> data = null;
+
+            //data = _db.Orders.Where(p => p.OrderId == id)
+            //        .Include(m => m.Member)
+            //        .Include(s => s.State)
+            //        .Include(h => h.Ship)
+            //        .Include(p => p.Pay)
+            //        .Include(n => n.OrderDetails)
+            //        .ThenInclude(n => n.Product)
+            //        .ToList();
+
+
+
+            List<COrderWarp> data = new List<COrderWarp>();
+            var q = _db.Orders
+                .Include(n => n.Member)
+                .Include(n => n.Pay)
+                .Include(n => n.Ship)
+                .Include(n => n.State)
+                .Include(n => n.OrderDetails)
+                .ThenInclude(n => n.Product)
+                .Where(n => n.OrderId == id);
+
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                data.Add(od);
+            }
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return PartialView("OrderDetail", data);
+        }
+
+        public IActionResult OrderDetailJSON(int id)
+        {
+            //IEnumerable<Order> data = null;
+
+            //data = _db.Orders.Where(p => p.OrderId == id)
+            //        .Include(m => m.Member)
+            //        .Include(s => s.State)
+            //        .Include(h => h.Ship)
+            //        .Include(p => p.Pay)
+            //        .Include(n => n.OrderDetails)
+            //        .ThenInclude(n => n.Product);
+
+            List<COrderWarp> data = new List<COrderWarp>();
+            var q = _db.Orders
+                .Include(n => n.Member)
+                .Include(n => n.Pay)
+                .Include(n => n.Ship)
+                .Include(n => n.State)
+                .Include(n => n.OrderDetails)
+                .ThenInclude(n => n.Product)
+                .Where(n => n.OrderId == id);
+
+            //這個訂單有哪些產品
+
+
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                data.Add(od);
+            }
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return Json(data);
+        }
+
         public IActionResult Data()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -469,9 +546,9 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report(CKeywordViewModel vm,int page=1)
+        public IActionResult Report(CKeywordViewModel vm, int page = 1)
         {
-           //尚未完成 :報告寄出提示功能(次要)
+            //尚未完成 :報告寄出提示功能(次要)
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
@@ -794,12 +871,22 @@ namespace MedSysProject.Controllers
 
                 if (pDb != null)
                 {
+                    // 刪除舊圖片
+                    if (!string.IsNullOrEmpty(pDb.FimagePath))
+                    {
+                        string[] oldImages = pDb.FimagePath.Split(',');
+                        foreach (var image in oldImages)
+                        {
+                            string oldFilePath = Path.Combine(_host.WebRootPath, "img-product", image);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+                    }
 
-                    pDb.FimagePath = string.Empty;
-
+                    // 上傳新圖片並更新路徑
                     var newImagePaths = new List<string>();
-
-
                     if (model.FormFiles != null && model.FormFiles.Count > 0)
                     {
                         foreach (var formFile in model.FormFiles)
@@ -815,6 +902,7 @@ namespace MedSysProject.Controllers
                             newImagePaths.Add(photoName);
                         }
                     }
+                    pDb.FimagePath = string.Join(",", newImagePaths);
 
 
                     pDb.FimagePath = string.Join(",", newImagePaths);
@@ -871,13 +959,26 @@ namespace MedSysProject.Controllers
 
 
 
-
         public IActionResult Delete(int? id)
         {
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
-                // 刪除相關聯的 ProductsClassification 記錄
+                // 刪除與產品相關的圖片
+                if (!string.IsNullOrEmpty(x.FimagePath))
+                {
+                    string[] images = x.FimagePath.Split(',');
+                    foreach (var image in images)
+                    {
+                        string filePath = Path.Combine(_host.WebRootPath, "img-product", image);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                }
+
+                // 刪除產品和相關聯的 ProductsClassification 記錄
                 var relatedClassifications = _db.ProductsClassifications
                     .Where(pc => pc.ProductId == id)
                     .ToList();
@@ -931,12 +1032,12 @@ namespace MedSysProject.Controllers
 
         }
 
-        public IActionResult test1(int id=0)
+        public IActionResult test1(int id = 0)
         {
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (id==0)
+            if (id == 0)
                 datas = from s in _db.ReportDetails
                         orderby s.ReportId
                         select s;
@@ -948,7 +1049,7 @@ namespace MedSysProject.Controllers
 
         }
 
-      
+
 
     }
 }

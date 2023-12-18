@@ -23,6 +23,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.CodeAnalysis;
 using Microsoft.Build.Evaluation;
 using System.Text.Json.Serialization.Metadata;
+using Newtonsoft.Json;
+using Google.Apis.Json;
 
 namespace MedSysProject.Controllers
 {
@@ -53,7 +55,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult planComeparison()
-        {////方案比較(設計filter篩選方案)+更換圖片+加中文名稱
+        {////方案比較(設計filter篩選方案)+更換圖片+加中文名稱+排除出現負數情況
             //_context.Projects.Load();
             //_context.Plans.Load();
             //調整planname個數
@@ -89,9 +91,9 @@ namespace MedSysProject.Controllers
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
         {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認(在post已找出完整資料，可複製貼上)+資料匯出
-            //int id = 3;
-            if (planlist != null)
-            {
+            
+            if (planlist !=null)
+            { 
  List<int> list = new List<int>();
 
             foreach(var item2 in planlist.Split(','))
@@ -100,19 +102,52 @@ namespace MedSysProject.Controllers
                     list.Add(Int32.Parse(item2));
 
             }
-            //ViewBag.Id = id;
-            var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
+                //---------------------完整資料
+                List<CPlanViewModel> total = new List<CPlanViewModel>();
+                var pl = _context.Plans.Where(n => list.Contains(n.PlanId))
+                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId ))
+                     .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
+
+                     //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+                     .Select(t => new
+                     {
+                         planId = t.Project.PlanRefs.First().PlanId,
+                         planName = t.Project.PlanRefs.First().Plan.PlanName,
+                         PlanDescription=(string)t.Project.PlanRefs.First().Plan.PlanDescription,
+                         projectid = t.Project.ProjectId,
+                         ProjectName = (string)t.Project.ProjectName,
+                         ProjectPrice = (double)t.Project.ProjectPrice,
+                         itemId = t.it.ItemId,
+                         ItemName = (string)t.it.ItemName,
+
+                     });
+                foreach (var t in pl)
+                {
+                    total.Add(new CPlanViewModel()
+                    {
+                        PlanId = t.planId,
+                        PlanName = t.planName,
+                        PlanDescription = (string)t.PlanDescription,
+                        ProjectId = t.projectid,
+                        ProjectName = (string)t.ProjectName,
+                        ProjectPrice = (double)t.ProjectPrice,
+                        ItemId = t.itemId,
+                        ItemName = (string)t.ItemName,
+                    }
+
+                );
+                }
+                //----------------------
+                var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
             List<CPlanViewModel> data = new List<CPlanViewModel>();
             List<CPlanViewModel> test = new List<CPlanViewModel>();
-            //var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
-            //           select pl;
+          
 
             foreach (Plan plans in plan2)
             {
                 test.Add(new CPlanViewModel()
                 {
-                    //PlanName = plans.PlanName,
-                    //PlanDescription = plans.PlanDescription,
+                   
                     PlanId = plans.PlanId,
 
                 });
@@ -136,41 +171,7 @@ namespace MedSysProject.Controllers
 
             var item = from it in _context.Items
                        select it;
-            //var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(n => list.Contains(n.PlanId)))
-            //           select it;
-            int dp = 4;
-            //var itemsss2 = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items.Select(o => new { o.ItemId, o.ItemName }), l => new { (int)l.ProjectId,(int)l.PlanId})
-            //));
-            //var itemsss = _context.Plans.Where(n => n.PlanId == 4).SelectMany(n => n.PlanRefs.SelectMany(p => p.Project.Items)).Select(p => new
-            //{
-            //    PlanDescription = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanDescription),
-            //    PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
-            //    ProjectId = (int)p.ProjectId,
-            //    ItemId = p.ItemId,
-            //}).AsEnumerable().ToList();
-
-            //foreach (var p in itemsss)
-            //{
-            //    test.Add(new CPlanViewModel()
-            //    {
-            //        PlanDescription = p.PlanDescription,
-            //        PlanName = p.PlanName,
-            //        ProjectId = (int)p.ProjectId,
-            //        ItemId = p.ItemId,
-
-
-            //        //PlanDescription = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanDescription),
-            //        //PlanName = (string)p.Project.PlanRefs.SelectMany(p => p.Plan.PlanName),
-            //        //PlanId = dp,
-            //        //ProjectId = (int)p.ProjectId,
-            //        //ProjectName = (string)p.Project.ProjectName,
-            //        ////ProjectPrice = p.PlanRefs.SelectMany(pp => pp.Project.ProjectPrice),
-            //        //ItemId = p.ItemId,
-            //        //ItemName = p.PlanRefs.SelectMany(pp => pp.Project.Items.SelectMany(ppp => ppp.ItemName)),
-
-            //    }) ;
-            //}
-
+           
             foreach (Item items in item)
             {
                 data.Add(new CPlanViewModel()
@@ -193,7 +194,8 @@ namespace MedSysProject.Controllers
             dt.Columns.Add(new DataColumn("ProjectPrice"));
             dt.Columns.Add(new DataColumn("itemId"));
             dt.Columns.Add(new DataColumn("ItemName"));
-            foreach (var t in data)
+                //--data為不完整版 total為完整版
+            foreach (var t in total)
             {
                 DataRow dr = dt.NewRow();
 
@@ -243,7 +245,7 @@ namespace MedSysProject.Controllers
                     ItemName = (string)t.it.ItemName,
                    
                 }) ;
-
+            //------datatable 轉json區--------
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("planId"));
             dt.Columns.Add(new DataColumn("planName"));
@@ -267,17 +269,26 @@ namespace MedSysProject.Controllers
                 dr["ItemName"] = t.ItemName ;
                 dt.Rows.Add(dr);
             }
+            DataTableToJsonConverter converter = new DataTableToJsonConverter();
+            string js=converter.ConverterDataTableToJson(dt);
 
+            //------datatable 轉json區--------
 
-            
             if (dt != null)
-            {string json=JsonSerializer.Serialize(pl);
+            {string json= System.Text.Json.JsonSerializer.Serialize(pl);
                 HttpContext.Session.SetString(CDictionary.SK_PLAN_COMPARERE_RESULT,json);
                 
                 return Json(json); }
             else
             {  return View(); }
            
+        }
+
+        public class DataTableToJsonConverter {
+            public string ConverterDataTableToJson(DataTable dataTable) 
+            { string json = JsonConvert.SerializeObject(dataTable, Formatting.Indented);
+            return json;}
+        
         }
 
         public IActionResult PlanIntroductionProject(int? id)
@@ -460,7 +471,7 @@ namespace MedSysProject.Controllers
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
             {
                 string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                Member? currentMember = JsonSerializer.Deserialize<Member>(json);
+                Member? currentMember = System.Text.Json.JsonSerializer.Deserialize<Member>(json);
                 int currentMemberId = currentMember?.MemberId ?? -1;
 
                 foreach (var itemName in healthCheckItems)
