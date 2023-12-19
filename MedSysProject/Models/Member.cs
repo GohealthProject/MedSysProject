@@ -19,6 +19,8 @@ public partial class Member
 
     public string MemberEmail { get; set; }
 
+    public int? MemberCityDistrictRoadId { get; set; }
+
     public string MemberAddress { get; set; }
 
     public string MemberContactNumber { get; set; }
@@ -39,9 +41,17 @@ public partial class Member
 
     public string VieifiedId { get; set; }
 
+    public bool? GoogleLogin { get; set; }
+
+    public bool? FacebookLogin { get; set; }
+
+    public bool? LineLogin { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new List<HealthReport>();
+
+    public virtual Twaddress MemberCityDistrictRoad { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 

@@ -73,6 +73,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<TrackingList> TrackingLists { get; set; }
 
+    public virtual DbSet<Twaddress> Twaddresses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Blog>(entity =>
@@ -313,6 +315,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.MemberBirthdate)
                 .HasColumnType("date")
                 .HasColumnName("memberBirthdate");
+            entity.Property(e => e.MemberCityDistrictRoadId).HasColumnName("memberCityDistrictRoadId");
             entity.Property(e => e.MemberContactNumber)
                 .HasMaxLength(10)
                 .IsFixedLength()
@@ -347,6 +350,10 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.StatusId).HasColumnName("statusID");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
             entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
+
+            entity.HasOne(d => d.MemberCityDistrictRoad).WithMany(p => p.Members)
+                .HasForeignKey(d => d.MemberCityDistrictRoadId)
+                .HasConstraintName("FK_Members_TWAddress");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Members)
                 .HasForeignKey(d => d.StatusId)
@@ -682,6 +689,22 @@ public partial class MedSysContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.TrackingLists)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_TrackingList_Products");
+        });
+
+        modelBuilder.Entity<Twaddress>(entity =>
+        {
+            entity.ToTable("TWAddress");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.City)
+                .HasMaxLength(10)
+                .HasColumnName("city");
+            entity.Property(e => e.Road)
+                .HasMaxLength(200)
+                .HasColumnName("road");
+            entity.Property(e => e.SiteId)
+                .HasMaxLength(50)
+                .HasColumnName("site_id");
         });
 
         OnModelCreatingPartial(modelBuilder);
