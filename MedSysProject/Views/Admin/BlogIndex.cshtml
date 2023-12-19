@@ -326,17 +326,17 @@
                     const day = String(date.getDate()).padStart(2, '0');
                     const formattedDate = `${year}-${month}-${day}`;
                     const detailContain = `
-                                        <div class="single-post">
-                                            <div class="post-meta">
-                                                <span class="date">${formattedDate}</span>
-                                            </div>
-                                            <h1 class="mb-5">${title}</h1>
-                                                <div class="previewImage" style="margin-bottom:20px;">
-                                                        <img id="imagePreviewDetail" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                <div class="single-post">
+                                                    <div class="post-meta">
+                                                        <span class="date">${formattedDate}</span>
                                                     </div>
-                                            ${content}
-                                        </div>
-                                    `;
+                                                    <h1 class="mb-5">${title}</h1>
+                                                        <div class="previewImage" style="margin-bottom:20px;">
+                                                                <img id="imagePreviewDetail" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                            </div>
+                                                    ${content}
+                                                </div>
+                                            `;
 
                     detailContainer.innerHTML = detailContain;
                     if (data.blogImage == null) {
@@ -506,7 +506,7 @@
                 });
             });
         }
-        
+
         //修改文章相關
         //(1)讓資料可以顯示在修改彈窗上
         function updateThisPost(editButton) {
