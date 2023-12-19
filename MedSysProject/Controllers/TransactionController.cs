@@ -25,18 +25,27 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult members()
+        public IActionResult members(int id)
         {
             //IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-
-            var datas = from s in _context.Members.Include(p => p.HealthReports)
-
-                        select s;
+            IQueryable<Member> datas = null;
+            
+            if (id == 0)
+            {
+                 datas = from s in _context.Members.Include(p => p.HealthReports)
+                            select s;
+            }
+            else {
+                 datas =from s in _context.Members.Include(p => p.HealthReports).ThenInclude(p=>p.Reserve)
+                        where s.MemberId == id
+                           select s;
+                    }
+          
             //_context.Members.Load();
             //var datass = _context.Members.Include(q => q.HealthReports).SelectMany(p => new {p,p.HealthReports});
-                         
+
 
             return Json(datas);
 
