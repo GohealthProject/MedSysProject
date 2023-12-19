@@ -20,9 +20,12 @@ namespace MedSysProject.Controllers
     public class ShoppingController : Controller
     {
         MedSysContext? _db = null;
-        public ShoppingController(MedSysContext db)
+        IHttpClientFactory _httpClientFactory;
+
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory)
         {
             _db = db;
+            _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
@@ -192,10 +195,24 @@ namespace MedSysProject.Controllers
             {
                 data.Add(key, id[key]);
             }
-            var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
-            q.TradeNo= data["TradeNo"];
-            q.StateId = 14;
+            var order = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+            order.TradeNo= data["TradeNo"];
+            order.StateId = 14;
             _db.SaveChanges();
+            string Memberemail = data["CustomField1"];
+            using (var httpclient = _httpClientFactory.CreateClient())
+            {
+                string url = "https://localhost:7078/api/Email";
+
+                EmailData email = new EmailData();
+                email.Address = Memberemail;
+                email.Body = "heelllo";
+                email.Subject = "訂單成立";
+                string emailjson = JsonSerializer.Serialize(email);
+                HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+            }
+
             return RedirectToAction("OrderList");
         }
        
@@ -222,7 +239,7 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Index");
             }
             proName = proName.Substring(0, proName.Length - 1);
-
+            string memberEmail = m.MemberEmail;
 
             //需填入你的網址
             var website = $"https://localhost:7203/";
@@ -236,7 +253,7 @@ namespace MedSysProject.Controllers
         { "TradeDesc",  "無"},
         { "ItemName", proName},
         { "ExpireDate",  "3"},
-        { "CustomField1",  ""},
+        { "CustomField1",  memberEmail},
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},

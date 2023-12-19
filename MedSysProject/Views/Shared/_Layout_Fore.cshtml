@@ -164,7 +164,7 @@
             const response = await fetch(url);
             const count = await response.text();
             document.querySelector("#cartlistcount").innerHTML = count;
-
+            console.log(count);
         }
         document.addEventListener('DOMContentLoaded', () => {
             getcartList()
