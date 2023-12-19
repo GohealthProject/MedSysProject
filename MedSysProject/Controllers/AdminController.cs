@@ -890,31 +890,53 @@ namespace MedSysProject.Controllers
 
                 // 更新產品資料
                 pDb.ProductName = model.WrappedProductName;
-                    pDb.UnitsInStock = model.WrappedUnitsInStock;
-                    pDb.License = model.WrappedLicense;
-                    pDb.UnitPrice = model.WrappedUnitPrice;
-                    pDb.Ingredient = model.WrappedIngredient;
-                    pDb.Description = model.WrappedDescription;
-                    pDb.Discontinued = model.WrappedDiscontinued;
+                pDb.UnitsInStock = model.WrappedUnitsInStock;
+                pDb.License = model.WrappedLicense;
+                pDb.UnitPrice = model.WrappedUnitPrice;
+                pDb.Ingredient = model.WrappedIngredient;
+                pDb.Description = model.WrappedDescription;
+                pDb.Discontinued = model.WrappedDiscontinued;
 
-                    // 處理 ProductsClassification 資料表
-                    if (model.SelectedCategories != null && model.SelectedCategories.Any())
+                // 處理圖片上傳
+                if (model.FormFiles != null && model.FormFiles.Count > 0)
+                {
+                    // 清空原有的圖片路徑
+                    pDb.FimagePath = string.Empty;
+
+                    foreach (var file in model.FormFiles)
                     {
-                        // 移除所有現有的 CategoriesId 記錄
-                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
+                        var uploadsFolder = Path.Combine(_host.WebRootPath, "img-product"); // 圖片保存的文件夾
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                        // 新增選擇的 CategoriesId 記錄
-                        foreach (var categoryId in model.SelectedCategories)
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
-                            var classification = new ProductsClassification
-                            {
-                                ProductId = model.WrappedProductId,
-                                CategoriesId = categoryId
-                            };
-
-                            _db.ProductsClassifications.Add(classification);
+                            file.CopyTo(fileStream);
                         }
+
+                        // 更新數據庫中的圖片路徑，將多個圖片路徑以逗號分隔
+                        pDb.FimagePath += string.IsNullOrEmpty(pDb.FimagePath) ? uniqueFileName : $",{uniqueFileName}";
                     }
+                }
+
+                // 處理 ProductsClassification 資料表
+                if (model.SelectedCategories != null && model.SelectedCategories.Any())
+                {
+                    // 移除所有現有的 CategoriesId 記錄
+                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
+
+                    // 新增選擇的 CategoriesId 記錄
+                    foreach (var categoryId in model.SelectedCategories)
+                    {
+                        var classification = new ProductsClassification
+                        {
+                            ProductId = model.WrappedProductId,
+                            CategoriesId = categoryId
+                        };
+
+                        _db.ProductsClassifications.Add(classification);
+                    }
+                }
 
                 try
                 {
@@ -951,6 +973,7 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Product");
             }
         }
+
 
         private bool IsAjaxRequest()
         {
