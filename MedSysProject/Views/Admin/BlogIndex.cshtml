@@ -307,11 +307,13 @@
 @section Scripts {
     <script>
         //全域變數們
+        let selectBlogId = 0;
         let employeeLogIn = @empLogIn;
 
         let commentTable = document.querySelector('#putIn');//留言板
         function detail(detailButton) {
             var blogId = detailButton.getAttribute('data-blog-id');
+            selectBlogId = blogId;
             console.log(blogId); // id藏這裡
             const detailContainer = document.querySelector('.single-post');
             detailContainer.innerHTML = '';
@@ -465,14 +467,10 @@
                     inputReply.addEventListener('keydown', async function (event) {
                         if (event.key === "Enter" && !event.shiftKey) {
                             console.log('回復訊息');
-                            if (memberLogIn === 0) {
-                                const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
-                                invisibleButton.dispatchEvent(new Event('click'));
-                            }
-                            const apiUrl = 'https://localhost:7078/api/Comments/memberAddReply';
+                            const apiUrl = 'https://localhost:7078/api/Comments/employeeAddReply';
                             const data = {
-                                BlogId: blogId,
-                                MemberId: memberLogIn,
+                                BlogId: selectBlogId,
+                                EmployeeId: employeeLogIn,
                                 ParentCommentId: parentCommentId,
                                 Content: inputReply.value
                             }
@@ -487,7 +485,10 @@
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok.');
                                 }
-                                await refreshCommentTable();
+                                await backLoadPrimeComments(selectBlogId);
+                                await backProcessReplies();//有沒有取到mainComment()?有
+                                toggleLinkEvent();
+                                initButtons();
                                 inputReply.value = '';
                             }
                             catch (error) { console.error('There was a problem saving the comment:', error); }
