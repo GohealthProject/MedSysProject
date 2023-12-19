@@ -39,13 +39,16 @@
 
                     <div class="col-lg-8">
                         <div class="portfolio-details-slider swiper">
+                            @*區*@
+                            @*test*@
+                           
                             <div class="swiper-wrapper align-items-center">
                                 @foreach(var plan in Model){
 
                                     if (plan.PlanId>0)
                                     {
                                  <div class="swiper-slide">
-                                    <img src="~/img/PersonalPlan/p1-@{@plan.PlanId}.jpg" alt="" >
+                                    <img src="~/img/PersonalPlan/p4-1-@{@plan.PlanId}.jpg" alt="" >
                                         </div>
                                         continue;
                                     }
@@ -67,7 +70,9 @@
                                     <h3 style="color:#7045af" id="@plandetail.PlanName">@plandetail.PlanName<input id="@plandetail.PlanId" type="hidden" name="@plandetail.PlanId" value="2" /> </h3>
                                 
                             <ul class="list-group list-group-flush ">
-                                <li class="list-group-item"><strong style="color:#b1297d">價格</strong>: NT$</li>
+                                <li class="list-group-item" id="price"><strong style="color:#b1297d">價格</strong>: NT$
+                                          
+                                   </li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
                                  <li class="list-group-item"><strong style="color:#51966d">方案介紹</strong>: @plandetail.PlanDescription</li>
                                 <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i>/女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></li>
@@ -94,10 +99,12 @@
                                     </a>
                                 </button>
                             </h2>
-                        
-                            <div class="table-responsive-lg  table-dialog table-dialog-scrollable">
-                                <div class="overflow-auto navbar-nav-scroll ">
-                                    <table class="table order-column " style="width:100%" id="Plan">
+
+                            @*原*@
+                        <div style="height:200px;overflow:auto;">
+                                <div class="table-responsive-lg  table-dialog table-dialog-scrollable" style="height:fit-content">
+                                    <div class="overflow-auto " style="height:fit-content">
+                                    <table class="table order-column " style="width:100% ;height:fit-content" id="Plan">
                                     <thead>
                                         <tr class="">
                                             <th scope="col" disable></th>
@@ -140,8 +147,10 @@
                                 </table>
                                 </div>
                             </div>
-                           
+                            </div>
                         </div>
+
+                      
                     </div>
                   
                 </div>
@@ -155,15 +164,26 @@
 </body>
 @section Scripts{
 <script>
-    const xhr = new XMLHttpRequest();
-        const PlanName = document.querySelector("#PlanName");// <h3 style="color:#7045af" id="PlanName"> 樂活銀髮方案 </h3>
-        const ProjectDetail = document.querySelector("#ProjectDetail");//start   <tbody id="ProjectDetail">
-        const url = "https://localhost:7078/api/PlanIntroductionProject/";
-        const id = document.querySelectorAll("#item");
-        const project= document.querySelectorAll("#project");
-        console.log(project);
-   //------------------select列
-     
+      const Planid= @Model[0].PlanId;
+      console.log(Planid);
+   //------------------
+   async function priceload(){
+       let url =`https://localhost:7078/api/CPlan/${Planid}`
+            const response = await fetch(url,{
+                method:"POST",
+            });
+            const data=await response.json();
+            console.log(data);
+            console.log(data[0].PlanPrice);
+            const Price = data[0].PlanPrice;
+            price.innerHTML ="<a>"+data[0].PlanPrice+"</a>";
+            price.innerHTML =
+            `
+               <strong style="color:#b1297d">NT$ : ${Price}</strong>
+            `
+
+   }
+     priceload();
     
     //----------------------
 
