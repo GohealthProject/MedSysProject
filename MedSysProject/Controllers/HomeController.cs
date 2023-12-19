@@ -87,25 +87,25 @@ namespace MedSysProject.Controllers
             //return View(_context.Plans);
         }
 
-        
+
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
         {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認(在post已找出完整資料，可複製貼上)+資料匯出
-            
-            if (planlist !=null)
-            { 
- List<int> list = new List<int>();
 
-            foreach(var item2 in planlist.Split(','))
+            if (planlist != null)
             {
-                if(item2!="")
-                    list.Add(Int32.Parse(item2));
+                List<int> list = new List<int>();
 
-            }
+                foreach (var item2 in planlist.Split(','))
+                {
+                    if (item2 != "")
+                        list.Add(Int32.Parse(item2));
+
+                }
                 //---------------------完整資料
                 List<CPlanViewModel> total = new List<CPlanViewModel>();
                 var pl = _context.Plans.Where(n => list.Contains(n.PlanId))
-                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId ))
+                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId))
                      .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
 
                      //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
@@ -113,7 +113,7 @@ namespace MedSysProject.Controllers
                      {
                          planId = t.Project.PlanRefs.First().PlanId,
                          planName = t.Project.PlanRefs.First().Plan.PlanName,
-                         PlanDescription=(string)t.Project.PlanRefs.First().Plan.PlanDescription,
+                         PlanDescription = (string)t.Project.PlanRefs.First().Plan.PlanDescription,
                          projectid = t.Project.ProjectId,
                          ProjectName = (string)t.Project.ProjectName,
                          ProjectPrice = (double)t.Project.ProjectPrice,
@@ -139,93 +139,94 @@ namespace MedSysProject.Controllers
                 }
                 //----------------------
                 var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
-            List<CPlanViewModel> data = new List<CPlanViewModel>();
-            List<CPlanViewModel> test = new List<CPlanViewModel>();
-          
+                List<CPlanViewModel> data = new List<CPlanViewModel>();
+                List<CPlanViewModel> test = new List<CPlanViewModel>();
 
-            foreach (Plan plans in plan2)
-            {
-                test.Add(new CPlanViewModel()
+
+                foreach (Plan plans in plan2)
                 {
-                   
-                    PlanId = plans.PlanId,
+                    test.Add(new CPlanViewModel()
+                    {
 
-                });
+                        PlanId = plans.PlanId,
+
+                    });
 
                 }
-                var project = from pj in _context.PlanRefs.Include(p=>p.Project).Where(n => list.Contains(n.PlanId))
-                          select pj;
-            foreach (PlanRef projects in project)
-            {
-                data.Add(new CPlanViewModel()
+                var project = from pj in _context.PlanRefs.Include(p => p.Project).Where(n => list.Contains(n.PlanId))
+                              select pj;
+                foreach (PlanRef projects in project)
                 {
-                    ProjectId = (int)projects.ProjectId,
-                    ProjectName = projects.Project.ProjectName,
-                    ProjectPrice = projects.Project.ProjectPrice,
-                    PlanDescription=projects.Plan.PlanDescription,
-                    PlanName=projects.Plan.PlanName,
-                    PlanId= projects.PlanId,
-                });
-              
-            }
+                    data.Add(new CPlanViewModel()
+                    {
+                        ProjectId = (int)projects.ProjectId,
+                        ProjectName = projects.Project.ProjectName,
+                        ProjectPrice = projects.Project.ProjectPrice,
+                        PlanDescription = projects.Plan.PlanDescription,
+                        PlanName = projects.Plan.PlanName,
+                        PlanId = projects.PlanId,
+                    });
 
-            var item = from it in _context.Items
-                       select it;
-           
-            foreach (Item items in item)
-            {
-                data.Add(new CPlanViewModel()
+                }
+
+                var item = from it in _context.Items
+                           select it;
+
+                foreach (Item items in item)
                 {
-                    
-                    ItemId = (int)items.ItemId,
-                    ItemName = items.ItemName,
-                  ProjectId= (int)items.ProjectId 
-                  
-                });
-                
-            }
-            //-----------------------list轉datatable
-            DataTable dt = new DataTable();
-            dt.Columns.Add(new DataColumn("planId"));
-            dt.Columns.Add(new DataColumn("planName"));
-            dt.Columns.Add(new DataColumn("PlanDescription"));
-            dt.Columns.Add(new DataColumn("projectid"));
-            dt.Columns.Add(new DataColumn("ProjectName"));
-            dt.Columns.Add(new DataColumn("ProjectPrice"));
-            dt.Columns.Add(new DataColumn("itemId"));
-            dt.Columns.Add(new DataColumn("ItemName"));
+                    data.Add(new CPlanViewModel()
+                    {
+
+                        ItemId = (int)items.ItemId,
+                        ItemName = items.ItemName,
+                        ProjectId = (int)items.ProjectId
+
+                    });
+
+                }
+                //-----------------------list轉datatable
+                DataTable dt = new DataTable();
+                dt.Columns.Add(new DataColumn("planId"));
+                dt.Columns.Add(new DataColumn("planName"));
+                dt.Columns.Add(new DataColumn("PlanDescription"));
+                dt.Columns.Add(new DataColumn("projectid"));
+                dt.Columns.Add(new DataColumn("ProjectName"));
+                dt.Columns.Add(new DataColumn("ProjectPrice"));
+                dt.Columns.Add(new DataColumn("itemId"));
+                dt.Columns.Add(new DataColumn("ItemName"));
                 //--data為不完整版 total為完整版
-            foreach (var t in total)
+                foreach (var t in total)
+                {
+                    DataRow dr = dt.NewRow();
+
+                    dr["planId"] = t.PlanId;
+                    dr["PlanName"] = t.PlanName;
+                    dr["PlanDescription"] = t.PlanDescription;
+                    dr["projectid"] = t.ProjectId;
+                    dr["ProjectName"] = t.ProjectName + t.ItemName;
+                    dr["ProjectPrice"] = t.ProjectPrice;
+                    dr["itemId"] = t.ItemId;
+                    dr["ItemName"] = t.ItemName + $"{t.ItemId}";
+                    dt.Rows.Add(dr);
+                }
+
+
+
+
+
+
+                return View(dt);
+
+            }
+            else
             {
-                DataRow dr = dt.NewRow();
-
-                dr["planId"] = t.PlanId;
-                dr["PlanName"] = t.PlanName;
-                dr["PlanDescription"] = t.PlanDescription;
-                dr["projectid"] = t.ProjectId;
-                dr["ProjectName"] = t.ProjectName + t.ItemName;
-                dr["ProjectPrice"] = t.ProjectPrice;
-                dr["itemId"] = t.ItemId;
-                dr["ItemName"] = t.ItemName +$"{t.ItemId }";
-                dt.Rows.Add(dr);
-            }
-
-          
-
-
-
-            
-            return View(dt);
-
-            }
-            else {
                 return RedirectToAction("planComeparison");
             }
-           
+
 
         }
-        
-      [HttpPost]
+
+        [HttpPost]
         public IActionResult planComeparisonTotal(int? planid)
         {//測試方案暫定planid=3
 
@@ -243,13 +244,13 @@ namespace MedSysProject.Controllers
                     ProjectPrice = (double)t.Project.ProjectPrice,
                     itemId = t.it.ItemId,
                     ItemName = (string)t.it.ItemName,
-                   
-                }) ;
+
+                });
             //------datatable 轉json區--------
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("planId"));
             dt.Columns.Add(new DataColumn("planName"));
-           
+
             dt.Columns.Add(new DataColumn("projectid"));
             dt.Columns.Add(new DataColumn("ProjectName"));
             dt.Columns.Add(new DataColumn("ProjectPrice"));
@@ -261,34 +262,39 @@ namespace MedSysProject.Controllers
 
                 dr["planId"] = t.planId;
                 dr["PlanName"] = t.planName;
-                
+
                 dr["projectid"] = t.projectid;
                 dr["ProjectName"] = t.ProjectName;
                 dr["ProjectPrice"] = t.ProjectPrice;
                 dr["itemId"] = t.itemId;
-                dr["ItemName"] = t.ItemName ;
+                dr["ItemName"] = t.ItemName;
                 dt.Rows.Add(dr);
             }
             DataTableToJsonConverter converter = new DataTableToJsonConverter();
-            string js=converter.ConverterDataTableToJson(dt);
+            string js = converter.ConverterDataTableToJson(dt);
 
             //------datatable 轉json區--------
 
             if (dt != null)
-            {string json= System.Text.Json.JsonSerializer.Serialize(pl);
-                HttpContext.Session.SetString(CDictionary.SK_PLAN_COMPARERE_RESULT,json);
-                
-                return Json(json); }
+            {
+                string json = System.Text.Json.JsonSerializer.Serialize(pl);
+                HttpContext.Session.SetString(CDictionary.SK_PLAN_COMPARERE_RESULT, json);
+
+                return Json(json);
+            }
             else
-            {  return View(); }
-           
+            { return View(); }
+
         }
 
-        public class DataTableToJsonConverter {
-            public string ConverterDataTableToJson(DataTable dataTable) 
-            { string json = JsonConvert.SerializeObject(dataTable, Formatting.Indented);
-            return json;}
-        
+        public class DataTableToJsonConverter
+        {
+            public string ConverterDataTableToJson(DataTable dataTable)
+            {
+                string json = JsonConvert.SerializeObject(dataTable, Formatting.Indented);
+                return json;
+            }
+
         }
 
         public IActionResult PlanIntroductionProject(int? id)
@@ -656,6 +662,51 @@ namespace MedSysProject.Controllers
             }
         }
 
+        //企業方案傳遞資料API
+
+        [HttpGet]
+        public IEnumerable<string> GetCompanyPlan()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCompanyPlan(int? planid)
+        {
+            if (planid == null)
+            {
+                return BadRequest("Plan ID is required.");
+            }
+
+            var queryResult = _context.Plans
+                .Where(p => p.PlanId == planid)
+                .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project })
+            .Where(p => p.project.PlanId == planid)
+            .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it })
+            .Where(p => p.Project.ProjectId == p.it.ProjectId)
+            .Select(t => new
+            {
+                planId = t.Project.PlanRefs.First().PlanId,
+                planName = t.Project.PlanRefs.First().Plan.PlanName,
+                projectid = t.Project.ProjectId,
+                ProjectName = t.Project.ProjectName,
+                ProjectPrice = t.Project.ProjectPrice,
+                itemId = t.it.ItemId,
+                ItemName = t.it.ItemName,
+                ItemPrice = t.it.ItemPrice
+            })
+            .ToList();
+
+            if (queryResult != null && queryResult.Any())
+            {
+                string json = JsonConvert.SerializeObject(queryResult, Formatting.Indented);
+                return Json(json); // 返回 JsonResult
+            }
+            else
+            {
+                return NotFound($"No data found for Plan ID {planid}");
+            }
+        }
     }
 }
 

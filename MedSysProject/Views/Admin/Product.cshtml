@@ -1,5 +1,6 @@
-﻿@model IEnumerable<MedSysProject.Models.CProductsWrap>
-@using MedSysProject.Models
+﻿@using MedSysProject.Models
+@model IEnumerable<MedSysProject.Models.CProductsWrap>
+
 @using MedSysProject.Controllers
 @using static MedSysProject.Models.Product
 
@@ -7,6 +8,9 @@
     ViewData["Title"] = "產品管理";
     Layout = "_Layout_Admin2";
 }
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 <style>
     .custom-modal-dialog {
@@ -38,6 +42,12 @@
                     <div class="col-auto"><input type="submit" class="btn btn-primary" value="查詢" style="margin-top:.5em;" /></div>
                 }
             </div>
+         @*    @using (Html.BeginForm("FilterProducts", "Admin", FormMethod.Get))
+            {
+                @Html.Label("選擇類別：")
+                @Html.DropDownListFor(model => model.WrappedCategoryId, new SelectList(Model, "CategoryId", "CategoryName"), "全部類別")
+                <input type="submit" value="篩選">
+            } *@
             <p class="mt-3">
                 <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
                     <i class="fas fa-plus"></i>
@@ -51,13 +61,13 @@
                 <tr>
                     <!-- 列項目 -->
                     <th>序</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedProductName)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedUnitPrice)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedLicense)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedIngredient)</th>
-                    <th>@Html.DisplayNameFor(model => model.FimagePath)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedUnitsInStock)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedDiscontinued)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedUnitPrice)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedLicense)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedIngredient)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().FimagePath)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedUnitsInStock)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedDiscontinued)</th>
                     <th>執行動作</th>
                 </tr>
             </thead>
@@ -146,12 +156,13 @@
 @* ---修改彈窗結束--- *@
 
 <!-- 載入 Bootstrap 的 JavaScript -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
 <script>
+
     function submitForm() {
         $.ajax({
             url: '@Url.Action("Create", "Admin")',

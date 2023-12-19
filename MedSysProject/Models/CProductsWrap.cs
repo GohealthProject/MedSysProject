@@ -141,5 +141,18 @@ namespace MedSysProject.Models
 
         // 確保 SelectedCategories 不為 null
 
+
+
+
+        //private ProductsCategory _productscategory;
+       
+        //[DisplayName("選擇產品分類")]
+        //public int? WrappedCategoryId
+        //{
+        //    get { return _productscategory.CategoriesId; }
+        //    set => _productscategory.CategoriesId = (int)value;
+        //}
+
+
     }
 }
