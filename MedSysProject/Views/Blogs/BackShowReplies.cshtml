@@ -49,12 +49,12 @@
                     @{
                         if (reply.ParentComment.EmployeeId == null)
                         {//可以在inline style設計hover嗎
-                            string rid =  @reply.ParentCommentId.ToString() ;
+                            string rid = @reply.ParentCommentId.ToString();
                             <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(會員)@reply.ParentComment.Member.MemberNickname</a> @reply.Content
                         }
                         else
                         {
-                            string rid =  @reply.ParentCommentId.ToString() ;
+                            string rid = @reply.ParentCommentId.ToString();
                             <a href="javascript:void(0);" style="color:blue;" onclick="scrollToElement(@rid);">(@reply.ParentComment.Employee.EmployeeClass.Class)@reply.ParentComment.Employee.EmployeeName</a> @reply.Content
                         }
                     }
@@ -67,7 +67,7 @@
                     <form class="reply-form" action="#">
                         <span class="icon bi-reply"></span>
                         <input class="form-control" type="text" placeholder="回覆...">
-                        <button class="btn js-end-reply" style="position:absolute; right:245px;"><span class="bi-x"></span></button>
+                        <button class="btn js-end-reply" style="position:absolute; left:73% ;"><span class="bi-x"></span></button>
                     </form>
                 </div>
             </div>
@@ -78,5 +78,6 @@
 <script>
     console.log("我是回覆區的script");
 </script>
+
 
 

@@ -33,9 +33,9 @@
                             int count = 0;
                             foreach(var img in Model.Path)
                             {
-                                                                                                                                                                                                            <div class="swiper-slide">
-                                                                                                                                                                                                                <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
-                                                                                                                                                                                                            </div>
+                                    <div class="swiper-slide">
+                                      <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px;object-fit:cover;">
+                                      </div>
                                 count++;
                             }
                         } 
@@ -101,6 +101,12 @@
                         <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
                         </form>
                     </p>
+                    @{
+                        if (Model.UnitsInStock < 10)
+                        {
+                            <span class="text-danger fs-2">庫存不足 僅剩 @Model.UnitsInStock 個!!</span>
+                        }
+                        }
                 </div>
             </div>
 
@@ -114,7 +120,7 @@
         <div style="height:100px" class=" d-flex align-items-center ">
             <span class="fs-1 ps-4">你可能對這個有興趣</span>
         </div>
-        <div style="height:350px">
+        <div >
                 <div class="row ps-3" id="Suggestedhere">
                         
             </div>
@@ -385,16 +391,16 @@
             const value = data.$values.map(item => {
                 console.log(item);
                 const productID = item.productId;
-                const productName = item.productName.substring(0,6);
+                const productName = item.productName.substring(0,16);
                 const productPrice = item.unitPrice;
                 const productImage = item.fimagePath.split(",")[0];
                 console.log(productImage);
                 let html =
                     `
-                        <div class="col p-3  ">
-                               <img src="/img-product/${productImage}" style="height:150px; width:200px;"><br />
+                        <div class="col   text-center">
+                               <img src="/img-product/${productImage}" style="height:200px; width:200px; object-fit:cover"><br />
                                <a href="/Shopping/selectProduct/${productID}" class="fs-3"> ${productName} </a><br />
-                               <span class="fs-3 text-danger">$${productPrice}</span>
+                               <span class="fs-3 text-danger">特價 ：$${productPrice}</span>
                         </div>
                 `
                 return html;
