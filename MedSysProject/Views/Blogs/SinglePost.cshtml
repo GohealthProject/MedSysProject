@@ -314,7 +314,7 @@
                     console.log(parentCommentId);//測試用，能抓到按鈕對應留言區塊
                     const replyFormWrap = comment.querySelector('.js-reply-form-wrap');
                     replyFormWrap.classList.add("active");
-                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]')
+                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]');
                     console.log(inputReply);
                     inputReply.addEventListener('keydown', async function (event) {
                         if (event.key === "Enter" && !event.shiftKey) {

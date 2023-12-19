@@ -8,8 +8,16 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF/jspdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+<script type="text/javascript" src="libs/jsPDF/jspdf.umd.min.js"></script>
+
+
 <style>
     .left {
        /* position: fixed;*/
@@ -65,6 +73,10 @@
     #chose1, #chose2 {
         width:80%;
     }
+
+    #toolbar {
+        margin: 0;
+    }
    /* div {
         border: 1px solid #333;
     }*/
@@ -75,6 +87,8 @@
     List<string>dd=new List<string>();
     string[] sArray={};
 }
+<meta charset="UTF-8">
+
 <div class="col-2 title">
     <select class="form-select" aria-label="Default select example" id="import">
         <option selected>選擇健檢報告0</option>
@@ -238,8 +252,23 @@
                         </select>
                     </div>*@
                     <div class="col-2"></div>
+                    
                     <div class="col-6">
-                        <table border="1" id="table1" data-show-print="true">
+                        <div id="toolbar" class="select">
+                            <select class="form-control">
+                                <option value="">Export Basic</option>
+                                <option value="all">Export All</option>
+                                <option value="selected">Export Selected</option>
+                            </select>
+                        </div>
+                        <table border="1" id="table1" data-show-print="true"
+                               data-show-export="true"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-click-to-select="true"
+                               data-toolbar="#toolbar"
+                               data-show-toggle="true"
+                               data-show-columns="true">
                             <thead>
                                 <tr>
                                     <th class="col-4">
@@ -461,8 +490,17 @@
         </div>
     </div>
     @ViewData["id"]
+    <button id="dd">123</button>
 </div>
     <script>
+    var tablet = document.querySelector("#reportshow1");
+    var dd = document.querySelector("#dd")
+    dd.addEventListener("click",()=>{
+        const doc = new jsPDF();
+        doc.text(tablet.innerHTML,100,100);
+        doc.save("two-by-four.pdf");
+
+    })
     var table = document.querySelector("#reportshow1");
     show();
         var ch1 = document.querySelector("#chose1");
@@ -737,6 +775,42 @@
         $(function () {
             $table.bootstrapTable()
         })
+
+        /////////
+        ///export//
+        ///////////
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                exportDataType: $(this).val(),
+                
+                exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf'],
+                columns: [
+                    //{
+                    //    field: 'state',
+                    //    checkbox: true,
+                    //    visible: $(this).val() === 'selected'
+                    //},
+                    {
+                        field: '',
+                        title: 'ID'
+                    },
+                    {
+                        field: 'id',
+                        title: 'ID'
+                    }, 
+                    {
+                        field: 'name',
+                        title: 'Item Name'
+                    }, 
+                    {
+                        field: 'price',
+                        title: 'Item Price'
+                    }
+                ]
+            })
+        }).trigger('change')
+    })
 
     </script>
 

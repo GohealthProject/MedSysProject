@@ -55,9 +55,18 @@ namespace MedSysProject.Controllers
             var form = Request.Form;
             
             var rs2 = form["reserve"];
+            var rss = form["reservesub"];
+            var htrp = form["healthreport"];
+            var rpdt = form["reportdetail"];
 
             Reserve rsggg = JsonSerializer.Deserialize<Reserve>(rs2);
+            ReservedSub rsb = JsonSerializer.Deserialize<ReservedSub>(rss);
+            HealthReport hrp = JsonSerializer.Deserialize<HealthReport>(htrp);
+            ReportDetail rpd = JsonSerializer.Deserialize<ReportDetail>(rpdt);
             //_context.Add(rsggg);
+            //_context.Add(rsb);
+            //_context.Add(hrp);
+            //_context.Add(rpd);
             //_context.SaveChanges();
             return Content("rsyes");
         }
