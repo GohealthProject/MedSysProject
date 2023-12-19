@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
     });
 
-
+builder.Services.AddHttpClient();
 builder.Services.AddSession();
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
