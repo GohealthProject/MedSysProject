@@ -208,14 +208,18 @@
 <script>
     function addcheck() {
         // Find the last checkbox within the form group
-        var lastCheckbox = document.querySelector('#Cprjchoose input[type="checkbox"]:last-child');
+        var Cprjchoose = document.getElementById('Cprjchoose')
+        console.log(Cprjchoose);
+
+        var lastbox = $('#Cprjchoose').find('input[type="checkbox"]').last()[0];
+        console.log(lastbox);
 
         // Determine the last ID used
-        var lastId = lastCheckbox ? parseInt(lastCheckbox.id) : 0;
+        var lastId = lastbox.id;
         console.log(lastId);
 
         // Increment the ID for the new checkbox
-        var newId = lastId + 1;
+        var newId = parseInt(lastId) + 1;
 
         // Create a new checkbox element
         var newCheckbox = document.createElement('div');
@@ -471,9 +475,10 @@
         //找到choose裡面的最後一個checkbox的value
 
         let prjid = choose.lastChild.querySelector('input[type="checkbox"]').value; //找到最後一個checkbox的value
-
+        console.log(prjid)
         //插入新的chkbox，value為最後一個的value+1
         const newprjid = parseInt(prjid) + 1;
+        console.log(newprjid)
         choose.innerHTML += `                                        <div class="form-check-inline" style="margin-left:1em;">
                                                                                                                     <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
                                                                                                                 <label class="form-check-label" for="${newprjid}">

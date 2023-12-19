@@ -8,5 +8,12 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+
+        public IActionResult Chat()
+        {
+
+
+            return PartialView();
+        }
     }
 }
