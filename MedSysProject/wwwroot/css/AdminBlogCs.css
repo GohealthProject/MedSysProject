@@ -163,3 +163,100 @@
     font-family: var(--font-secondary);
     font-size: 12px;
 }
+
+.scroll-top {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    right: 15px;
+    bottom: 15px;
+    z-index: 99999;
+    background: var(--color-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    transition: all 0.4s;
+}
+
+    .scroll-top i {
+        font-size: 24px;
+        color: #fff;
+        line-height: 0;
+    }
+
+    .scroll-top:hover {
+        background: rgba(var(--color-primary-rgb), 0.8);
+        color: #fff;
+    }
+
+    .scroll-top.active {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
+.comment {
+    position: relative;
+}
+
+/* 回复表单容器 */
+.reply-form-wrap {
+    position: relative;
+    //right: 0;
+    //top: 0;
+    z-index: 9;
+    transition: 0.3s all ease;
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+}
+
+    /* 显示回复表单的类 */
+    .reply-form-wrap.active {
+        visibility: visible;
+        opacity: 1;
+        display: block;
+    }
+
+/* 回复表单样式 */
+.reply-form {
+    position: relative;
+}
+
+    /* 回复输入框样式 */
+    .reply-form .form-control {
+        width: 500px;
+        border: none;
+        box-shadow: 0 15px 20px -10px rgba(var(--color-black-rgb), 0.5);
+        padding: 0 40px; /* 上下 左右 */
+    }
+
+    /* 放大镜图标样式 */
+    .reply-form .icon {
+        position: absolute;
+        left: 10px;
+        top: 2px;
+        opacity: 0.5;
+    }
+
+    /* 关闭按钮样式 */
+    .reply-form .btn {
+        position: absolute;
+        top: -2px;
+        right: 500px;
+        padding: 0;
+        margin: 0;
+        line-height: 1;
+        font-size: 30px;
+        opacity: 0.5;
+    }   
+
+#putIn {
+    height: 500px;
+    overflow-y: scroll;
+}
+
+    #putIn::-webkit-scrollbar {
+        display: none;
+    }
+

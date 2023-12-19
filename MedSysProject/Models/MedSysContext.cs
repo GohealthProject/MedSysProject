@@ -73,6 +73,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<TrackingList> TrackingLists { get; set; }
 
+    public virtual DbSet<Twaddress> Twaddresses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Blog>(entity =>
@@ -313,6 +315,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.MemberBirthdate)
                 .HasColumnType("date")
                 .HasColumnName("memberBirthdate");
+            entity.Property(e => e.MemberCityDistrictRoadId).HasColumnName("memberCityDistrictRoadId");
             entity.Property(e => e.MemberContactNumber)
                 .HasMaxLength(10)
                 .IsFixedLength()
@@ -347,6 +350,10 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.StatusId).HasColumnName("statusID");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
             entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
+
+            entity.HasOne(d => d.MemberCityDistrictRoad).WithMany(p => p.Members)
+                .HasForeignKey(d => d.MemberCityDistrictRoadId)
+                .HasConstraintName("FK_Members_TWAddress");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Members)
                 .HasForeignKey(d => d.StatusId)
@@ -391,6 +398,7 @@ public partial class MedSysContext : DbContext
                 .HasColumnName("shipDate");
             entity.Property(e => e.ShipId).HasColumnName("shipID");
             entity.Property(e => e.StateId).HasColumnName("stateID");
+            entity.Property(e => e.TradeNo).IsUnicode(false);
 
             entity.HasOne(d => d.Member).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MemberId)
@@ -633,18 +641,20 @@ public partial class MedSysContext : DbContext
 
         modelBuilder.Entity<ReturnProduct>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ReturnProduct");
+            entity.HasKey(e => e.ReturnId);
 
+            entity.ToTable("ReturnProduct");
+
+            entity.Property(e => e.ReturnId).HasColumnName("ReturnID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.ProcessedDate).HasColumnType("date");
             entity.Property(e => e.RefundAmount).HasColumnType("money");
             entity.Property(e => e.ReturnDate).HasColumnType("date");
-            entity.Property(e => e.ReturnId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("ReturnID");
             entity.Property(e => e.ReturnState).HasMaxLength(50);
+
+            entity.HasOne(d => d.Order).WithMany(p => p.ReturnProducts)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_ReturnProduct_Order");
         });
 
         modelBuilder.Entity<SubProjectBridge>(entity =>
@@ -679,6 +689,22 @@ public partial class MedSysContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.TrackingLists)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_TrackingList_Products");
+        });
+
+        modelBuilder.Entity<Twaddress>(entity =>
+        {
+            entity.ToTable("TWAddress");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.City)
+                .HasMaxLength(10)
+                .HasColumnName("city");
+            entity.Property(e => e.Road)
+                .HasMaxLength(200)
+                .HasColumnName("road");
+            entity.Property(e => e.SiteId)
+                .HasMaxLength(50)
+                .HasColumnName("site_id");
         });
 
         OnModelCreatingPartial(modelBuilder);

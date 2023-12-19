@@ -25,6 +25,7 @@ using Microsoft.Build.Evaluation;
 using System.Text.Json.Serialization.Metadata;
 using Newtonsoft.Json;
 using Google.Apis.Json;
+using System.Collections.Generic;
 
 namespace MedSysProject.Controllers
 {
@@ -55,24 +56,25 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult planComeparison()
-        {////方案比較(設計filter篩選方案)+更換圖片+加中文名稱+排除出現負數情況
-            //_context.Projects.Load();
-            //_context.Plans.Load();
-            //調整planname個數
-            var projectprice = from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
+        {////方案比較(設計filter篩選方案)+更換圖片+加中文名稱+排除出現負數情況+調整where條件
+
+            var projectprice = /*from p in _context.Projects.SelectMany(p => p.PlanRefs, (pj, pr) => new { pj, pr }).SelectMany(p => p.pr.Plan.PlanRefs, (pl, q) => new { pl.pr.Plan.PlanName, q.Project.ProjectPrice })*/
+                   from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
                    .AsEnumerable()
                                    //from ppp in _context.Plans
                                group p by p.Plan.PlanName into g
+                               //group p by p.PlanName into g 
                                //select p;
                                select new
                                {
-
+                                   
                                    PlanName = g.Key,
                                    PlanPrice = g.Sum(p => p.Project.ProjectPrice)
                                };
 
             var total = from p in projectprice
                         from pp in _context.Plans
+                      
                         select new
                         {
                             pp.PlanName,
@@ -90,25 +92,25 @@ namespace MedSysProject.Controllers
 
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
-        {////方案比較總計(總項+PDF產生)+篩選比較intersection+資料確認(在post已找出完整資料，可複製貼上)+資料匯出
-
-            if (planlist != null)
-            {
-                List<int> list = new List<int>();
+        {////方案比較總計(總項+PDF產生)+篩選比較intersection+
+            
+            if (planlist !=null)
+            { 
+ List<int> list = new List<int>();
 
                 foreach (var item2 in planlist.Split(','))
                 {
                     if (item2 != "")
                         list.Add(Int32.Parse(item2));
 
-                }
+            }
+             
                 //---------------------完整資料
                 List<CPlanViewModel> total = new List<CPlanViewModel>();
-                var pl = _context.Plans.Where(n => list.Contains(n.PlanId))
-                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId))
+                var pl = _context.Plans.Where(n => list.Contains(n.PlanId))// list.Contains(n.PlanId)
+                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId ))
                      .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
-
-                     //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+                    
                      .Select(t => new
                      {
                          planId = t.Project.PlanRefs.First().PlanId,
@@ -138,62 +140,17 @@ namespace MedSysProject.Controllers
                 );
                 }
                 //----------------------
-                var plan2 = _context.Plans.Where(n => list.Contains(n.PlanId));
-                List<CPlanViewModel> data = new List<CPlanViewModel>();
-                List<CPlanViewModel> test = new List<CPlanViewModel>();
-
-
-                foreach (Plan plans in plan2)
-                {
-                    test.Add(new CPlanViewModel()
-                    {
-
-                        PlanId = plans.PlanId,
-
-                    });
-
-                }
-                var project = from pj in _context.PlanRefs.Include(p => p.Project).Where(n => list.Contains(n.PlanId))
-                              select pj;
-                foreach (PlanRef projects in project)
-                {
-                    data.Add(new CPlanViewModel()
-                    {
-                        ProjectId = (int)projects.ProjectId,
-                        ProjectName = projects.Project.ProjectName,
-                        ProjectPrice = projects.Project.ProjectPrice,
-                        PlanDescription = projects.Plan.PlanDescription,
-                        PlanName = projects.Plan.PlanName,
-                        PlanId = projects.PlanId,
-                    });
-
-                }
-
-                var item = from it in _context.Items
-                           select it;
-
-                foreach (Item items in item)
-                {
-                    data.Add(new CPlanViewModel()
-                    {
-
-                        ItemId = (int)items.ItemId,
-                        ItemName = items.ItemName,
-                        ProjectId = (int)items.ProjectId
-
-                    });
-
-                }
-                //-----------------------list轉datatable
-                DataTable dt = new DataTable();
-                dt.Columns.Add(new DataColumn("planId"));
-                dt.Columns.Add(new DataColumn("planName"));
-                dt.Columns.Add(new DataColumn("PlanDescription"));
-                dt.Columns.Add(new DataColumn("projectid"));
-                dt.Columns.Add(new DataColumn("ProjectName"));
-                dt.Columns.Add(new DataColumn("ProjectPrice"));
-                dt.Columns.Add(new DataColumn("itemId"));
-                dt.Columns.Add(new DataColumn("ItemName"));
+           
+            //-----------------------list轉datatable
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("planId"));
+            dt.Columns.Add(new DataColumn("planName"));
+            dt.Columns.Add(new DataColumn("PlanDescription"));
+            dt.Columns.Add(new DataColumn("projectid"));
+            dt.Columns.Add(new DataColumn("ProjectName"));
+            dt.Columns.Add(new DataColumn("ProjectPrice"));
+            dt.Columns.Add(new DataColumn("itemId"));
+            dt.Columns.Add(new DataColumn("ItemName"));
                 //--data為不完整版 total為完整版
                 foreach (var t in total)
                 {
@@ -298,7 +255,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  固定item高度+男女差異+價格+修資料傳送型態(datatable)
+        { //放方案介紹  固定item高度+男女差異+價格+資料傳送型態可換(datatable)
 
             //vm方法
             List<CPlanViewModel> data = new List<CPlanViewModel>();
@@ -354,7 +311,24 @@ namespace MedSysProject.Controllers
         }
         public IActionResult xxx()
         {//自訂方案加選與總計(含搜尋項目功能):備用
+            int id = 3;
+            var pl = _context.Plans.Where(n => n.PlanId==id)
+                    .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => p.project.PlanId == id)
+                    .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
 
+                    //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+                    .Select(t => new
+                    {
+                        planId = t.Project.PlanRefs.First().PlanId,
+                        planName = t.Project.PlanRefs.First().Plan.PlanName,
+                        PlanDescription = (string)t.Project.PlanRefs.First().Plan.PlanDescription,
+                        projectid = t.Project.ProjectId,
+                        ProjectName = (string)t.Project.ProjectName,
+                        ProjectPrice = (double)t.Project.ProjectPrice,
+                        itemId = t.it.ItemId,
+                        ItemName = (string)t.it.ItemName,
+
+                    });
             return View(_context.Projects);
         }
 
@@ -382,7 +356,7 @@ namespace MedSysProject.Controllers
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { //預約總覽   尚未完成:日曆限制人數+第三方金流
+        { //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
 
             //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
 
@@ -395,6 +369,7 @@ namespace MedSysProject.Controllers
             ViewBag.item = item["item"];
             ViewBag.mid = item["Mid"];
             ViewBag.pid = item["Pid"];
+            ViewBag.member = HttpContext.Session.Get(CDictionary.SK_MEMBER_LOGIN);
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
@@ -406,7 +381,7 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult report(int id)
-        {          //尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
+        {          //todo 尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
             ViewData["id"] = 55;
             var m = _context.Reserves.Where(s => s.MemberId == 46);
 
@@ -417,9 +392,29 @@ namespace MedSysProject.Controllers
                      select s);
 
             return View(j);
+            
         }
 
-        public IActionResult Customcompare()
+        public IActionResult Customcompare0(string json)
+        {
+            
+            var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
+            return Json(data);
+        }
+        public IActionResult Customcompare(string json)
+        {
+            //todo 尚未完成:  測試比較後傳送資料
+
+            var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
+            _context.Plans.Load();
+
+            var datass = _context.Projects.Include(n => n.Items).Include(n => n.PlanRefs);
+
+
+            return View(datass.ToList());
+        }
+
+        public IActionResult Customcompare2()
 
         {//尚未完成:  測試比較後傳送資料
             //IEnumerable<Item> datas = null;
@@ -443,16 +438,6 @@ namespace MedSysProject.Controllers
             //}
 
             return View(datass.ToList());
-        }
-
-        public IActionResult Customcompare2()
-
-        {
-            //IEnumerable<Item> datas = null;
-            var datas = from s in (_context.Items.Include(p => p.Project)).AsEnumerable()
-                        select s.Project.ProjectName;
-
-            return Ok(datas);
         }
 
 

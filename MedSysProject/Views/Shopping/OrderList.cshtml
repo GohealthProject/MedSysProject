@@ -15,42 +15,42 @@
         
             <div class=" p-3">
                 @{
-                    <div class="fs-1 ">購買清單(本頁有 @count 筆資料，共 @ViewBag.Total 筆資料)</div>
+                                <div class="fs-1 ">購買清單(本頁有 @count 筆資料，共 @ViewBag.Total 筆資料)</div>
                     // <span class="fs-2">訂單查詢</span>
-                    <div class="row g-3">
-                    <form method="post" class="col-3">
-                        <div style="display:inline">
-                            <input type="hidden" value="keyword" name="Key" id="go" />
-                            <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." style="width:200px;display:inline"/>
-                            <input class="btn btn-primary" type="submit" value="查詢" style="display:inline" />
-                        </div>
-                    </form>
-                    <form method="post" class="col-9">
-                        <div class="col-3">
-                            <input type="hidden" value="monthKey" name="Key"/>
-                            <input class="btn btn-primary" type="submit" value="近一個月訂單" />
-                        </div>
-                    </form>
-                    </div>
+                                <div class="row g-3">
+                                <form method="post" class="col-3">
+                                    <div style="display:inline">
+                                        <input type="hidden" value="keyword" name="Key" id="go" />
+                                        <input class="form-control" type="text" name="Keyword" placeholder="輸入關鍵字..." style="width:200px;display:inline"/>
+                                        <input class="btn btn-primary" type="submit" value="查詢" style="display:inline" />
+                                    </div>
+                                </form>
+                                <form method="post" class="col-9">
+                                    <div class="col-3">
+                                        <input type="hidden" value="monthKey" name="Key"/>
+                                        <input class="btn btn-primary" type="submit" value="近一個月訂單" />
+                                    </div>
+                                </form>
+                                </div>
                 }
             </div>
             
         <form method="post">
             @{
-                <input type="hidden" value="dateKey" name="key" />
+                           <input type="hidden" value="dateKey" name="key" />
                 var q = Model.OrderBy(n => n.order.OrderDate);
-                <div class="row p-3">
-                    <div class="col-auto">
-                        <input class="form-control" type="date" name="dateMin" value="2010-01-01" />
-                    </div>
-                    -
-                    <div class="col-auto">
-                        <input class="form-control" type="date" name="dateMax" value="2023-12-11" />
-                    </div>
-                    <div class="col-auto">
-                        <input class="btn btn-primary" type="submit" value="日期查詢" />
-                    </div>
-                </div>
+                            <div class="row p-3">
+                                <div class="col-auto">
+                                    <input class="form-control" type="date" name="dateMin" value="2010-01-01" />
+                                </div>
+                                -
+                                <div class="col-auto">
+                                    <input class="form-control" type="date" name="dateMax" value="2023-12-11" />
+                                </div>
+                                <div class="col-auto">
+                                    <input class="btn btn-primary" type="submit" value="日期查詢" />
+                                </div>
+                            </div>
             }
 
             <nav aria-label="Page navigation example" style="display: flex;justify-content: center;align-items: center;">
@@ -72,36 +72,36 @@
                             int Total = ViewBag.TotalPage;
                             if (ViewBag.page == 1)
                             {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                             }
                             else
                             {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                             }
 
                             for (int i = 1; i <= ViewBag.TotalPage; i++)
                             {
                                 if (i == ViewBag.page)
                                 {
-                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                                 }
                                 else
                                 {
-                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                                 }
                             }
 
                             if (ViewBag.page == ViewBag.TotalPage)
                             {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
                             }
                             else
                             {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
                             }
 
                         }
@@ -115,80 +115,117 @@
             {
                 count++;
 
-                <div class="article">
-                    <div class="card w-100 shadow-sm" style="border:none">
-                        <div class="card-body">
-                            <h5 class="card-title"></h5>
-                            <div class="row mb-3">
-                                <div class="col-2 border fs-5" >
-                                    訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
-                                </div>
-                                <div class="col-2 border fs-5">
-                                    下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
-                                </div>
-                                <div class="col-1 border fs-5">
-                                    @Model[i].order.State.StateName
-                                </div>
-                                <div class="col-1 border fs-5">
-                                    @Model[i].order.Pay.PayName
-                                </div>
-                                <div class="col-1 border fs-5">
-                                    @Model[i].order.Ship.ShipName
-                                </div>
-                                <div class="col-1 border fs-5">
-                                    <a class="btn btn-outline-secondary fs-4" asp-action="" asp-controller="" asp-route-id="">發票</a>
-                                </div>
-                                <div class="col-3 border fs-5">
-                                    說明 : @Model[i].order.State.StateDetailed
-                                </div>
-                                <div class="col-1 border fs-3">
-                                    <a class="btn btn-outline-danger fs-4" asp-action="" asp-controller="" asp-route-id="">退貨</a>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
-                            <div id="productList">
-                                <ul class="list-group mt-3" style="display:none;">
+                            <div class="article">
+                                <div class="card w-100 shadow-sm" style="border:none">
+                                    <div class="card-body">
+                                        <h5 class="card-title"></h5>
+                                        <div class="row mb-3">
+                                            <div class="col-2 border fs-5" >
+                                            <input type="hidden" class="OrderID" value="@Model[i].OrderId"/>
+                                                訂單編號 : @Model[i].OrderDate.ToString("yyyymmdd")@Model[i].OrderId
+                                            </div>
+                                            <div class="col-2 border fs-5">
+                                                下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
+                                            </div>
+                                            <div class="col-1 border fs-5">
+                                                @Model[i].order.State.StateName
+                                            </div>
+                                            <div class="col-1 border fs-5">
+                                                @Model[i].order.Pay.PayName
+                                            </div>
+                                            <div class="col-1 border fs-5">
+                                                @Model[i].order.Ship.ShipName
+                                            </div>
+                                            <div class="col-1 border fs-5">
+                                                <a class="btn btn-outline-secondary fs-4" asp-action="" asp-controller="" asp-route-id="">發票</a>
+                                            </div>
+                                            <div class="col-3 border fs-5">
+                                                說明 : @Model[i].order.State.StateDetailed
+                                            </div>
+                                            <div class="col-1 border fs-3">
                                     @{
+                                        if (Model[i].StateId >= 15)
+                                        {
+                                            <button type="button" class="btn btn-outline-danger reProduct" data-bs-toggle="modal" data-bs-target="#exampleModal" disabled>
+                                                退貨
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-outline-danger reProduct" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                退貨
+                                            </button>
+                                        }
+                                    }
+                                                
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-info dBtn">訂單詳細如下</button>
+                                        <div id="productList">
+                                            <ul class="list-group mt-3" style="display:none;">
+                                                @{
                                         int pcount = 0;
                                         int total = 0;
                                         foreach (var item in Model[i].order.OrderDetails)
                                         {
                                             total += (int)item.Quantity * (int)item.Product.UnitPrice;
                                             pcount++;
-                                            <li class="list-group-item ">
-                                                <div class="row">
-                                                    <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
-                                                    <div class="col-3 "></div>
-                                                    <div class="col-3 ">件數 : @item.Quantity</div>
-                                                    <div class="col-3  text-danger " style="text-align: right;">
-                                                        $@{
+                                                                    <li class="list-group-item ">
+                                                                        <div class="row">
+                                                                            <div class="col-3 "><a asp-action="selectProduct" asp-controller="Shopping" asp-route-id="@item.Product.ProductId">@pcount. @item.Product.ProductName</a></div>
+                                                                            <div class="col-3 "></div>
+                                                                            <div class="col-3 ">件數 : @item.Quantity</div>
+                                                                            <div class="col-3  text-danger" style="text-align: right;">
+                                                                                $@{
                                                             int pd = (int)item.Quantity * (int)item.Product.UnitPrice; string p = pd.ToString("N0");
-                                                            @p
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                                                                @p
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
 
                                         }
-                                        <li class=" fs-3 d-flex justify-content-end">
-                                            總金額 : $ @{
-                                                @total.ToString("N0")
-                                            }
-                                        </li>
-                                    }
-                                </ul>
+                                                                <li class=" fs-3 d-flex justify-content-end">
+                                                                    <span>總金額 : $</span> @{
+                                                                    <span class="Amount">@total.ToString("N0")</span>
+                                                                    }
+                                                                </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mb-0" style="border:none" />
                             </div>
-                        </div>
-                    </div>
-                    <hr class="mb-0" style="border:none" />
-                </div>
             }
 
         }
 
     </div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">退款填寫單</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="returnProduct">
+            <input type="hidden" value="" name="orderID"  id="ReOrderID"/>
+            <input type="hidden" value="" name="orderAmount" id="ReOrderAmount" />
+            <div class="modal-body">
+                <span>請輸入退款理由</span><br /><span>訂單編號：</span><br />
+                <textarea name="ReturnReason"></textarea>
+            </div>
+            </form>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary RPB">確定退貨</button>
+            </div>
+        </div>
+    </div>
+</div>
 @* 測試用 *@
 <!-- status elements -->
 <div class="page-load-status">
@@ -221,36 +258,36 @@
 int Total = ViewBag.TotalPage;
                 if (ViewBag.page == 1)
                 {
-                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                 }
                 else
                 {
-                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                 }
 
                 for (int i = 1; i <= ViewBag.TotalPage; i++)
                 {
                     if (i == ViewBag.page)
                     {
-                        <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                     }
                     else
                     {
-                        <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                     }
                 }
 
                 if (ViewBag.page == ViewBag.TotalPage)
                 {
-                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
                 }
                 else
                 {
-                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
                 }
 
             }
@@ -277,24 +314,9 @@ int Total = ViewBag.TotalPage;
             for(var i =0; i<btns.length;i++){
                 btns[i].addEventListener('click',out);
             }
-            //scrollevent()
-            //const showmore = document.getElementById('showmore');
-            //showmore.addEventListener('click', () => {
-            //    scrollevent()
-            //});
         });
 
-        //function scrollevent() {
-        //    //wait 2s
-        //    setTimeout(() => {
-        //        //add event
-        //        let butons = document.querySelectorAll(".dBtn");
-        //        for (var i = 0; i < butons.length; i++) {
-        //            butons[i].addEventListener("click", out);
-        //        }
-        //    }, 200);
-
-        //}
+        
 
         function out(event) {
             event.target.removeEventListener('click', out);
@@ -309,30 +331,40 @@ int Total = ViewBag.TotalPage;
             event.target.addEventListener('click', out);
         }
 
-         //init Infinite Scroll
-        //$('.article-feed').infiniteScroll({
-        //    path: getPath,
-        //    append: '.article',
-        //    button: '.view-more-button',
-        //    scrollThreshold: false,
-        //    status: '.page-load-status',
-        //    hideNav: '.pagination',
-        //});
-
-        //function getPath() {
-        //    const nextSlugs = [];
-        //    let key = document.querySelector("#go").value;
-        //    let p = document.querySelector("#Keyword").value;
-        //    for (let i = 1; i <= @ViewBag.TotalPage; i++) {
-        //        nextSlugs.push(i);
-        //    }
-
-        //    //let url = `@Url.Content("~/Shopping/OrderList?key=")${key}&page=`
-        //    let url = `/Shopping/OrderList?Key=${key}&page=`
-        //    let slug = nextSlugs[this.loadCount];
-        //    url+= `&p=${p}`
-        //    if (slug) return url + slug;
-        //}
+        let orderID = 0;
+        let Amount = 0;
+        let rebtn = document.querySelectorAll(".reProduct");
+        rebtn.forEach((item) => {
+            item.addEventListener('click', (event) => {
+                orderID = event.target.parentNode.parentNode.querySelector(".OrderID").value;
+                Amount = event.target.parentNode.parentNode.parentNode.querySelector(".Amount").innerText;
+                Amount = Amount.trim();
+                Amount = Amount.replace(/,/g, '');
+                document.querySelector("#ReOrderID").value = orderID;
+                document.querySelector("#ReOrderAmount").value = Amount;
+            });
+        });
+        let returnProductBtn = document.querySelector(".RPB");
+        returnProductBtn.addEventListener('click', returnProduct);
+        async function returnProduct() {
+            let form = document.querySelector(".returnProduct");
+            let data = new FormData(form);
+            let url = "https://localhost:7078/api/ReturnProducts/create";
+            let response = await fetch(url, {
+                method: "POST",
+                body: data
+            });
+            const model = new bootstrap.Modal(document.querySelector('#exampleModal'));
+            model.hide();
+            window.location.href = "https://localhost:7203/Shopping/OrderList";
+            if (await response.ok) {
+                alert("退貨成功");
+                window.localtion.reload();
+            }
+            else {
+                alert("退貨失敗");
+            }
+        }
 
     </script>
 }

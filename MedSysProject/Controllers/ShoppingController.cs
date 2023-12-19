@@ -153,6 +153,25 @@ namespace MedSysProject.Controllers
             HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
             return RedirectToAction("CartList");
         }
+        public IActionResult changeQta(int id,int nqta)
+        {
+            string json = "";
+            List<CCartItem>? cart = null;
+            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
+
+            foreach(var item in cart)
+            {
+                if(item.Product.ProductId == id)
+                {
+                    item.count= nqta;
+                    item.小計 = item.count * item.UnitPrice;
+                    break;
+                }
+            }
+            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
+            return RedirectToAction("CartList");
+        }
         public IActionResult getcartList()
         {
             if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
@@ -166,7 +185,6 @@ namespace MedSysProject.Controllers
             }
             
         }
-
         public IActionResult paySussess(IFormCollection id)
         {
             var data = new Dictionary<string, string>();
@@ -174,57 +192,17 @@ namespace MedSysProject.Controllers
             {
                 data.Add(key, id[key]);
             }
-            return View();
+            var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+            q.TradeNo= data["TradeNo"];
+            q.StateId = 14;
+            _db.SaveChanges();
+            return RedirectToAction("OrderList");
         }
-        [HttpPost]
-         public async Task<IActionResult> CheckMacAsync()
+       
+        public IActionResult CartList()
         {
-            var form = Request.Form;
-            var order = new Dictionary<string, string>();
-            foreach(var item in form.Keys)
-            {
-                order.Add(item, form[item]);
-            }
-            order["CheckMacValue"] = PayMethod.GetCheckMacValue(order);
-
-
-            return Ok(order);
-        }
-
-
-
-
-        public static string GetCheckMacValue(Dictionary<string, string> order)
-        {
-            var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
-            string checkValue = string.Join("&", param);
-            //測試用的 HashKey
-            var hashKey = "5294y06JbISpM5x9";
-            //測試用的 HashIV
-            var HashIV = "v77hoKGq4kWxNNIS";
-            checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
-            checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
-            checkValue = GetSHA256(checkValue);
-            return checkValue.ToUpper();
-        }
-        private static string GetSHA256(string value)
-        {
-            var result = new StringBuilder();
-            var sha256 = SHA256.Create();
-            var bts = Encoding.UTF8.GetBytes(value);
-            var hash = sha256.ComputeHash(bts);
-            for (int i = 0; i < hash.Length; i++)
-            {
-                result.Append(hash[i].ToString("X2"));
-            }
-            return result.ToString();
-        }
-
-
-
-
-        public IActionResult testPay222()
-        {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+                return RedirectToAction("Index");
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             List<CCartItem> cartList = new List<CCartItem>();
             string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
@@ -233,19 +211,23 @@ namespace MedSysProject.Controllers
             MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(mjson);
 
             int total = 0;
-            string proName= "";
-            foreach(var pro in cartList)
+            string proName = "";
+            foreach (var pro in cartList)
             {
                 proName += pro.ProductName + "#";
-                total+=pro.UnitPrice*pro.count;
+                total += pro.UnitPrice * pro.count;
+            }
+            if (proName.Length == 0)
+            {
+                return RedirectToAction("Index");
             }
             proName = proName.Substring(0, proName.Length - 1);
-            
+
 
             //需填入你的網址
             var website = $"https://localhost:7203/";
 
-            var order = new Dictionary<string, string>
+            var orderGreen = new Dictionary<string, string>
     {
         //綠界需要的參數
         { "MerchantTradeNo",  orderId},
@@ -258,8 +240,8 @@ namespace MedSysProject.Controllers
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},
-        //{ "ReturnURL",  $"{website}/Shopping/paymethodinfo"},
-        { "OrderResultURL", $"{website}/Shopping/paySussess/{orderId}"},
+        { "ReturnURL",  $"{website}Shopping/paymethodinfo"},
+        { "OrderResultURL", $"{website}Shopping/paySussess/{orderId}"},
         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
         //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
         { "MerchantID",  "2000132"},
@@ -269,8 +251,8 @@ namespace MedSysProject.Controllers
         { "EncryptType",  "1"},
     };
             //檢查碼
-            order["CheckMacValue"] = GetCheckMacValue(order);
-            ViewBag.order= order;
+            orderGreen["CheckMacValue"] = PayMethod.GetCheckMacValue(orderGreen);
+            ViewBag.order = orderGreen;
 
             Order o = new Order();
             o.OrderDate = DateTime.Now;
@@ -280,57 +262,23 @@ namespace MedSysProject.Controllers
             o.PayId = 1;
             o.ShipId = 1;
             o.StateId = 13;
-
+            o.MerchantTradeNo = orderId;
             _db.Orders.Add(o);
-            
+
             _db.SaveChanges();
 
-            return View();
-        }
+            var q =_db.Orders.Where(n=>n.MerchantTradeNo == orderId).FirstOrDefault();
 
-
-        public IActionResult CartList()
-        {
-            //step1 : 網頁導入傳值到前端
-            //
-            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
-            //需填入你的網址
-            var website = $"https://localhost:7203/";
-            var order = new Dictionary<string, string>
-    {
-        //綠界需要的參數
-
-        //必填
-        { "MerchantID",  "3002599"},//特店編號
-        { "MerchantTradeNo",  orderId},//特店訂單編號 不可重複使用
-        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
-        { "PaymentType",  "aio"},//交易類型(固定aio)
-        { "TotalAmount",  "1450"},//交易金額
-        { "TradeDesc",  "Test"},//交易描述
-        { "ItemName",  "測試商品"},//商品名稱
-        { "ReturnURL",  $"{website}/Transaction/addOrders"},//付款完成通知回傳網址
-        { "ChoosePayment",  "ALL"},//選擇預設付款方式
-        { "EncryptType",  "1"},//CheckMacValue加密類型
-
-        //選填
-        /*{ "ExpireDate",  "3"},*///分期
-        { "CustomField1",  ""},//自訂名稱欄位1
-        { "CustomField2",  ""},
-        { "CustomField3",  ""},
-        { "CustomField4",  ""},
-        { "OrderResultURL", $"{website}/Transaction/payInfo/{orderId}"},//Client端回傳付款結果網址
-        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
-        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
-        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},//隱藏付款方式
-        
-        
-        
-    };
-            //檢查碼
-            order["CheckMacValue"] = GetCheckMacValue(order);
-
-            ViewBag.order = order;
-
+            foreach (var product in cartList)
+            {
+                OrderDetail od = new OrderDetail();
+                od.OrderId = q.OrderId;
+                od.ProductId = product.Product.ProductId;
+                od.Quantity = product.count;
+                od.UnitPrice = product.UnitPrice;
+                _db.OrderDetails.Add(od);
+            }
+            _db.SaveChanges();
 
             if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
             {
@@ -342,58 +290,12 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                List<CCartItem>? cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-                return View(cart);
+                string? json2 = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+                List<CCartItem>? carts = JsonSerializer.Deserialize<List<CCartItem>>(json2);
+                return View(carts);
             }
         }
-        [HttpPost]
-        public IActionResult CartLIst()
-        {
-
-
-
-
-
-
-
-            int count = 0;
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
-            var data = Request.Form;
-            var pid = data["ProductID"];
-            var qta = data["ProductQta"];
-            var pay = data["odPay"];
-            var ship = data["odShip"];
-            Order o = new Order();
-            o.MemberId = m.MemberId;
-            o.OrderDate = System.DateTime.Now;
-            o.PayId = Int32.Parse(pay);
-            o.ShipId = Int32.Parse(ship);
-            o.StateId = 2;
-            o.ShipDate= System.DateTime.Now.AddDays(2);
-            o.DeliveryDate = System.DateTime.Now.AddDays(3);
-            _db.Orders.Add(o);
-            _db.SaveChanges();
-            var lastOrder = _db.Orders.OrderByDescending(n=>n.OrderId).FirstOrDefault().OrderId;
-            foreach (var id in pid)
-            {
-                var q = _db.Products.Find(Int32.Parse(id));
-                q.UnitsInStock -= int.Parse(qta[count]);
-                OrderDetail od = new OrderDetail();
-                od.ProductId = Int32.Parse(id);
-                od.Quantity = int.Parse(qta[count]);
-                od.OrderId = lastOrder;
-                od.UnitPrice = q.UnitPrice;
-                _db.OrderDetails.Add(od);
-                count++;
-            }
-            _db.SaveChanges();
-
-            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
-            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
-            return RedirectToAction("index");
-        }
+       
         public IActionResult KeySearch(string Key)
         {
             if (Key == null)
@@ -629,6 +531,57 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult changeState()
+        {
+            var form = Request.Form;
+            int orderid= Int32.Parse(form["orderid"]);
+            string state = form["state"];
+            var order = _db.Orders.Include(n => n.OrderDetails).Where(n => n.OrderId == orderid).FirstOrDefault();
+            List<int> productList = new List<int>();
+            foreach(var item in order.OrderDetails)
+            {
+                productList.Add((int)item.ProductId);
+            }
+            
+            var returnOrder = _db.ReturnProducts.Where(n=>n.OrderId== orderid).FirstOrDefault();
 
+
+            if(state == "退款申請中")
+            {
+                order.StateId = 16;
+                returnOrder.ReturnState = "退款處理中";
+                returnOrder.ProcessedDate= System.DateTime.Now;
+                _db.SaveChanges();
+                return Content("退款處理中");
+            }
+            else if(state=="退款處理中")
+            {
+                order.StateId = 17;
+                returnOrder.ReturnState= "退款完成";
+
+                foreach(var item in productList)
+                {
+                    var product = _db.Products.Find(item);
+                    product.UnitsInStock += order.OrderDetails.Where(n => n.ProductId == item).FirstOrDefault().Quantity;
+                }
+
+                _db.SaveChanges();
+                return Content("退款完成");
+            }
+            else if(state=="退款完成")
+            {
+                order.StateId = 15;
+                returnOrder.ReturnState = "退款申請中";
+                returnOrder.ProcessedDate = null;
+                _db.SaveChanges();
+                return Content("退款申請中");
+            }
+            else
+            {
+                return Content("錯誤");
+            }
+
+        }
     }
 }
