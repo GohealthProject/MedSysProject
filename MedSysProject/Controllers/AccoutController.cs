@@ -408,6 +408,9 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Logout()
         {
+            //wait 2 sec
+            Thread.Sleep(1600);
+
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
