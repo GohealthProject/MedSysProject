@@ -259,11 +259,13 @@ namespace MedSysProject.Controllers
         /// <returns></returns>
         public IActionResult ShowComments(int BlogId)
         {
+            int total=_db.Comments.Count(comment=>comment.BlogId==BlogId);
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
                                             .Include(comment => comment.Employee.EmployeeClass)
                                             .Where(comment => comment.BlogId == BlogId && comment.ParentCommentId == null)
                                 .Select(comment => comment)).ToList();
+            ViewBag.totalComment = total;
             return PartialView(mainComments);
         }
         public IActionResult ShowReplies(int mainCommentId) 
@@ -292,6 +294,30 @@ namespace MedSysProject.Controllers
                 allReplies.Add(reply);
                 howManyExactly(reply.CommentId, ref allReplies);
             }             
+        }
+
+        public IActionResult BackShowReplies(int mainCommentId) 
+        { 
+            List<Comment> backAllReplies = new List<Comment>();
+            backHowManyExactly(mainCommentId, ref backAllReplies);
+            return PartialView("BackShowReplies", backAllReplies);
+        }
+
+        private void backHowManyExactly(int parentCommentId, ref List<Comment> backAllReplies)
+        {
+            var subReplies = _db.Comments.Include(reply => reply.Member)
+                                         .Include(reply => reply.Employee)
+                                         .Include(reply => reply.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment)
+                                         .Include(reply => reply.ParentComment.Employee)
+                                         .Include(reply => reply.ParentComment.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment.Member)
+                                         .Where(reply => reply.ParentCommentId == parentCommentId).ToList();
+            foreach (var reply in subReplies)
+            {
+                backAllReplies.Add(reply);
+                backHowManyExactly(reply.CommentId, ref backAllReplies);
+            }
         }
         #endregion
 

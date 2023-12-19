@@ -1,9 +1,8 @@
 ﻿@model List<MedSysProject.Models.Comment>
 <!--部分檢視，哪裡沒對到?-->
-<h1>哈囉</h1>
 <div class="comments">
     <!--一個h5顯示共幾則留言，可能要加一個div並在右邊放收折按鈕(顯示所有留言)-->
-    <h5 class="comment-title py-4">2 Comments</h5>
+    <h5 class="comment-title py-4">共 @ViewBag.totalComment 則留言</h5>
     @{
         //所有留言用id做排序
         var comments = from comment in Model
