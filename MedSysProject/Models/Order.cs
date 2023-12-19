@@ -8,25 +8,24 @@ namespace MedSysProject.Models;
 
 public partial class Order
 {
-    [JsonIgnore]
     public int OrderId { get; set; }
-    [JsonIgnore]
+
     public DateTime OrderDate { get; set; }
-    [JsonIgnore]
+
     public int? MemberId { get; set; }
-    [JsonIgnore]
+
     public int? ShipId { get; set; }
-    [JsonIgnore]
+
     public int? PayId { get; set; }
-    [JsonIgnore]
+
     public int? StateId { get; set; }
-    [JsonIgnore]
+
     public DateTime? ShipDate { get; set; }
-    [JsonIgnore]
+
     public DateTime? DeliveryDate { get; set; }
-    [JsonIgnore]
+
     public string MerchantTradeNo { get; set; }
-    [JsonIgnore]
+
     public string TradeNo { get; set; }
     [JsonIgnore]
     public virtual Member Member { get; set; }
