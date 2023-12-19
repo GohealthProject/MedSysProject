@@ -20,56 +20,125 @@
         <h6 class="m-0 font-weight-bold text-primary">方案調整</h6>
     </div>
     <div class="card-body">
-        <p>
-            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
-                <i class="fas fa-plus"></i>
-            </a>
-        </p>
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        序
-                    </th>
-                    <th>
-                        方案名稱
-                    </th>
-                    <th>
-                        方案描述
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int count = 0;
-                    foreach (var item in Model)
-                    {
-                        count++;
-                        <tr class="table-warning">
-                            <td>
-                                @count
-                                <input type="hidden" value="@item.PlanId" />
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PlanName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PlanDescription)
-                            </td>
-                            <td>
-                                <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a class="btn btn-danger" id="btnDel" onclick="get(this)">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </td>
+
+        <div class="plan-container mb-3">
+            <ul class="nav nav-pills" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">方案管理</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">項目管理</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                <p>
+                    <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                序
+                            </th>
+                            <th>
+                                方案名稱
+                            </th>
+                            <th>
+                                方案描述
+                            </th>
+                            <th></th>
                         </tr>
-                    }
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count = 0;
+                            foreach (var item in Model)
+                            {
+                                count++;
+                                <tr class="table-warning">
+                                    <td>
+                                        @count
+                                        <input type="hidden" value="@item.PlanId" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PlanName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PlanDescription)
+                                    </td>
+                                    <td>
+                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger" id="btnDel" onclick="get(this)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <p>
+                    <a class="btn btn-success" data-toggle="modal" data-target="#modalCreateprj">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                序
+                            </th>
+                            <th>
+                                項目名稱
+                            </th>
+                            <th>
+                                項目價格
+                            </th>
+                            <th>執行動作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int countPj = 0;
+                            foreach (var item in ViewBag.Project)
+                            {
+                                countPj++;
+                                <tr class="table-warning">
+                                    <td>
+                                        @countPj
+                                        <input type="hidden" value="@item.ProjectId" />
+                                    </td>
+                                    <td>
+                                        @item.ProjectName
+                                    </td>
+                                    <td>
+                                        @item.ProjectPrice
+                                    </td>
+                                    <td>
+                                        <a onclick="updataprj(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEditprj">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger" id="btnDel" onclick="getprj(this)">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -116,7 +185,7 @@
                                             <label class="form-check-label" for="@item.ProjectId">
                                                 @item.ProjectName
                                             </label>
-                                            
+
                                         </div>
 
                                         <br />
@@ -205,6 +274,97 @@
 </div>
 @* ---修改彈窗結束--- *@
 
+@* ---prj新增彈窗開始--- *@
+<div class="modal fade" id="modalCreateprj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">新增項目</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form id="myCreatedataformprj" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <input type="hidden" id="CinputIdprj" value="" name="CProjectId" />
+                                <label class="control-label">項目名稱</label>
+                                <input class="form-control" id="CinputNameprj" name="CProjectName" required />
+                                <div class="invalid-feedback">請輸入項目名稱</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">項目價格</label>
+                                <input class="form-control" id="CinputPriceprj" name="CProjectPrice" rows="3" required></input>
+                                <div class="invalid-feedback">請輸入項目價格</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelProjectCreate" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" id="Cbtnprj">確定新增</button>
+                    <button class="btn btn-dark" id="demoProjectCreate">DEMO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---prj新增彈窗結束--- *@
+
+@* ---prj修改彈窗開始--- *@
+<div class="modal fade" id="modalEditprj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">修改項目</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form id="myEditdataformprj" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <input type="hidden" id="inputIdprj" value="" name="ProjectId" />
+                                <label class="control-label">項目名稱</label>
+                                <input class="form-control" id="inputNameprj" name="ProjectName" required />
+                                <div class="invalid-feedback">請輸入項目名稱</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">項目價格</label>
+                                <input class="form-control" id="inputPriceprj" name="ProjectPrice" rows="3" required></input>
+                                <div class="invalid-feedback">請輸入項目價格</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelProjectEdit" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" id="btnprj">確定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---prj修改彈窗結束--- *@
+
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
     function Caddcheck() {
@@ -227,11 +387,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-            <label class="form-check-label" for="${newId}">
-                <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
-            </label>
-        `;
+                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                        <label class="form-check-label" for="${newId}">
+                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
+                                        </label>
+                                    `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -262,11 +422,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                <label class="form-check-label" for="${newId}">
-                    <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
-                </label>
-            `;
+                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                            <label class="form-check-label" for="${newId}">
+                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
+                                            </label>
+                                        `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -293,7 +453,7 @@
         const state = await response.status;
         if (response.ok) {
             createPrj(form);
-            
+
 
         } else {
             Swal.fire({
@@ -360,6 +520,14 @@
 
     }
 
+    const idprj = document.querySelector("Projectid");
+    function getprj(element) {
+        let par = element.parentNode.parentNode;
+        var hidd = par.querySelector('input[type="hidden"]');
+        console.log(hidd.value);
+        delprj(hidd.value);
+    }
+
 
     //主畫面按下去要彈框框的事件
     function updata(element) {
@@ -412,6 +580,27 @@
                 console.log(err);
             });
 
+
+    }
+
+
+    //項目類主畫面按下去要彈框框的事件
+    function updataprj(element) {
+        showToggetprj(element)
+    }
+
+    //把項目資料印到彈出來的視窗(去掉空白)
+    function showToggetprj(element) {
+        let par = element.closest("tr");
+        let tds = par.getElementsByTagName("td");
+
+        let tdid = tds[0].querySelector('input[type="hidden"]');
+        let tdname = tds[1].innerHTML;
+        let tdprice = tds[2].innerHTML;
+
+        document.getElementById("inputIdprj").value = tdid.value;
+        document.getElementById("inputNameprj").value = tdname.trim();
+        document.getElementById("inputPriceprj").value = tdprice.trim();
 
     }
 
@@ -526,6 +715,43 @@
         }
     }
 
+    async function delprj(idprj) {
+        const result = await Swal.fire({
+            title: "確定要刪除嗎？",
+            text: "此步驟將無法復原！",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "取消",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "確定刪除"
+        });
+
+        if (result.isConfirmed) {
+
+            const response = await fetch(`https://localhost:7078/api/Projects/${id}`, {
+                method: 'DELETE'
+            });
+            let data = await response.status
+            if (response.ok) {
+                Swal.fire({
+                    title: "刪除成功!",
+                    text: data,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
+                });
+            }
+            research()
+        }
+    }
+
     //新增其他項目
     // function Caddprj() {
     //     var choose = document.getElementById("Cprjchoose");
@@ -564,5 +790,17 @@
         $("#CinputId").val("");
         $("#CinputName").val("");
         $("#CinputDescription").val("");
+    });
+
+    $("#demoProjectCreate").click(function () {
+        $("#CinputIdprj").val("");
+        $("#CinputNameprj").val("超級快樂項目");
+        $("#CinputPriceprj").val("1000");
+    });
+
+    $("#CancelProjectCreate").click(function () {
+        $("#CinputIdprj").val("");
+        $("#CinputNameprj").val("");
+        $("#CinputPriceprj").val("");
     });
 </script>
