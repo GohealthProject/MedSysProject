@@ -224,62 +224,81 @@
                                                                         </td>
                                                                         <td>
                                                                             @{
-                                                                                                                            @*Html.DisplayFor(modelItem => item.State.StateName)*@
+                                    @*Html.DisplayFor(modelItem => item.State.StateName)*@
                                     //1.順利送達 2.轉運中 3.配送中 4.配送中(當日) 5.取件中 6.已集貨 7.取消取件 8.未順利取件 9.暫置營業所 10.調查處理中 11.不在家 12.公司行號休息
                                     if (item.StateId == 1)
                                     {
-                                                                                                                                <span class="badge badge-success state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-success state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 2)
                                     {
-                                                                                <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 3)
                                     {
-                                                                                <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 4)
                                     {
-                                                                                <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 5)
                                     {
-                                                                                <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 6)
                                     {
-                                                                                <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 7)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 8)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 9)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 10)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 11)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 12)
                                     {
-                                                                                <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 13)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 14)
+                                    {
+                                        <span class="badge badge-success state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 15)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 16)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if(item.StateId == 17)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else
                                     {
-                                                                                <span class="badge badge-secondary state" style="font-size:large;">@item.State.StateName</span>
-
+                                        <span class="badge badge-secondary state" style="font-size:large;">@item.State.StateName</span>
                                     }
-                                                                            }
+                                }
                                                                         </td>
                                                                         @*             <td>
                     @Html.DisplayFor(modelItem => item.ShipDate)
