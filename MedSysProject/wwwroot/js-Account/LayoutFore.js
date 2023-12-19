@@ -3,7 +3,13 @@
 
     if (logbutton) {
         logbutton.addEventListener('click', () => {
-            alert("登出成功");
+            Swal.fire({
+                title: "您已登出!",
+                text: "將為您跳轉至首頁",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
         })
     }
 })
