@@ -655,43 +655,43 @@ namespace MedSysProject.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetCompanyPlan(int? planId)
-        {
-            if (planId == null)
-            {
-                return BadRequest("Plan ID is required.");
-            }
+        //[HttpGet("{planId}")]
+        //public IActionResult GetCompanyPlan(int? planId)
+        //{
+        //    if (planId == null)
+        //    {
+        //        return BadRequest("Plan ID is required.");
+        //    }
 
-            var queryResult = _context.Plans
-                .Where(p => p.PlanId == planId)
-                .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project })
-            .Where(p => p.project.PlanId == planId)
-            .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it })
-            .Where(p => p.Project.ProjectId == p.it.ProjectId)
-            .Select(t => new
-            {
-                planId = t.Project.PlanRefs.First().PlanId,
-                planName = t.Project.PlanRefs.First().Plan.PlanName,
-                projectid = t.Project.ProjectId,
-                ProjectName = t.Project.ProjectName,
-                ProjectPrice = t.Project.ProjectPrice,
-                itemId = t.it.ItemId,
-                ItemName = t.it.ItemName,
-                ItemPrice = t.it.ItemPrice
-            })
-            .ToList();
+        //    var queryResult = _context.Plans
+        //        .Where(p => p.PlanId == planId)
+        //        .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project })
+        //    .Where(p => p.project.PlanId == planId)
+        //    .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it })
+        //    .Where(p => p.Project.ProjectId == p.it.ProjectId)
+        //    .Select(t => new
+        //    {
+        //        planId = t.Project.PlanRefs.First().PlanId,
+        //        planName = t.Project.PlanRefs.First().Plan.PlanName,
+        //        projectid = t.Project.ProjectId,
+        //        ProjectName = t.Project.ProjectName,
+        //        ProjectPrice = t.Project.ProjectPrice,
+        //        itemId = t.it.ItemId,
+        //        ItemName = t.it.ItemName,
+        //        ItemPrice = t.it.ItemPrice
+        //    })
+        //    .ToList();
 
-            if (queryResult != null && queryResult.Any())
-            {
-                string json = JsonConvert.SerializeObject(queryResult, Formatting.Indented);
-                return Json(json); // 返回 JsonResult
-            }
-            else
-            {
-                return NotFound($"No data found for Plan ID {planId}");
-            }
-        }
+        //    if (queryResult != null && queryResult.Any())
+        //    {
+        //        string json = JsonConvert.SerializeObject(queryResult, Formatting.Indented);
+        //        return Json(json); // 返回 JsonResult
+        //    }
+        //    else
+        //    {
+        //        return NotFound($"No data found for Plan ID {planId}");
+        //    }
+        //}
     }
 }
 
