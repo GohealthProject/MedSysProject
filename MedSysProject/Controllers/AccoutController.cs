@@ -562,7 +562,22 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        public IActionResult ReturnProduct()
+        {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Login");
 
+            string? json  = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+            List<int> ReturnOrderList = _db.Orders.Where(n => n.MemberId == m.MemberId && n.StateId == 15).Select(n=>n.OrderId).ToList();
+            List<ReturnProduct> ReturnProductList = _db.ReturnProducts.Where(n => ReturnOrderList.Contains((int)n.OrderId)).ToList();
+
+            
+            
+
+            return View(ReturnProductList);
+        }
         public IActionResult TrackingList()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
