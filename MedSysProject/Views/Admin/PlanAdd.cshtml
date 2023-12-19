@@ -116,12 +116,13 @@
                                             <label class="form-check-label" for="@item.ProjectId">
                                                 @item.ProjectName
                                             </label>
+                                            
                                         </div>
 
                                         <br />
                                     }
                                 }
-                                <a class="btn btn-link" onclick="addcheck()"><i class="fas fa-plus"></i> 新增其他項目</a>
+                                <a class="btn btn-link" onclick="Caddcheck()"><i class="fas fa-plus"></i> 新增其他項目</a>
                                 <div class="invalid-feedback">請至少勾選一項</div>
                             </div>
 
@@ -187,7 +188,7 @@
                                         <br />
                                     }
                                 }
-                                <a class="btn btn-link" onclick="addprj"><i class="fas fa-plus"></i> 新增其他項目</a>
+                                <a class="btn btn-link" onclick="addcheck()"><i class="fas fa-plus"></i> 新增其他項目</a>
                                 <div class="invalid-feedback">請至少勾選一項</div>
                             </div>
 
@@ -206,7 +207,7 @@
 
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script>
-    function addcheck() {
+    function Caddcheck() {
         // Find the last checkbox within the form group
         var Cprjchoose = document.getElementById('Cprjchoose')
         console.log(Cprjchoose);
@@ -228,7 +229,7 @@
         newCheckbox.innerHTML = `
             <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
             <label class="form-check-label" for="${newId}">
-                <input type="text" class="form-control" placeholder="自定義方案...">
+                <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
             </label>
         `;
 
@@ -237,6 +238,41 @@
 
         // Append the new checkbox and line break to the existing form group
         var formGroup = document.getElementById('Cprjchoose');
+        formGroup.appendChild(newCheckbox);
+        formGroup.appendChild(lineBreak);
+    }
+
+    function addcheck() {
+        // Find the last checkbox within the form group
+        var prjchoose = document.getElementById('prjchoose')
+        console.log(prjchoose);
+
+        var lastbox = $('#prjchoose').find('input[type="checkbox"]').last()[0];
+        console.log(lastbox);
+
+        // Determine the last ID used
+        var lastId = lastbox.id;
+        console.log(lastId);
+
+        // Increment the ID for the new checkbox
+        var newId = parseInt(lastId) + 1;
+
+        // Create a new checkbox element
+        var newCheckbox = document.createElement('div');
+        newCheckbox.className = 'form-check-inline';
+        newCheckbox.style.marginLeft = '1em';
+        newCheckbox.innerHTML = `
+                <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                <label class="form-check-label" for="${newId}">
+                    <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
+                </label>
+            `;
+
+        // Create a new line break element
+        var lineBreak = document.createElement('br');
+
+        // Append the new checkbox and line break to the existing form group
+        var formGroup = document.getElementById('prjchoose');
         formGroup.appendChild(newCheckbox);
         formGroup.appendChild(lineBreak);
     }
@@ -250,6 +286,27 @@
     })
     async function create(form) {
         let url = `https://localhost:7078/api/Plans`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: form,
+        });
+        const state = await response.status;
+        if (response.ok) {
+            createPrj(form);
+            
+
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
+    async function createPrj(form) {
+        console.log(form)
+        let url = `https://localhost:7078/api/Projects`;
         const response = await fetch(url, {
             method: 'POST',
             body: form,
@@ -364,6 +421,7 @@
         let apiurl = `https://localhost:7078/api/Plans/Up/${id}`;
         var myForm = document.getElementById("myUpdataform");
         var data = new FormData(myForm);
+        createPrj(data);
         const response = await fetch(apiurl, {
             method: 'PUT',
             body: data
@@ -469,26 +527,26 @@
     }
 
     //新增其他項目
-    function Caddprj() {
-        var choose = document.getElementById("Cprjchoose");
-        console.log("------------" + choose + "------------")
-        //找到choose裡面的最後一個checkbox的value
+    // function Caddprj() {
+    //     var choose = document.getElementById("Cprjchoose");
+    //     console.log("------------" + choose + "------------")
+    //     //找到choose裡面的最後一個checkbox的value
 
-        let prjid = choose.lastChild.querySelector('input[type="checkbox"]').value; //找到最後一個checkbox的value
-        console.log(prjid)
-        //插入新的chkbox，value為最後一個的value+1
-        const newprjid = parseInt(prjid) + 1;
-        console.log(newprjid)
-        choose.innerHTML += `                                        <div class="form-check-inline" style="margin-left:1em;">
-                                                                                                                    <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
-                                                                                                                <label class="form-check-label" for="${newprjid}">
-                                                                                                            <input class="form-control" id="CinputName" name="CPlanName" required />
-                                                                                                        </label>
-                                                                                                    </div>
+    //     let prjid = choose.lastChild.querySelector('input[type="checkbox"]').value; //找到最後一個checkbox的value
+    //     console.log(prjid)
+    //     //插入新的chkbox，value為最後一個的value+1
+    //     const newprjid = parseInt(prjid) + 1;
+    //     console.log(newprjid)
+    //     choose.innerHTML += `                                        <div class="form-check-inline" style="margin-left:1em;">
+    //                                                                                                                 <input class="form-check-input" type="checkbox" name="prjchk" value="${newprjid}" id="${newprjid}">
+    //                                                                                                             <label class="form-check-label" for="${newprjid}">
+    //                                                                                                         <input class="form-control" id="CinputName" name="CPlanName" required />
+    //                                                                                                     </label>
+    //                                                                                                 </div>
 
-                                                                                                    <br />`;
+    //                                                                                                 <br />`;
 
-    }
+    // }
 
     async function research() {
         await new Promise(resolve => setTimeout(resolve, 1600));
