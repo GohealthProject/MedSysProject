@@ -557,7 +557,7 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                return Ok();
+                return Content("錯誤");
             }
 
         }
