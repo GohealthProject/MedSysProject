@@ -671,6 +671,30 @@ namespace MedSysProject.Controllers
             return View(viewModel);
         }
 
+
+        public List<ProductsCategory> GetCategories()
+        {
+            // 使用 LINQ 查詢從數據庫中獲取所有類別
+            List<ProductsCategory> categories = _db.ProductsCategories.ToList();
+
+            return categories;
+        }
+
+
+        public ActionResult FilterProducts()
+        {
+            var products = _db.Products.ToList(); // 假設 _db 是您的資料庫上下文
+            var categories = GetCategories(); // 假設 GetCategories 是一個獲取類別清單的方法
+            var productsWithCategories = products.Select(product => new CProductsWrap(product, product.ProductsClassifications.ToList())).ToList();
+
+            return View(productsWithCategories);
+        }
+
+
+
+
+
+
         [HttpPost]
         public IActionResult ToggleDiscontinued(int productId, bool discontinued)
         {

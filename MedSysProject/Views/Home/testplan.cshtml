@@ -12,6 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
     <style>
         h4.bg-green {
             text-align: center; /* 使標題水平居中 */
@@ -36,9 +39,9 @@
 
         #plansSection {
             display: flex;
-            flex-wrap: nowrap; 
-            overflow-x: hidden; 
-            justify-content: center; 
+            flex-wrap: nowrap;
+            overflow-x: hidden;
+            justify-content: center;
         }
 
         .card {
@@ -56,7 +59,7 @@
             height: auto; /* 調整行高 */
         }
 
-        .table tbody tr td {
+            .table tbody tr td {
                 vertical-align: middle; /* 垂直居中 */
             }
 
@@ -118,35 +121,32 @@
                 transform: translateY(0);
             }
 
-
-
     </style>
-  
-    </head>
+
+</head>
 <body>
     <h4 class="bg-green" style="background-color: aliceblue"><strong class="text-dark">企業方案個人健檢項目比較</strong></h4>
     <div class="table-button-container">
         <div class="table-container">
             <table class="table table-success table-striped table-hover">
-        <thead>
-            <tr>
-                <th>健檢項目</th>
-                <th id="plansHeader">
-                    <select id="planSelect" class="form-control centered-select">
-                        <!-- 選項將動態添加 -->
-                    </select>
-                </th>
-            </tr>
-        </thead>
-        <tbody id="comparisonTableBody">
-            <!-- 動態添加項目和方案比較的行 -->
-        </tbody>
-        <tfoot>
-            <tr>
-                        <!-- 自動生成按鈕還沒寫 -->
-            </tr>
-            
-        </tfoot>
+                <thead>
+                    <tr>
+                        <th>健檢項目</th>
+                        <th id="plansHeader">
+                            <select id="planSelect" class="form-control centered-select">
+                                <!-- 選項將動態添加 -->
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonTableBody">
+                    <!-- 動態添加項目和方案比較的行 -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                    </tr>
+
+                </tfoot>
             </table>
         </div>
         <div class="btn-section">
@@ -175,17 +175,17 @@
                 }
             });
 
-           planSelect.change(function () {
-    var selectedPlanId = $(this).val();
-    if (!selectedPlanId) return; // 避免空選項觸發
+            planSelect.change(function () {
+                var selectedPlanId = $(this).val();
+                if (!selectedPlanId) return; // 避免空選項觸發
 
-    var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
-    addPlanColumn(selectedPlan);
-    addedPlans.push(selectedPlanId); // 將選擇的方案ID添加到陣列中
-    $(this).prop('disabled', true); // 禁用選擇過的選單
-    // 調用 addSelectButtonToFooter 函數以添加按鈕
-    addSelectButtonToFooter(selectedPlan.planId); 
-});
+                var selectedPlan = globalPlans.find(p => p.planId == selectedPlanId);
+                addPlanColumn(selectedPlan);
+                addedPlans.push(selectedPlanId); // 將選擇的方案ID添加到陣列中
+                $(this).prop('disabled', true); // 禁用選擇過的選單
+                // 調用 addSelectButtonToFooter 函數以添加按鈕
+                addSelectButtonToFooter(selectedPlan.planId);
+            });
         }
 
         // 在表頭添加新的下拉選單
@@ -207,44 +207,37 @@
             }
         }
 
-   function addSelectButtonToFooter(planId) {
-    var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
-    var footerCell = footerRow.find('td:first');
+        function addSelectButtonToFooter(planId) {
+            var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+            var newFooterCell = $('<td></td>');
+            var selectButton = createSelectButton(planId);
+            newFooterCell.append(selectButton);
+            footerRow.append(newFooterCell);
+        }
 
-    // 在現有的 footerRow 中添加新按鈕的單元格
-    var newFooterCell = $('<td></td>').attr('plan-id', planId);
-    var selectButton = $('<button></button>').addClass('btn btn-primary').text('選擇');
-    newFooterCell.append(selectButton);
-    footerRow.append(newFooterCell);
-
-    // 更新 colspan 為當前列數減去按鈕數量加一
-    var colspanCount = $('#comparisonTableBody tr:first td').length - footerRow.find('td').length + 1;
-    footerCell.attr('colspan', colspanCount);
-}
-
-function updateFooterColspan() {
-    var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
-    var colspanCount = $('#comparisonTableBody tr:first td').length - footerRow.find('td').length + 1;
-    footerRow.find('td:first').attr('colspan', colspanCount);
-}
+        function updateFooterColspan() {
+            var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+            var colspanCount = $('#comparisonTableBody tr:first td').length - footerRow.find('td').length + 1;
+            footerRow.find('td:first').attr('colspan', colspanCount);
+        }
 
 
         // 添加方案比較列
-      function addPlanColumn(plan) {
-    var tableBody = $('#comparisonTableBody');
-    tableBody.find('tr').each(function (index, tr) {
-        var project = globalProjects[index];
-        var includesProject = plan.projects.some(p => p.projectId === project.projectId);
-        var symbol = includesProject ? '<i class="fas fa-check-circle text-success icon-fade-in"></i>' : '<i class="fas fa-times-circle text-danger icon-fade-in"></i>';
-        var newTd = $('<td></td>').html(symbol);
-        $(tr).append(newTd);
-    });
-    animateIconElements();
-}
+        function addPlanColumn(plan) {
+            var tableBody = $('#comparisonTableBody');
+            tableBody.find('tr').each(function (index, tr) {
+                var project = globalProjects[index];
+                var includesProject = plan.projects.some(p => p.projectId === project.projectId);
+                var symbol = includesProject ? '<i class="fas fa-check-circle text-success icon-fade-in"></i>' : '<i class="fas fa-times-circle text-danger icon-fade-in"></i>';
+                var newTd = $('<td></td>').html(symbol);
+                $(tr).append(newTd);
+            });
+            animateIconElements();
+        }
 
-     
 
-       
+
+
 
         function createComparisonTableRows() {
             var tableBody = $('#comparisonTableBody');
@@ -256,7 +249,7 @@ function updateFooterColspan() {
             });
         }
 
-  function createFooterCell() {
+        function createFooterCell() {
             var footer = $('#comparisonTableBody').closest('table').find('tfoot');
             var footerRow = footer.find('tr');
 
@@ -271,33 +264,21 @@ function updateFooterColspan() {
 
         function addSelectButtonToFooter(planId) {
             var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
-            var planIndex = addedPlans.indexOf(planId.toString()) + 1; // 獲取當前計劃的索引
-
-            // 確保 footerRow 存在
-            if (footerRow.length === 0) {
-                footerRow = $('<tr></tr>').appendTo($('#comparisonTableBody').closest('table').find('tfoot'));
-            }
-
-            // 確保 footerRow 有足夠的單元格（包括 "健檢項目" 列和所有計劃列）
-            while (footerRow.find('td').length < $('#comparisonTableBody tr:first td').length) {
-                footerRow.append('<td></td>');
-            }
-
-            // 添加按鈕到正確的位置
-            var newFooterCell = footerRow.find('td').eq(planIndex);
-            var selectButton = $('<button></button>').addClass('btn btn-primary').text('選擇');
-            newFooterCell.html(selectButton);
+            var newFooterCell = $('<td></td>');
+            var selectButton = createSelectButton(planId);
+            newFooterCell.append(selectButton);
+            footerRow.append(newFooterCell);
         }
 
         function updateFooterColspan() {
             var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
             var totalCells = $('#comparisonTableBody tr:first td').length;
-            var buttonCells = footerRow.find('td').length - 1; 
+            var buttonCells = footerRow.find('td').length - 1;
             var colspan = totalCells - buttonCells;
             footerRow.find('td:first').attr('colspan', colspan);
         }
 
-         function loadData() {
+        function loadData() {
             return $.ajax({ // 確保這裡返回一個 Promise 對象
                 url: '@Url.Action("GetPlansAndProjects", "Home")',
                 type: 'GET',
@@ -316,14 +297,14 @@ function updateFooterColspan() {
             });
         }
 
-          function animateIconElements() {
-    $('.icon-fade-in').each(function (i) {
-        var element = $(this);
-        setTimeout(function () {
-            element.addClass('visible');
-        }, i * 100);
-    });
-}
+        function animateIconElements() {
+            $('.icon-fade-in').each(function (i) {
+                var element = $(this);
+                setTimeout(function () {
+                    element.addClass('visible');
+                }, i * 100);
+            });
+        }
 
         // 添加動畫效果
         function animateElements() {
@@ -334,11 +315,88 @@ function updateFooterColspan() {
                 }, i * 100); // 每個元素之間延遲100毫秒
             });
         }
+
+        $(document).on('click', '.btn-primary', function () {
+            var planId = $(this).closest('td').attr('plan-id');
+            if (!planId) {
+                console.error('Plan ID not found.');
+                return;
+            }
+
+            // 假設 globalPlans 中的 planId 是數字類型
+            planId = parseInt(planId);
+            var selectedPlan = globalPlans.find(p => p.planId === planId);
+
+            if (!selectedPlan || !selectedPlan.PlanRefs) {
+                console.error('Selected plan not found or does not have PlanRefs for ID:', planId);
+                return;
+            }
+
+            var projectNames = selectedPlan.PlanRefs.map(planRef => planRef.Project?.ProjectName).filter(name => name != null);
+
+            var data = {
+                planId: planId,
+                projects: projectNames
+            };
+
+            var jsonData = JSON.stringify(data);
+            // 這裡可以選擇一種發送數據的方式
+        });
+
+
+        // 創建帶有事件監聽器的 "選擇" 按鈕的函數
+        function createSelectButton(planId) {
+            return $('<button></button>')
+                .addClass('btn btn-primary')
+                .text('選擇')
+                .attr('data-plan-id', planId)
+                .on('click', function () {
+                    sendPlanData($(this).data('plan-id'));
+                });
+        }
+
+
+
+
+        // 發送數據並重定向的函數
+        // 發送數據並重定向的函數
+        async function sendPlanData(planId) {
+            try {
+                // 請確保此 URL 與您的後端路由設置相匹配
+                let response = await fetch(`/Home/GetCompanyPlan/${planId}`);
+                if (!response.ok) throw new Error('Server response wasn\'t OK');
+
+                let data = await response.json();
+                alert(JSON.stringify(data)); // 顯示帶有 JSON 數據的警告窗口
+
+                // 根據需要重定向到適當的頁面
+                window.location.href = '/Home/Customcompare';
+            } catch (error) {
+                console.error("錯誤:", error);
+            }
+        }
+
+        //---變數區
+        let table = new DataTable('#datatable');
+        const btnSubmit = document.querySelector("#submit");
+        const xhr = new XMLHttpRequest();
+
+       
+        // 當按下 '選擇' 按鈕時的事件處理
+        $(document).on('click', '.btn-primary', function () {
+            var planId = $(this).attr('data-plan-id');
+            if (!planId) {
+                console.error('Plan ID not found.');
+                return;
+            }
+            sendPlanData(planId);
+        });
+
     </script>
 
- 
 
-    
+
+
 
 
 
@@ -349,10 +407,10 @@ function updateFooterColspan() {
 
 
 <!--Grid column-->
-@section Scripts{
+@section Scripts {
     <script>
 
     </script>
-   
 
-    }
+
+}
