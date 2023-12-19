@@ -19,5 +19,7 @@ public partial class ReturnProduct
 
     public decimal? RefundAmount { get; set; }
 
+    public string ReturnReason { get; set; }
+
     public virtual Order Order { get; set; }
 }

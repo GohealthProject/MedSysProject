@@ -242,7 +242,7 @@
                     BlogId: blogId,
                     MemberId: memberLogIn,
                     Content: InputTextArea.value
-                };
+                };  
                 const requestOption =
                 {
                     method: 'POST',
@@ -314,7 +314,7 @@
                     console.log(parentCommentId);//測試用，能抓到按鈕對應留言區塊
                     const replyFormWrap = comment.querySelector('.js-reply-form-wrap');
                     replyFormWrap.classList.add("active");
-                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]')
+                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]');
                     console.log(inputReply);
                     inputReply.addEventListener('keydown', async function (event) {
                         if (event.key === "Enter" && !event.shiftKey) {
@@ -408,7 +408,7 @@
             console.log(data);
             const popularContainer = document.querySelector('#pills-popular');
             const popular6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt ,views} = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -422,7 +422,7 @@
                                                             <span>${formattedDate}</span>
                                                         </div>
                                                     <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                       <span class="author mb-3 d-block">${author}</span>
+                                                               <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                    </div>
 
                                                 `
@@ -438,7 +438,7 @@
             const latestContainer = document.querySelector('#pills-latest');
 
             const latest6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt ,views} = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -452,7 +452,7 @@
                                                             <span>${formattedDate}</span>
                                                         </div>
                                                     <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                       <span class="author mb-3 d-block">${author}</span>
+                                                               <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                    </div>
 
                                                 `
@@ -468,7 +468,7 @@
             console.log(data);
             const thisCarContainer = document.querySelector('#pills-thisCat');
             const thisCat6 = data.$values.map(blog => {
-                const { blogId, title, author, articleClass, createdAt } = blog;
+                const { blogId, title, author, articleClass, createdAt ,views} = blog;
 
                 const date = new Date(createdAt);
                 const year = date.getFullYear();
@@ -482,7 +482,7 @@
                                                             <span>${formattedDate}</span>
                                                         </div>
                                                     <h2 class="mb-2"><a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">${title}</a></h2>
-                                                       <span class="author mb-3 d-block">${author}</span>
+                                                               <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
                                                    </div>
 
                                                 `
