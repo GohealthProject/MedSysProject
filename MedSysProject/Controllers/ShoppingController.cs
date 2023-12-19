@@ -531,6 +531,35 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult changeState()
+        {
+            var form = Request.Form;
+            int orderid= Int32.Parse(form["orderid"]);
+            string state = form["state"];
+            var order = _db.Orders.Find(orderid);
+            var returnOrder = _db.ReturnProducts.Where(n=>n.OrderId== orderid).FirstOrDefault();
 
+            if(state == "退款申請中")
+            {
+                order.StateId = 16;
+                returnOrder.ReturnState = "退款處理中";
+                returnOrder.ProcessedDate= System.DateTime.Now;
+                _db.SaveChanges();
+                return Content("退款處理中");
+            }
+            else if(state=="退款處理中")
+            {
+                order.StateId = 17;
+                returnOrder.ReturnState= "退款完成";
+                _db.SaveChanges();
+                return Content("退款完成");
+            }
+            else
+            {
+                return Content("錯誤");
+            }
+
+        }
     }
 }

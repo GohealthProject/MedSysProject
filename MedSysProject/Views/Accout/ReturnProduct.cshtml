@@ -23,21 +23,24 @@
         </thead>
         <tbody>
             @{
-                
+
                 int count = 0;
                 int RegularPrice = 0;
                 int SpecialPrice = 0;
                 string ReturnNum = "";
+                string ReturnID = "";
                 foreach (var item in Model)
                 {
-                    
+                    ReturnNum = item.ReturnDate.ToString();
+                    ReturnNum = ReturnNum.Split(" ")[0];
+                    ReturnID = ReturnNum.Replace("/", "")+item.ReturnId;
                     count++;
                     <tr style="vertical-align: middle">
 
                         <td style="vertical-align: middle" class="fs-4">@count</td>
-                        <td class="fs-4">@item.ReturnId</td>
+                        <td class="fs-4">@ReturnID</td>
                         <td style="vertical-align: middle " class="fs-4">@item.OrderId</td>
-                        <td class=" fs-4" style="vertical-align: middle">@item.ReturnDate</td>
+                        <td class=" fs-4" style="vertical-align: middle">@ReturnNum</td>
                         <td class=" fs-4" style="vertical-align: middle">@item.ProcessedDate</td>
                         <td class=" fs-4" style="vertical-align: middle">@item.ReturnReason</td>
                         <td class="text-danger fs-4" style="vertical-align: middle">@item.ReturnState</td>
