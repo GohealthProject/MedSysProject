@@ -67,6 +67,9 @@
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js" />
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js.map" />
     <None Include="wwwroot\js\AdminJavaScript.js" />
+    <None Include="wwwroot\js\dist\tw-city-selector.js" />
+    <None Include="wwwroot\js\dist\tw-city-selector.js.map" />
+    <None Include="wwwroot\js\dist\tw-city-selector.min.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.min.js" />

@@ -134,6 +134,10 @@
       {
          "Name": "[dbo].[TrackingList]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TWAddress]",
+         "ObjectType": 0
       }
    ],
    "UiHint": "jie-testsrv.MedSys.dbo",
