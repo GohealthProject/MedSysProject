@@ -16,12 +16,12 @@
     var Banned = TempData["Banned"] as string;
 }
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+@* <script src="https://accounts.google.com/gsi/client" async defer></script>
 <div id="g_id_onload"
      data-client_id="641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com"
      data-login_uri="/Accout/ValidGoogleLogin"
      data-auto_prompt="false"> 
-</div>
+</div> *@
 
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v18.0" nonce="XWFh9EQT"></script>
@@ -36,7 +36,7 @@
             <form method="post" id="from" style="padding-top:0px;">
                 <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
 
-                <div class="g_id_signin py-1" data-type="standard"></div>
+                @* <div class="g_id_signin py-1" data-type="standard"></div> *@
                 
 
                 @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
