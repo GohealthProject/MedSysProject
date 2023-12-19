@@ -1,55 +1,22 @@
-﻿
-   @{
-    ViewData["Title"] = "健檢報告";
+﻿@{
+    ViewData["Title"] = "000";
     Layout = "_Layout_Admin2";
 }
 
-
 @{
 }
-@*boostrap*@
-@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-*@
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-@*datatable*@
-<link href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script><script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
-
-
-@*boostrap-table*@
-<link href="https://cdn.jsdelivr.net/npm/jquery-treegrid@0.3.0/css/jquery.treegrid.css" rel="stylesheet">
-<link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/jquery-treegrid@0.3.0/js/jquery.treegrid.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/treegrid/bootstrap-table-treegrid.min.js"></script>
-
-<link href="https://cdn.datatables.net/v/dt/dt-1.13.8/b-2.4.2/b-html5-2.4.2/datatables.min.css" rel="stylesheet">
-
-<script src="https://cdn.datatables.net/v/dt/dt-1.13.8/b-2.4.2/b-html5-2.4.2/datatables.min.js"></script>
-
 <style>
-  
+    #A {
+        background-color: aquamarine;
+    }
 </style>
 <!-- Button trigger modal -->
 <!-- Button trigger modal -->
 <meta charset="UTF-8">
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">會員管理</h6>
-    </div>
-    <div class="card-body">
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Launch static backdrop modal
 </button>
-<button  id="e04">123</button>
+<button id="e04">123</button>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -57,24 +24,23 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">我是內容</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" @*aria-label="Close"*@>×</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                        <table id="tableD" class="table table-bordered table-hover" width="100%" cellspacing="0">
-                   <thead class="thead-dark">
+                <table id="tableD">
+                    <thead>
                         <tr>
                             <th>下拉</th>
-                            <th >健檢細項ID</th>
-                            <th>健檢報告ID</th>
-                            <th>項目名稱</th>
-                            <th>檢查結果</th>
-                            <th>修改</th>
-                            <th>動作</th>
+                            <th>reportDetailId</th>
+                            <th>reportId</th>
+                            <th>itemId</th>
+                            <th>rs</th>
+                            <th>input</th>
+                            <th>empty</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
-
                     </tbody>
                 </table>
             </div>
@@ -86,19 +52,19 @@
     </div>
 </div>
 
-        <table id="tableM" class="table table-bordered table-hover" width="100%" cellspacing="0">
-    <thead class="thead-dark">
+<table id="tableM" class="">
+    <thead>
         <tr>
             <th>序</th>
             <th>會員ID</th>
             <th>會員姓名</th>
-          
+
 
         </tr>
     </thead>
 </table>
 
-   
+
 
 <button id="dd">123</button>
 
@@ -107,34 +73,33 @@
     <button id="button" class="btn btn-secondary">refreshOptions</button>
 </div>
 <table id="table" hidden
-       @*data-toggle="table"
+@*data-toggle="table"
        data-height="460"
        data-ajax="ajaxRequest"
        data-search="true"
        data-side-pagination="server"
        data-pagination="true"
        data-show-refresh="true"*@>
-   @* <thead>
-        <tr>
-            <th data-field="reportDetailId">reportDetailId</th>
-            <th data-field="reportId">reportId</th>
-            <th data-field="itemId">itemId</th>
-            <th data-field="result">itemId</th>
-        </tr>
+    @* <thead>
+    <tr>
+    <th data-field="reportDetailId">reportDetailId</th>
+    <th data-field="reportId">reportId</th>
+    <th data-field="itemId">itemId</th>
+    <th data-field="result">itemId</th>
+    </tr>
     </thead>*@
 </table>
-    </div>
-</div>
+
 <script>
-   
+
     //test
     //$table.bootstrapTable('refresh')
     var myModal = document.getElementById('e04');
     var fku = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-    myModal.addEventListener("click",(e)=>{
-    fku.show();
+    myModal.addEventListener("click", (e) => {
+        fku.show();
     })
-    
+
     //var errorModal = document.getElementById('e04'); //Modal的id
     //console.log(errorModal)
     //var modal = Modal.getOrCreateInstance(errorModal); //創建或取得modal實例
@@ -150,10 +115,6 @@
     //內表////////////dd
     var ttt = $('#tableD').DataTable({
         //設定語言
-         dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 'pdf'
-        ],
         "language": {
             "processing": "處理中...",
             "loadingRecords": "載入中...",
@@ -175,7 +136,43 @@
                 "sortDescending": ": 降冪排列"
             }
         },
-       
+        //移除預設的搜尋框
+        "dom": '<"top"lpB>rt<"bottom"ip>',
+        "buttons": [
+            {
+                extend: 'excel',
+                text: '匯出Excel',
+                className: 'btn btn-success',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                }
+            },
+            {
+                extend: 'print',
+                text: '列印',
+                className: 'btn btn-info',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                }
+            },
+            {
+                extend: 'pdf',
+                text: '匯出PDF',
+                className: 'btn btn-danger',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                },
+                customize: function (doc) {
+                    doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
+                }
+            }
+        ],
         "autoWidth": false,
         "ajax": {
             "url": "https://localhost:7203/admin/test1/",
@@ -195,27 +192,27 @@
                 "targets": -1,
                 "render": function (data, type, full, meta) {
                     return (
-                    `
-                        <a class="btn btn-primary" data-toggle="modal">
-                        <i class="fas fa-edit"></i>
-                        </a>
-                       <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
-                        <i class="fas fa-trash-alt"></i>
-                         </a>
-                    ` 
+                        `
+                            <a class="btn btn-primary" data-toggle="modal">
+                            <i class="fas fa-edit"></i>
+                            </a>
+                           <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+                            <i class="fas fa-trash-alt"></i>
+                             </a>
+                        `
                     )
-                }   
-                
+                }
+
             },
-                {
+            {
 
                 "targets": 5,
                 "render": function (data, type, full, meta) {
                     return ("<input type='text' id = 'text'>")
                 }
-                },
-              
-               
+            },
+
+
 
             //},
             //       {
@@ -237,82 +234,49 @@
             { data: 'name', title: "項目" },
             { data: 'result', title: "結果" },
             { data: null },
-            { data: null },           
+            { data: null },
         ],
 
-       
-       
-            //{
-            //    extend: 'print',
-            //    text: '列印',
-            //    className: 'btn btn-info',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    }
-            //},
-            //{
-            //    extend: 'pdf',
-            //    text: '匯出PDF',
-            //    className: 'btn btn-danger',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    },
-            //    customize: function (doc) {
-            //        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
-            //    }
-            //}
-        
+        //{
+        //    extend: 'print',
+        //    text: '列印',
+        //    className: 'btn btn-info',
+        //    exportOptions: {
+        //        modifier: {
+        //            page: 'all'
+        //        }
+        //    }
+        //},
+        //{
+        //    extend: 'pdf',
+        //    text: '匯出PDF',
+        //    className: 'btn btn-danger',
+        //    exportOptions: {
+        //        modifier: {
+        //            page: 'all'
+        //        }
+        //    },
+        //    customize: function (doc) {
+        //        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
+        //    }
+        //}
 
-       
-        
-    
-    
+
+
+
+
+
 
     });
     //外表//
-    var count =0
+    var count = 0
     var table = $('#tableM').DataTable({
-        scrollY: true,
-        scroller: {
-            rowHeight: 10
-        },
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 'pdf'
-        ],
-        "language": {
-            "processing": "處理中...",
-            "loadingRecords": "載入中...",
-            "lengthMenu": "每頁 _MENU_ 位會員",
-            "zeroRecords": "沒有符合的會員",
-            "info": "顯示第 _START_ 至 _END_ 位會員，共 _TOTAL_ 位",
-            "infoEmpty": "顯示第 0 至 0 位會員，共 0 位",
-            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
-            "infoPostFix": "",
-            "search": "搜尋:",
-            "paginate": {
-                "first": "第一頁",
-                "previous": "上一頁",
-                "next": "下一頁",
-                "last": "最後一頁"
-            },
-            "aria": {
-                "sortAscending": ": 升冪排列",
-                "sortDescending": ": 降冪排列"
-            }
-        },
-
         "autoWidth": false,
         ajax: {
             url: 'https://localhost:7203/transaction/members',
             dataSrc: ''
         },
         columns: [
-           
             {
                 data: null,
                 width: "20px",
@@ -320,21 +284,16 @@
                     count++;
                     return count;
                 }
-                
+
             },
-            { data: 'memberId', title: "會員編號", },
+            { data: 'memberId', title: "會員編號" },
             { data: 'memberName', title: "姓名" },
             //{ data: "healthReports", title: "mid" },
             //{ data: 'state_date' },
             //{ data: 'office' },
             //{ data: 'extn' }
         ],
-        "columnDefs": [{
-            "className": "dt-center align-middle",
-            "targets": "_all"
-        },
-        ]
-       
+
     })
     //if (row.child.isShown()) {
     //    // This row is already open - close it
@@ -361,11 +320,10 @@
             var datarr = data
             let tabletr = event.target.closest('tr');
             let tablerow = table.row(tabletr);
-            
-           
+
+
             ////彈窗
-            if (thistr.className=="A")
-            {
+            if (thistr.className == "A") {
                 ////ttt更新
                 var id = (event.target.closest('tr').children[2].innerHTML)
                 //    console.log(id)
@@ -373,49 +331,75 @@
                 ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
                 $.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
 
-                  var datarr = data
-                  if(datarr.length ==0)
-                  {
-                  alert("null")
-                  }
-                  else{
-                  fku.show();
-                  }
-                  console.log(datarr)
+                    var datarr = data
+                    if (datarr.length == 0) {
+                        alert("null")
+                    }
+                    else {
+                        fku.show();
+                    }
+                    console.log(datarr)
                 })
 
+                ////自建表
+                //$.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
+
+                //    var datarr = data
+                //    console.log(datarr)
+                ////tableD.
+
+                //var ttd1 = document.createElement("td")
+                //var ttd2 = document.createElement("td");
+                //var ttd3 = document.createElement("td");
+                //var ttd4 = document.createElement("td");
+
+                //var newtr = document.createElement("tr");
+
+                //ttd1.innerHTML = datarr[0].item.itemName
+                //ttd2.innerHTML = "2"
+                //ttd3.innerHTML = "3"
+                //ttd4.innerHTML = "4"
+
+                //newtr.appendChild(ttd2);
+                //newtr.appendChild(ttd4);
+                //newtr.appendChild(ttd3);
+                //newtr.appendChild(ttd1);
+                //newtr.setAttribute("Class", "A");
+                //newtr.setAttribute("style", "background-color:#5CADAD");
+                //tbody.appendChild(newtr);
+
+                //fku.show();
+
+                //})
 
 
             }
-           else{
+            else {
 
-            //收縮
-            if (thistr.id == "on") {
-                // This row is already open - close it
-                for (var i = 0; i < data[0].healthReports.length;i++)
-                {
-                    if (thistr.nextSibling!=null)
-                    {
-                        if ( thistr.nextSibling.className == ""||thistr.nextSibling.className != "A" )
-                    continue;
-                    var rm = document.querySelector(".A")
-                    //thistr.nextsibilings.remove()
-                    thistr.parentNode.removeChild(rm)
-                    }
-                    else
-                    {
-                        break
-                    }
+                //收縮
+                if (thistr.id == "on") {
+                    // This row is already open - close it
+                    for (var i = 0; i < data[0].healthReports.length; i++) {
+                        if (thistr.nextSibling != null) {
+                            if (thistr.nextSibling.className == "" || thistr.nextSibling.className != "A")
+                                continue;
+                            var rm = document.querySelector(".A")
+                            //thistr.nextsibilings.remove()
+                            thistr.parentNode.removeChild(rm)
+                        }
+                        else {
+                            break
+                        }
 
-                }
-                alert("a")
-                thistr.removeAttribute("id")
-            } else {
-                //Open this row
-                //擴展
-                console.log(tablerow)
-                thistr.setAttribute("id","on")
-                //head
+                    }
+                    alert("a")
+                    thistr.removeAttribute("id")
+                } else {
+                    //Open this row
+                    //擴展
+                    console.log(tablerow)
+                    thistr.setAttribute("id", "on")
+                    //head
                     //var ttabletd1 = document.createElement("td")
                     //var ttabletd2 = document.createElement("td");
                     //var ttabletd3 = document.createElement("td");
@@ -431,47 +415,43 @@
                     //tnewtr.appendChild(ttabletd4);
                     //tnewtr.setAttribute("Class", "A");
                     //tnewtr.setAttribute("style", "background-color:green");
-                   
-                    
 
-            for (var i = 0; i <= data[0].healthReports.length;i++)
-            {
-                    var tabletd1 = document.createElement("td")
-                    var tabletd2 = document.createElement("td")
-                    ;
-                    var tabletd3 = document.createElement("td");
-                    
-                    var tabletd4 = document.createElement("td");
 
-                    var newtr = document.createElement("tr");
-                    //data[0].healthReports[i].reportId
-                    //data[0].healthReports[i].reserve.reserveDate
-                    tabletd1.innerHTML = "1"
-                    tabletd2.innerHTML = "2"
-                    tabletd3.innerHTML = data[0].healthReports[i].reportId
-                    //if (data[0].healthReports[i].reserve=!null)
-                    tabletd4.innerHTML = data[0].healthReports[i].reserve.reserveDate
-                   tabletd2.setAttribute("Class","align-middle")
-                   tabletd3.setAttribute("Class","align-middle");
-                    newtr.appendChild(tabletd2);
-                    newtr.appendChild(tabletd4);
-                    newtr.appendChild(tabletd3);
-                    newtr.appendChild(tabletd1);
-                    newtr.setAttribute("Class", "A");
-                    newtr.setAttribute("style", "background-color:#5CADAD");
-                    thistr.after(newtr)
 
-            }
+                    for (var i = 0; i <= data[0].healthReports.length; i++) {
+                        var tabletd1 = document.createElement("td")
+                        var tabletd2 = document.createElement("td");
+                        var tabletd3 = document.createElement("td");
+                        var tabletd4 = document.createElement("td");
+
+                        var newtr = document.createElement("tr");
+                        //data[0].healthReports[i].reportId
+                        //data[0].healthReports[i].reserve.reserveDate
+                        tabletd1.innerHTML = "1"
+                        tabletd2.innerHTML = "2"
+                        tabletd3.innerHTML = data[0].healthReports[i].reportId
+                        //if (data[0].healthReports[i].reserve=!null)
+                        tabletd4.innerHTML = data[0].healthReports[i].reserve.reserveDate
+
+                        newtr.appendChild(tabletd2);
+                        newtr.appendChild(tabletd4);
+                        newtr.appendChild(tabletd3);
+                        newtr.appendChild(tabletd1);
+                        newtr.setAttribute("Class", "A");
+                        newtr.setAttribute("style", "background-color:#5CADAD");
+                        thistr.after(newtr)
+
+                    }
                     //thistr.after(tnewtr)
-                    
-            
-            }
+
+
+                }
             }
         })
     });
 
-    
-    
+
+
 
     //dd.addEventListener("click", () => {
     //    $('#tableM').DataTable({
@@ -491,11 +471,11 @@
 
     /////摺疊
     ttt.on('click', 'td.dt-control', function (event) {
-      
+
         let tr = event.target.closest('tr');
         let row = ttt.row(tr);
         console.log(tr)
-        
+
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
         var td3 = document.createElement("td");
@@ -514,33 +494,33 @@
 
         tr.after(trr).show();
 
-        
 
 
-       
+
+
     });
-    
+
     // Formatting function for row details - modify as you need
     function format(event) {
         // `d` is the original data object for the row
         console.log(event)
         return (
-           
+
             '<tr>' +
-                '<td>'+
-                    "aa"+
-                '</td>' +
-                '<td>' +
-                     event.result +
-                '</td>' +
             '<td>' +
             "aa" +
             '</td>' +
             '<td>' +
             event.result +
             '</td>' +
-            '</tr>' 
-            
+            '<td>' +
+            "aa" +
+            '</td>' +
+            '<td>' +
+            event.result +
+            '</td>' +
+            '</tr>'
+
         );
     }
 
@@ -560,52 +540,52 @@
 
     //console.log(event.target.closest('tr').children[0].innerHTML)///該選取欄位之ID
     //tableM.addEventListener("click", () => {
-        
-        //modalshow
-        //fku.show();
+
+    //modalshow
+    //fku.show();
 
 
-        //btn.setAttribute("data-ajax", "ajaxRequest2")
-        //ajaxRequest2(params)
-        //console.log(btn)
-        //var table = $('#example').DataTable();
-        //table.ajax.reload();
+    //btn.setAttribute("data-ajax", "ajaxRequest2")
+    //ajaxRequest2(params)
+    //console.log(btn)
+    //var table = $('#example').DataTable();
+    //table.ajax.reload();
 
-        //bs
-        //var table = document.querySelector('#table');
-        //var $button = $('#button')
-        
-        //$.ajax({
-        //    url: 'https://localhost:7203/admin/test1',
-        //    data: data,
-        //    success: success,
-        //    dataType: dataType
-        //});
-       //// var datasss = $.get('https://localhost:7203/admin/test1/')
-       
+    //bs
+    //var table = document.querySelector('#table');
+    //var $button = $('#button')
 
-        //$('#myModal').on('shown.bs.modal', function () {
-        //    alert("00")
-        //})
+    //$.ajax({
+    //    url: 'https://localhost:7203/admin/test1',
+    //    data: data,
+    //    success: success,
+    //    dataType: dataType
+    //});
+    //// var datasss = $.get('https://localhost:7203/admin/test1/')
+
+
+    //$('#myModal').on('shown.bs.modal', function () {
+    //    alert("00")
+    //})
     //    var id = (event.target.closest('tr').children[0].innerHTML)
     //    console.log(id)
     //    ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
-      
 
-        
+
+
 
     //})
-   
-   
 
 
-   
 
-    function g8(){
 
-        
+
+
+    function g8() {
+
+
         //tableD.setAttribute("hidden", false);
-        tableM.setAttribute("hidden","");
+        tableM.setAttribute("hidden", "");
         tableD.removeAttribute("hidden");
         table2.ajax.url('https://localhost:7203/admin/test1').load();
         //dt
@@ -658,9 +638,9 @@
     //    ]
     //});
 
-     
-    
-       ////////XXXXXX
+
+
+    ////////XXXXXX
     //$('#tableD').DataTable({
     //    ajax: {
     //        url: 'https://localhost:7203/admin/test1',
@@ -702,7 +682,7 @@
     ////    const data = await response.json();
     ////    //console.log(data);
     ////}
-    
+
     ////Table.on('click', function (e) {
     ////    let data = table.row(e.target.closest('tr')).data();
 
@@ -724,11 +704,11 @@
     //        //console.log(data);
     //    }
 
-        //Table.on('click', function (e) {
-        //    let data = table.row(e.target.closest('tr')).data();
+    //Table.on('click', function (e) {
+    //    let data = table.row(e.target.closest('tr')).data();
 
-        //    alert(data[0] + "'s salary is: " + data[5]);
-        //})
+    //    alert(data[0] + "'s salary is: " + data[5]);
+    //})
 
     //var $table = $('#table')
 
@@ -749,7 +729,7 @@
                 {
                     field: 'ck',
                     checkbox: true
-                }, 
+                },
                 {
                     field: 'memberId',
                     title: 'MID',
@@ -761,7 +741,7 @@
                     field: 'memberName',
                     title: 'name'
                 },
-                
+
                 {
                     field: 'memberGender',
                     title: 'Gender'
@@ -779,7 +759,7 @@
             //                $table.bootstrapTable('resetView')
             //            }
             //        })
-                //}
+            //}
             //}
         })
     })

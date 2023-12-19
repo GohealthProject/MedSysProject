@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Azure;
 using Microsoft.CodeAnalysis.FlowAnalysis;
 using System.Collections.Generic;
+using static MedSysProject.Controllers.HomeController;
+using System.Data;
 
 namespace MedSysProject.Controllers
 {
@@ -1034,19 +1036,79 @@ namespace MedSysProject.Controllers
 
         public IActionResult test1(int id = 0)
         {
-            IEnumerable<ReportDetail> datas = null;
+            //IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (id == 0)
-                datas = from s in _db.ReportDetails
-                        orderby s.ReportId
-                        select s;
+            //if (id == 0)
+            //    datas = from s in _db.ReportDetails
+            //            orderby s.ReportId
+            //            select s;
 
-            else
-                datas = _db.ReportDetails.Where(p =>
-                p.Report.MemberId.Equals(id));
+            //else
+              var  datas = _db.ReportDetails.Where(p => p.Report.ReportId.Equals(id))
+                        .Select(p => new{name = p.Item.ItemName, result =p.Result , ReportId = p.Report.ReportId, ReportDetailId=p.ReportDetailId});
             return Json(datas);
+            
 
+
+
+
+
+
+
+            //var pl = _context.Plans.Where(p => p.PlanId == planid)
+            //   .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => p.project.PlanId == planid)
+            //   .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
+
+            //   //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+            //   .Select(t => new
+            //   {
+            //       planId = t.Project.PlanRefs.First().PlanId,
+            //       planName = t.Project.PlanRefs.First().Plan.PlanName,
+            //       projectid = t.Project.ProjectId,
+            //       ProjectName = (string)t.Project.ProjectName,
+            //       ProjectPrice = (double)t.Project.ProjectPrice,
+            //       itemId = t.it.ItemId,
+            //       ItemName = (string)t.it.ItemName,
+            //       ItemPrice = (int)t.it.ItemPrice,
+            //   });
+            ////------datatable 轉json區--------
+            //DataTable dt = new DataTable();
+            //dt.Columns.Add(new DataColumn("planId"));
+            //dt.Columns.Add(new DataColumn("planName"));
+
+            //dt.Columns.Add(new DataColumn("projectid"));
+            //dt.Columns.Add(new DataColumn("ProjectName"));
+            //dt.Columns.Add(new DataColumn("ProjectPrice"));
+            //dt.Columns.Add(new DataColumn("itemId"));
+            //dt.Columns.Add(new DataColumn("ItemName"));
+            //dt.Columns.Add(new DataColumn("ItemPrice"));
+            //foreach (var t in pl)
+            //{
+            //    DataRow dr = dt.NewRow();
+
+            //    dr["planId"] = t.planId;
+            //    dr["PlanName"] = t.planName;
+
+            //    dr["projectid"] = t.projectid;
+            //    dr["ProjectName"] = t.ProjectName;
+            //    dr["ProjectPrice"] = t.ProjectPrice;
+            //    dr["itemId"] = t.itemId;
+            //    dr["ItemName"] = t.ItemName;
+            //    dr["ItemPrice"] = t.ItemPrice;
+            //    dt.Rows.Add(dr);
+            //}
+            //DataTableToJsonConverter converter = new DataTableToJsonConverter();
+            //string js = converter.ConverterDataTableToJson(dt);
+
+            ////------datatable 轉json區--------
+
+
+
+            //string json = System.Text.Json.JsonSerializer.Serialize(pl);
+
+
+            //return js;
         }
 
 
