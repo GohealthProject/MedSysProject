@@ -1,6 +1,10 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
+   @{
+    ViewData["Title"] = "健檢報告";
+    Layout = "_Layout_Admin2";
+}
+
+
 @{
 }
 @*datatable*@
@@ -48,6 +52,7 @@
                             <th>reportId</th>
                             <th>itemId</th>
                             <th>rs</th>
+                            <th>input</th>
                             <th>empty</th>
                         </tr>
                     </thead>
@@ -67,7 +72,7 @@
 <table id="tableM" class="">
     <thead>
         <tr>
-            <th>00</th>
+            <th>序</th>
             <th>會員ID</th>
             <th>會員姓名</th>
           
@@ -94,12 +99,10 @@
        data-show-refresh="true"*@>
    @* <thead>
         <tr>
-            
             <th data-field="reportDetailId">reportDetailId</th>
             <th data-field="reportId">reportId</th>
             <th data-field="itemId">itemId</th>
             <th data-field="result">itemId</th>
-            
         </tr>
     </thead>*@
 </table>
@@ -127,7 +130,7 @@
     /////////////
 
     //內表////////////dd
-    var ttt = $('#tableDD').DataTable({
+    var ttt = $('#tableD').DataTable({
         "autoWidth": false,
         "ajax": {
             "url": "https://localhost:7203/admin/test1/",
@@ -136,22 +139,46 @@
         },
         //給table內自定義按鈕
         "columnDefs": [
+            //{
+            //    "className": "dt-center align-middle",
+            //    "targets": "_all"
+            //},
             {
+
                 // targets用於指定操作的列，從第0列開始，-1爲最後一列，這裏第六列
                 // return後邊是我們希望在指定列填入的按鈕代碼
                 "targets": -1,
                 "render": function (data, type, full, meta) {
-                    return ("<button class='btn btn-primary' id = 'testButton'>點擊我！</button> <button class='btn btn-primary' id = 'testButton'>點擊我！</button>")
-                    
-                }, 
-             
+                    return (
+                    `
+                        <a class="btn btn-primary" data-toggle="modal">
+                        <i class="fas fa-edit"></i>
+                        </a>
+                       <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+                        <i class="fas fa-trash-alt"></i>
+                         </a>
+                    ` 
+                    )
+                }   
+                
             },
-                   {
-                       //隱藏
-                target: 4,
-                visible: false,
-                searchable: false
-            },
+                {
+
+                "targets": 5,
+                "render": function (data, type, full, meta) {
+                    return ("<input type='text' id = 'text'>")
+                }
+                },
+              
+               
+
+            //},
+            //       {
+            //           ////隱藏
+            //    target: 4,
+            //    visible: false,
+            //    searchable: false
+            //},
         ],
         columns: [
             {
@@ -160,10 +187,11 @@
                 data: null,
                 defaultContent: ''
             },
-            { data: 'ReportDetailId'/*, title: "健檢詳細ID"*/ },
-            { data: 'ReportId', title: "健檢報告ID" },
+            { data: 'reportDetailId', title: "健檢詳細ID" },
+            { data: 'reportId', title: "健檢報告ID" },
             { data: 'name', title: "項目" },
             { data: 'result', title: "結果" },
+            { data: null },
             { data: null },
             
             
@@ -176,6 +204,7 @@
 
     });
     //外表//
+    var count =0
     var table = $('#tableM').DataTable({
         "autoWidth": false,
         ajax: {
@@ -184,10 +213,13 @@
         },
         columns: [
             {
-                className: 'dt-control',
-                orderable: false,
                 data: null,
-                defaultContent: '11'
+                width: "20px",
+                render: function (data, type, row) {
+                    count++;
+                    return count;
+                }
+                
             },
             { data: 'memberId', title: "會員編號" },
             { data: 'memberName', title: "姓名" },
@@ -233,7 +265,18 @@
                 //    console.log(id)
                 title.innerHTML = `健檢報告ID:${id}`
                 ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
+                $.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
 
+                  var datarr = data
+                  if(datarr.length ==0)
+                  {
+                  alert("null")
+                  }
+                  else{
+                  fku.show();
+                  }
+                  console.log(datarr)
+                })
 
                 ////自建表
                 //$.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
