@@ -656,17 +656,17 @@ namespace MedSysProject.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCompanyPlan(int? planid)
+        public IActionResult GetCompanyPlan(int? planId)
         {
-            if (planid == null)
+            if (planId == null)
             {
                 return BadRequest("Plan ID is required.");
             }
 
             var queryResult = _context.Plans
-                .Where(p => p.PlanId == planid)
+                .Where(p => p.PlanId == planId)
                 .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project })
-            .Where(p => p.project.PlanId == planid)
+            .Where(p => p.project.PlanId == planId)
             .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it })
             .Where(p => p.Project.ProjectId == p.it.ProjectId)
             .Select(t => new
@@ -689,7 +689,7 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                return NotFound($"No data found for Plan ID {planid}");
+                return NotFound($"No data found for Plan ID {planId}");
             }
         }
     }

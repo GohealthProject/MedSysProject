@@ -355,22 +355,16 @@
                 });
         }
 
-
-
-
-        // 發送數據並重定向的函數
         // 發送數據並重定向的函數
         async function sendPlanData(planId) {
             try {
-                // 請確保此 URL 與您的後端路由設置相匹配
-                let response = await fetch(`/Home/GetCompanyPlan/${planId}`);
+                // 確保此處使用正確的路由格式
+                let response = await fetch(`https://localhost:7078/api/CPlan/3?planid=3`);
                 if (!response.ok) throw new Error('Server response wasn\'t OK');
 
                 let data = await response.json();
-                alert(JSON.stringify(data)); // 顯示帶有 JSON 數據的警告窗口
-
-                // 根據需要重定向到適當的頁面
-                window.location.href = '/Home/Customcompare';
+                // 將數據傳遞到下一個頁面的邏輯（可能需要存儲到本地存儲或session存儲）
+                window.location.href = '/Home/Customcompare'; // 更新此處以傳遞數據
             } catch (error) {
                 console.error("錯誤:", error);
             }
