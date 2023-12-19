@@ -295,45 +295,7 @@ namespace MedSysProject.Controllers
                 return View(carts);
             }
         }
-        //[HttpPost]
-        //public IActionResult CartLIst()
-        //{
-        //    int count = 0;
-        //    string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-        //    MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
-        //    var data = Request.Form;
-        //    var pid = data["ProductID"];
-        //    var qta = data["ProductQta"];
-        //    var pay = data["odPay"];
-        //    var ship = data["odShip"];
-        //    Order o = new Order();
-        //    o.MemberId = m.MemberId;
-        //    o.OrderDate = System.DateTime.Now;
-        //    o.PayId = Int32.Parse(pay);
-        //    o.ShipId = Int32.Parse(ship);
-        //    o.StateId = 2;
-        //    o.ShipDate= System.DateTime.Now.AddDays(2);
-        //    o.DeliveryDate = System.DateTime.Now.AddDays(3);
-        //    _db.Orders.Add(o);
-        //    _db.SaveChanges();
-        //    var lastOrder = _db.Orders.OrderByDescending(n=>n.OrderId).FirstOrDefault().OrderId;
-        //    foreach (var id in pid)
-        //    {
-        //        var q = _db.Products.Find(Int32.Parse(id));
-        //        q.UnitsInStock -= int.Parse(qta[count]);
-        //        OrderDetail od = new OrderDetail();
-        //        od.ProductId = Int32.Parse(id);
-        //        od.Quantity = int.Parse(qta[count]);
-        //        od.OrderId = lastOrder;
-        //        od.UnitPrice = q.UnitPrice;
-        //        _db.OrderDetails.Add(od);
-        //        count++;
-        //    }
-        //    _db.SaveChanges();
-
-
-        //    return RedirectToAction("index");
-        //}
+       
         public IActionResult KeySearch(string Key)
         {
             if (Key == null)
