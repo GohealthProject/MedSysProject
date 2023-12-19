@@ -537,8 +537,15 @@ namespace MedSysProject.Controllers
             var form = Request.Form;
             int orderid= Int32.Parse(form["orderid"]);
             string state = form["state"];
-            var order = _db.Orders.Find(orderid);
+            var order = _db.Orders.Include(n => n.OrderDetails).Where(n => n.OrderId == orderid).FirstOrDefault();
+            List<int> productList = new List<int>();
+            foreach(var item in order.OrderDetails)
+            {
+                productList.Add((int)item.ProductId);
+            }
+            
             var returnOrder = _db.ReturnProducts.Where(n=>n.OrderId== orderid).FirstOrDefault();
+
 
             if(state == "退款申請中")
             {
@@ -552,8 +559,23 @@ namespace MedSysProject.Controllers
             {
                 order.StateId = 17;
                 returnOrder.ReturnState= "退款完成";
+
+                foreach(var item in productList)
+                {
+                    var product = _db.Products.Find(item);
+                    product.UnitsInStock += order.OrderDetails.Where(n => n.ProductId == item).FirstOrDefault().Quantity;
+                }
+
                 _db.SaveChanges();
                 return Content("退款完成");
+            }
+            else if(state=="退款完成")
+            {
+                order.StateId = 15;
+                returnOrder.ReturnState = "退款申請中";
+                returnOrder.ProcessedDate = null;
+                _db.SaveChanges();
+                return Content("退款申請中");
             }
             else
             {
