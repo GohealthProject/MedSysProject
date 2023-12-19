@@ -352,5 +352,16 @@ namespace MedSysProject.Controllers
                           select blog;
             return PartialView("_MedicalNews", medical.ToList());
         }
+
+        public IActionResult LoadCelebritySharing()
+        {
+            var celebrity = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                                .Include(blog => blog.ArticleClass)
+                                                .Where(blog => blog.ArticleClassId == 3)
+                                                .OrderByDescending(blog => blog.BlogId)
+                                                .Take(9)
+                            select blog;
+            return PartialView("_CelebritySharing", celebrity.ToList());
+        }
     }
 }
