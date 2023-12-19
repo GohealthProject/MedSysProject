@@ -35,6 +35,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<Member> Members { get; set; }
 
+    public virtual DbSet<MembersStatus> MembersStatuses { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -64,6 +66,8 @@ public partial class MedSysContext : DbContext
     public virtual DbSet<Reserve> Reserves { get; set; }
 
     public virtual DbSet<ReservedSub> ReservedSubs { get; set; }
+
+    public virtual DbSet<ReturnProduct> ReturnProducts { get; set; }
 
     public virtual DbSet<SubProjectBridge> SubProjectBridges { get; set; }
 
@@ -340,12 +344,30 @@ public partial class MedSysContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("memberPhone");
+            entity.Property(e => e.StatusId).HasColumnName("statusID");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
             entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Members)
+                .HasForeignKey(d => d.StatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Members_MembersStatus");
 
             entity.HasOne(d => d.Tax).WithMany(p => p.Members)
                 .HasForeignKey(d => d.TaxId)
                 .HasConstraintName("FK_Member_Corporation");
+        });
+
+        modelBuilder.Entity<MembersStatus>(entity =>
+        {
+            entity.HasKey(e => e.StatusId);
+
+            entity.ToTable("MembersStatus");
+
+            entity.Property(e => e.StatusId).HasColumnName("statusID");
+            entity.Property(e => e.StatusName)
+                .HasMaxLength(50)
+                .HasColumnName("statusName");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -359,6 +381,7 @@ public partial class MedSysContext : DbContext
                 .HasColumnType("date")
                 .HasColumnName("deliveryDate");
             entity.Property(e => e.MemberId).HasColumnName("memberId");
+            entity.Property(e => e.MerchantTradeNo).IsUnicode(false);
             entity.Property(e => e.OrderDate)
                 .HasColumnType("date")
                 .HasColumnName("orderDate");
@@ -368,6 +391,7 @@ public partial class MedSysContext : DbContext
                 .HasColumnName("shipDate");
             entity.Property(e => e.ShipId).HasColumnName("shipID");
             entity.Property(e => e.StateId).HasColumnName("stateID");
+            entity.Property(e => e.TradeNo).IsUnicode(false);
 
             entity.HasOne(d => d.Member).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MemberId)
@@ -434,6 +458,7 @@ public partial class MedSysContext : DbContext
             entity.ToTable("OrderState");
 
             entity.Property(e => e.StateId).HasColumnName("stateID");
+            entity.Property(e => e.OrderStatus).HasColumnName("orderStatus");
             entity.Property(e => e.StateDetailed)
                 .HasMaxLength(50)
                 .HasColumnName("stateDetailed");
@@ -605,6 +630,24 @@ public partial class MedSysContext : DbContext
                 .HasForeignKey(d => d.ReservedId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ReservedSub_Reserve");
+        });
+
+        modelBuilder.Entity<ReturnProduct>(entity =>
+        {
+            entity.HasKey(e => e.ReturnId);
+
+            entity.ToTable("ReturnProduct");
+
+            entity.Property(e => e.ReturnId).HasColumnName("ReturnID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.ProcessedDate).HasColumnType("date");
+            entity.Property(e => e.RefundAmount).HasColumnType("money");
+            entity.Property(e => e.ReturnDate).HasColumnType("date");
+            entity.Property(e => e.ReturnState).HasMaxLength(50);
+
+            entity.HasOne(d => d.Order).WithMany(p => p.ReturnProducts)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_ReturnProduct_Order");
         });
 
         modelBuilder.Entity<SubProjectBridge>(entity =>

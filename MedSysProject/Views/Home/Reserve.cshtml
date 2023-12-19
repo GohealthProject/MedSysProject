@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Text.Json;
+@{
     ViewData["Title"] = "Reserve";
 
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -6,60 +7,57 @@
 @*@model IEnumerable<MedSysProject.Models.Plan>*@
 @model IFormCollection
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script>
 
 <style>
-   
+
     .A {
         /*position: fixed;*/
         /* top: 50%; */
         /*z-index: 999;*/
-       /* width: 20%; /*270px;*/
+        /* width: 20%; /*270px;*/
         height: 75%;
-        margin-left:25%;
+        margin-left: 25%;
         margin-bottom: 26%;
         /*margin-bottom: 5px;*/
-       
-       /* left: 20px;*/
+        /* left: 20px;*/
         overflow: visible;
-      /*  transform: translateX(-270px);*/
+        /*  transform: translateX(-270px);*/
         background-color: #f2f9f8;
-        border:solid 3px;
-       /* word-wrap:;*/
-        float:right;
-        text-align:justify-all;
+        border: solid 3px;
+        /* word-wrap:;*/
+        float: right;
+        text-align: justify-all;
     }
 
-   /* div {
-        word-wrap: break-word;
-        border:solid 3px;
-    }*/
+    /* div {
+                word-wrap: break-word;
+                border:solid 3px;
+            }*/
     /*.open .main {
-        transform: translateX(270px);
-         // 點了 .header 會讓 .menu 往右推 270 px 以容納滑出來的選單
-    }
+                transform: translateX(270px);
+                 // 點了 .header 會讓 .menu 往右推 270 px 以容納滑出來的選單
+            }
 
-    .open .aside {
-        transform: translateX(0px);
-          // 點了 .header 會讓選單滑入視窗中
-    }*/
+            .open .aside {
+                transform: translateX(0px);
+                  // 點了 .header 會讓選單滑入視窗中
+            }*/
 
     #1 {
         padding-top: 100px;
     }
 
- /*   .offcanvas-body{
-        height:8%;
-    }*/
+    /*   .offcanvas-body{
+                height:8%;
+            }*/
 
     table,
     td {
         border: 1px solid #333;
-        
     }
 
 
@@ -68,50 +66,54 @@
         background-color: #333;
         color: #fff;
     }
-    #1{
+
+    #1 {
         background-color: #f2f9f8;
     }
 
-    .accordion-item{
+    .accordion-item {
         background-color: #f2f9f8;
     }
-    .but{
+
+    .but {
         text-align: center;
     }
-    h5{
-       margin-left:4%;
-      text-align:match-parent;
-        
-     
+
+    h5 {
+        margin-left: 4%;
+        text-align: match-parent;
     }
 
-    .form{
-        margin-top:20%;
+    .form {
+        margin-top: 20%;
     }
 
-    td,th {
-        text-align:center;
+    td, th {
+        text-align: center;
     }
 
-    #sbmbnt{
-        margin-top:30px;
-        margin-bottom:3px;
+    #sbmbnt {
+        margin-top: 30px;
+        margin-bottom: 3px;
     }
     /*#bigC{
-        position:relative;
-    }*/
+                position:relative;
+            }*/
 
-   /* #sbmbtn{
-        position:absolute;
-        bottom:3px;
-        left:40%;
-    }*/
-   /* div{border:dashed 3px red;}*/
-   
+    /* #sbmbtn{
+                position:absolute;
+                bottom:3px;
+                left:40%;
+            }*/
+    /* div{border:dashed 3px red;}*/
+
 </style>
 
 <h1 class="container">Reserve</h1>
 <!doctype html>
+
+<h1 class="container">Reserve @ViewBag.member @ViewBag.mid</h1>
+
 <html lang="zh-hant">
 
 <body>
@@ -284,6 +286,7 @@
 </div>
     @{
         //reserve//
+        var mid = ViewBag.member;
         Reserve rs = new Reserve();
         rs.MemberId = 9;
         rs.PlanId = 6;
@@ -330,16 +333,28 @@
     }
     <form id="form" method="post">
             <input type="text" value="@ViewBag.item" id="forminput" name="item">
-            <input type="text" value="@jsonreserve" id="ttt" name="reserve">
-            <input type="text" value="@jsonreservedsub" id="ttt" name="reservesub">
-        <input type="text" value="@jsonhealthreport" id="ttt" name="healthreport">
-        <input type="text" value="@jsonreportdetail" id="ttt" name="reportdetail">
+        <input type="text" value="@jsonreserve" id="reserve" name="reserve">
+        <input type="text" value="@jsonreservedsub" id="reservesub" name="reservesub">
+        <input type="text" value="@jsonhealthreport" id="healthreport" name="healthreport">
+        <input type="text" value="@jsonreportdetail" id="reportdetail" name="reportdetail">
     </form>
+    <button id="ttb">123</button>
  
 </body>
 </html>
 
 <script>
+    @{
+        MemberWarp m = new MemberWarp();
+        string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+        if (!string.IsNullOrEmpty(json))
+        {
+             m = JsonSerializer.Deserialize<MemberWarp>(json);
+        }
+    }
+    
+     mid = @m.MemberId;
+    console.log(mid);
     $("reservesubmit").click(()=>{
         $('#detail').modal('hide');
         $('#reserve').modal('hide');
@@ -350,44 +365,52 @@
     
     var table = document.querySelector("#show")
     table.innerHTML = forminput;
-    console.log(forminput)
-    console.log(table.innerHTML)
+    //console.log(forminput)
+    //console.log(table.innerHTML)
+    ttb.addEventListener("click", () => {
+       pricecount()
+    
+    })
+    function pricecount(){
+    var ttb = document.querySelector("#ttb")
+    
+    
+        var price = 0;
+        var tbody = document.querySelector("#show")
+        var tfoot = document.querySelector("tfoot")
+        for (var i = 0; i <= tbody.childElementCount - 1; i++) {
+            
+            price = price+parseInt(tbody.childNodes[i].children[2].innerText)
+        }
+        console.log(tfoot.children[0].children[2].children[0].innerHTML)
+        //價格
+        tfoot.children[0].children[2].children[0].innerHTML = price;
+        //數量
+        tfoot.children[0].children[1].children[0].innerHTML = tbody.childElementCount;
+
+
+        //console.log(Int16Array(tbody.childNodes[i].children[2].innerText))
+        //console.log(price)
+        //console.log(tbody.childNodes[0].children[2].innerText)
+        //console.log(tbody.childElementCount - 1)
+
+
+
+    
+   }
+
+
   ////reservesubmit////
     var rsvsbm = document.querySelector("#reservesubmit")
     rsvsbm.addEventListener("click",()=>{
-        
 
-    @{
+
+
+        //var reserve = document.querySelector("#reserve")
      
-
-        //[reportdetail]
-        // reportID new
-        //itemID
-        //result null?
-
-        // [healthreport]
-        //memberID
-        //reportdate?
-        //planID
-        //reserveID new
-        //payment
-
-        //[reserve]
-        //mID
-        //pID
-        //Reservestatus new
-        //reservedate new
-
-        //[reservesub]
-        //reserveID new
-        //itemID
-    }
-   
-         var t3 = document.querySelector("#ttt")
-     
-        console.log(t3)
-        console.log(t3.value)
-        gg(t3);
+        console.log(reserve)
+        console.log(reserve.value)
+        gg();
 
     //    fetch('@Url.Content("~/Transaction/reserve")', {
     //        method: "POST",
@@ -417,45 +440,45 @@
         });
         const data = await response.text();
         console.log(`data${data}`);
-
+        window.location.href = ('@Url.Content("~/Home/xxx")');
     }
 
-    function TTT() {
-        var formData = new FormData();
-        var date = new Date()
-        var now = date.toLocaleDateString()
-        //reserve
-        formData.append("MemberId", @ViewBag.mid);
-        formData.append("PlanId", @ViewBag.pid);
-        formData.append("ReserveDate", now)
-        formData.append("ReserveState", "預約中");
-        //reservesub
-        formData.append("ReservedID", 2);//serch
-        formData.append("ItemID", 6);
-        //healthreport
-        //formData.append("MemberId", 2);
-        formData.append("ReportDate", 6); 
-        //formData.append("PlanID", now)
-        //formData.append("ReserveID", "預約中");
-        formData.append("Paymentstatus", "預約中");
-        //reportdetail
-        formData.append("ReportID", 2);//serch
-        //formData.append("itemID", 6);
-        formData.append("result", now)
+    //function TTT() {
+    //    var formData = new FormData();
+    //    var date = new Date()
+    //    var now = date.toLocaleDateString()
+    //    //reserve
+    //    formData.append("MemberId", @ViewBag.mid);
+    //    formData.append("PlanId", @ViewBag.pid);
+    //    formData.append("ReserveDate", now)
+    //    formData.append("ReserveState", "預約中");
+    //    //reservesub
+    //    formData.append("ReservedID", 2);//serch
+    //    formData.append("ItemID", 6);
+    //    //healthreport
+    //    //formData.append("MemberId", 2);
+    //    formData.append("ReportDate", 6); 
+    //    //formData.append("PlanID", now)
+    //    //formData.append("ReserveID", "預約中");
+    //    formData.append("Paymentstatus", "預約中");
+    //    //reportdetail
+    //    formData.append("ReportID", 2);//serch
+    //    //formData.append("itemID", 6);
+    //    formData.append("result", now)
 
-        fetch('@Url.Content("~/Transaction/reservesub")', {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("新增成功");
-                    //location.href = '@Url.Content("~/home/members")';
-                }
-            })
-            .catch((error) => console.error("Error:", error))
-            .then((response) => console.log("Success:", response));
-    }
+    //    fetch('@Url.Content("~/Transaction/reservesub")', {
+    //        method: "POST",
+    //        body: formData,
+    //    })
+    //        .then((response) => {
+    //            if (response.ok) {
+    //                alert("新增成功");
+    //                //location.href = '@Url.Content("~/home/members")';
+    //            }
+    //        })
+    //        .catch((error) => console.error("Error:", error))
+    //        .then((response) => console.log("Success:", response));
+    //}
 
     function reserve() {
         var formData = new FormData();
@@ -574,6 +597,9 @@
       return sum + i
             console(sum)
     }, 0)+" 元"
+
+    
+
   }
     ////////////
 
@@ -597,6 +623,7 @@
         body.removeChild(event.target.parentNode.parentNode);
         //priceFormatter(1000);
         //console.log(t.innerHTML)
+        pricecount()
     }
 
 

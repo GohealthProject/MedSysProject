@@ -5,6 +5,15 @@
     ViewData["Title"] = "BlogList";
     Layout = "_Layout_Admin2";
 }
+@{
+    int? empLogIn = 0;
+    if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+    {
+        string Json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+        Employee whoLogIn = JsonSerializer.Deserialize<Employee>(Json);
+        empLogIn = whoLogIn.EmployeeId;
+    }
+}
 @* 這邊是確保左側邊欄的目前區域標亮 *@
 @* ---------------------------------------------- *@
 <script>
@@ -29,187 +38,203 @@
                 Employee emp = JsonSerializer.Deserialize<Employee>(Json);
                 empID = emp.EmployeeId;
             }
+                                        <p>
+                                            <!--@Html.ActionLink("我的貼文", "BlogList", "Admin", new { id = empID }, new { @class = "btn btn-primary", style = "margin-left:10px" })-->
+                                            <a href="@Url.Content("~/Admin/BlogIndex")?id=@empID" class="btn btn-primary" style="margin-left:10px">我的貼文</a>
+                                            <a href="@Url.Content("~/Admin/BlogIndex")" class="btn btn-primary" style="margin-left:10px">貼文總表</a>
+                                            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" style="margin-left:1200px">
+                                                <i class="fas fa-plus">新貼文</i>
+                                            </a>
+                                        </p>
+                                        @* ---新增彈窗開始--- *@
+                                        <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-xl" role="document">
+                                                <div class="modal-content">
+                                                    <!--Header-->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel">新增文章</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <!--Body-->
+                                                    <div class="modal-body">
+                                                        <form id="myCreatedataform" novalidate class="needs-validation">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <div class="previewImage" style="margin-bottom:20px;">
+                                                                        <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                                    </div>
+                                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <p>
-                <!--@Html.ActionLink("我的貼文", "BlogList", "Admin", new { id = empID }, new { @class = "btn btn-primary", style = "margin-left:10px" })-->
-                <a href="@Url.Content("~/Admin/BlogIndex")?id=@empID" class="btn btn-primary" style="margin-left:10px">我的貼文</a>
-                <a href="@Url.Content("~/Admin/BlogIndex")" class="btn btn-primary" style="margin-left:10px">貼文總表</a>
-                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" style="margin-left:1200px">
-                    <i class="fas fa-plus">新貼文</i>
-                </a>
-            </p>
-            @* ---新增彈窗開始--- *@
-            <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">新增文章</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <!--Body-->
-                        <div class="modal-body">
-                            <form id="myCreatedataform" novalidate class="needs-validation">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="previewImage" style="margin-bottom:20px;">
-                                            <img id="imagePreview" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                                    <div class="form-group" style="margin-bottom:20px;">
+                                                                        <label for="titleInput" class="control-label">文章標題:</label>
+                                                                        <input id="titleInput" class="form-control" name="Title" required />
+
+                                                                    </div>
+
+                                                                    <div style="margin-bottom:20px;">
+                                                                        <label for="articleClass" class="control-label">文章類別:</label>
+                                                                        <!--選項要包在select標籤裡面-->
+                                                                        <select id="articleClass" class="form-control" name="ArticleClassId" required>
+                                                                            <option value="1">活動快訊</option>
+                                                                            <option value="2">醫療新知</option>
+                                                                            <option value="3">名人分享會</option>
+                                                                            <option value="4">媒體報導</option>
+                                                                            <option value="5">企業責任</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-group" style="margin-bottom:20px;">
+                                                                        <label for="mytextarea" class="control-label">文章內容:</label>
+                                                                        <!--注意文字編輯器不要加required屬性，會炸掉-->
+                                                                        <textarea id="mytextarea" class="form-control" name="Content"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group" style="margin-bottom:20px;">
+                                                                        <label for="mainPhoto" class="control-label">選擇主題相片:</label>
+                                                                        <input id="mainPhoto" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImage(event)" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" value="@empID" type="hidden" name="EmployeeId" />
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                                                            <button type="button" class="btn btn-success" onclick="newPost()" id="Cbtn">確定新增</button>
+                                                            <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                                        <div class="form-group" style="margin-bottom:20px;">
-                                            <label for="titleInput" class="control-label">文章標題:</label>
-                                            <input id="titleInput" class="form-control" name="Title" required />
 
+
+                                        @* ---詳細資料彈窗開始--- *@
+                                        <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog modal-xl" role="document">
+                                                <div class="modal-content">
+                                                    <!--Header-->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel">文章內容</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <!--Body-->
+                                                    <div class="modal-body">
+
+
+                                                        @* 詳細資料 *@
+                                                        <div class="col-md-9 post-content" @* data-aos="fade-up" *@>
+
+                                                            <!-- ======= Single Post Content ======= -->
+                                                            <div class="single-post">
+                                                            </div>
+                                                            <!-- ======= Comments ======= -->
+
+
+                                                            <div class="Comments" id="putIn">
+                                                            </div>
+                                                            <!-- End Comments -->
+                                                            <!-- ======= Comments Form ======= -->
+                                                            <div class="row justify-content-center mt-5">
+                                                                <div class="col-lg-12">
+                                                                    <h5 class="comment-title">留言</h5>
+                                                                    <div class="row">
+                                                                        <div class="col-12 mb-3">
+                                                                            <textarea class="form-control" id="comment-message" placeholder="說些什麼吧..." cols="30" rows="1"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Comments Form -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <div style="margin-bottom:20px;">
-                                            <label for="articleClass" class="control-label">文章類別:</label>
-                                            <!--選項要包在select標籤裡面-->
-                                            <select id="articleClass" class="form-control" name="ArticleClassId" required>
-                                                <option value="1">活動快訊</option>
-                                                <option value="2">醫療新知</option>
-                                                <option value="3">名人分享會</option>
-                                                <option value="4">媒體報導</option>
-                                                <option value="5">企業責任</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group" style="margin-bottom:20px;">
-                                            <label for="mytextarea" class="control-label">文章內容:</label>
-                                            <!--注意文字編輯器不要加required屬性，會炸掉-->
-                                            <textarea id="mytextarea" class="form-control" name="Content"></textarea>
-                                        </div>
-                                        <div class="form-group" style="margin-bottom:20px;">
-                                            <label for="mainPhoto" class="control-label">選擇主題相片:</label>
-                                            <input id="mainPhoto" class="form-control btn btn-primary" name="BlogImage" type="file" onchange="previewImage(event)" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" value="@empID" type="hidden" name="EmployeeId" />
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-success" onclick="newPost()" id="Cbtn">確定新增</button>
-                                <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @* ---新增彈窗結束--- *@
-
-            @* ---詳細資料彈窗開始--- *@
-            <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">文章內容</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <!--Body-->
-                        <div class="modal-body">
-
-
-                            @* 詳細資料 *@
-
-
-
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @* ---詳細資料彈窗結束--- *@
-
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            序號
-                        </th>
-                        <th style="width:250px;">
-                            文章標題
-                        </th>
-                        <th>
-                            文章類別
-                        </th>
-                        <th>
-                            瀏覽人次
-                        </th>
-                        <th>
-                            建立時間
-                        </th>
-                        <th>
-                            作者
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
+                                        @* ---詳細資料彈窗結束--- *@
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        序號
+                                                    </th>
+                                                    <th style="width:250px;">
+                                                        文章標題
+                                                    </th>
+                                                    <th>
+                                                        文章類別
+                                                    </th>
+                                                    <th>
+                                                        瀏覽人次
+                                                    </th>
+                                                    <th>
+                                                        建立時間
+                                                    </th>
+                                                    <th>
+                                                        作者
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
                         int count = 0;
                         foreach (var item in Model)
                         {
                             count++;
-                            <tr>
-                                <td>
-                                    @count
-                                    <input type="hidden" value="@item.BlogId" />
-                                </td>
-                                <td style="width:250px;">
-                                    @Html.DisplayFor(modelItem => item.Title)
-                                </td>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            @count
+                                                                                            <input type="hidden" value="@item.BlogId" />
+                                                                                        </td>
+                                                                                        <td style="width:250px;">
+                                                                                            @Html.DisplayFor(modelItem => item.Title)
+                                                                                        </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Views)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
-                                </td>
-                                <td>
-                                    @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
-                                    <button asp-action="Detail" asp-route-id="@item.BlogId" onclick="detail(this)" class="btn btn-outline-info" data-toggle="modal" data-target="#modalDetail">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    @if (item.EmployeeId == empID)
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => item.Views)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @*//如果文章的item.EmployeeID = EMPid顯示修改跟刪除按鈕，else把這兩個按鈕disable*@
+                                                                                            @*顯示詳細按鈕*@
+                                                                                            <button asp-action="Detail" asp-route-id="@item.BlogId" onclick="detail(this)" data-blog-id="@item.BlogId" class="btn btn-outline-info" data-toggle="modal" data-target="#modalDetail">
+                                                                                                <i class="fas fa-info-circle"></i>
+                                                                                            </button>
+                                                                                            @if (item.EmployeeId == empID)
                                     {
-                                        <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button asp-action="Delete" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                                                                                <button asp-action="Edit" asp-route-id="@item.BlogId" class="btn btn-outline-warning" data-blog-id="@item.BlogId" onclick="updateThisPost(this)" data-toggle="modal" data-target="#modalEdit">
+                                                                                                    <i class="fas fa-edit"></i>
+                                                                                                </button>
+                                                                                                <button asp-action="Delete" asp-route-id="@item.BlogId" class="btn btn-outline-danger" onclick="selectPost(this)">
+                                                                                                    <i class="fas fa-trash"></i>
+                                                                                                </button>
                                     }
-                                </td>
-                            </tr>
+                                                                                        </td>
+                                                                                    </tr>
                         }
-                    }
-                </tbody>
-            </table>
+                                                }
+                                            </tbody>
+                                        </table>
         }
     </div>
 </div>
-
-
 @* ---修改彈窗開始--- *@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -279,200 +304,404 @@
     </div>
 </div>
 
-<script>
-    //修改文章相關
-    //(1)讓資料可以顯示在修改彈窗上
-    function updateThisPost(editButton) {
-        var blogId = editButton.getAttribute('data-blog-id');
-        console.log(blogId);//可以取到blogId
-        fetch(`https://localhost:7078/api/Blogs/${blogId}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                document.querySelector('#idEdit').value = data.blogId;
-                document.querySelector('#titleEdit').value = data.title;
-                document.querySelector('#classEdit').value = data.articleClassId;
-                tinymce.get('mytextareaEdit').setContent(data.content);
-                //document.querySelector('#mainPhoto').value = data.blogImage;
-                console.log(`取出來的圖片${typeof data.blogImage}`);//型別是string
-                console.log(data.blogImage);
-                //如果data.BlogImage是null，#imagePreviewEdit Display:none
-                if (data.blogImage == null) {
-                    document.querySelector('#imagePreviewEdit').style.display = 'none';
-                }
-                else {
-                    var binary = atob(data.blogImage);
-                    var byteArray = new Uint8Array(binary.length);
-                    for (var i = 0; i < binary.length; i++) {
-                        byteArray[i] = binary.charCodeAt(i);
+@section Scripts {
+    <script>
+        //全域變數們
+        let employeeLogIn = @empLogIn;
+
+        let commentTable = document.querySelector('#putIn');//留言板
+        function detail(detailButton) {
+            var blogId = detailButton.getAttribute('data-blog-id');
+            console.log(blogId); // id藏這裡
+            const detailContainer = document.querySelector('.single-post');
+            detailContainer.innerHTML = '';
+            fetch(`https://localhost:7078/api/Blogs/detail?id=${blogId}`)
+                .then(response => response.json())
+                .then(async data => {
+                    console.log(data);
+                    const { blogId, title, articleClass, content, createdAt, views } = data;
+                    const date = new Date(createdAt);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+                    const detailContain = `
+                                                <div class="single-post">
+                                                    <div class="post-meta">
+                                                        <span class="date">${formattedDate}</span>
+                                                    </div>
+                                                    <h1 class="mb-5">${title}</h1>
+                                                        <div class="previewImage" style="margin-bottom:20px;">
+                                                                <img id="imagePreviewDetail" src="#" alt="preview" style="display:none; max-width:1107px; max-height:500px;">
+                                                            </div>
+                                                    ${content}
+                                                </div>
+                                            `;
+
+                    detailContainer.innerHTML = detailContain;
+                    if (data.blogImage == null) {
+                        document.querySelector('#imagePreviewDetail').style.display = 'none';
                     }
-                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
-                    var imageUrl = URL.createObjectURL(blob);
-                    document.querySelector('#imagePreviewEdit').src = imageUrl;
-                    document.querySelector('#imagePreviewEdit').style.display = 'block';
+                    else {
+                        var binary = atob(data.blogImage);
+                        var byteArray = new Uint8Array(binary.length);
+                        for (var i = 0; i < binary.length; i++) {
+                            byteArray[i] = binary.charCodeAt(i);
+                        }
+                        var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                        var imageUrl = URL.createObjectURL(blob);
+                        document.querySelector('#imagePreviewDetail').src = imageUrl;
+                        document.querySelector('#imagePreviewDetail').style.display = 'block';
+                    }
+                    restrictContent();
+                    await backLoadPrimeComments(data.blogId);
+                    await backProcessReplies();//有沒有取到mainComment()?有
+                    toggleLinkEvent();
+                    initButtons();
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    // Handle error here
+                });
+        }
+        //限制文章內容圖片大小
+        function restrictContent() {
+            var postContentElements = document.getElementsByClassName('single-post');
+            for (var i = 0; i < postContentElements.length; i++) {
+                var images = postContentElements[i].getElementsByTagName('img');
+                for (var j = 0; j < images.length; j++) {
+                    var image = images[j];
+                    var figure = document.createElement('figure');
+                    image.parentNode.insertBefore(figure, image);
+                    figure.appendChild(image);//有待研究，javascripts真的太不熟了
                 }
-            }).catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
-    //(2)確認修改後執行
-    async function sureEditPost() {
-        var blogId = document.querySelector('#idEdit').value;
-        var editTitle = document.querySelector('#titleEdit').value;
-        var editClass = document.querySelector('#classEdit').value;
-        var editContent = tinymce.get('mytextareaEdit').getContent();
-        var editPhoto = document.querySelector('#mainPhotoEdit').files[0];
-        var author = document.querySelector('#authorEdit').value;
-
-        var afterEdit = new FormData();
-        afterEdit.append('Title', editTitle);
-        afterEdit.append('ArticleClassId', editClass);
-        afterEdit.append('Content', editContent);
-        afterEdit.append('EmployeeId', author);
-        if (editPhoto) {
-            afterEdit.append('BlogImage', editPhoto);
-        }
-        try {
-            const response = await fetch(`https://localhost:7078/api/Blogs/${blogId}`, {
-                method: 'PUT',
-                body: afterEdit
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
             }
-            console.log("修改成功!");
-            $('#modalEdit').modal('hide');
-            Swal.fire({
-                title: "修改成功!",
-                text: "Post updated successfully",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
+
+        }
+
+        async function backLoadPrimeComments(blogId) {
+            const response = await fetch(`@Url.Content("~/Blogs/ShowComments")?BlogId=${blogId}`);
+            const data = await response.text();
+            commentTable.innerHTML = '';
+            commentTable.innerHTML = data;
+        }
+        async function backProcessReplies() {
+            let mainComments = document.querySelectorAll('.mainComment');
+            console.log(mainComments);
+            for (const comment of mainComments) {
+                await processReply(comment);
+            }
+        }
+        async function processReply(comment) {
+            let commentId = comment.getAttribute('data-comment-id');
+            const response = await fetch(`@Url.Content("~/Blogs/ShowReplies")?mainCommentId=${commentId}`);
+            const data = await response.text();
+            let subPutIn = comment.querySelector('.subPutIn');
+            subPutIn.innerHTML = '';
+            subPutIn.innerHTML = data;
+            let replyCountElement = subPutIn.querySelector('.comment-replies-title');
+            if (replyCountElement) {
+                let replyCount = replyCountElement.getAttribute('data-reply-count');
+                if (parseInt(replyCount) === 0) {
+                    subPutIn.style.display = 'none';
+                }
+            }
+        }
+        function toggleLinkEvent() {
+            var toggleLinks = document.querySelectorAll('.toggleLink');
+            //console.log(toggleLinks);
+
+            toggleLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var icon = link.querySelector('.bi');
+                    var parentDiv = icon.parentNode.parentNode;
+                    var repliesSection = parentDiv.parentNode;
+                    console.log(repliesSection);
+                    var replySections = repliesSection.querySelectorAll('.reply');
+                    console.log(replySections);
+                    replySections.forEach(function (reply) {
+                        reply.style.display = 'none!';
+                        reply.setAttribute('style', 'display: none !important');
+
+                    });
+                    if (icon.classList.contains('bi-chevron-down')) {
+                        icon.classList.remove('bi-chevron-down');
+                        icon.classList.add('bi-chevron-up');
+                        replySections.forEach(function (reply) {
+                            reply.style.display = 'block';
+                            reply.setAttribute('style', 'display: block !important');
+                        });
+
+                    } else {
+                        icon.classList.remove('bi-chevron-up');
+                        icon.classList.add('bi-chevron-down');
+                        replySections.forEach(function (reply) {
+                            reply.style.display = 'none!important';
+                            reply.setAttribute('style', 'display: none !important');
+                        });
+                    }
+
+
+                });
             });
-            research();
-        } catch (error) {
-            console.error('發生錯誤:', error);
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "有錯誤發生!"
+
+
+        }
+        function initButtons() {
+            let replyButtons = document.querySelectorAll('.replyBtn');//回覆按鈕
+            console.log(replyButtons);
+            replyButtons.forEach(function (rplyBtn) {
+                rplyBtn.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const comment = rplyBtn.parentNode.parentNode;
+                    console.log(comment);
+                    const parentCommentId = comment.getAttribute('data-comment-id');
+                    console.log(parentCommentId);//測試用，能抓到按鈕對應留言區塊
+                    const replyFormWrap = comment.querySelector('.js-reply-form-wrap');
+                    replyFormWrap.classList.add("active");
+                    let inputReply = comment.querySelector('input.form-control[type="text"][placeholder="回覆..."]');
+                    console.log(inputReply);
+                    inputReply.addEventListener('keydown', async function (event) {
+                        if (event.key === "Enter" && !event.shiftKey) {
+                            console.log('回復訊息');
+                            if (memberLogIn === 0) {
+                                const invisibleButton = document.querySelector('[data-bs-target="#staticBackdrop"]');
+                                invisibleButton.dispatchEvent(new Event('click'));
+                            }
+                            const apiUrl = 'https://localhost:7078/api/Comments/memberAddReply';
+                            const data = {
+                                BlogId: blogId,
+                                MemberId: memberLogIn,
+                                ParentCommentId: parentCommentId,
+                                Content: inputReply.value
+                            }
+                            const requestOption =
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            }
+                            try {
+                                const response = await fetch(apiUrl, requestOption);
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok.');
+                                }
+                                await refreshCommentTable();
+                                inputReply.value = '';
+                            }
+                            catch (error) { console.error('There was a problem saving the comment:', error); }
+                        }
+                    });
+
+                });
+            });
+            let closeButtons = document.querySelectorAll('.js-end-reply');
+            console.log(closeButtons);//測試用，能抓到關閉按鈕
+            closeButtons.forEach(closeBtn => {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const replyFormWrap = closeBtn.closest('.js-reply-form-wrap');
+                    replyFormWrap.classList.remove('active');
+                });
             });
         }
 
-    }
-
-
-    async function newPost() {
-
-        let apiUrl = `https://localhost:7078/api/Blogs`;
-        var myform = document.querySelector('#myCreatedataform');
-        var contentt = tinymce.get('mytextarea').getContent();
-
-        //把contentt放進textarea裡面
-        document.querySelector('#mytextarea').value = contentt;
-
-        var data = new FormData(myform);
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            body: data,
-        });
-        const state = await response.status;
-        if (response.ok) {
-
-            $('#modalCreate').modal('hide');
-
-            Swal.fire({
-                title: "新增成功!",
-                text: state,
-                icon: "success",
-                showConfirmButton: false,
-                timer: 1500
-            });
-            research();
+        //修改文章相關
+        //(1)讓資料可以顯示在修改彈窗上
+        function updateThisPost(editButton) {
+            var blogId = editButton.getAttribute('data-blog-id');
+            console.log(blogId);//可以取到blogId
+            fetch(`https://localhost:7078/api/Blogs/${blogId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    document.querySelector('#idEdit').value = data.blogId;
+                    document.querySelector('#titleEdit').value = data.title;
+                    document.querySelector('#classEdit').value = data.articleClassId;
+                    tinymce.get('mytextareaEdit').setContent(data.content);
+                    //document.querySelector('#mainPhoto').value = data.blogImage;
+                    console.log(`取出來的圖片${typeof data.blogImage}`);//型別是string
+                    console.log(data.blogImage);
+                    //如果data.BlogImage是null，#imagePreviewEdit Display:none
+                    if (data.blogImage == null) {
+                        document.querySelector('#imagePreviewEdit').style.display = 'none';
+                    }
+                    else {
+                        var binary = atob(data.blogImage);
+                        var byteArray = new Uint8Array(binary.length);
+                        for (var i = 0; i < binary.length; i++) {
+                            byteArray[i] = binary.charCodeAt(i);
+                        }
+                        var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                        var imageUrl = URL.createObjectURL(blob);
+                        document.querySelector('#imagePreviewEdit').src = imageUrl;
+                        document.querySelector('#imagePreviewEdit').style.display = 'block';
+                    }
+                }).catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
-        else {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "有錯誤發生!"
-            });
-        }
+        //(2)確認修改後執行
+        async function sureEditPost() {
+            var blogId = document.querySelector('#idEdit').value;
+            var editTitle = document.querySelector('#titleEdit').value;
+            var editClass = document.querySelector('#classEdit').value;
+            var editContent = tinymce.get('mytextareaEdit').getContent();
+            var editPhoto = document.querySelector('#mainPhotoEdit').files[0];
+            var author = document.querySelector('#authorEdit').value;
 
-    }
-
-    //刪除文章相關
-    function selectPost(element) {
-        let grandpa = element.parentNode.parentNode;
-        var hideId = grandpa.querySelector('input[type="hidden"]').value;
-        console.log(hideId);
-        deletePost(hideId);
-    }
-    async function deletePost(hideId) {
-        const result = await Swal.fire({
-            title: "確定要刪除嗎？",
-            text: "此步驟將無法復原！",
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: "取消",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "確定刪除"
-        });
-
-        if (result.isConfirmed) {
-
-            const response = await fetch(`https://localhost:7078/api/Blogs/${hideId}`, {
-                method: 'DELETE'
-            });
-            let data = await response.status
-            if (response.ok) {
+            var afterEdit = new FormData();
+            afterEdit.append('Title', editTitle);
+            afterEdit.append('ArticleClassId', editClass);
+            afterEdit.append('Content', editContent);
+            afterEdit.append('EmployeeId', author);
+            if (editPhoto) {
+                afterEdit.append('BlogImage', editPhoto);
+            }
+            try {
+                const response = await fetch(`https://localhost:7078/api/Blogs/${blogId}`, {
+                    method: 'PUT',
+                    body: afterEdit
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log("修改成功!");
+                $('#modalEdit').modal('hide');
                 Swal.fire({
-                    title: "刪除成功!",
-                    text: data,
+                    title: "修改成功!",
+                    text: "Post updated successfully",
                     icon: "success",
                     showConfirmButton: false,
                     timer: 1500
                 });
-            } else {
+                research();
+            } catch (error) {
+                console.error('發生錯誤:', error);
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
                     text: "有錯誤發生!"
                 });
             }
-            research()
-        }
-    }
 
-    async function research() {
-        await new Promise(resolve => setTimeout(resolve, 1600));
-        window.location.reload();
-    }
-    //預覽圖片
-    function previewImage(event) {
-        const input = event.target;
-        if (input.files && input.files[0]) {
-            const reader = new FileReader(); // 創建FileReader物件
-            reader.onload = function (e) { // 正確拼寫onload
-                const imagePreview = document.getElementById('imagePreview');
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
         }
-    };
-    //修改彈窗預覽圖片
-    function previewImageForEdit(event) {
-        const input = event.target;
-        if (input.files && input.files[0]) {
-            const reader = new FileReader(); // 創建FileReader物件
-            reader.onload = function (e) { // 正確拼寫onload
-                const imagePreview = document.getElementById('imagePreviewEdit');
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
 
-</script>
+
+        async function newPost() {
+
+            let apiUrl = `https://localhost:7078/api/Blogs`;
+            var myform = document.querySelector('#myCreatedataform');
+            var contentt = tinymce.get('mytextarea').getContent();
+
+            //把contentt放進textarea裡面
+            document.querySelector('#mytextarea').value = contentt;
+
+            var data = new FormData(myform);
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                body: data,
+            });
+            const state = await response.status;
+            if (response.ok) {
+
+                $('#modalCreate').modal('hide');
+
+                Swal.fire({
+                    title: "新增成功!",
+                    text: state,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                research();
+            }
+            else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
+                });
+            }
+
+        }
+
+        //刪除文章相關
+        function selectPost(element) {
+            let grandpa = element.parentNode.parentNode;
+            var hideId = grandpa.querySelector('input[type="hidden"]').value;
+            console.log(hideId);
+            deletePost(hideId);
+        }
+        async function deletePost(hideId) {
+            const result = await Swal.fire({
+                title: "確定要刪除嗎？",
+                text: "此步驟將無法復原！",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "確定刪除"
+            });
+
+            if (result.isConfirmed) {
+
+                const response = await fetch(`https://localhost:7078/api/Blogs/${hideId}`, {
+                    method: 'DELETE'
+                });
+                let data = await response.status
+                if (response.ok) {
+                    Swal.fire({
+                        title: "刪除成功!",
+                        text: data,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "有錯誤發生!"
+                    });
+                }
+                research()
+            }
+        }
+
+        async function research() {
+            await new Promise(resolve => setTimeout(resolve, 1600));
+            window.location.reload();
+        }
+        //預覽圖片
+        function previewImage(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 創建FileReader物件
+                reader.onload = function (e) { // 正確拼寫onload
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+        //修改彈窗預覽圖片
+        function previewImageForEdit(event) {
+            const input = event.target;
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 創建FileReader物件
+                reader.onload = function (e) { // 正確拼寫onload
+                    const imagePreview = document.getElementById('imagePreviewEdit');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+    </script>
+
+}

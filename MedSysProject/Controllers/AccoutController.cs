@@ -1,6 +1,9 @@
 ﻿using Google.Apis.Auth;
 using MedSysProject.Models;
 using MedSysProject.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -122,13 +125,18 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m, IFormFile fileN)
         {
-            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
-            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            if (fileN != null)
             {
-                fileN.CopyTo(fileStream);
+                string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+                using (var fileStream = new FileStream(webPath, FileMode.Create))
+                {
+                    fileN.CopyTo(fileStream);
+                }
             }
+            
             Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
-            Upm.MemberImage = fileN.FileName;
+            if(fileN!=null)
+                Upm.MemberImage = fileN.FileName;
             Upm.MemberEmail = m.MemberEmail;
             Upm.MemberName = m.MemberName;
             Upm.MemberBirthdate = m.MemberBirthdate;
@@ -166,7 +174,6 @@ namespace MedSysProject.Controllers
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN) && vm.newPwdChk == vm.newPwd && vm.oldPwd == oldpwd)
             {
-                //todo 這裡要修復
                 string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                 MemberWarp nown = new MemberWarp();
                 nown.member = JsonSerializer.Deserialize<Member>(json);
@@ -343,7 +350,6 @@ namespace MedSysProject.Controllers
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_FPWD_SUBMIT) && vm.newPwdChk == vm.newPwd)
             {
-                //todo 這裡要修復
                 string email = JsonSerializer.Deserialize<string>(HttpContext.Session.GetString(CDictionary.SK_FPWD_SUBMIT));
                 var q = _db.Members.FirstOrDefault(n => n.MemberEmail == email);
                 q.MemberPassword = vm.newPwd;
@@ -514,6 +520,38 @@ namespace MedSysProject.Controllers
             return payload;
         }
 
+        public async Task googlelogin()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            });
+        }
+
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (result?.Succeeded != true)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var claims = result.Principal.Identities.FirstOrDefault()?.Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
+
+            //string json = JsonSerializer.Serialize(claims);
+            //HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+
+            //return RedirectToAction("MemberCenter", "Accout");
+
+            return Json(claims);
+        }
+
         public IActionResult MenberQA()
         {
             return View();
@@ -524,7 +562,22 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        public IActionResult ReturnProduct()
+        {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Login");
 
+            string? json  = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+            List<int> ReturnOrderList = _db.Orders.Where(n => n.MemberId == m.MemberId && n.StateId == 15).Select(n=>n.OrderId).ToList();
+            List<ReturnProduct> ReturnProductList = _db.ReturnProducts.Where(n => ReturnOrderList.Contains((int)n.OrderId)).ToList();
+
+            
+            
+
+            return View(ReturnProductList);
+        }
         public IActionResult TrackingList()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))

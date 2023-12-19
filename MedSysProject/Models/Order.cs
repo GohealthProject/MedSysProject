@@ -23,12 +23,18 @@ public partial class Order
     public DateTime? ShipDate { get; set; }
 
     public DateTime? DeliveryDate { get; set; }
+
+    public string MerchantTradeNo { get; set; }
+
+    public string TradeNo { get; set; }
     [JsonIgnore]
     public virtual Member Member { get; set; }
     [JsonIgnore]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     [JsonIgnore]
     public virtual OrderPay Pay { get; set; }
+    [JsonIgnore]
+    public virtual ICollection<ReturnProduct> ReturnProducts { get; set; } = new List<ReturnProduct>();
     [JsonIgnore]
     public virtual OrderShip Ship { get; set; }
     [JsonIgnore]

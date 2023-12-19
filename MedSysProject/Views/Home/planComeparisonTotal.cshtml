@@ -176,23 +176,11 @@
             event.preventDefault();
             async function send() {
              alert("傳送")
-                const response = await fetch('@Url.Content("~/Home/planComeparisonTotal?planid=3")');//選取方案id
+                const response = await fetch('@Url.Content("https://localhost:7078/api/CPlan/3?planid=3")');//選取方案id
                 window.location.href = ('@Url.Content("~/Home/Customcompare")');
             };
             send();
-            // fetch('@Url.Content("~/Home/planComeparisonTotal?planid=3")', {
-            //     method: 'POST',
-            //     body: FormData
-            // })
-            //     .then(response => {
-            //         if (response.ok) {
-            //             alert("成功");
-            //           window.location.href=('@Url.Content("~/Home/Customcompare")');
-            //             alert("123")
-            //         }
-            //     });
-            // xhr.open('POST','@Url.Content("~/Home/Customcompare")');
-            // xhr.send(formdata);
+           
         });
       //-----傳送區
         $(document).ready(function () {
