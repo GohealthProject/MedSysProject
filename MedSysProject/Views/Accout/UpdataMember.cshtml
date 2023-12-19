@@ -5,7 +5,17 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 @section LinkStyle {
+    <link rel="stylesheet" href="~/vendor/cropperjs/cropper.css" />
     <link rel="stylesheet" href="~/css/AccoutUpdataMember.css" />
+
+    <style>
+        .cropper-container {
+            width: 250px; /* 设置为父容器宽度的百分比，或者具体的像素值 */
+            height: 250px; /* 设置为父容器高度的百分比，或者具体的像素值 */
+        }
+
+
+    </style>
 }
 
 <div class="UPdiv" style="width:70%">
@@ -19,9 +29,9 @@
         <div class="col-12">
             <label for="inputAddress" class="form-label" name="MemberAddress">地址</label>
             <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="MemberAddress" value="@Model.MemberAddress">
-@*             @{
-                string address = Model.MemberAddress;
-                string[] addressArray = address.Split(' ');
+            @*             @{
+            string address = Model.MemberAddress;
+            string[] addressArray = address.Split(' ');
 
             }
             // select 縣市
@@ -49,8 +59,22 @@
         </div>
         <div class="col-12">
             <span>瀏覽圖片</span>
-            <input type="file" name="fileN" />
+            <input type="file" name="fileN" id="fileN" />
         </div>
+
+        <!-- 上傳圖片預覽 -->
+        @{
+            if (Model.MemberImage != null)
+            {
+                string imgFN = Model.MemberImage;
+
+                <div class="col-12">
+                    <img src="@Url.Content("~/img/MemberImg/" + imgFN)" id="btnImg" style="width: 200px; height: 200px;" />
+                    @*<img src="@Url.Content("~/img/MemberImg/" + imgFN)" id="btnImgPreview" style="width: 200px; height: 200px;" />*@
+                </div>
+            }
+        }
+
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">儲存並修改</button>
@@ -59,8 +83,33 @@
 
 </div>
 @section Scripts {
+    <script src="~/vendor/cropperjs/cropper.js"></script>
     <script src="~/js/dist/tw-city-selector.js"></script>
     <script>
         const btnImg = document.querySelector('#btnImg');
+        const btnImgPreview = document.querySelector('#btnImgPreview');
+        const fileN = document.querySelector('#fileN');
+
+        // const cropper = new Cropper (btnImg, {
+        //     aspectRatio: 1 / 1,
+        //     viewMode: 1,
+        //     preview: '#btnImgPreview',
+        //     crop(event) {
+        //         //顯示在#btnImgPreview的圖片
+        //         btnImgPreview.src = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+        //     },
+        // });
+
+        fileN.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    btnImg.setAttribute('src', this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
     </script>
 }
