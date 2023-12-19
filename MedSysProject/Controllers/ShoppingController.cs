@@ -20,9 +20,12 @@ namespace MedSysProject.Controllers
     public class ShoppingController : Controller
     {
         MedSysContext? _db = null;
-        public ShoppingController(MedSysContext db)
+        IHttpClientFactory _httpClientFactory;
+
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory)
         {
             _db = db;
+            _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
@@ -192,16 +195,30 @@ namespace MedSysProject.Controllers
             {
                 data.Add(key, id[key]);
             }
-            var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
-            q.TradeNo= data["TradeNo"];
-            q.StateId = 14;
+            var order = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+            order.TradeNo= data["TradeNo"];
+            order.StateId = 14;
             _db.SaveChanges();
+            string Memberemail = data["CustomField1"];
+            using (var httpclient = _httpClientFactory.CreateClient())
+            {
+                string url = "https://localhost:7078/api/Email";
+
+                EmailData email = new EmailData();
+                email.Address = Memberemail;
+                email.Body = "heelllo";
+                email.Subject = "訂單成立";
+                string emailjson = JsonSerializer.Serialize(email);
+                HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+            }
+
             return RedirectToAction("OrderList");
         }
        
         public IActionResult CartList()
         {
-            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                 return RedirectToAction("Index");
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             List<CCartItem> cartList = new List<CCartItem>();
@@ -222,7 +239,7 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Index");
             }
             proName = proName.Substring(0, proName.Length - 1);
-
+            string memberEmail = m.MemberEmail;
 
             //需填入你的網址
             var website = $"https://localhost:7203/";
@@ -236,7 +253,7 @@ namespace MedSysProject.Controllers
         { "TradeDesc",  "無"},
         { "ItemName", proName},
         { "ExpireDate",  "3"},
-        { "CustomField1",  ""},
+        { "CustomField1",  memberEmail},
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},
@@ -537,8 +554,15 @@ namespace MedSysProject.Controllers
             var form = Request.Form;
             int orderid= Int32.Parse(form["orderid"]);
             string state = form["state"];
-            var order = _db.Orders.Find(orderid);
+            var order = _db.Orders.Include(n => n.OrderDetails).Where(n => n.OrderId == orderid).FirstOrDefault();
+            List<int> productList = new List<int>();
+            foreach(var item in order.OrderDetails)
+            {
+                productList.Add((int)item.ProductId);
+            }
+            
             var returnOrder = _db.ReturnProducts.Where(n=>n.OrderId== orderid).FirstOrDefault();
+
 
             if(state == "退款申請中")
             {
@@ -552,8 +576,23 @@ namespace MedSysProject.Controllers
             {
                 order.StateId = 17;
                 returnOrder.ReturnState= "退款完成";
+
+                foreach(var item in productList)
+                {
+                    var product = _db.Products.Find(item);
+                    product.UnitsInStock += order.OrderDetails.Where(n => n.ProductId == item).FirstOrDefault().Quantity;
+                }
+
                 _db.SaveChanges();
                 return Content("退款完成");
+            }
+            else if(state=="退款完成")
+            {
+                order.StateId = 15;
+                returnOrder.ReturnState = "退款申請中";
+                returnOrder.ProcessedDate = null;
+                _db.SaveChanges();
+                return Content("退款申請中");
             }
             else
             {
