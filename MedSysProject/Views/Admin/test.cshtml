@@ -65,12 +65,12 @@
                    <thead class="thead-dark">
                         <tr>
                             <th>下拉</th>
-                            <th >reportDetailId</th>
-                            <th>reportId</th>
-                            <th>itemId</th>
-                            <th>rs</th>
-                            <th>input</th>
-                            <th>empty</th>
+                            <th >健檢細項ID</th>
+                            <th>健檢報告ID</th>
+                            <th>項目名稱</th>
+                            <th>檢查結果</th>
+                            <th>修改</th>
+                            <th>動作</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -150,6 +150,10 @@
     //內表////////////dd
     var ttt = $('#tableD').DataTable({
         //設定語言
+         dom: 'Bfrtip',
+        buttons: [
+            'copy', 'excel', 'pdf'
+        ],
         "language": {
             "processing": "處理中...",
             "loadingRecords": "載入中...",
@@ -235,41 +239,8 @@
             { data: null },
             { data: null },           
         ],
-        "buttons": [
-            {
-                extend: 'excel',
-                text: '匯出Excel',
-                className: 'btn btn-success',
-                exportOptions: {
-                    modifier: {
-                        page: 'all'
-                    }
-                }
-            },
-            {
-                extend: 'print',
-                text: '列印',
-                className: 'btn btn-info',
-                exportOptions: {
-                    modifier: {
-                        page: 'all'
-                    }
-                }
-            },
-            {
-                extend: 'pdf',
-                text: '匯出PDF',
-                className: 'btn btn-danger',
-                exportOptions: {
-                    modifier: {
-                        page: 'all'
-                    }
-                },
-                customize: function (doc) {
-                    doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
-                }
-            }
-        ],
+
+       
        
             //{
             //    extend: 'print',
@@ -309,6 +280,7 @@
         scroller: {
             rowHeight: 10
         },
+        dom: 'Bfrtip',
         buttons: [
             'copy', 'excel', 'pdf'
         ],
@@ -412,36 +384,6 @@
                   console.log(datarr)
                 })
 
-                ////自建表
-                //$.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
-                    
-                //    var datarr = data
-                //    console.log(datarr)
-                ////tableD.
-
-                //var ttd1 = document.createElement("td")
-                //var ttd2 = document.createElement("td");
-                //var ttd3 = document.createElement("td");
-                //var ttd4 = document.createElement("td");
-
-                //var newtr = document.createElement("tr");
-               
-                //ttd1.innerHTML = datarr[0].item.itemName
-                //ttd2.innerHTML = "2"
-                //ttd3.innerHTML = "3"
-                //ttd4.innerHTML = "4"
-
-                //newtr.appendChild(ttd2);
-                //newtr.appendChild(ttd4);
-                //newtr.appendChild(ttd3);
-                //newtr.appendChild(ttd1);
-                //newtr.setAttribute("Class", "A");
-                //newtr.setAttribute("style", "background-color:#5CADAD");
-                //tbody.appendChild(newtr);
-
-                //fku.show();
-
-                //})
 
 
             }
@@ -495,8 +437,10 @@
             for (var i = 0; i <= data[0].healthReports.length;i++)
             {
                     var tabletd1 = document.createElement("td")
-                    var tabletd2 = document.createElement("td");
+                    var tabletd2 = document.createElement("td")
+                    ;
                     var tabletd3 = document.createElement("td");
+                    
                     var tabletd4 = document.createElement("td");
 
                     var newtr = document.createElement("tr");
@@ -507,7 +451,8 @@
                     tabletd3.innerHTML = data[0].healthReports[i].reportId
                     //if (data[0].healthReports[i].reserve=!null)
                     tabletd4.innerHTML = data[0].healthReports[i].reserve.reserveDate
-                   
+                   tabletd2.setAttribute("Class","align-middle")
+                   tabletd3.setAttribute("Class","align-middle");
                     newtr.appendChild(tabletd2);
                     newtr.appendChild(tabletd4);
                     newtr.appendChild(tabletd3);
