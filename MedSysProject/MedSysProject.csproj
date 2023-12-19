@@ -86,6 +86,10 @@
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.min.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.min.js" />
+    <None Include="wwwroot\vendor\cropperjs\cropper.common.js" />
+    <None Include="wwwroot\vendor\cropperjs\cropper.esm.js" />
+    <None Include="wwwroot\vendor\cropperjs\cropper.js" />
+    <None Include="wwwroot\vendor\cropperjs\cropper.min.js" />
   </ItemGroup>
 
   <ItemGroup>

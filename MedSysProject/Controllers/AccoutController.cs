@@ -61,7 +61,7 @@ namespace MedSysProject.Controllers
             m.member = q;
             if (q != null)
             {
-                if (m.member.MemberPassword == c.txtPassWord && m.IsVerified)
+                if (m.member.MemberPassword == c.txtPassWord && m.IsVerified && m.StatusId == 1)
                 {
                     string json = JsonSerializer.Serialize(q);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
@@ -73,6 +73,16 @@ namespace MedSysProject.Controllers
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
                     TempData["notverify"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 你的帳號尚未驗證，請至信箱收取驗證信。</div>";
                     return RedirectToAction("Verifyemail");
+                }
+                else if (m.member.MemberPassword == c.txtPassWord && m.StatusId == 2)
+                {
+                    TempData["Banned"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 您的帳號已遭停權，請<a href=\"mailto:gohealth790@gmail.com\">聯絡客服</a>。</div>";
+                    return View();
+                }
+                else if (m.member.MemberPassword == c.txtPassWord && m.StatusId == 3)
+                {
+                    TempData["Banned"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 您的帳號目前有異常，請<a href=\"mailto:gohealth790@gmail.com\">聯絡客服</a>。</div>";
+                    return View();
                 }
                 else
                 {
