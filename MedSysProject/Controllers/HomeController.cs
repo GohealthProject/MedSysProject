@@ -507,12 +507,20 @@ namespace MedSysProject.Controllers
 
         public IActionResult report(int id)
         {          //todo 尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
-            ViewData["id"] = 55;
-            var m = _context.Reserves.Where(s => s.MemberId == 46);
+            MemberWarp mw = new MemberWarp();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            if (!string.IsNullOrEmpty(json))
+            {
+                mw = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(json);
+            }
+
+            ViewData["id"] = mw.MemberId;
+            var m = _context.Reserves.Where(s => s.MemberId == mw.MemberId);
 
             _context.Members.Load();
             var j = (from s in _context.ReportDetails.Include(p => p.Item).Include(p => p.Report).ThenInclude(p => p.Reserve)
-                     where s.Report.MemberId == 7
+                     where s.Report.MemberId == mw.MemberId
+                     orderby s.Report.Reserve.ReserveDate
                      //select s.Report.Reserve.ReserveDate).Distinct();
                      select s);
 

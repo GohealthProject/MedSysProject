@@ -86,11 +86,13 @@
     List<int> reportid = new List<int>();
     List<string>dd=new List<string>();
     string[] sArray={};
+
+    
 }
 <meta charset="UTF-8">
 
 <div class="col-2 title">
-    <select class="form-select" aria-label="Default select example" id="import">
+    <select class="form-select" aria-label="Default select example" id="import" >
         <option selected>選擇健檢報告0</option>
 
         @{
@@ -124,7 +126,7 @@
 
         }*@
        
-<h1>會員中心</h1>
+<h1>會員中心  @ViewData["id"]</h1>
 @*@Html.DisplayNameFor(model => model)*@
 
 <div class="container-fluid ">
@@ -203,7 +205,7 @@
                     <div class="col-2 d-none">
                         <h4>隱藏內容</h4>
                     </div>
-                    <div class="col-2 title d-none">
+                    <div class="col-2 title" hidden>
                         <select class="form-select" aria-label="Default select example" id="chose1id">
                             <option selected>選擇健檢報告</option>
 
@@ -222,7 +224,7 @@
 
                         </select>
                     </div>
-                    <div class="col-2 title d-none">
+                    <div class="col-2 title " hidden>
                         <select class="form-select" aria-label="Default select example" id="chose2id">
                             <option selected>選擇健檢報告</option>
 
@@ -263,6 +265,7 @@
                         </div>
                         <table border="1" id="table1" data-show-print="true"
                                data-show-export="true"
+                               data-url=""
                                data-pagination="true"
                                data-side-pagination="server"
                                data-click-to-select="true"
@@ -274,10 +277,10 @@
                                     <th class="col-4">
                                         項目
                                     </th>
-                                    <th class="col-3">
+                                    <th class="col-3" id="th1">
                                         XX年度檢驗結果
                                     </th>
-                                    <th class="col-3" >
+                                    <th class="col-3" id="th2" >
                                         XX年度檢驗結果
                                     </th>
                                     <th class="col-3">
@@ -493,6 +496,7 @@
     <button id="dd">123</button>
 </div>
     <script>
+   
     var tablet = document.querySelector("#reportshow1");
     var dd = document.querySelector("#dd")
     dd.addEventListener("click",()=>{
@@ -502,7 +506,7 @@
 
     })
     var table = document.querySelector("#reportshow1");
-    show();
+    
         var ch1 = document.querySelector("#chose1");
         var ch1id = document.querySelector("#chose1id");
         var ch2 = document.querySelector("#chose2");
@@ -510,15 +514,21 @@
         
         //var val = document.all['#chose2'].value;
         var index = ch1.selectedIndex;
-    
-
+        var index2 = ch2.selectedIndex;
+        var title1 = index;
+        var title2 = index2;
+    show();
         ////todo 顯示問題
     function rp1Display() {
 
-        //let rp2 = document.querySelector("#tr").children[2]
+        let t1 = document.querySelectorAll("th")
         //old length=3
         let rp1 = document.querySelectorAll('#rp1')
-
+        title1 = ch1[index].textContent.split("\n")[2]
+        t1[1].childNodes[0].innerText = `${title1}健檢結果`
+        
+        //let th1 = document.querySelectorAll('th1')
+        //th1.innerHTML = `${i1}健檢報告`
         ///ajax///
         const endpoint = 'https://localhost:7203/transaction/rp2';
         const reportdid = ch1id.value
@@ -527,7 +537,7 @@
             url: `${endpoint}/${reportdid}`,
             dataType: "json",
             success: function (response) {
-                alert(response)
+                //alert(response)
                 //response[0].reportDetailId
                 //response[0].reportId
                 //response[0].itemId
@@ -560,9 +570,16 @@
 
 
     }
-
+    //$table.bootstrapTable('refresh', {
+    //    url: 'new url'
+    //});
         function rp2Display() {
-           
+       
+       
+        let t2 = document.querySelectorAll("th")
+        title2 = ch2[index2].textContent.split("\n")[2]
+        t2[2].childNodes[0].innerText = `${title2}健檢結果`
+        //th2.innerHTML = `${ch2.value}健檢報告`
             //let rp2 = document.querySelector("#tr").children[2]
             let rp3 = document.querySelectorAll('#rp2')
          
@@ -574,7 +591,7 @@
             url: `${endpoint}/${reportdid}`,
             dataType: "json",
             success: function (response) {
-                alert(response)
+                //alert(response)
                
                 console.log(ch2id.value)
                 for (var i = 0; i <= response.length; i++) {
@@ -629,8 +646,8 @@
 
         ch2.addEventListener("change", () => {
         //console.log(ch2.value)
-        index = ch2.selectedIndex;
-        ch2id.selectedIndex = index;
+        index2 = ch2.selectedIndex;
+        ch2id.selectedIndex = index2;
         rp2Display();
 
     })
@@ -671,10 +688,10 @@
 
         
         @{
-            var report = from s in Model
-                         where s.Report.Reserve.ReserveDate == "2023-10-10" &&
-                         s.Report.ReportId == 30
-                         select s;
+            var report = (from s in Model
+                         //where s.Report.Reserve.ReserveDate == "2023-10-10" &&
+                         //      s.Report.ReportId.Equals(ViewData["id"])
+                         select s);
         }
 
             table.innerHTML =
@@ -793,25 +810,30 @@
                     //},
                     {
                         field: '',
-                        title: 'ID'
+                        title: '項目'
                     },
                     {
                         field: 'id',
-                        title: 'ID'
+                        title: `${title1}檢驗結果`
                     }, 
                     {
                         field: 'name',
-                        title: 'Item Name'
+                        title: `檢查報告`
                     }, 
                     {
                         field: 'price',
-                        title: 'Item Price'
+                        title: '標準值'
                     }
                 ]
             })
         }).trigger('change')
     })
-
+    ch1.selectedIndex = 6;
+    ch1id.selectedIndex = 6;
+    index = ch1.selectedIndex
+    //index2 = ch1.selectedIndex
+    rp1Display();
+    
     </script>
 
 

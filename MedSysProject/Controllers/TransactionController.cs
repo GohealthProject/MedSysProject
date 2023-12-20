@@ -25,6 +25,31 @@ namespace MedSysProject.Controllers
             return View();
         }
 
+        public IActionResult editreport()
+        {
+            var form = Request.Form;
+            var rpdi = form["reportdetailid"];
+            var rpi = form["reportid"];
+            var item = form["itemname"];
+            var rs = form["result"];
+            var edit = form["editinput"];
+            
+
+            var id = int.Parse(rpdi);
+            var items = _context.ReportDetails.Where(p => p.ReportDetailId.Equals(id)).FirstOrDefault();
+            items.Result = rs;
+            //ReportDetail rd = new ReportDetail();
+            //rd.ReportDetailId = int.Parse(rpdi);
+            //rd.ReportId = int.Parse(rpi);
+            //rd.Result = rs;
+
+            //_context.Add();
+            _context.SaveChanges();
+
+            return View();
+        }
+
+
         public IActionResult members(int id)
         {
             //IEnumerable<ReportDetail> datas = null;
