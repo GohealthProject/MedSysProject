@@ -23,11 +23,11 @@
     <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-   
+
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
@@ -48,18 +48,18 @@
 
 <body>
     <!-- ======= Header ======= -->
-   <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center">
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center">
 
-      <div class="logo me-auto">
+            <div class="logo me-auto">
                 <h1><a href="~/Home/Index"><img src="~/img/gohealth-logo.png" alt="" class="img-fluid"> GO健康</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
 
-      <nav id="navbar" class="navbar">
+            <nav id="navbar" class="navbar">
                 <!-- =======最上方欄位 ======= -->
-        <ul>
+                <ul>
                     <li class="dropdown fs-4">
                         <a href="~/Home/Index#about"><span class="fs-4">關於GO健康</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
@@ -69,11 +69,11 @@
                         </ul>
                     </li>
                     <li>
-                    
+
                     <li class="dropdown fs-4">
                         <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
-                            
+
                             <li class="dropdown fs-4">
                                 <a href="#"><span class="fs-4">線上預約</span> <i class="bi bi-chevron-right"></i></a>
                                 <ul>
@@ -87,7 +87,7 @@
                     <li>
                         <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
-                    <li><a class="nav-link scrollto fs-4" href="/blogs/indexnew" >健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li><a class="nav-link scrollto fs-4" href="/blogs/indexnew">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:35px">
                         <button type="button" class="btn  position-relative" asp-action="CartList" asp-controller="Shopping">
                             <img src="@Url.Content("~/img/shopping-cart.png")" alt="Inbox Image" class="img-fluid" id="CartListImg" />
@@ -97,33 +97,43 @@
                             </span>
                         </button>
                     </li>
-                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto fs-4"})</li>
-                        }else{
+                        <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto fs-4" })</li>
+                        }
+                        else
+                        {
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                             MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
-                                <li class="dropdown">
+                        <li class="dropdown">
                             <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
-                                    <ul>
+                            <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
                                 <li><a asp-action="OrderList" asp-controller="Shopping">訂單管理</a></li>
                                 <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
-                                    </ul>
-                                </li>
-                            }
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+                            </ul>
+                        </li>
+                        }
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
 
-    </div>
-  </header><!-- End #header -->
+        </div>
+    </header><!-- End #header -->
     <main id="main" style="background-color:#F2F9F8">
-    @RenderBody()
-    <!-- ======= Footer ======= -->
-    
+        @RenderBody()
+        <!-- ======= Footer ======= -->
+
     </main>
+
+    <!-- chat room button -->
+    <div class="chatroom position-fixed bottom-0 end-0" style="margin-bottom:4rem;">
+        <a href="https://line.me/R/ti/p/%40qjz8589a" target="_blank">
+            <img src="~/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
+        </a>
+    </div>
+
     <footer id="footer">
         <div class="container">
             <div class="copyright">
@@ -143,8 +153,8 @@
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="   crossorigin="anonymous"></script>
-   
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
     <script src="~/forevendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/forevendor/swiper/swiper-bundle.min.js"></script>
     <script src="~/forevendor/php-email-form/validate.js"></script>
@@ -152,7 +162,7 @@
     <script src="~/js/foremain.js"></script>
 
 
-  
+
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         async function getcartList() {
@@ -170,7 +180,7 @@
                 window.location.href = "@Url.Content("~/Shopping/CartList")";
             })
         })
-        
+
     </script>
 </body>
 
