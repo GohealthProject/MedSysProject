@@ -29,8 +29,17 @@
                 int SpecialPrice = 0;
                 string ReturnNum = "";
                 string ReturnID = "";
+                string color = "";
                 foreach (var item in Model)
                 {
+                    if (item.ReturnState == "退款完成")
+                    {
+                        color = " text-success fs-3 ";
+                    }
+                    else
+                    {
+                        color="text-danger fs-3";
+                    }
                     ReturnNum = item.ReturnDate.ToString();
                     ReturnNum = ReturnNum.Split(" ")[0];
                     ReturnID = ReturnNum.Replace("/", "")+item.ReturnId;
@@ -43,7 +52,7 @@
                         <td class=" fs-4" style="vertical-align: middle">@ReturnNum</td>
                         <td class=" fs-4" style="vertical-align: middle">@item.ProcessedDate</td>
                         <td class=" fs-4" style="vertical-align: middle">@item.ReturnReason</td>
-                        <td class="text-danger fs-4" style="vertical-align: middle">@item.ReturnState</td>
+                        <td class="@color" style="vertical-align: middle">@item.ReturnState</td>
                     </tr>
                 }
             }

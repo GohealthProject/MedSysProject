@@ -11,65 +11,102 @@
     }
     @foreach (var comment in comments)
     {
-        string id ="c"+comment.CommentId ;
-        <!--data-comment-id自訂義屬性-->
-        <div id="@id" class="comment d-flex mb-4 mainComment pcId" data-comment-id="@comment.CommentId">
-            <!--放使用者照片的位置-->
-            <div class="flex-shrink-0">
-                <div class="avatar avatar-sm rounded-circle">
-                    @if (comment.EmployeeId == null)
-                    {
-                        <img class="avatar-img" src="~/img/MemberImg/@comment.Member.MemberImage" alt="" class="img-fluid" />
-                    }
-                    else
-                    {
-                        <img class="avatar-img" src="data:image/jpeg;base64,@Convert.ToBase64String(comment.Employee.EmployeePhoto)"
-                             alt=""
-                             class="img-fluid" />
-                    }
+        if (comment.Content.Length >= 15 && comment.Content.Substring(0, 15) == "[INAPPROPRIATE]")
+        {
+            string id = "c" + comment.CommentId;
+            <!--data-comment-id自訂義屬性-->
+            <div id="@id" class="comment d-flex mb-4 mainComment pcId" data-comment-id="@comment.CommentId">
+                <!--放使用者照片的位置-->
+                <div class="flex-shrink-0">
+                    <div class="avatar avatar-sm rounded-circle">
+                        <img class="avatar-img" src="~/assets/img/images (1).jpg" alt="" class="img-fluid" />
+                    </div>
+                </div>
+
+                <!--放使用者名字、留言-->
+                <div class="flex-grow-1 ms-2 ms-sm-3" data-comment-id="@comment.CommentId">
+                    <div class="comment-meta d-flex  align-item-center">
+                        <h6 class="me-2">(會員)已屏蔽</h6>
+                        <!--留言時間，幾天前-->
+                        <span class="text-muted">@comment.CreatedAt</span>
+                    </div>
+                    <div class="comment-body">
+                        系統偵測到不當發言，已屏蔽，請注意維持平台友善!
+                    </div>
+                    <!--回覆按鈕-->
+                    <!--塞輸入方塊-->
+                   
+
+                    <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">
+                        <!--總共幾筆子留言-->
+                    </div>
                 </div>
             </div>
-
-            <!--放使用者名字、留言-->
-            <div class="flex-grow-1 ms-2 ms-sm-3" data-comment-id="@comment.CommentId">
-                <div class="comment-meta d-flex  align-item-center">
-                    @{
-                        if (comment.EmployeeId == null)
+        }
+        else
+        {
+            string id = "c" + comment.CommentId;
+            <!--data-comment-id自訂義屬性-->
+            <div id="@id" class="comment d-flex mb-4 mainComment pcId" data-comment-id="@comment.CommentId">
+                <!--放使用者照片的位置-->
+                <div class="flex-shrink-0">
+                    <div class="avatar avatar-sm rounded-circle">
+                        @if (comment.EmployeeId == null)
                         {
-                            <h6 class="me-2">(會員)@comment.Member.MemberName</h6>
+                            <img class="avatar-img" src="~/img/MemberImg/@comment.Member.MemberImage" alt="" class="img-fluid" />
                         }
                         else
                         {
-                            <h6 class="me-2">(@comment.Employee.EmployeeClass.Class)@comment.Employee.EmployeeName</h6>
+                            <img class="avatar-img" src="data:image/jpeg;base64,@Convert.ToBase64String(comment.Employee.EmployeePhoto)"
+                                 alt=""
+                                 class="img-fluid" />
                         }
-
-                    }
-                    <!--留言時間，幾天前-->
-                    <span class="text-muted">@comment.CreatedAt</span>
-                </div>
-                <div class="comment-body">
-                    @comment.Content
-                </div>
-                <!--回覆按鈕-->
-                <div>
-                    <button type="button" class="replyBtn btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
-                </div> 
-                <!--塞輸入方塊-->
-                <div class="reply-form-wrap js-reply-form-wrap">
-                    <form class="reply-form" action="#">
-                        <span class="icon bi-reply"></span>
-                        <input class="form-control" type="text" placeholder="回覆...">
-                        <button class="btn js-end-reply" style="position:absolute; right:280px;"><span class="bi-x"></span>
-
-        </button>
-                    </form>
+                    </div>
                 </div>
 
-                <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">
-                    <!--總共幾筆子留言-->
+                <!--放使用者名字、留言-->
+                <div class="flex-grow-1 ms-2 ms-sm-3" data-comment-id="@comment.CommentId">
+                    <div class="comment-meta d-flex  align-item-center">
+                        @{
+                            if (comment.EmployeeId == null)
+                            {
+                                <h6 class="me-2">(會員)@comment.Member.MemberName</h6>
+                            }
+                            else
+                            {
+                                <h6 class="me-2">(@comment.Employee.EmployeeClass.Class)@comment.Employee.EmployeeName</h6>
+                            }
+
+                        }
+                        <!--留言時間，幾天前-->
+                        <span class="text-muted">@comment.CreatedAt</span>
+                    </div>
+                    <div class="comment-body">
+                        @comment.Content
+                    </div>
+                    <!--回覆按鈕-->
+                    <div>
+                        <button type="button" class="replyBtn btn btn-outline-secondary btn-sm" style="font-size:10px;"><i class="bi bi-reply">回覆</i></button>
+                    </div>
+                    <!--塞輸入方塊-->
+                    <div class="reply-form-wrap js-reply-form-wrap">
+                        <form class="reply-form" action="#">
+                            <span class="icon bi-reply"></span>
+                            <input class="form-control" type="text" placeholder="回覆...">
+                            <button class="btn js-end-reply" style="position:absolute; right:280px;">
+                                <span class="bi-x"></span>
+
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="comment-replies bg-light p-3 mt-3 rounded subPutIn">
+                        <!--總共幾筆子留言-->
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+
     }
 
  
