@@ -107,24 +107,7 @@
             slideContainer.innerHTML = slider6.join('');
 
         }
-        function getContentSnippet(content) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(content, 'text/html');
-
-            // 获取所有文本节点
-            const textNodes = doc.body.querySelectorAll('p:not(:has(img))');
-
-            // 提取文本内容
-            let snippet = '';
-            for (const node of textNodes) {
-                snippet += node.textContent.trim() + ' ';
-            }
-
-            // 截取前几个字符作为摘要（这里示例截取前200个字符）
-            snippet = snippet.slice(0, 200);
-            console.log(snippet);
-            return snippet;
-        }
+        
 
         //
         async function loadRecentPost() 
