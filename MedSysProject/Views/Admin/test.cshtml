@@ -4,6 +4,15 @@
     Layout = "_Layout_Admin2";
 }
 
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Report = document.getElementById("li-Report");
+    const Index = document.getElementById("li-index");
+    Report.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
 
 @{
 }
@@ -374,29 +383,7 @@
 
        
        
-            //{
-            //    extend: 'print',
-            //    text: '列印',
-            //    className: 'btn btn-info',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    }
-            //},
-            //{
-            //    extend: 'pdf',
-            //    text: '匯出PDF',
-            //    className: 'btn btn-danger',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    },
-            //    customize: function (doc) {
-            //        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
-            //    }
-            //}
+           
         
 
        
@@ -465,15 +452,7 @@
         ]
        
     })
-    //if (row.child.isShown()) {
-    //    // This row is already open - close it
-    //    row.child.hide();
-    //}
-    //else {
-    //    // Open this row
-    //    row.child(format(row.data())).show();
-    //}
-
+    
     ///外細表 報告 日期
     var select;
     table.on('click',/* 'td.dt-control',*/ function (event) {

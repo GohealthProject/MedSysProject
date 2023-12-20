@@ -37,9 +37,10 @@
     }
 
     #rsbtn {
-        position: absolute;
+      /*  position: absolute;
         bottom: 5px;
-        left: 30%;
+        left: 30%;*/
+        margin-left:90px;
     }
 
 </style>
@@ -218,7 +219,7 @@
 
         </div>
 
-        <form id="form" method="post" action="~/Home/Reserve">
+        <form id="form" method="post" action="~/Home/Reserve" hidden>
             <input type="text" value="" id="forminput" name="item">
             <input type="text" value="" id="Mid" name="Mid">
             <input type="text" value="" id="Pid" name="Pid">
@@ -290,10 +291,10 @@
 
             </tbody>
         </table>
-
+        
         @*<button class="btn btn-primary  col-6" type="button" id="rsbtn"><a href="~/Home/Reserve" onclick="submit()">馬上預約</a></button>*@
         <button class="btn btn-primary  col-6" type="button" id="rsbtn" onclick="submit()">馬上預約</button>
-        <button id="tbt">123</button>
+        
     </div>
 </div>
 
@@ -304,7 +305,7 @@
         function getPlan(){
         //$("#tbt").click(function () {
             $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
+                //alert("Data: " + data + "\nStatus: " + status);
                 var datarr = JSON.parse(data)
                 var tbody = document.querySelector("#ilist")
 
@@ -326,7 +327,7 @@
                     tr.appendChild(td2);
                     td3.innerHTML = datarr[i].ItemPrice
                     tr.appendChild(td3);
-                    td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
+                    td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p hidden id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
                     tr.appendChild(td4);
                     tbody.appendChild(tr);
                 }
@@ -390,7 +391,7 @@
                                             </td>
                                             <td>
                                                <img src="/img/icon/x.png" onclick="imgdelete()"/>
-                                               <p id="${count}">${iid.innerHTML}</p>
+                                               <p id="${count}" hidden>${iid.innerHTML}</p>
                                             </td>
                              </tr>
                     `;
