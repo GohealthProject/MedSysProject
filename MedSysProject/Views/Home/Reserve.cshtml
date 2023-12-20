@@ -362,15 +362,20 @@
     var bday= document.querySelector("#bday")
     var currentdate = new Date()
     //bday.min = convertToISO(currentdate)
-
+    @{
+        string Rday = "";
+    }
     bday.addEventListener("change",()=>{
-        var Rday = bday.value
-        $.ajax({
-            url: 'https://localhost:7203/Transaction/checkreserve',
-            data: Rday,
-            success: console.log("ok"),
-           // dataType: String,
-        });
+        @Rday = bday.value
+        //Context.Session.Set("date",Rday)
+         //Context.Session["Rday"] = "1"
+
+        //$.ajax({
+        //    url: 'https://localhost:7203/Transaction/checkreserve',
+        //    data: Rday,
+        //    success: console.log("ok"),
+        //   // dataType: String,
+        //});
 
     alert("0")
     })
