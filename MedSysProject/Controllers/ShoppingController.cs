@@ -200,20 +200,38 @@ namespace MedSysProject.Controllers
             order.StateId = 14;
             _db.SaveChanges();
             string Memberemail = data["CustomField1"];
+            string ProName = data["CustomField2"];
+            string ProCount = data["CustomField3"];
+            string total = data["CustomField4"];
+            string proID = "";
+            List<int> proList = new List<int>();
+            var Pid  = ProName.Split("#").ToList();
+            foreach(var item in Pid)
+            {
+                proList.Add(Int32.Parse(item));
+            }
+            var Ps = _db.Products.Where(n => proList.Contains(n.ProductId)).ToList();
+            foreach(var item in Ps)
+            {
+                proID += item.ProductName + "#";
+            }
             using (var httpclient = _httpClientFactory.CreateClient())
             {
                 string url = "https://localhost:7078/api/Email";
 
                 EmailData email = new EmailData();
                 email.Address = Memberemail;
-                email.Body = "heelllo";
+
+                email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount,total);
                 email.Subject = "訂單成立";
                 string emailjson = JsonSerializer.Serialize(email);
                 HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
             }
+            var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
 
-            return RedirectToAction("OrderList");
+            
+            return RedirectToAction("OrderList",new {page =999});
         }
        
         public IActionResult CartList()
@@ -222,6 +240,9 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Index");
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
             List<CCartItem> cartList = new List<CCartItem>();
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+                return RedirectToAction("Index");
+           
             string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
             cartList = JsonSerializer.Deserialize<List<CCartItem>>(json);
             string mjson = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
@@ -229,10 +250,15 @@ namespace MedSysProject.Controllers
 
             int total = 0;
             string proName = "";
+            string proCount = "";
+            string proProductName = "";
+            
             foreach (var pro in cartList)
             {
-                proName += pro.ProductName + "#";
-                total += pro.UnitPrice * pro.count;
+                proName += pro.Product.ProductId + "#";
+                proProductName +=pro.Product.ProductName + "#";
+                 total += pro.UnitPrice * pro.count;
+                proCount += pro.count.ToString() + "#";
             }
             if (proName.Length == 0)
             {
@@ -240,7 +266,7 @@ namespace MedSysProject.Controllers
             }
             proName = proName.Substring(0, proName.Length - 1);
             string memberEmail = m.MemberEmail;
-
+            total = total + (int)(total * 0.05);
             //需填入你的網址
             var website = $"https://localhost:7203/";
 
@@ -251,12 +277,12 @@ namespace MedSysProject.Controllers
         { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
         { "TotalAmount",  total.ToString()},
         { "TradeDesc",  "無"},
-        { "ItemName", proName},
+        { "ItemName", proProductName},
         { "ExpireDate",  "3"},
         { "CustomField1",  memberEmail},
-        { "CustomField2",  ""},
-        { "CustomField3",  ""},
-        { "CustomField4",  ""},
+        { "CustomField2",  proName},
+        { "CustomField3",  proCount},
+        { "CustomField4",  total.ToString()},
         { "ReturnURL",  $"{website}Shopping/paymethodinfo"},
         { "OrderResultURL", $"{website}Shopping/paySussess/{orderId}"},
         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
@@ -284,19 +310,20 @@ namespace MedSysProject.Controllers
 
             _db.SaveChanges();
 
-            var q =_db.Orders.Where(n=>n.MerchantTradeNo == orderId).FirstOrDefault();
+            var q = _db.Orders.Where(n => n.MerchantTradeNo == orderId).FirstOrDefault();
 
             foreach (var product in cartList)
             {
                 OrderDetail od = new OrderDetail();
                 od.OrderId = q.OrderId;
                 od.ProductId = product.Product.ProductId;
+                var op = _db.Products.Find(product.Product.ProductId);
+                op.UnitsInStock -= product.count;
                 od.Quantity = product.count;
                 od.UnitPrice = product.UnitPrice;
                 _db.OrderDetails.Add(od);
             }
             _db.SaveChanges();
-
             if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
             {
                 return RedirectToAction("Login", "Accout");
@@ -332,6 +359,13 @@ namespace MedSysProject.Controllers
         }
         public IActionResult OrderList(int page=1)
         {
+            if(page == 999)
+            {
+                HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+                HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+                page = 1;
+            }
+
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             List<COrderWarp>list = new List<COrderWarp>();
