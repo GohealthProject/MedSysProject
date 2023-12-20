@@ -185,10 +185,10 @@
                             <label class="mb-2 mt-2">
                                 預約日期:
                                 <input type="date"
-                                       name="party"
-                                       min=new date()
-                                       max="2023/11/21"
-                                       required />
+                                       name="bday"
+                                       min= new date()
+                                       max="2023-12-29"
+                                       required id="bday"/>
                                 <span class="validity"></span>
                             </label>
 
@@ -356,6 +356,34 @@
         $('#detail').modal('hide');
         $('#reserve').modal('hide');
     })
+
+
+    ////日期變更/////
+    var bday= document.querySelector("#bday")
+    var currentdate = new Date()
+    //bday.min = convertToISO(currentdate)
+
+    bday.addEventListener("change",()=>{
+        var Rday = bday.value
+        $.ajax({
+            url: 'https://localhost:7203/Transaction/checkreserve',
+            data: Rday,
+            success: console.log("ok"),
+           // dataType: String,
+        });
+
+    alert("0")
+    })
+    //bday.selectionEnd = datetime.toUTCString()
+
+    function convertToISO(timebit) {
+        // remove GMT offset
+        timebit.setHours(0, -timebit.getTimezoneOffset(), 0, 0);
+        // format convert and take first 10 characters of result
+        var isodate = timebit.toISOString().slice(0, 10);
+        return isodate;
+    }
+
     var data;
     
     var forminput = document.querySelector("#forminput").value

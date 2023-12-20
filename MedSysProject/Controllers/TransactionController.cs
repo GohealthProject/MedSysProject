@@ -24,8 +24,14 @@ namespace MedSysProject.Controllers
         {
             return View();
         }
+        public IActionResult checkreserve(string date)
+        {
+            var t = _context.Reserves.Where(p => p.ReserveDate == date).Count();
 
-        public IActionResult editreport()
+            return View(t);
+        }
+
+            public IActionResult editreport()
         {
             var form = Request.Form;
             var rpdi = form["reportdetailid"];
