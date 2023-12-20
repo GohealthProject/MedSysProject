@@ -311,7 +311,7 @@
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="CancelProjectCreate" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-success" id="Cbtnprj">確定新增</button>
+                    <button type="button" class="btn btn-success" id="Cbtnprj" onclick="updataprj()">確定新增</button>
                     <button class="btn btn-dark" id="demoProjectCreate">DEMO</button>
                 </div>
             </div>
@@ -357,7 +357,7 @@
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="CancelProjectEdit" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-success" id="btnprj">確定修改</button>
+                    <button type="button" class="btn btn-success" id="btnprj" onclick="putdataprj2()">確定修改</button>
                 </div>
             </div>
         </div>
@@ -387,11 +387,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                        <label class="form-check-label" for="${newId}">
-                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
-                                        </label>
-                                    `;
+                                            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                            <label class="form-check-label" for="${newId}">
+                                                <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
+                                            </label>
+                                        `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -422,11 +422,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                            <label class="form-check-label" for="${newId}">
-                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
-                                            </label>
-                                        `;
+                                                <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                <label class="form-check-label" for="${newId}">
+                                                    <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
+                                                </label>
+                                            `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -464,9 +464,17 @@
         }
     }
 
+    document.querySelector("#Cbtnprj").addEventListener("click", () => {
+        console.log("hello")
+        let createform = document.querySelector("#myCreatedataformprj");
+        let form = new FormData(createform);
+        createPrj(form);
+
+    })
+
     async function createPrj(form) {
         console.log(form)
-        let url = `https://localhost:7078/api/Projects`;
+        let url = `https://localhost:7078/api/Projects/prj`;
         const response = await fetch(url, {
             method: 'POST',
             body: form,
@@ -474,7 +482,17 @@
         const state = await response.status;
         if (response.ok) {
 
-            createRef(form);
+            $('#modalCreateprj').modal('hide');
+
+            Swal.fire({
+                title: "新增成功!",
+                text: state,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+            research();
 
         } else {
             Swal.fire({
@@ -664,6 +682,42 @@
         }
     }
 
+    async function putdataprj2() {
+        let id = document.getElementById("inputIdprj").value;
+        console.log(id)
+        let apiurl = `https://localhost:7078/api/Projects/prj/${id}`;
+        var myForm = document.getElementById("myEditdataformprj");
+        var data = new FormData(myForm);
+        const response = await fetch(apiurl, {
+            method: 'PUT',
+            body: data
+        });
+        const status = await response.status;
+        if (response.ok) {
+
+            $('#modalEditprj').modal('hide');
+
+            Swal.fire({
+                title: "修改成功!",
+                text: status,
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            });
+
+
+
+            research();
+        }
+        else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
+
     // document.addEventListener("keydown", (event) => {
     //     if (event.key == "Enter") {
     //         console.log(document.querySelectorAll(".pjlist"));
@@ -729,7 +783,7 @@
 
         if (result.isConfirmed) {
 
-            const response = await fetch(`https://localhost:7078/api/Projects/${id}`, {
+            const response = await fetch(`https://localhost:7078/api/Projects/${idprj}`, {
                 method: 'DELETE'
             });
             let data = await response.status

@@ -86,6 +86,7 @@
         const btnImgPreview = document.querySelector('#btnImgPreview');
         const fileN = document.querySelector('#fileN');
         const formAAA = document.querySelector('#formAAA');
+        const btn_submit = document.querySelector('#btn_submit');
 
         // var basic = $('#btnImg').croppie({
         //     viewport: {
@@ -149,11 +150,28 @@
                         var blob = dataURItoBlob(resp);
 
                         //blob to file in #formAAA
-                        var file = blobToFile(blob, 'fileN');
+                        var formdata = new FormData(formAAA);
+                        formdata.append('fileN', blobToFile(blob, 'fileN'));
 
                     });
                 });
             }
+        });
+
+        btn_submit.addEventListener('click', function () {
+            var formdata = new FormData(formAAA);
+            formdata.append('fileN', blobToFile(blob, 'fileN'));
+            console.log(formdata);
+            $.ajax({
+                url: '/Accout/UpdataMember',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
         });
 
         function dataURItoBlob(resp) {
