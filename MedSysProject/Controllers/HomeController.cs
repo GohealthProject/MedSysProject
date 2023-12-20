@@ -716,7 +716,7 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult testplan()
+        public IActionResult CompanyPlan()
         { //plan 企業版
             return View();
         }
