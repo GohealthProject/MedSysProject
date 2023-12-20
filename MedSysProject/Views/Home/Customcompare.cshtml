@@ -1,5 +1,5 @@
 ﻿@{
-
+    List<Item> list = ViewBag.Items;
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
@@ -37,9 +37,10 @@
     }
 
     #rsbtn {
-        position: absolute;
+      /*  position: absolute;
         bottom: 5px;
-        left: 30%;
+        left: 30%;*/
+        margin-left:90px;
     }
 
 </style>
@@ -218,7 +219,7 @@
 
         </div>
 
-        <form id="form" method="post" action="~/Home/Reserve">
+        <form id="form" method="post" action="~/Home/Reserve" hidden>
             <input type="text" value="" id="forminput" name="item">
             <input type="text" value="" id="Mid" name="Mid">
             <input type="text" value="" id="Pid" name="Pid">
@@ -261,50 +262,53 @@
                 </tr>
             </thead>
             <tbody id="ilist">
-                @*   <tr>
-                <td>
-                A
-                </td>
-                <td>
-                B
-                </td>
-                <td>
-                150
-                </td>
-                <td><img src="~/img/icon/x.png" /></td>
-                </tr>*@
+               @* @{
+                    int count = 0;
+                    foreach(var item in list)
+                    {
+                        <tr>
+                            <td>
+                                @item.ItemId
+                            </td>
+                            <td>
+                                @item.ItemName
+                            </td>
+                            <td>
+                                @item.ItemPrice
+                            </td>
+                            <td><img src="~/img/icon/x.png" onclick="imgdelete()" /><p id="count">@item.ItemId</p></td>
+                        </tr>
 
-                @* <tr>
-                <td>
-                A
-                </td>
-                <td>
-                B
-                </td>
-                <td>
-                100
-                </td>
-                <td><img src="~/img/icon/x.png" /></td>
+                        count++;
+                    }
+                    
 
-                </tr>*@
-
+                }*@
+                   
             </tbody>
         </table>
-
+        
         @*<button class="btn btn-primary  col-6" type="button" id="rsbtn"><a href="~/Home/Reserve" onclick="submit()">馬上預約</a></button>*@
         <button class="btn btn-primary  col-6" type="button" id="rsbtn" onclick="submit()">馬上預約</button>
-        <button id="tbt">123</button>
+        
     </div>
 </div>
 
 @section Scripts{
     <script>
+        
+        @{
+            int planid = ViewBag.Planid;
+        }
+        let id = @planid;
+
+        console.log("hello");
         getPlan();
-        //取得
+        取得
         function getPlan(){
         //$("#tbt").click(function () {
             $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
-                alert("Data: " + data + "\nStatus: " + status);
+                //alert("Data: " + data + "\nStatus: " + status);
                 var datarr = JSON.parse(data)
                 var tbody = document.querySelector("#ilist")
 
@@ -326,39 +330,38 @@
                     tr.appendChild(td2);
                     td3.innerHTML = datarr[i].ItemPrice
                     tr.appendChild(td3);
-                    td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
+                    td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p hidden id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
                     tr.appendChild(td4);
                     tbody.appendChild(tr);
                 }
 
 
-
+        
             });
         //});
         }
         var count = 0;///不能點太快
         const items = [];
         //todo 選後enable
+        
         let btn = document.querySelectorAll(".ibtn");
         let list = document.querySelector("#ilist");
-        for (var i = 0; i < btn.length; i++) {
-            btn[i].addEventListener('click', itemadd);
-        }
-        //let img = document.querySelectorAll(".imgdelete");
-        //console.log(img);
-        //for(var i=0; i<img.length;i++){
-        //    img[i].addEventListener('click',()=>{
-        //        console.log("hello");
-        //    });
-        //};
+        let img = document.querySelectorAll(".imgdelete");
+        console.log(img);
+        for(var i=0; i<img.length;i++){
+            img[i].addEventListener('click',()=>{
+                console.log("hello");
+            });
+        };
         function imgdelete() {
             let img = document.querySelectorAll(".imgdelete");
             var dtr = document.querySelectorAll("#dtr");
             let iid = event.target.parentNode.querySelector(".iid");
-
+            let list = document.querySelector("#ilist");
             console.log(event.target.this);
             //var t = dtr.removeChild(event.target.parentNode);
             var del = list.removeChild(event.target.parentNode.parentNode);
+            const items = [];
             var tar = event.target.nextElementSibling.id;
             //console.log(t.innerHTML)
             var index = items.indexOf(event.target)
@@ -369,6 +372,7 @@
             console.log(items);
             count--;
         }
+
         function itemadd(event) {
             console.log(event.target);
             console.log()
@@ -390,7 +394,7 @@
                                             </td>
                                             <td>
                                                <img src="/img/icon/x.png" onclick="imgdelete()"/>
-                                               <p id="${count}">${iid.innerHTML}</p>
+                                               <p id="${count}" hidden>${iid.innerHTML}</p>
                                             </td>
                              </tr>
                     `;
@@ -420,53 +424,53 @@
         }
        
 
-                //$("#btng:has(#ibtn)").click(()=>{
-                //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
-                //    //var suck = document.querySelector("event.target");
-                //    //console.log(event.currentTarget)
-                //    console.log(event.target.value)
-                //    event.target.addEventListener("click",()=>{
-                //        document.querySelector("#ilist").innerHTML +=
-                //            `<tr>
-                //                    <td>
-                //                    AA
-                //                    </td>
-                //                    <td>
-                //                           ${event.target.value}
-                //                    </td>
-                //                            <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
-                //                 </tr>`
-                //    })
-                    //document.querySelector("#ilist").innerHTML +=
-                    //    `<tr>
-                    //            <td>
-                    //            ${this.itembtn}
-                    //            </td>
-                    //            <td>
-                    //           BB
-                    //            </td>
-                    //                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
-                    //         </tr>`
-                //})
+                $("#btng:has(#ibtn)").click(()=>{
+                   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
+                    //var suck = document.querySelector("event.target");
+                    //console.log(event.currentTarget)
+                    console.log(event.target.value)
+                    event.target.addEventListener("click",()=>{
+                        document.querySelector("#ilist").innerHTML +=
+                            `<tr>
+                                    <td>
+                                    AA
+                                    </td>
+                                    <td>
+                                           ${event.target.value}
+                                    </td>
+                                            <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+                                 </tr>`
+                    })
+                    document.querySelector("#ilist").innerHTML +=
+                        `<tr>
+                                <td>
+                                ${this.itembtn}
+                                </td>
+                                <td>
+                               BB
+                                </td>
+                                        <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+                             </tr>`
+                })
 
 
-                //const itembtn = document.querySelector("#btng:has(#ibtn)");
-                //itembtn.addEventListener('click',() => {
-                //    console.log(event.target)
+                const itembtn = document.querySelector("#btng:has(#ibtn)");
+                itembtn.addEventListener('click',() => {
+                    console.log(event.target)
 
-                //    //console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
-                //    document.querySelector("#ilist").innerHTML +=
-                //    `<tr>
-                //        <td>
-                //        ${this.itembtn}
-                //        </td>
-                //        <td>
-                //       BB
-                //        </td>
-                //                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
-                //     </tr>`
+                    //console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
+                    document.querySelector("#ilist").innerHTML +=
+                    `<tr>
+                        <td>
+                        ${this.itembtn}
+                        </td>
+                        <td>
+                       BB
+                        </td>
+                                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+                     </tr>`
 
 
-                //})
+                })
     </script>
 }

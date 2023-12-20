@@ -227,13 +227,13 @@ namespace MedSysProject.Controllers
             {
                 List<int> list = new List<int>();
 
-                foreach (var item2 in planlist.Split(','))
+                foreach (var item2 in planlist.Split(' '))
                 {
                     if (item2 != "")
                         list.Add(Int32.Parse(item2));
 
                 }
-
+                ViewBag.list = System.Text.Json.JsonSerializer.Serialize(list);
                 //---------------------完整資料
                 List<CPlanViewModel> total = new List<CPlanViewModel>();
                 var pl = _context.Plans.Where(n => list.Contains(n.PlanId))// list.Contains(n.PlanId)
@@ -242,9 +242,9 @@ namespace MedSysProject.Controllers
 
                      .Select(t => new
                      {
-                         planId = t.Project.PlanRefs.First().PlanId,
-                         planName = t.Project.PlanRefs.First().Plan.PlanName,
-                         PlanDescription = (string)t.Project.PlanRefs.First().Plan.PlanDescription,
+                         planId = t.Project.PlanRefs.FirstOrDefault().PlanId,
+                         planName = t.Project.PlanRefs.FirstOrDefault().Plan.PlanName,
+                         PlanDescription = (string)t.Project.PlanRefs.FirstOrDefault().Plan.PlanDescription,
                          projectid = t.Project.ProjectId,
                          ProjectName = (string)t.Project.ProjectName,
                          ProjectPrice = (double)t.Project.ProjectPrice,
@@ -273,25 +273,30 @@ namespace MedSysProject.Controllers
                 //-----------------------list轉datatable
                 DataTable dt = new DataTable();
              
-                dt.Columns.Add(new DataColumn("Class"));
-                dt.Columns.Add(new DataColumn("Details"));
-                for (int i = 0; i < list.Count; i++)
+                dt.Columns.Add(new DataColumn("檢查類別"));
+                dt.Columns.Add(new DataColumn("檢查細項"));
+
+                    var q = from id in list
+                        select   GetProjectName(id);
+                List<string> list2 = q.ToList();
+          
+                for (int i = 0; i < list2.Count; i++)
                 {
-                    dt.Columns.Add(new DataColumn(list[i].ToString()));
+                    dt.Columns.Add(new DataColumn(list2[i].ToString()));
                   
                 }
                var  total1 = from p in _context.Projects
                         from item in p.Items
                         select new { p.ProjectName,  ItemName= item.ItemName };
 
-                foreach (var tt in total1)
+                foreach (var tt in total1)//比對全部
                 {
                     DataRow dr = dt.NewRow();
-                    dr["Class"] = tt.ProjectName;
-                    dr["Details"] = tt.ItemName;
+                    dr["檢查類別"] = tt.ProjectName;
+                    dr["檢查細項"] = tt.ItemName;
                     for (int i = 0; i < list.Count; i++)
                     {
-                        dr[list[i].ToString()] = Check(list[i], tt.ProjectName, tt.ItemName);
+                        dr[list2[i].ToString()] = Check(list[i], tt.ProjectName, tt.ItemName,total  );
                         
                     }
                     dt.Rows.Add(dr);
@@ -307,9 +312,36 @@ namespace MedSysProject.Controllers
             }
         }
 
-        private object Check(int v, string projectName, string itemName)
+        private string GetProjectName(int id)
         {
-            return true;
+          var x =  _context.Plans.FirstOrDefault(p => p.PlanId == id);
+            if (x!=null)
+            {
+                return x.PlanName;
+            }
+            else
+            {
+    return "";
+            }
+        
+        }
+
+        private object Check(int v, string projectName, string itemName, List<CPlanViewModel> viewModel)
+        { 
+            string flag = "false";
+            string t = "true";
+            string f= "false";
+            foreach (var item in viewModel)
+            {
+                if (item.ItemName == itemName && projectName == item.ProjectName)
+                {
+                    flag = t;
+                    break;
+                }
+               
+            }
+            return flag;                   
+           
         }
 
         [HttpPost]
@@ -506,12 +538,20 @@ namespace MedSysProject.Controllers
 
         public IActionResult report(int id)
         {          //todo 尚未完成: 補db去年資料+報告值差異比對+列印匯出功能
-            ViewData["id"] = 55;
-            var m = _context.Reserves.Where(s => s.MemberId == 46);
+            MemberWarp mw = new MemberWarp();
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            if (!string.IsNullOrEmpty(json))
+            {
+                mw = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(json);
+            }
+
+            ViewData["id"] = mw.MemberId;
+            var m = _context.Reserves.Where(s => s.MemberId == mw.MemberId);
 
             _context.Members.Load();
             var j = (from s in _context.ReportDetails.Include(p => p.Item).Include(p => p.Report).ThenInclude(p => p.Reserve)
-                     where s.Report.MemberId == 7
+                     where s.Report.MemberId == mw.MemberId
+                     orderby s.Report.Reserve.ReserveDate
                      //select s.Report.Reserve.ReserveDate).Distinct();
                      select s);
 
@@ -525,9 +565,15 @@ namespace MedSysProject.Controllers
             var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
             return Json(data);
         }
-        public IActionResult Customcompare(string json)
+        public IActionResult Customcompare(int planid)
         {
             //todo 尚未完成:  測試比較後傳送資料
+            ViewBag.Planid = planid;
+            
+
+           List<Item> list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+
+            ViewBag.Items = list;
 
             var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
             _context.Plans.Load();
