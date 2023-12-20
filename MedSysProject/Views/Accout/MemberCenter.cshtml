@@ -10,6 +10,9 @@
     }
 </style>
 
+
+
+
 <div class="container " style="background-color:#F2F9F8; height:1200px">
     <div style="height:350px; background-color:antiquewhite;"><img src="@Url.Content("~/img/Member.jpg")" class="img-fluid" alt="..." style="width:1296px; height:350px"></div>
     <div style="background-color:azure;height:200px" class="my-4">
@@ -132,8 +135,10 @@
 
 @{
     var ResetPasswordSuccess = TempData["alertResetPwdSuccess"] as string;
+    var LoginSuccess = TempData["LoginSuccess"] as string;
 }
 
 <script>
     @Html.Raw(ResetPasswordSuccess)
+    @Html.Raw(LoginSuccess)
 </script>
