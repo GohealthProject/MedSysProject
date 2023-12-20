@@ -47,6 +47,17 @@
             console.log(snippet);
             return snippet;
         }
+        function getContentSnippet(content, length) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(content, 'text/html');
+            const textNodes = doc.body.querySelectorAll('p:not(:has(img))');
+            let snippet = '';
+            for (const node of textNodes) {
+                snippet += node.textContent.trim() + '';
+            }
+            snippet = snippet.slice(0, length);
+            return snippet;
+        }
     </script>
     
     @await RenderSectionAsync("IndexCss", false)
