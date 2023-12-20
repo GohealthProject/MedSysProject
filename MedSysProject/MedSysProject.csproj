@@ -25,6 +25,41 @@
     <Content Remove="wwwroot\img\PersonalPlan\p2-4.jpg" />
     <Content Remove="wwwroot\img\PersonalPlan\p2-5.jpg" />
     <Content Remove="wwwroot\img\PersonalPlan\tree-clipart-1520959433vmu.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\css\style.css" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\friend.js" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\annex.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\cry.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\cry2.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\I_dont_know.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\like.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\like2.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\omg.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\robot-face.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\smile.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\strange.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\what.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\emoji\wow.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Alpha_Team.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Beta_Team.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\BigBoss.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\David.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Final_Check.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Grace.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Judy.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\LittleBoss.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Peter.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Steve.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Susan.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Tech_boy.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\friends\Tony.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\me\Johnny.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\me\Johnny2.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\photo\423893.jpg" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\img\photo\54137321.png" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\index.html" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\README.MD" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\webChat.js" />
+    <Content Remove="wwwroot\vendor\UI_Web_Chat-master\Web_Chat.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -86,6 +121,41 @@
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.min.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.min.js" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\css\style.css" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\friend.js" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\annex.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\cry.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\cry2.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\I_dont_know.jpg" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\like.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\like2.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\omg.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\robot-face.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\smile.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\strange.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\what.jpg" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\emoji\wow.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Alpha_Team.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Beta_Team.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\BigBoss.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\David.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Final_Check.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Grace.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Judy.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\LittleBoss.jpg" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Peter.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Steve.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Susan.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Tech_boy.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\friends\Tony.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\me\Johnny.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\me\Johnny2.jpg" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\photo\423893.jpg" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\img\photo\54137321.png" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\index.html" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\README.MD" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\webChat.js" />
+    <None Include="wwwroot\vendor\UI_Web_Chat-master\Web_Chat.png" />
   </ItemGroup>
 
   <ItemGroup>

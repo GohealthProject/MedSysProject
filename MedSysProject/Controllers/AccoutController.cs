@@ -65,6 +65,7 @@ namespace MedSysProject.Controllers
                 {
                     string json = JsonSerializer.Serialize(q);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                    TempData["LoginSuccess"] = "Swal.fire({position: \"top-end\",icon: \"success\",title: \"登入成功！\",showConfirmButton: false,timer: 1000});";
                     return RedirectToAction("MemberCenter", "Accout");
                 }
                 else if (m.member.MemberPassword == c.txtPassWord && !m.IsVerified)
