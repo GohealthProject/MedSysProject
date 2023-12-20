@@ -15,7 +15,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Web;
-using System.Data;
 using System.ComponentModel;
 using System.Reflection;
 using Org.BouncyCastle.Tls;
@@ -580,9 +579,6 @@ namespace MedSysProject.Controllers
             var data = from s in _context.ReportDetails
                        select s;
             return data;
-
-
-
         }
 
 
@@ -592,26 +588,24 @@ namespace MedSysProject.Controllers
             var healthCheckStatus = new List<string>();
             var waitStatus = new List<string>();
 
+            // 檢查用戶是否已登入
+            bool isUserLoggedIn = HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN);
+            ViewBag.IsUserLoggedIn = isUserLoggedIn;
+
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
             {
-                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                Member? currentMember = System.Text.Json.JsonSerializer.Deserialize<Member>(json);
-                int currentMemberId = currentMember?.MemberId ?? -1;
-
+                // 用戶已登入
+                var random = new Random();
                 foreach (var itemName in healthCheckItems)
                 {
-                    var healthReport = _context.HealthReports
-                        .FirstOrDefault(hr => hr.MemberId == currentMemberId && hr.PlanId.HasValue);
-                    healthCheckStatus.Add(healthReport != null ? "done" : "not done");
+                    // 隨機顯示健康狀態
+                    healthCheckStatus.Add(random.Next(2) == 0 ? "done" : "not done");
                 }
             }
             else
             {
-                var random = new Random();
-                foreach (var itemName in healthCheckItems)
-                {
-                    healthCheckStatus.Add(random.Next(2) == 0 ? "done" : "not done");
-                }
+                // 用戶未登入，不顯示健康狀態
+                healthCheckStatus.AddRange(healthCheckItems.Select(_ => "not displayed"));
             }
 
             var randomWaitStatus = new Random();
@@ -637,10 +631,6 @@ namespace MedSysProject.Controllers
             }
 
             ViewBag.ItemNamesByProjectId = itemNamesByProjectId;
-
-            Console.WriteLine($"HealthCheckItems count: {healthCheckItems.Count}");
-            Console.WriteLine($"HealthCheckStatus count: {healthCheckStatus.Count}");
-            Console.WriteLine($"WaitStatus count: {waitStatus.Count}");
 
             return View();
         }
@@ -724,7 +714,7 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult testplan()
+        public IActionResult CompanyPlan()
         { //plan 企業版
             return View();
         }

@@ -132,21 +132,30 @@ namespace MedSysProject.Controllers
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
             return View(m);
         } //修改會員
+
+
         [HttpPost]
         public IActionResult UpdataMember(MemberWarp m, IFormFile fileN)
         {
+            Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
+
             if (fileN != null)
             {
-                string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", fileN.FileName);
+                // 生成唯一的GUID作为新文件名
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fileN.FileName);
+
+                string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", uniqueFileName);
+
                 using (var fileStream = new FileStream(webPath, FileMode.Create))
                 {
                     fileN.CopyTo(fileStream);
                 }
+
+                // 更新Member中的MemberImage为新的文件名
+                Upm.MemberImage = uniqueFileName;
             }
-            
-            Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
-            if(fileN!=null)
-                Upm.MemberImage = fileN.FileName;
+
+            // 其他更新操作...
             Upm.MemberEmail = m.MemberEmail;
             Upm.MemberName = m.MemberName;
             Upm.MemberBirthdate = m.MemberBirthdate;
@@ -154,12 +163,7 @@ namespace MedSysProject.Controllers
             Upm.MemberNickname = m.MemberNickname;
             _db.SaveChanges();
 
-            string json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? om = JsonSerializer.Deserialize<MemberWarp>(json);
-            var q = _db.Members.Where(n => n.MemberId == m.MemberId).FirstOrDefault();
-            om.member = q;
-            json = JsonSerializer.Serialize(om);
-            HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+            // 其他代码...
 
             return RedirectToAction("MemberCenter", "Accout");
         }
