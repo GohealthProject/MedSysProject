@@ -25,7 +25,7 @@
                                 <div class="post-meta"><span class="date">@item.ArticleClass.BlogCategory1</span> <span class="mx-1">&bullet;</span> <span>@item.CreatedAt.ToString("yyyy/MM/dd")</span></div>
                                 <h3><a href="~/Blogs/SinglePost?SingleBlogID=@item.BlogId">@item.Title</a></h3>
                                 <p>
-                                   @*@item.Content*@
+                                   
                                 </p>
                                 <div class="d-flex align-items-center author">
                                     <div class="photo"><img src="/blogs/GetEmpImageByte/@item.EmployeeId" alt="" class="img-fluid"></div>
@@ -52,11 +52,11 @@
 
                                 if (ViewBag.page == 1)
                                 {
-                                                                        <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@previous" class="btn prev disabled" hidden>上一頁</a>
+                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@previous" class="btn prev disabled" hidden>上一頁</a>
                                 }
                                 else
                                 {
-                                                                        <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@previous" class="prev">上一頁</a>
+                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@previous" class="prev">上一頁</a>
                                 }
 
 
@@ -64,21 +64,21 @@
                                 {
                                     if (i == current)
                                     {
-                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@i" class="active">@i</a>
+                                                                                <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@i" class="active">@i</a>
                                     }
                                     else
                                     {
-                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@i">@i</a>
+                                                                                <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@i">@i</a>
                                     }
                                 }
 
                                 if (ViewBag.page == ViewBag.MaxPage)
                                 {
-                                                                        <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@next" class="btn prev disabled" hidden>下一頁</a>
+                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@next" class="btn prev disabled" hidden>下一頁</a>
                                 }
                                 else
                                 {
-                                                                        <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@next" class="prev">下一頁</a>
+                                                                            <a href="~/blogs/QueryByKeyword?txtKeyword=@ViewBag.Key&page=@next" class="prev">下一頁</a>
                                 }
                                 
                             }
@@ -136,31 +136,19 @@
             loadSidePopular();
             const blogUnits = document.querySelectorAll('.post-entry-2');
             //console.log(blogUnits);
-            blogUnits.forEach(unit =>{
+            blogUnits.forEach(unit => {
                 const blogId = unit.getAttribute('data-hide-id');
-                const contentContainer = unit.querySelector("p");
+                const contentContainer = unit.querySelector('p');
                 //console.log(contentContainer);//取到了
                 fetch(`https://localhost:7078/api/Blogs/${blogId}`)
-                .then(response=>response.json())
-                .then(data=>{
-                    console.log(data);
-                    const {content} = data;
-                    contentContainer.innerHTML=getContentSnippet(content, 50)+' . . .';
-                })
-                //unit.querySelector(".post-entry-2 .half p").innerHTML=getContentSnippet(content, 50);
-            })
+                    .then(response => response.json())
+                    .then(data => {
+                        //console.log(data);
+                        const { content } = data;
+                        contentContainer.innerHTML = getContentSnippet(content, 50) + '. . .';
+                    });
+            });
         });
-        function getContentSnippet(content, length) {
-           const parser = new DOMParser();
-           const doc =parser.parseFromString(content, 'text/html');
-            const textNodes = doc.body.querySelectorAll('p:not(:has(img))');
-            let snippet = '';
-            for(const node of textNodes) {
-                snippet += node.textContent.trim() + '';
-            }
-            snippet = snippet.slice(0, length);
-            return snippet;
-        }
         async function loadSidePopular() {
             const response = await fetch(`https://localhost:7078/api/Blogs/popular6`);
             const data = await response.json();
