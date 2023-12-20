@@ -97,14 +97,39 @@
         display: none;
     }
 
+     .details-content {
+        display: none;
+    }
     .collapse-button {
         cursor: pointer;
-        margin-left: 10px; /* 調整按鈕位置 */
+    }
+    .detail-item {
+        padding-left: 20px;
+    }
+
+   .table-container {
+        width: 70%; /* 設置容器寬度為 70% */
+        margin-left: 15%; /* 左側邊距設為 15% */
+        margin-right: 15%; /* 右側邊距設為 15% */
+    }
+
+    .table {
+        width: 100%; /* 設置表格寬度為容器的 100% */
+    }
+
+    .table .project-name,
+    .table .item-name {
+        text-align: left; /* 靠左對齊 */
+    }
+
+    /* 對於其他列 */
+    .table th, 
+    .table td {
+        text-align: center; /* 居中對齊 */
     }
 
 
 </style>
-
 <div>
     @if (!isUserLoggedIn.HasValue || !isUserLoggedIn.Value)
     {
@@ -117,41 +142,60 @@
         <div style="text-align: center;">
             <h1 style="margin-top:50px">個人檢查項目及現場情形</h1>
         </div>
-
-        <table class="table">
-            <thead>
-                <tr class="table-header">
-                    <th>檢查完成</th>
-                    <th>檢查項目</th>
-                    <th>現場等候情形</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (ViewBag.HealthCheckItems != null && healthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
+                                                        <div style="display: flex; width: 100%;">
+                                                    <div style="width: 50%; display: flex; align-items: center; justify-content: center; text-align: center;">
+                                                      <div style="width: 50%; text-align: left; padding-left: 100px">
+    <i class="fas fa-check-circle text-success"></i>: 您已完成的檢查項目
+    <br>
+    <i class="fas fa-times-circle text-danger"></i>: 您尚未完成的檢查項目
+</div>
+                                                    </div>
+                                                    <div style="width: 50%;">
+                                                        <br>
+                                                        <i class="fas fa-user-nurse text-success"></i>: 無需等候，可立即檢查
+                                                        <br>
+                                                        <i class="fas fa-user-nurse text-warning"></i><i class="fas fa-user-nurse text-warning"></i>: 需等候5-10分鐘
+                                                        <br>
+                                                        <i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i>: 需等候20分鐘以上，建議先進行其他檢查項目
+                                                    </div>
+                                                </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+            <tr class="table-header">
+                <th>檢查完成</th>
+                <th class="project-name">檢查項目</th>
+                <th class="item-name" style="padding-left: 20px">細項</th>
+                <th>現場等候情形</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewBag.HealthCheckItems != null && healthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
+            {
+                for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
                 {
-                    for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
-                    {
-                        var healthStatus = healthCheckStatus[i];
-                        var currentWaitStatus = waitStatus[i];
+                    var healthStatus = healthCheckStatus[i];
+                    var currentWaitStatus = waitStatus[i];
 
-                        <tr class="table-row">
-                            <td>
-                                @if (healthStatus == "done")
-                                {
-                                    <i class="fas fa-check-circle text-success"></i>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-times-circle text-danger"></i>
-                                }
-                            </td>
-                            <td>
-                                @ViewBag.HealthCheckItems[i]
-                                <div class="collapse-button" onclick="toggleDetails('details' + @i)">
-                                    <i class="fas fa-plus-circle"></i>
-                                </div>
-                            </td>
-                            <td>
+                    <tr class="table-row">
+                        <td>
+                            @if (healthStatus == "done")
+                            {
+                                <i class="fas fa-check-circle text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-times-circle text-danger"></i>
+                            }
+                        </td>
+                        <td class="project-name">@ViewBag.HealthCheckItems[i]</td>
+                        <td class="item-name">
+                            @foreach (var itemName in (ViewBag.ItemNamesByProjectId.ContainsKey(i + 1) ? ViewBag.ItemNamesByProjectId[i + 1] : new List<string>()))
+                            {
+                                <div class="detail-item">@itemName</div>
+                            }
+                        </td>
+                        <td>
                                 @{
                                     if (currentWaitStatus == "high")
                                     {
@@ -169,51 +213,43 @@
                                         <i class="fas fa-user-nurse text-success"></i>
                                     }
                                 }
-                            </td>
-                        </tr>
-                        <tr id="details@i" class="details">
-                            <td colspan="3">
-                                <ul>
-                                    @{
-                                        var projectId = i + 1;
-                                        var itemNames = ViewBag.ItemNamesByProjectId[projectId] as List<string>;
-
-                                        if (itemNames != null && itemNames.Any())
-                                        {
-                                            foreach (var itemName in itemNames)
-                                            {
-                                                <li>@itemName</li>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <li>No items available.</li>
-                                        }
-                                    }
-                                </ul>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr class="table-row">
-                        <td colspan="3">資料不可用。</td>
+                           </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr class="table-row">
+                    <td colspan="4">資料不可用。</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+        </div>
     }
 </div>
 
+@* <script>
+ function toggleDetails(detailsId) {
+    var details = document.getElementById(detailsId);
 
-<script>
-    function toggleDetails(detailsId) {
-        var details = document.getElementById(detailsId);
-        if (details && details.style.display === "none") {
-            details.style.display = "block";
-        } else if (details) {
-            details.style.display = "none";
+    if (details) {
+        var iconId = 'icon' + detailsId.substring(7);
+        var icon = document.getElementById(iconId);
+
+        if (details.style.display === 'none' || details.style.display === '') {
+            details.style.display = 'block';
+            if (icon) {
+                icon.classList.remove('fa-plus-circle');
+                icon.classList.add('fa-minus-circle');
+            }
+        } else {
+            details.style.display = 'none';
+            if (icon) {
+                icon.classList.remove('fa-minus-circle');
+                icon.classList.add('fa-plus-circle');
+            }
         }
     }
-</script>
+}
+</script> *@

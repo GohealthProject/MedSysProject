@@ -627,10 +627,6 @@ namespace MedSysProject.Controllers
 
             ViewBag.ItemNamesByProjectId = itemNamesByProjectId;
 
-            Console.WriteLine($"HealthCheckItems count: {healthCheckItems.Count}");
-            Console.WriteLine($"HealthCheckStatus count: {healthCheckStatus.Count}");
-            Console.WriteLine($"WaitStatus count: {waitStatus.Count}");
-
             return View();
         }
 
