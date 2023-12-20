@@ -11,6 +11,11 @@
 
 <div class="RegisterDiv">
 
+    @{
+        var NotRegister = TempData["NotRegister"] as string;
+    }
+
+    @Html.Raw(NotRegister)
 
 <div class="row from" >
     <div class="col-md-4">
