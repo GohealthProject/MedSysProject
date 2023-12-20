@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "testplan";
+    ViewData["Title"] = "CompanyPlan";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 <!DOCTYPE html>
@@ -144,6 +144,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th>請選擇方案</th>
                     </tr>
 
                 </tfoot>
@@ -188,7 +189,6 @@
             });
         }
 
-        // 在表頭添加新的下拉選單
         function addPlanSelectColumn() {
             if (addedPlans.length >= globalPlans.length - 1) {
                 alert("已達最大方案比較量！");
@@ -205,6 +205,10 @@
             } else {
                 lastPlanSelectTh.after(newTh);
             }
+
+            // 在 tfoot 中添加一個新的 td 元素以保持結構一致
+            var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
+            footerRow.append('<td></td>');
         }
 
         function addSelectButtonToFooter(planId) {
@@ -264,10 +268,17 @@
 
         function addSelectButtonToFooter(planId) {
             var footerRow = $('#comparisonTableBody').closest('table').find('tfoot tr');
-            var newFooterCell = $('<td></td>');
+
+            // 檢查是否已有足夠的 td 元素，如果沒有，則添加
+            var neededTdCount = $('#comparisonTableBody tr:first td').length;
+            while (footerRow.find('td').length < neededTdCount) {
+                footerRow.append('<td></td>');
+            }
+
+            // 新的按鈕將被添加到倒數第二個單元格中
+            var newFooterCell = footerRow.find('td').eq(footerRow.find('td').length - 2);
             var selectButton = createSelectButton(planId);
             newFooterCell.append(selectButton);
-            footerRow.append(newFooterCell);
         }
 
         function updateFooterColspan() {
