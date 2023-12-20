@@ -572,9 +572,6 @@ namespace MedSysProject.Controllers
             var data = from s in _context.ReportDetails
                        select s;
             return data;
-
-
-
         }
 
 
@@ -716,7 +713,7 @@ namespace MedSysProject.Controllers
         }
 
 
-        public IActionResult testplan()
+        public IActionResult CompanyPlan()
         { //plan 企業版
             return View();
         }

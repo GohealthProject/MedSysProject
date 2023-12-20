@@ -86,14 +86,11 @@
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.min.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.min.js" />
-    <None Include="wwwroot\vendor\cropperjs\cropper.common.js" />
-    <None Include="wwwroot\vendor\cropperjs\cropper.esm.js" />
-    <None Include="wwwroot\vendor\cropperjs\cropper.js" />
-    <None Include="wwwroot\vendor\cropperjs\cropper.min.js" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.2" />
+    <PackageReference Include="Chronos.Blazor.Cropper" Version="1.2.16" />
     <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.14" />
