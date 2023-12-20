@@ -11,8 +11,6 @@ namespace MedSysProject.Controllers
 
         public IActionResult Chat()
         {
-
-
             return PartialView();
         }
     }
