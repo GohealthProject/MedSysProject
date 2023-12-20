@@ -15,10 +15,6 @@
             Member whoLogIn = JsonSerializer.Deserialize<Member>(Json);
             memLogIn = whoLogIn.MemberId;
         }
-            // else
-            // {
-        //     memLogIn = null;
-        // }
     }
     @{
         <section class="single-post-content">
@@ -28,8 +24,9 @@
 
                         <!-- ======= Single Post Content ======= -->
                         <div class="single-post">
-                            <div class="post-meta"><span class="date"></span> <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt</span></div>
+                            <div class="post-meta"><span class="date"></span><span>@Model[0].CreatedAt.ToString("yyyy/MM/dd")</span>&nbsp;&nbsp;<span>@Model[0].Employee.EmployeeName</span></div>
                             <h1 class="mb-5">@Model[0].Title</h1>
+                            
                             @{
                                 if (Model[0].BlogImage != null)
                                 {
@@ -42,7 +39,7 @@
                         </div><!-- End Single Post Content -->
                         <!-- ======= Comments ======= -->
                         <!--所有的留言裝在一個div class="Comments"中，跟single-post同一個層級-->
-
+                       
                         <div class="Comments" id="putIn">
                         </div>
                         <!-- End Comments -->
@@ -136,7 +133,7 @@
                             @Html.Raw(loginfail)*@
                                 <span class="text-danger">@Html.Raw(ViewBag.Msg)</span>
                                 <div class="px-1 my-2 form-floating">
-                                    <input type="text" class="form-control" id="hiddenBlogId" name="blogId" value="@Model[0].BlogId">
+                                    <input type="hidden" class="form-control" id="hiddenBlogId" name="blogId" value="@Model[0].BlogId">
                                 </div>
 
                                 <div class="px-1 my-2 form-floating">

@@ -18,7 +18,7 @@ namespace MedSysProject.Controllers
             _db = db;
         }
 
-
+        #region 回收桶
         /// <summary>
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
@@ -78,7 +78,12 @@ namespace MedSysProject.Controllers
             #endregion
             return View(post);
         }
+        #endregion
 
+        /// <summary>
+        /// 新首頁
+        /// </summary>
+        /// <returns></returns>
         public IActionResult IndexNew() 
         {
             return View();
@@ -87,13 +92,15 @@ namespace MedSysProject.Controllers
         //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
-            IEnumerable<Blog> singlePost = null;
+            List<Blog> singlePost = null;
             if (singleBlogID != null)
             {
                 singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
                                           .Include(blog => blog.Employee)
+                                          .Include(blog=>blog.Employee.EmployeeClass)
                                           .Where(blog => blog.BlogId == singleBlogID)
                               select blog).ToList();
+                singlePost[0].Views += 1;
             }
             else
             {
@@ -101,10 +108,11 @@ namespace MedSysProject.Controllers
                                                   .Include(blog => blog.Employee)
                                                   .OrderByDescending(blog => blog.BlogId).Take(1)
                               select blog).ToList();
+                singlePost[0].Views += 1;
             }
-
-            var q = _db.Comments.Where(n => n.BlogId ==singleBlogID&&n.ParentCommentId==null).Select(n => n.CommentId);
-            ViewBag.CommentId = JsonSerializer.Serialize(q.ToList());
+            _db.SaveChanges();
+            //共幾則留言?
+           
             return View(singlePost);
         }
         public IActionResult SelectBlogCategory(int? CategoryID, int page = 1)
@@ -259,13 +267,13 @@ namespace MedSysProject.Controllers
         /// <returns></returns>
         public IActionResult ShowComments(int BlogId)
         {
-            int total=_db.Comments.Count(comment=>comment.BlogId==BlogId);
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
                                             .Include(comment => comment.Employee.EmployeeClass)
                                             .Where(comment => comment.BlogId == BlogId && comment.ParentCommentId == null)
                                 .Select(comment => comment)).ToList();
-            ViewBag.totalComment = total;
+            int totalComment = _db.Comments.Count(n => n.BlogId == BlogId);
+            ViewBag.TotalComment = totalComment;
             return PartialView(mainComments);
         }
         public IActionResult ShowReplies(int mainCommentId) 
