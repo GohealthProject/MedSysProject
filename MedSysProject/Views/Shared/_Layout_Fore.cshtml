@@ -129,9 +129,58 @@
 
     <!-- chat room button -->
     <div class="chatroom position-fixed bottom-0 end-0" style="margin-bottom:4rem;">
-        <a href="https://line.me/R/ti/p/%40qjz8589a" target="_blank">
+        <a onclick="showChatroomWindow()">
             <img src="~/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
         </a>
+    </div>
+
+    <!-- chat room window -->
+    <div class="chatroom-window position-fixed bottom-0 end-0" id="chatroom-window" style="margin-bottom: 4rem;margin-right: 4rem;width: 267px;height: 364px;background-color: antiquewhite;border: double;border-radius: 15px;" hidden>
+        <div class="chatroom-window-header">
+            <div class="chatroom-window-header-title">
+                <img src="/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
+                <span>GO健康客服</span>
+            </div>
+            <div class="chatroom-window-header-close" onclick="showChatroomWindow" style="position: absolute;right: 0;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="chatroom-window-body">
+            <div class="chatroom-window-body-message" id="chat-message-body">
+                @*                 <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div> *@
+                @*             <div class="chatroom-window-body-message">
+                <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div>
+                <div class="chatroom-window-body-message">
+                <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div> *@
+
+            </div>
+            <div class="chatroom-window-footer" style="position: absolute;bottom: 0;">
+                <div class="d-inline chatroom-window-footer-input">
+                    <input type="text" id="chat-text" placeholder="請輸入訊息...">
+                </div>
+                <div class="d-inline chatroom-window-footer-send">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer id="footer">
@@ -180,6 +229,47 @@
                 window.location.href = "@Url.Content("~/Shopping/CartList")";
             })
         })
+
+        function showChatroomWindow() {
+            if (document.querySelector("#chatroom-window").hidden == false) {
+                document.querySelector("#chatroom-window").hidden = true;
+                return;
+            }
+            var datetime = new Date();
+            datetime = Date.now();
+            document.querySelector("#chatroom-window").hidden = false;
+            document.querySelector("#chat-text").focus();
+            document.querySelector('#chat-message-body').innerHTML = `
+                                                                            <div class="chatroom-window-body-message-time">
+                                                                                <span>${datetime}</span>
+                                                                            </div>
+                                                                            <div class="chatroom-window-body-message-content">
+                                                                                <span>您好，有什麼可以幫助您的嗎？</span>
+                                                                            </div>`
+        };
+
+        document.getElementById('chat-text').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                console.log('Enter pressed');
+                let text = document.getElementById('chat-text').value;
+                console.log(text);
+                document.getElementById('chat-text').value = "";
+
+                var datetime = new Date();
+                datetime = Date.now();
+                document.querySelector('#chat-message-body').innerHTML += `
+                                                                        <div class="chatroom-window-body-message">
+                                                                            <div class="chatroom-window-body-message-time">
+                                                                                <span>${datetime}</span>
+                                                                            </div>
+                                                                            <div class="chatroom-window-body-message-content">
+                                                                                <span>${text}</span>
+                                                                            </div>
+                                                                        </div>`
+
+
+            }
+        });
 
     </script>
 </body>
