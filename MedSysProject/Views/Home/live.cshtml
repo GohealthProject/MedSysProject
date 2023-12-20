@@ -16,13 +16,13 @@
         var currentWaitStatus = waitStatus.Count > i ? waitStatus[i] : "unknown";
         // 使用 healthStatus 和 currentWaitStatus
     }
-    <text>Health Check Items Count: @healthCheckItems?.Count</text>
-    <br />
-    <text>Health Check Status Count: @healthCheckStatus?.Count</text>
-    <br />
-    <text>Wait Status Count: @waitStatus?.Count</text>
-    <br />
-
+    // <text>Health Check Items Count: @healthCheckItems?.Count</text>
+    // <br />
+    // <text>Health Check Status Count: @healthCheckStatus?.Count</text>
+    // <br />
+    // <text>Wait Status Count: @waitStatus?.Count</text>
+    // <br />
+    bool? isUserLoggedIn = ViewBag.IsUserLoggedIn as bool?;
 
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -68,147 +68,148 @@
         top: 50%; 
         transform: translate(-50%, -50%); 
     }
-   
+
+    .login-link {
+        font-size: 20px; 
+        font-weight: bold; 
+        color: #007bff; 
+        text-decoration: none; 
+        margin-top: 30px; 
+    }
+
+        .login-link:hover {
+            text-decoration: underline; 
+        }
+
+    .header-section {
+        display: flex;
+        justify-content: space-around; /* 平均分布標題 */
+        margin-top: 50px;
+    }
+
+        .header-section > div {
+            /* 通過調整寬度來控制標題之間的距離 */
+            width: 30%;
+            text-align: center;
+        }
+
+    .details {
+        display: none;
+    }
+
+    .collapse-button {
+        cursor: pointer;
+        margin-left: 10px; /* 調整按鈕位置 */
+    }
 
 
 </style>
 
 <div>
-    <div style="display: flex; justify-content: space-around;">
-        <div style="width: 30%;">
+    @if (!isUserLoggedIn.HasValue || !isUserLoggedIn.Value)
+    {
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="@Url.Action("Login", "Accout")" class="login-link">請登入以顯示相關資訊</a>
         </div>
-        <div style="width: 60%;">
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div style="text-align: center;">
-                        <h1 style="margin-top:50px">個人檢查項目及現場情形</h1>
-                    </div>
-                    <div style="display: flex; width: 100%;">
-                        <div style="width: 50%; display: flex; align-items: center; justify-content: center; text-align: center;">
-                            <div style="width: 50%;">
-                                <i class="fas fa-check-circle text-success"></i>: 您已完成的檢查項目
-                                <br>
-                                <i class="fas fa-times-circle text-danger"></i>: 您尚未完成的檢查項目
-                            </div>
-                        </div>
-                        <div style="width: 50%;">
-                            <br>
-                            <i class="fas fa-user-nurse text-success"></i>: 無需等候，可立即檢查
-                            <br>
-                            <i class="fas fa-user-nurse text-warning"></i><i class="fas fa-user-nurse text-warning"></i>: 需等候5-10分鐘
-                            <br>
-                            <i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i><i class="fas fa-user-nurse text-danger"></i>: 需等候20分鐘以上，建議先進行其他檢查項目
-                        </div>
-                    </div>
-                    <div style="display: flex; width: 100%; margin-bottom: 20px; margin-top: 50px; justify-content: space-between;">
-                        <div style="width: 23%; text-align: center;"><strong>檢查完成</strong></div>
-                        <div style="width: 33.33%; text-align: center;"><strong>檢查項目</strong></div>
-                        <div style="width: 20%; text-align: center;"><strong>現場等候情形</strong></div>
-                    </div>
-                    <div class="offcanvas-body">
-                        <ul class="list-group list-group-flush" style="margin-bottom: 100px">
-                            @{
-                                if (ViewBag.HealthCheckItems != null && healthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
+    }
+    else
+    {
+        <div style="text-align: center;">
+            <h1 style="margin-top:50px">個人檢查項目及現場情形</h1>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr class="table-header">
+                    <th>檢查完成</th>
+                    <th>檢查項目</th>
+                    <th>現場等候情形</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.HealthCheckItems != null && healthCheckStatus.Count == ViewBag.HealthCheckItems.Count)
+                {
+                    for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
+                    {
+                        var healthStatus = healthCheckStatus[i];
+                        var currentWaitStatus = waitStatus[i];
+
+                        <tr class="table-row">
+                            <td>
+                                @if (healthStatus == "done")
                                 {
-                                    for (int i = 0; i < ViewBag.HealthCheckItems.Count; i++)
-                                    {
-                                        var healthStatus = healthCheckStatus[i];
-                                        var currentWaitStatus = waitStatus[i];
-                                        <li class="list-group-item-container">
-                                            <div class="item-check">
-                                                <div class="form-check">
-                                                    @if (healthStatus == "done")
-                                                    {
-                                                        <i class="fas fa-check-circle text-success"></i>
-                                                    }
-                                                    else
-                                                    {
-                                                        <i class="fas fa-times-circle text-danger"></i>
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div class="item-details">
-                                                <div class="form-check">
-                                                    <label style="justify-content: center; text-align: center;" class="form-check-label" for="checkbox@i">@ViewBag.HealthCheckItems[i]</label>
-                                                </div>
-                                                <div class="collapse-button" onclick="toggleDetails(@i)">
-                                                    <i class="fas fa-plus-circle"></i>
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="wait-status">
-                                                <span class="wait-status">
-                                                    @{
-                                                        if (currentWaitStatus == "high")
-                                                        {
-                                                            <i class="fas fa-user-nurse text-danger"></i>
-                                                            <i class="fas fa-user-nurse text-danger"></i>
-                                                            <i class="fas fa-user-nurse text-danger"></i>
-                                                        }
-                                                        else if (currentWaitStatus == "medium")
-                                                        {
-                                                            <i class="fas fa-user-nurse text-warning"></i>
-                                                            <i class="fas fa-user-nurse text-warning"></i>
-                                                        }
-                                                        else
-                                                        {
-                                                            <i class="fas fa-user-nurse text-success"></i>
-                                                        }
-                                                    }
-                                                </span>
-                                            </div>
-                                        </li>
-
-                                        <li id="@Html.Raw("details" + i)" style="display: none; flex: 1; width: 25%; margin: 0 auto;margin:auto">
-                                            <ul class="list-group list-group-flush" style="display: flex; flex-direction: column;">
-                                                @{
-                                                    // 取得對應 ProjectId 的 ItemName 列表
-                                                    var projectId = i + 1; // 假設 ProjectId 從 1 開始
-                                                    var itemNames = ViewBag.ItemNamesByProjectId[projectId] as List<string>;
-
-                                                    if (itemNames != null && itemNames.Any())
-                                                    {
-                                                        foreach (var itemName in itemNames)
-                                                        {
-                                                            <li class="list-group-item">@itemName</li>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        <li class="list-group-item">No items available.</li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </li>
-
-
-
-
-                                    }
+                                    <i class="fas fa-check-circle text-success"></i>
                                 }
                                 else
                                 {
-                                    <li class="list-group-item" style="text-align: center;">
-                                        Data not available.
-                                    </li>
+                                    <i class="fas fa-times-circle text-danger"></i>
                                 }
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="width: 30%;">
-        </div>
-    </div>
+                            </td>
+                            <td>
+                                @ViewBag.HealthCheckItems[i]
+                                <div class="collapse-button" onclick="toggleDetails('details' + @i)">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                            </td>
+                            <td>
+                                @{
+                                    if (currentWaitStatus == "high")
+                                    {
+                                        <i class="fas fa-user-nurse text-danger"></i>
+                                        <i class="fas fa-user-nurse text-danger"></i>
+                                        <i class="fas fa-user-nurse text-danger"></i>
+                                    }
+                                    else if (currentWaitStatus == "medium")
+                                    {
+                                        <i class="fas fa-user-nurse text-warning"></i>
+                                        <i class="fas fa-user-nurse text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-user-nurse text-success"></i>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr id="details@i" class="details">
+                            <td colspan="3">
+                                <ul>
+                                    @{
+                                        var projectId = i + 1;
+                                        var itemNames = ViewBag.ItemNamesByProjectId[projectId] as List<string>;
+
+                                        if (itemNames != null && itemNames.Any())
+                                        {
+                                            foreach (var itemName in itemNames)
+                                            {
+                                                <li>@itemName</li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li>No items available.</li>
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="table-row">
+                        <td colspan="3">資料不可用。</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 
-<script>
-    // JavaScript 或 jQuery 部分
-    function toggleDetails(index) {
-        var detailsId = "details" + index;
-        var details = document.getElementById(detailsId);
 
+<script>
+    function toggleDetails(detailsId) {
+        var details = document.getElementById(detailsId);
         if (details && details.style.display === "none") {
             details.style.display = "block";
         } else if (details) {
