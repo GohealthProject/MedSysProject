@@ -571,9 +571,6 @@ namespace MedSysProject.Controllers
             var data = from s in _context.ReportDetails
                        select s;
             return data;
-
-
-
         }
 
 

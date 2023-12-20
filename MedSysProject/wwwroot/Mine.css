@@ -4,19 +4,12 @@
 }
 
 a {
-  color: red;
-  color: #d2ece9;
   text-decoration: none;
-  /*能否取用全域變數?可以，所以不需要在上面引用*/
-  /* color:var(--color-links);*/
-  /* &:hover {
-      color: var(--color-links);
-      text-decoration: none;
-  }*/
+  color: var(--color-primary);
+  transition: 0.25s all ease;
 }
 a:hover {
-  color: #fff;
-  text-decoration: none;
+  color: #d2ece9;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -56,6 +49,20 @@ section .section-header p {
   transition: all 0.5s;
   z-index: 997;
   background: #2d6760;
+}
+.header a {
+  color: #d2ece9;
+  text-decoration: none;
+  /*能否取用全域變數?可以，所以不需要在上面引用*/
+  /* color:var(--color-links);*/
+  /* &:hover {
+      color: var(--color-links);
+      text-decoration: none;
+  }*/
+}
+.header a:hover {
+  color: #fff;
+  text-decoration: none;
 }
 .header.sticked {
   height: 70px;
@@ -407,6 +414,9 @@ section .section-header p {
 .post-entry-1 h2 a {
   color: var(--color-black);
 }
+.post-entry-1 h2 a:hover {
+  color: #d2ece9;
+}
 
 /*大張的那張*/
 .post-entry-1 .lg {
@@ -505,6 +515,7 @@ section .section-header p {
   border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
   position: relative;
   overflow: hidden;
+  transition: 0.25s all ease;
 }
 .trending .trending-post li a .number {
   position: absolute;
@@ -523,8 +534,8 @@ section .section-header p {
   color: rgba(var(--color-black-rgb), 0.7);
   font-weight: 500;
 }
-.trending .trending-post li a:hover h3 {
-  color: rgba(var(--color-black-rgb), 1);
+.trending .trending-post li a:hover h3, .trending .trending-post li a:hover .author {
+  color: #d2ece9;
 }
 
 /*----------------------------------------*/
@@ -954,83 +965,83 @@ Safari 7+ */
   display: none;
 }
 
-/* custom tab nav on sidebar */
 .aside-block {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
-    .aside-block .custom-tab-nav .nav-item {
-        display: inline-block;
-    }
+.aside-block .custom-tab-nav .nav-item {
+  display: inline-block;
+}
 
-        .aside-block .custom-tab-nav .nav-item button {
-            color: var(--color-black);
-            text-transform: uppercase;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            border-radius: 0;
-            padding-left: 0;
-            padding-right: 0;
-            margin-right: 20px;
-        }
+.aside-block .custom-tab-nav .nav-item button {
+  color: var(--color-black);
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 20px;
+}
 
-            .aside-block .custom-tab-nav .nav-item button.active {
-                background-color: var(--color-black) !important;
-                background-color: transparent !important;
-                color: var(--color-black);
-                border-bottom: 2px solid var(--color-black);
-            }
+.aside-block .custom-tab-nav .nav-item button.active {
+  background-color: var(--color-black) !important;
+  background-color: transparent !important;
+  color: var(--color-black);
+  border-bottom: 2px solid var(--color-black);
+}
 
 .link-video {
-    position: relative;
+  position: relative;
 }
 
-    .link-video span {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        border-radius: 50%;
-        text-align: center;
-        display: inline-block;
-        background-color: rgba(var(--color-black-rgb), 0.2);
-        color: var(--color-white);
-    }
+.link-video span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+  background-color: rgba(var(--color-black-rgb), 0.2);
+  color: var(--color-white);
+}
 
 .aside-links li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
 }
 
-    .aside-links li a {
-        display: block;
-        color: rgba(var(--color-black-rgb), 0.7);
-    }
+.aside-links li a {
+  display: block;
+  color: rgba(var(--color-black-rgb), 0.7);
+}
 
-        .aside-links li a:hover,
-        .aside-links li a:focus {
-            color: rgba(var(--color-black-rgb), 1);
-        }
+.aside-links li a:hover,
+.aside-links li a:focus {
+  color: #d2ece9;
+}
 
 .aside-tags li {
-    display: inline-block;
+  display: inline-block;
 }
 
-    .aside-tags li a {
-        display: inline-block;
-        color: rgba(var(--color-black-rgb), 0.7);
-        padding: 7px 10px;
-        border: 1px solid rgba(var(--color-black-rgb), 0.1);
-        margin-bottom: 3px;
-        transition: 0.3s all ease;
-    }
+.aside-tags li a {
+  display: inline-block;
+  color: rgba(var(--color-black-rgb), 0.7);
+  padding: 7px 10px;
+  border: 1px solid rgba(var(--color-black-rgb), 0.1);
+  margin-bottom: 3px;
+  transition: 0.3s all ease;
+}
 
-        .aside-tags li a:hover,
-        .aside-tags li a:focus {
-            color: rgba(var(--color-black-rgb), 1);
-            border: 1px solid rgba(var(--color-black-rgb), 0.5);
+.aside-tags li a:hover,
+.aside-tags li a:focus {
+  color: rgba(var(--color-black-rgb), 1);
+  border: 1px solid rgba(var(--color-black-rgb), 0.5);
+}
