@@ -5,21 +5,15 @@
     scroll-behavior: smooth;
 }
 
+
 a {
-    color: red;
-    color: #d2ece9;
     text-decoration: none;
+    color: var(--color-primary);
+    transition:0.25s all ease;
 
     &:hover {
-        color: #fff;
-        text-decoration: none;
+        color: #d2ece9;
     }
-    /*能否取用全域變數?可以，所以不需要在上面引用*/
-    /* color:var(--color-links);*/
-    /* &:hover {
-        color: var(--color-links);
-        text-decoration: none;
-    }*/
 }
 
 
@@ -59,6 +53,22 @@ section {
 
 /*Header*/
 .header {
+    a {
+        color: #d2ece9;
+        text-decoration: none;
+
+        &:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+        /*能否取用全域變數?可以，所以不需要在上面引用*/
+        /* color:var(--color-links);*/
+        /* &:hover {
+        color: var(--color-links);
+        text-decoration: none;
+    }*/
+    }
+
     height: 90px;
     transition: all 0.5s;
     z-index: 997;
@@ -325,7 +335,7 @@ section {
         }
 
         a:hover {
-            color: var(--color-primary);
+            color: #d2ece9;
         }
     }
 
@@ -477,7 +487,11 @@ section {
         line-height: 1.2;
 
         a {
-            color: var(--color-black)
+            color: var(--color-black);
+
+            &:hover {
+                color: #d2ece9;
+            }
         }
     }
 }
@@ -595,6 +609,7 @@ section {
                 border-bottom: 1px solid rgba(var(--color-black-rgb),0.1);
                 position: relative;
                 overflow: hidden;
+                transition: 0.25s all ease;
 
                 .number {
                     position: absolute;
@@ -617,8 +632,10 @@ section {
                 }
 
                 &:hover {
-                    h3 {
-                        color: rgba(var(--color-black-rgb),1);
+
+                    
+                    h3,.author {
+                        color: #d2ece9;
                     }
                 }
             }
@@ -1091,5 +1108,86 @@ Safari 7+ */
 
 #putIn::-webkit-scrollbar{
     display:none;
+}
+
+.aside-block {
+  margin-bottom: 30px;
+}
+
+.aside-block .custom-tab-nav .nav-item {
+  display: inline-block;
+}
+
+.aside-block .custom-tab-nav .nav-item button {
+  color: var(--color-black);
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 20px;
+}
+
+.aside-block .custom-tab-nav .nav-item button.active {
+  background-color: var(--color-black) !important;
+  background-color: transparent !important;
+  color: var(--color-black);
+  border-bottom: 2px solid var(--color-black);
+}
+
+.link-video {
+  position: relative;
+}
+
+.link-video span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+  background-color: rgba(var(--color-black-rgb), 0.2);
+  color: var(--color-white);
+}
+
+.aside-links li {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(var(--color-black-rgb), 0.1);
+}
+
+.aside-links li a {
+  display: block;
+  color: rgba(var(--color-black-rgb), 0.7);
+}
+
+.aside-links li a:hover,
+.aside-links li a:focus {
+    color: #d2ece9;
+}
+
+.aside-tags li {
+  display: inline-block;
+}
+
+.aside-tags li a {
+  display: inline-block;
+  color: rgba(var(--color-black-rgb), 0.7);
+  padding: 7px 10px;
+  border: 1px solid rgba(var(--color-black-rgb), 0.1);
+  margin-bottom: 3px;
+  transition: 0.3s all ease;
+}
+
+.aside-tags li a:hover,
+.aside-tags li a:focus {
+  color: rgba(var(--color-black-rgb), 1);
+  border: 1px solid rgba(var(--color-black-rgb), 0.5);
 }
 

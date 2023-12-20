@@ -3,7 +3,27 @@
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
 <main id="main">
+    <section id="hero-slider" class="hero-slider">
+        <div class="container-md" data-aos="fade-in">
+            <div class="row">
+                <div class="col-12">
+                    <div class="swiper sliderFeaturedPosts">
+                        <div class="swiper-wrapper">
+                            @*投影片塞這*@
+                        </div>
+                        <div class="custom-swiper-button-next">
+                            <span class="bi-chevron-right"></span>
+                        </div>
+                        <div class="custom-swiper-button-prev">
+                            <span class="bi-chevron-left"></span>
+                        </div>
 
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 
@@ -12,17 +32,82 @@
     <script>
         const main = document.querySelector('#main');
         document.addEventListener('DOMContentLoaded', async() => {
+            await loadSlider();
             await loadRecentPost();
             await loadNewActivity();
             await loadMedicalNews();
             await loadCelebritySharing();
+            initSlider();
         })
+        function initSlider() 
+        {
+            var swiper = new Swiper(".sliderFeaturedPosts", {
+                spaceBetween: 0,
+                speed: 500,
+                centeredSlides: true,
+                loop: true,
+                slideToClickedSlide: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".custom-swiper-button-next",
+                    prevEl: ".custom-swiper-button-prev",
+                },
+            });
+        }
 
         //
         async function loadSlider() 
         { //call Api
-            
+            const response = await fetch(`https://localhost:7078/api/Blogs/latest6`)
+            const data = await response.json();
+            const slideContainer = document.querySelector('.swiper-wrapper');
+            const slider6 = data.$values.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views,blogImage,content } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                const displayContent = getContentSnippet(content);
+                let imageUrl = '';
+                if (blog.blogImage != null) {
+                    var binary = atob(blog.blogImage);
+                    var byteArray = new Uint8Array(binary.length);
+                    for (var i = 0; i < binary.length; i++) {
+                        byteArray[i] = binary.charCodeAt(i);
+                    }
+                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    imageUrl = URL.createObjectURL(blob);
+                }
+                return `
+                            <div class="swiper-slide">
+                                        <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=${blogId}"
+                                           class="img-bg d-flex align-items-end"
+                                           style="background-image: url('${imageUrl}');">
+                                            <div class="img-bg-inner">
+                                                <h2>
+                                                     ${title}
+                                                </h2>
+                                                <p>
+                                                    ${displayContent}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                `;
+            });
+            slideContainer.innerHTML = slider6.join('');
+
         }
+        
 
         //
         async function loadRecentPost() 
@@ -143,11 +228,37 @@
             const response = await fetch(`@Url.Content("~/Blogs/LoadCelebritySharing")`)
             const data = await response.text();
             main.innerHTML += data;
-            //loadSideCelebrity6();
+            loadSideCelebrity6();
         }
-        async function loadSideCelebrity() 
-        { 
-            
+        async function loadSideCelebrity6() 
+        {
+            const response = await fetch(`https://localhost:7078/api/Blogs/celebrity6`);
+            const data = await response.json();
+            const celebrityContainer = document.querySelector('.sideCelebrity');
+            const celebrity6 = data.$values.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                return `
+                                                <div class="post-entry-1 border-bottom">
+                                            <div class="post-meta">
+                                                <span class="date">${articleClass}</span>
+                                                <span class="mx-1">&bullet;</span> <span>${formattedDate}</span>
+                                            </div>
+                                            <h2 class="mb-2">
+                                                        <a href=""@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">
+                                                    ${title}
+
+                                                </a>
+                                            </h2>
+                                                    <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
+                                        </div>
+                                `
+            });
+            celebrityContainer.innerHTML = celebrity6.join('');
         }
 
     </script>

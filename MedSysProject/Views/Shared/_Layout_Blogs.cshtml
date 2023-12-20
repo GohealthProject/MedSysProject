@@ -27,8 +27,28 @@
     <!-- Template Main CSS Files -->
     <link href="~/assets/css/variables.css" rel="stylesheet">
     <link href="~/Mine.css" rel="stylesheet">
-    @*  <link href="~/assets/css/main.css" rel="stylesheet"> *@
-    <!--//todo暫時用他給的，有空附上我自己的樣式表...-->
+    <script>
+        //公用方法可以寫在這裡
+        function getContentSnippet(content) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(content, 'text/html');
+
+            // 获取所有文本节点
+            const textNodes = doc.body.querySelectorAll('p:not(:has(img))');
+
+            // 提取文本内容
+            let snippet = '';
+            for (const node of textNodes) {
+                snippet += node.textContent.trim() + ' ';
+            }
+
+            // 截取前几个字符作为摘要（这里示例截取前200个字符）
+            snippet = snippet.slice(0, 200);
+            console.log(snippet);
+            return snippet;
+        }
+    </script>
+    
     @await RenderSectionAsync("IndexCss", false)
     @*  <link href="~/assets/css/main.css" rel="stylesheet"> *@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -40,7 +60,7 @@
             <a href="@Url.Content("~/Blogs/Index")" class="logo" style="font-size:2rem;">GoHealthBlog</a>
             <nav id="navbar" class="navbar">
                 <ul>
-                    <li>@Html.ActionLink("部落格首頁", "Index", "Blogs", null, null)</li>
+                    <li>@Html.ActionLink("部落格首頁", "Indexnew", "Blogs", null, null)</li>
                     <li>@Html.ActionLink("精選貼文", "SinglePost", "Blogs",null, null)</li>
                     <li class="dropdown">
                         <!--文章類別選單箭頭-->
@@ -113,11 +133,11 @@
                     <div class="col-6 col-lg-2">
                         <h3 class="footer-heading">文章類別</h3>
                         <ul class="footer-links list-unstyled">
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=1"><i class="bi bi-chevron-right"></i> 活動快訊</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=2"><i class="bi bi-chevron-right"></i> 醫療新知</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=3"><i class="bi bi-chevron-right"></i> 名人分享會</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=4"><i class="bi bi-chevron-right"></i> 媒體報導</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")?CategoryID=5"><i class="bi bi-chevron-right"></i> 企業責任</a></li>
                         </ul>
                     </div>
 

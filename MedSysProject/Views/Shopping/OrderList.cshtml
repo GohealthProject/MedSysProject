@@ -111,8 +111,21 @@
 
         </form>
         @{
+            string color = "";
             for (int i = 0; i < Model.Count; i++)
             {
+                if (Model[i].StateId == 7 || Model[i].StateId == 8 || Model[i].StateId == 9 || Model[i].StateId == 10 || Model[i].StateId == 11 || Model[i].StateId == 12 || Model[i].StateId == 13 || Model[i].StateId == 15 || Model[i].StateId == 16 || Model[i].StateId==17)
+                {
+                    color = "btn btn-danger ";
+                }
+                else if (Model[i].StateId == 1 || Model[i].StateId == 3 || Model[i].StateId == 4 || Model[i].StateId == 14 || Model[i].StateId==17)
+                {
+                    color = "btn btn-success ";
+                }
+                else
+                {
+                    color = "btn btn-warning ";
+                };
                 count++;
 
                             <div class="article">
@@ -127,8 +140,8 @@
                                             <div class="col-2 border fs-5">
                                                 下訂日期 : @Model[i].order.OrderDate.ToString().Split(" ")[0]
                                             </div>
-                                            <div class="col-1 border fs-5">
-                                                @Model[i].order.State.StateName
+                                            <div class="col-1 border ">
+                                                    <span class="@color">@Model[i].order.State.StateName</span>
                                             </div>
                                             <div class="col-1 border fs-5">
                                                 @Model[i].order.Pay.PayName
