@@ -1,15 +1,23 @@
 ﻿
-   @{
+@{
     ViewData["Title"] = "健檢報告";
     Layout = "_Layout_Admin2";
 }
 
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const Report = document.getElementById("li-Report");
+    const Index = document.getElementById("li-index");
+    Report.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
 
 @{
 }
 @*boostrap*@
-@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-*@
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 @*datatable*@
 <link href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
@@ -46,10 +54,10 @@
         <h6 class="m-0 font-weight-bold text-primary">會員管理</h6>
     </div>
     <div class="card-body">
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" hidden>
     Launch static backdrop modal
 </button>
-<button  id="e04">123</button>
+        <button id="e04" hidden>123</button>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -60,11 +68,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" @*aria-label="Close"*@>×</button>
             </div>
             <div class="modal-body">
-
+               @* <button id="TB" hidden>test</button>*@
                         <table id="tableD" class="table table-bordered table-hover" width="100%" cellspacing="0">
                    <thead class="thead-dark">
                         <tr>
-                            <th>下拉</th>
+                            <th>序</th>
                             <th >健檢細項ID</th>
                             <th>健檢報告ID</th>
                             <th>項目名稱</th>
@@ -100,11 +108,11 @@
 
    
 
-<button id="dd">123</button>
+<button id="dd" hidden>123</button>
 
 
-<div id="toolbar">
-    <button id="button" class="btn btn-secondary">refreshOptions</button>
+        <div id="toolbar" hidden>
+            <button id="button" class="btn btn-secondary" hidden>refreshOptions</button>
 </div>
 <table id="table" hidden
        @*data-toggle="table"
@@ -125,13 +133,130 @@
 </table>
     </div>
 </div>
+
+<form method="post" id="form" hidden>
+<input type="text" value="" id="rpdi" name="reportdetailid"/>
+<input type="text" value="" id="rpi" name="reportid" />
+<input type="text" value="" id="itemname" name="itemname" />
+<input type="text" value="" id="result" name="result" />
+<input type="text" value="" id="editinput" name="editinput" />
+</form>
 <script>
+   //var edit
+   //edit();
+     //////////edit///////////
+    //var tedit = document.getElementById("TB")
+    // tedit.addEventListener("click",(e)=>{
+         
+    //    editt()
+    //    alert("0")
+    // })
+
+    function checkk() 
+    {
+        var rs = document.getElementById("result")
+        var text = document.getElementById("text")
+     alert(rs.value)
+        alert(text.value)
+
+    }
+   function editt()
+   {
+        var ta = event.target.closest("tr")
+        var textvalue = ta.getElementsByTagName("input")[0].value
+        var tv = document.querySelectorAll("#text")
+        
+        var rpdi = document.getElementById("rpdi")
+        var rpi = document.getElementById("rpi")
+        var iname = document.getElementById("itemname")
+        var rs = document.getElementById("result")
+       
+        if (textvalue.value == "") {
+            alert("請輸入數值");
+        return
+        }
+   var all = tableD.querySelectorAll("tr")
+        //alert(all[1].childNodes[1].innerText)
+   //console.log()
+
+        var textvalue = document.getElementById("text").value//
+       
+        var reportdetailid = ta.childNodes[1].innerText;
+        var reportid = ta.childNodes[2].innerText;
+        var itemname = ta.childNodes[3].innerText;
+        var result = ta.childNodes[4].innerText;
+        var txt = ta.getElementsByTagName("input")
+        rpdi.value = reportdetailid
+        rpi.value = reportid
+        iname.value = itemname
+        rs.value = txt[0].value
+
+
+
+
+
+
+
+        //{
+        //  List<ReportDetail> lrd = new List<ReportDetail>();
+        //}
+   //for(var i=1;i<all.length;i++)
+      //{
+        //var wtf = new Array();
+        //var reportdetailid = all[1].childNodes[1].innerText;
+        //var reportid = all[1].childNodes[2].innerText;
+        //var itemname = all[1].childNodes[3].innerText;
+        //var result = all[1].childNodes[4].innerText;
+        //var txt = all[1].childNodes[5].innerText
+
+      
+      //}
+        //{
+        //    ReportDetail rd = new ReportDetail();
+        //}
+        
+        ////rd.ReportDetailId == reportdetailid;
+        ////rd.ReportId == reportid;
+        //rd.Result = textvalue;
+        //rd.ReportDetailId == reportdetailid;
+        //{
+        //    lrd.Add(rd);
+        //}
+        
+          //{
+          //    string json = System.Text.Json.JsonSerializer.Serialize(rd);
+          //}
+        //editinput.value = lrd
+        
+
+        send();
+        ttt.ajax.reload();
+   }
    
+
+   ///////送出/////////
+    async function send(event) {
+        //todo input>form
+        let input = document.querySelector("#form");
+        let form = new FormData(input);
+
+
+        let url2 = `/Transaction/editreport`;
+        const response = await fetch(url2, {
+            body: form,
+            method: "POST",
+
+        })/*.then(alert("已修改"));*/
+        const data = await response.text();
+        //alert(`data${data}`);
+        //window.location.href = ('@Url.Content("~/Home/xxx")');
+    }
     //test
     //$table.bootstrapTable('refresh')
     var myModal = document.getElementById('e04');
     var fku = new bootstrap.Modal(document.getElementById('staticBackdrop'));
     myModal.addEventListener("click",(e)=>{
+        edit()
     fku.show();
     })
     
@@ -148,9 +273,14 @@
     /////////////
 
     //內表////////////dd
+    var count2 = 0
     var ttt = $('#tableD').DataTable({
         //設定語言
          dom: 'Bfrtip',
+        //scrollY: true,
+        //scroller: {
+        //    rowHeight: 100
+        //},
         buttons: [
             'copy', 'excel', 'pdf'
         ],
@@ -196,17 +326,21 @@
                 "render": function (data, type, full, meta) {
                     return (
                     `
-                        <a class="btn btn-primary" data-toggle="modal">
+                            <a onclick = "editt()" class="btn btn-primary" data-toggle="modal">
                         <i class="fas fa-edit"></i>
                         </a>
-                       <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
-                        <i class="fas fa-trash-alt"></i>
-                         </a>
+                       
                     ` 
                     )
                 }   
                 
             },
+            //<a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+            // <i class="fas fa-trash-alt"></i>
+            //  </a>
+            //       <a class="btn btn-warning" onclick="checkk()">
+            //        <i class="fas fa-user-lock"></i>
+            //        </a>
                 {
 
                 "targets": 5,
@@ -226,45 +360,30 @@
             //},
         ],
         columns: [
+            //{
+            //    //className: 'dt-control',
+            //    //orderable: false,
+            //    data: null,
+            //    defaultContent: ''
+            //},
             {
-                className: 'dt-control',
-                orderable: false,
                 data: null,
-                defaultContent: ''
-            },
-            { data: 'reportDetailId', title: "健檢詳細ID" },
-            { data: 'reportId', title: "健檢報告ID" },
-            { data: 'name', title: "項目" },
-            { data: 'result', title: "結果" },
+                width: "20px",
+                render: function (data, type, row) {
+                    count2 ++;
+                    return count2;
+                }},
+            { data: 'reportDetailId', title: "健檢詳細ID", className: "reportdetailID" },
+            { data: 'reportId', title: "健檢報告ID", className: "reportID" },
+            { data: 'name', title: "項目", className: "itemname" },
+            { data: 'result', title: "結果", className: "result" },
             { data: null },
-            { data: null },           
+            { data: null,className: "edit" },           
         ],
 
        
        
-            //{
-            //    extend: 'print',
-            //    text: '列印',
-            //    className: 'btn btn-info',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    }
-            //},
-            //{
-            //    extend: 'pdf',
-            //    text: '匯出PDF',
-            //    className: 'btn btn-danger',
-            //    exportOptions: {
-            //        modifier: {
-            //            page: 'all'
-            //        }
-            //    },
-            //    customize: function (doc) {
-            //        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
-            //    }
-            //}
+           
         
 
        
@@ -276,10 +395,7 @@
     //外表//
     var count =0
     var table = $('#tableM').DataTable({
-        scrollY: true,
-        scroller: {
-            rowHeight: 10
-        },
+        "autoWidth": false,
         dom: 'Bfrtip',
         buttons: [
             'copy', 'excel', 'pdf'
@@ -336,15 +452,7 @@
         ]
        
     })
-    //if (row.child.isShown()) {
-    //    // This row is already open - close it
-    //    row.child.hide();
-    //}
-    //else {
-    //    // Open this row
-    //    row.child(format(row.data())).show();
-    //}
-
+    
     ///外細表 報告 日期
     var select;
     table.on('click',/* 'td.dt-control',*/ function (event) {
@@ -379,7 +487,9 @@
                   alert("null")
                   }
                   else{
+                  
                   fku.show();
+                  edit = tableD.querySelectorAll("tr") 
                   }
                   console.log(datarr)
                 })
@@ -408,7 +518,7 @@
                     }
 
                 }
-                alert("a")
+                
                 thistr.removeAttribute("id")
             } else {
                 //Open this row
@@ -436,7 +546,7 @@
 
             for (var i = 0; i <= data[0].healthReports.length;i++)
             {
-                    var tabletd1 = document.createElement("td")
+                    //var tabletd1 = document.createElement("td")
                     var tabletd2 = document.createElement("td")
                     ;
                     var tabletd3 = document.createElement("td");
@@ -446,19 +556,21 @@
                     var newtr = document.createElement("tr");
                     //data[0].healthReports[i].reportId
                     //data[0].healthReports[i].reserve.reserveDate
-                    tabletd1.innerHTML = "1"
-                    tabletd2.innerHTML = "2"
-                    tabletd3.innerHTML = data[0].healthReports[i].reportId
+                    //tabletd1.innerHTML = "1"
+                    //tabletd2.innerHTML = "2"
+                        tabletd3.innerHTML = "                      " + data[0].healthReports[i].reportId
                     //if (data[0].healthReports[i].reserve=!null)
-                    tabletd4.innerHTML = data[0].healthReports[i].reserve.reserveDate
+                    tabletd4.innerHTML = "                      "+data[0].healthReports[i].reserve.reserveDate
                    tabletd2.setAttribute("Class","align-middle")
                    tabletd3.setAttribute("Class","align-middle");
                     newtr.appendChild(tabletd2);
                     newtr.appendChild(tabletd4);
                     newtr.appendChild(tabletd3);
-                    newtr.appendChild(tabletd1);
+                    //newtr.appendChild(tabletd1);
                     newtr.setAttribute("Class", "A");
-                    newtr.setAttribute("style", "background-color:#5CADAD");
+                        newtr.setAttribute("style", "background-color:#C7C7E2");
+                        newtr.style.color = "#D26900"
+                       //newtr.setAttribute("style", "color:#FFA042");
                     thistr.after(newtr)
 
             }
@@ -471,24 +583,6 @@
     });
 
     
-    
-
-    //dd.addEventListener("click", () => {
-    //    $('#tableM').DataTable({
-    //        buttons: [
-    //            {
-    //                extend: 'pdf',
-    //                text: 'Save current page',
-    //                exportOptions: {
-    //                    modifier: {
-    //                        page: 'current'
-    //                    }
-    //                }
-    //            }
-    //        ]
-    //    });
-    //})
-
     /////摺疊
     ttt.on('click', 'td.dt-control', function (event) {
       
@@ -520,43 +614,17 @@
        
     });
     
-    // Formatting function for row details - modify as you need
-    function format(event) {
-        // `d` is the original data object for the row
-        console.log(event)
-        return (
-           
-            '<tr>' +
-                '<td>'+
-                    "aa"+
-                '</td>' +
-                '<td>' +
-                     event.result +
-                '</td>' +
-            '<td>' +
-            "aa" +
-            '</td>' +
-            '<td>' +
-            event.result +
-            '</td>' +
-            '</tr>' 
-            
-        );
-    }
+    //var edit = tableD.querySelector(".edit")
+    //edit.addEventListener("click",()=>{
+    //    alert("0")
 
-    //'<dl>' +
-    //    '<dt>Full name:</dt>' +
-    //    '<dd>' +
-    //    event.result +
-    //    '</dd>' +
-    //    '<dt>Extension number:</dt>' +
-    //    '<dd>' +
+    //})
+        
+   
+ 
 
-    //    '</dd>' +
-    //    '<dt>Extra info:</dt>' +
-    //    '<dd>And any further details here (images etc)...</dd>' +
-    //    '</dl>'
 
+  
 
     //console.log(event.target.closest('tr').children[0].innerHTML)///該選取欄位之ID
     //tableM.addEventListener("click", () => {
@@ -660,32 +728,7 @@
 
      
     
-       ////////XXXXXX
-    //$('#tableD').DataTable({
-    //    ajax: {
-    //        url: 'https://localhost:7203/admin/test1',
-    //        dataSrc: ''
-    //    },
-    //    columns: [
-    //        { data: 'reportDetailId' },
-    //        { data: 'reportId' },
-    //        { data: 'itemId' },
-    //        { data: 'result' },
-    //    ]
-    //})
-
-    //var table2 = $('#tableD').DataTable({
-    //    ajax: {
-    //        url: '',
-    //        dataSrc: ''
-    //    },
-    //    columns: [
-    //        { data: 'reportDetailId' },
-    //              { data: 'reportId' },
-    //              { data: 'itemId' },
-    //              { data: 'result' },
-    //    ]
-    //})
+    
 
     //// your custom ajax request here
     //function ajaxRequest(params) {
@@ -724,20 +767,7 @@
     //        //console.log(data);
     //    }
 
-        //Table.on('click', function (e) {
-        //    let data = table.row(e.target.closest('tr')).data();
-
-        //    alert(data[0] + "'s salary is: " + data[5]);
-        //})
-
-    //var $table = $('#table')
-
-    //$(function () {
-
-    //    $table.bootstrapTable()
-    //})
-    //$table.bootstrapTable('refreshOptions', { url: 'https://localhost:7203/admin/test1' })
-
+////////bs-table
     var $table = $('#table')
 
     $(function () {

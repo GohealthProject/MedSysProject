@@ -49,6 +49,27 @@ namespace MedSysProject.Controllers
 
         }
 
+        // POST api/<UploadController>
+        [HttpPost("Crop/{id}")]
+        public IActionResult PostCrop()
+        {
+            var fail = Request.Form;
+
+            IFormFile file = Request.Form.Files[0];
+
+            // 產生 GUID 作為檔案名稱
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", uniqueFileName);
+
+            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            return Ok();
+        }
+
         // PUT api/<UploadController>/5
         [HttpPut("Up/")]
         public IActionResult Puttt()

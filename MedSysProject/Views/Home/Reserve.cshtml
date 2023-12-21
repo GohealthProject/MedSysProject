@@ -93,18 +93,19 @@
     }
 
     #sbmbnt {
-        margin-top: 30px;
+        /*margin-top: 30px;*/
         margin-bottom: 3px;
     }
     /*#bigC{
                 position:relative;
             }*/
 
-    /* #sbmbtn{
-                position:absolute;
+     #sbmbtn{
+                /*position:absolute;
                 bottom:3px;
-                left:40%;
-            }*/
+                left:40%;*/
+                margin-left:350px;
+            }
     /* div{border:dashed 3px red;}*/
 
 </style>
@@ -158,14 +159,14 @@
                     </table>
                   
                  </div>
-                
+                <div class="col-5 id=btndiv"></div>
+                <a class="btn btn-primary col-2" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>
+                <div class="col-5"></div>
+                <div class="col-5"></div>
+
              </div>
             
-            <div class="col-5 id=btndiv"></div>
-            <a class="btn btn-primary but col-2" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>
-            <div class="col-5"></div>
-            <div class="col-5"></div>
-
+            
 
     </div>
 
@@ -184,10 +185,10 @@
                             <label class="mb-2 mt-2">
                                 預約日期:
                                 <input type="date"
-                                       name="party"
-                                       min=new date()
-                                       max="2023/11/21"
-                                       required />
+                                       name="bday"
+                                       min= new date()
+                                       max="2023-12-29"
+                                       required id="bday"/>
                                 <span class="validity"></span>
                             </label>
 
@@ -276,12 +277,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-5"></div>
-            @*<a class="btn btn-primary but col-2 sticky-bottom" data-bs-toggle="modal" href="#detail" role="button" id="sbmbtn">馬上預約</a>*@
-        <div class="col-5"></div>
-    </div>
-       
+   
+    
 
 </div>
     @{
@@ -359,6 +356,39 @@
         $('#detail').modal('hide');
         $('#reserve').modal('hide');
     })
+
+
+    ////日期變更/////
+    var bday= document.querySelector("#bday")
+    var currentdate = new Date()
+    //bday.min = convertToISO(currentdate)
+    @{
+        string Rday = "";
+    }
+    bday.addEventListener("change",()=>{
+        @Rday = bday.value
+        //Context.Session.Set("date",Rday)
+         //Context.Session["Rday"] = "1"
+
+        //$.ajax({
+        //    url: 'https://localhost:7203/Transaction/checkreserve',
+        //    data: Rday,
+        //    success: console.log("ok"),
+        //   // dataType: String,
+        //});
+
+    alert("0")
+    })
+    //bday.selectionEnd = datetime.toUTCString()
+
+    function convertToISO(timebit) {
+        // remove GMT offset
+        timebit.setHours(0, -timebit.getTimezoneOffset(), 0, 0);
+        // format convert and take first 10 characters of result
+        var isodate = timebit.toISOString().slice(0, 10);
+        return isodate;
+    }
+
     var data;
     
     var forminput = document.querySelector("#forminput").value
@@ -440,7 +470,7 @@
         });
         const data = await response.text();
         console.log(`data${data}`);
-        window.location.href = ('@Url.Content("~/Home/xxx")');
+       
     }
 
     //function TTT() {
