@@ -30,7 +30,7 @@
                                 <span>@Model[0].CreatedAt</span>
                             </div>
                             <h2>
-                                <a href="single-post.html">@Model[0].Title</a>
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId">@Model[0].Title</a>
                             </h2>
                             <p class="mb-4 d-block">
                                 @*@Html.Raw(Model[0].Content)不做截斷邏輯會出事*@

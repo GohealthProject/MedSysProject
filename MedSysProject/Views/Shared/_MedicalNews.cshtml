@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-9 order-md-2">
                 <!--大塊一-->
-                <div class="d-lg-flex post-entry-2">
+                <div class="d-lg-flex post-entry-2 need5" data-hide-id="@Model[0].BlogId">
                     <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId"
                        class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
                         @if (Model[0].BlogImage != null)
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <!--小塊有圖-->
-                        <div class="post-entry-1 border-bottom">
+                        <div class="post-entry-1 border-bottom need6" data-hide-id="@Model[1].BlogId">
                             <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[1].BlogId">
                                 @if (Model[1].BlogImage != null)
                                 {
@@ -108,8 +108,8 @@
                     </div>
                     <div class="col-lg-8">
                         <!--下面大塊-->
-                        <div class="post-entry-1">
-                            <a href="single-post.html">
+                        <div class="post-entry-1 need7" data-hide-id="@Model[2].BlogId">
+                            <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[2].BlogId">
                                 @if (Model[2].BlogImage != null)
                                 {
                                     <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[2].BlogImage)"
@@ -129,7 +129,7 @@
                                 <span>@Model[2].CreatedAt</span>
                             </div>
                             <h2 class="mb-2">
-                                <a href="single-post.html">
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[2].BlogId">
                                     @Model[2].Title
                                 </a>
                             </h2>

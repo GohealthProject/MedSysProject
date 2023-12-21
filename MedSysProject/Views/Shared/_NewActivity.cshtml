@@ -10,7 +10,7 @@
             @* var formattedDate = blog.CreatedAt.ToString("yyyy/MM/dd");*@
             <div class="col-md-9">
                 <!--第一大格-->
-                <div class="d-lg-flex post-entry-2">
+                <div class="d-lg-flex post-entry-2 need2" data-hide-id="@Model[0].BlogId">
                     <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId"
                        class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
                         @if (Model[0].BlogImage != null)
@@ -67,8 +67,8 @@
 
                 <div class="row">
                     <!--左側帶圖小格-->
-                    <div class="col-lg-4">
-                        <div class="post-entry-1 border-bottom">
+                    <div class="col-lg-4 need3" data-hide-id="@Model[1].BlogId">
+                        <div class="post-entry-1 border-bottom need3" data-hide-id="@Model[1].BlogId">
                             <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[1].BlogId">
                                 @if (Model[1].BlogImage != null)
                                 {
@@ -91,7 +91,7 @@
                                 <span>@Model[1].CreatedAt.ToString("yyyy/MM/dd")</span>
                             </div>
                             <h2 class="mb-2">
-                                <a href="single-post.html">@Model[1].Title</a>
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=@Model[1].BlogId">@Model[1].Title</a>
                             </h2>
                             <span class="author mb-3 d-block">@Model[1].Employee.EmployeeName</span>
                             <p class="mb-4 d-block">
@@ -117,7 +117,7 @@
                     </div>
                     <!--帶圖大格2-->
                     <div class="col-lg-8">
-                        <div class="post-entry-1">
+                        <div class="post-entry-1 need4" data-hide-id="@Model[2].BlogId">
                             <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[2].BlogId">
                                 @if (Model[2].BlogImage != null)
                                 {
@@ -139,7 +139,7 @@
                                 <span>@Model[2].CreatedAt.ToString("yyyy/MM/dd")</span>
                             </div>
                             <h2 class="mb-2">
-                                <a href="single-post.html">
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=@Model[2].BlogId">
                                     @Model[2].Title
                                 </a>
                             </h2>

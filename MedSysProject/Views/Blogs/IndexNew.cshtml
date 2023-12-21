@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "IndexOld";
+    ViewData["Title"] = "IndexNew";
     Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
 }
 <main id="main">
@@ -38,10 +38,90 @@
             await loadMedicalNews();
             await loadCelebritySharing();
             initSlider();
-            const needSnippet1=document.querySelector('.post-entry-1.lg');//取到
-            console.log(needSnippet1);
-            
+            snippet();            
         })
+        function snippet() 
+        {
+            const needSnippet1 = document.querySelector('.post-entry-1.lg');//取到
+            console.log(needSnippet1);
+            const firstId = needSnippet1.getAttribute('data-hide-id');
+            const need1Container = needSnippet1.querySelector('p');
+            console.log(need1Container);
+            fetch(`https://localhost:7078/api/Blogs/${firstId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need1Container.innerHTML = getContentSnippet(content, 200) + ' . . .';
+                });
+            const needSnippet2 = document.querySelector('.need2');
+            const secondId = needSnippet2.getAttribute('data-hide-id');
+            const need2Container = needSnippet2.querySelector('p');
+            console.log(need2Container);
+            fetch(`https://localhost:7078/api/Blogs/${secondId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need2Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet3 = document.querySelector('.need3');
+            console.log(needSnippet3);
+            const thirdId = needSnippet3.getAttribute('data-hide-id');
+            const need3Container = needSnippet3.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${thirdId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need3Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet4 = document.querySelector('.need4');
+            const forthId = needSnippet4.getAttribute('data-hide-id');
+            const need4Container = needSnippet4.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${forthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need4Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet5 = document.querySelector('.need5');
+            console.log(needSnippet5);
+            const fifthId = needSnippet5.getAttribute('data-hide-id');
+            const need5Container = needSnippet5.querySelector('p');
+            console.log(need5Container);
+            fetch(`https://localhost:7078/api/Blogs/${fifthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need5Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+            const needSnippet6 = document.querySelector('.need6');
+            const sixthId = needSnippet6.getAttribute('data-hide-id');
+            const need6Container = needSnippet6.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${sixthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need6Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet7 = document.querySelector('.need7');
+            const seventhId = needSnippet7.getAttribute('data-hide-id');
+            const need7Container = needSnippet7.querySelector('p');
+            console.log(need7Container);
+            fetch(`https://localhost:7078/api/Blogs/${seventhId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need7Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+            const needSnippet8 = document.querySelector('.need8');
+            const eighthId = needSnippet8.getAttribute('data-hide-id');
+            const need8Container = needSnippet8.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${eighthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need8Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+        }
         function initSlider() 
         {
             var swiper = new Swiper(".sliderFeaturedPosts", {
