@@ -333,12 +333,15 @@ namespace MedSysProject.Controllers
             string f= "false";
             foreach (var item in viewModel)
             {
-                if (item.ItemName == itemName && projectName == item.ProjectName)
+                if (item.PlanId == v)
                 {
-                    flag = t;
-                    break;
+                                 if (item.ItemName == itemName && projectName == item.ProjectName)
+                                            {
+                                               flag = t;
+                                                 break;
+                                             }              
+            
                 }
-               
             }
             return flag;                   
            
