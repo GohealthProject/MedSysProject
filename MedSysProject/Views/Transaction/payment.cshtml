@@ -31,48 +31,52 @@
 
     @*呼叫ACTION將訂單存入資料庫*@
     <script>
-        $("#checkoutBtn").on('click', (e) => {
-            //e.preventDefault(); //因為送出就跳轉到綠界，這個可以停住確認自己的console.log的內容
-            let formData = $("#form").serializeArray();
-            var json = {};
-            $.each(formData, function () {
-                json[this.name] = this.value || "";
-            });
-            console.log(json);
-            //step3 : 新增訂單到資料庫
-            $.ajax({
-                type: 'POST',
-                url: 'https://localhost:7203/Transaction/addOrders',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(json),
-                success: function (res) {
-                    console.log(res);
-                },
-                error: function (err) { console.log(err); },
-            });
-        });
-        $("#ttest").on('click', (e) =>{
-            //e.preventDefault(); //因為送出就跳轉到綠界，這個可以停住確認自己的console.log的內容
-            let formData = $("#form").serializeArray();
-            var json = {};
-            $.each(formData, function () {
-                json[this.name] = this.value || "";
-            });
-            console.log(json);
-            //step3 : 新增訂單到資料庫
-            $.ajax({
-                type: 'POST',
-                url: 'https://localhost:7203/Transaction/addOrders',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(json),
-                success: function (res) {
-                    console.log(res);
-                },
-                error: function (err) { console.log(err); },
-            });
-            $("#form").submit();
-        })
+        var form = document.querySelector("#form")
+        var checkoutBtn = document.querySelector("#checkoutBtn")
+        form.submit();
 
+        //$("#checkoutBtn").on('click', (e) => {
+        //    //e.preventDefault(); //因為送出就跳轉到綠界，這個可以停住確認自己的console.log的內容
+        //    let formData = $("#form").serializeArray();
+        //    var json = {};
+        //    $.each(formData, function () {
+        //        json[this.name] = this.value || "";
+        //    });
+        //    console.log(json);
+        //    //step3 : 新增訂單到資料庫
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: 'https://localhost:7203/Transaction/addOrders',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: JSON.stringify(json),
+        //        success: function (res) {
+        //            console.log(res);
+        //        },
+        //        error: function (err) { console.log(err); },
+        //    });
+        //});
+        //$("#ttest").on('click', (e) =>{
+        //    //e.preventDefault(); //因為送出就跳轉到綠界，這個可以停住確認自己的console.log的內容
+        //    let formData = $("#form").serializeArray();
+        //    var json = {};
+        //    $.each(formData, function () {
+        //        json[this.name] = this.value || "";
+        //    });
+        //    console.log(json);
+        //    //step3 : 新增訂單到資料庫
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: 'https://localhost:7203/Transaction/addOrders',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: JSON.stringify(json),
+        //        success: function (res) {
+        //            console.log(res);
+        //        },
+        //        error: function (err) { console.log(err); },
+        //    });
+        //    $("#form").submit();
+        //})
+       
     </script>
 </body>
 
