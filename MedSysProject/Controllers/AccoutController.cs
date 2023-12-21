@@ -166,6 +166,10 @@ namespace MedSysProject.Controllers
             Upm.MemberNickname = m.MemberNickname;
             _db.SaveChanges();
 
+            HttpContext.Session.Remove(CDictionary.SK_MEMBER_LOGIN);
+            string json = JsonSerializer.Serialize(Upm);
+            HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+
             // 其他代码...
 
             return RedirectToAction("MemberCenter", "Accout");
