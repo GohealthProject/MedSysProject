@@ -389,7 +389,7 @@
         newCheckbox.innerHTML = `
                                                 <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
                                                 <label class="form-check-label" for="${newId}">
-                                                    <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
+                                                    <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
                                                 </label>
                                             `;
 
@@ -424,7 +424,7 @@
         newCheckbox.innerHTML = `
                                                     <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
                                                     <label class="form-check-label" for="${newId}">
-                                                        <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
+                                                        <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
                                                     </label>
                                                 `;
 
@@ -649,7 +649,7 @@
         let apiurl = `https://localhost:7078/api/Plans/Up/${id}`;
         var myForm = document.getElementById("myUpdataform");
         var data = new FormData(myForm);
-        createPrj(data);
+        Projectcreate(data);
         const response = await fetch(apiurl, {
             method: 'PUT',
             body: data
