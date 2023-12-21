@@ -30,25 +30,20 @@
                     {
                          blogClassId = item.ArticleClassId;
 
-                        <div class="d-md-flex post-entry-2 half">
+                        <div class="d-md-flex post-entry-2 half" data-hide-id="@item.BlogId">
                             <a href="~/Blogs/SinglePost?SingleBlogID=@item.BlogId" class="me-4 thumbnail">
                                 <img src="/blogs/GetBlogImageByte/@item.BlogId" alt="" class="img-fluid" style="width:483px; height:263px;">
                             </a>
                             <div>
-                                <div class="post-meta"><span class="date">@Html.DisplayFor(modelItem => item.ArticleClass.BlogCategory1)</span> <span class="mx-1">&bullet;</span> <span>@Html.DisplayFor(modelItem => item.CreatedAt)</span></div>
-                                <h3><a href="~/Blogs/SinglePost?SingleBlogID=@item.BlogId">@Html.DisplayFor(modelItem => item.Title)</a></h3>
+                                <div class="post-meta"><span class="date">@item.ArticleClass.BlogCategory1</span> <span class="mx-1">&bullet;</span> <span>@item.CreatedAt.ToString("yyyy/MM/dd")</span></div>
+                                <h3><a href="~/Blogs/SinglePost?SingleBlogID=@item.BlogId">@item.Title</a></h3>
                                 <p>
-                                    @{
-                                        string content = item.Content;
-                                        string truncatedContent = content.Length > 50 ? content.Substring(0, 50) + "..." : content;
-
-                                        <p>@truncatedContent</p>
-                                    }
+                                   
                                 </p>
                                 <div class="d-flex align-items-center author">
                                     <div class="photo"><img src="/blogs/GetEmpImageByte/@item.EmployeeId" alt="" class="img-fluid"></div>
                                     <div class="name">
-                                        <h3 class="m-0 p-0">@Html.DisplayFor(modelItem => item.Employee.EmployeeName)</h3>
+                                        <h3 class="m-0 p-0">@item.Employee.EmployeeName)</h3>
                                     </div>
                                 </div>
                             </div>
@@ -79,11 +74,11 @@
 
                                         if (ViewBag.page == 1)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="btn prev disabled" hidden>上一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?page=@previous" class="btn prev disabled" hidden>上一頁</a>
                                         }
                                         else
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?page=@previous" class="prev">上一頁</a>
                                         }
 
 
@@ -91,21 +86,21 @@
                                         {
                                             if (i == current)
                                             {
-                                                <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
+                                                        <a href="~/blogs/SelectBlogCategory?page=@i" class="active">@i</a>
                                             }
                                             else
                                             {
-                                                <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
+                                                        <a href="~/blogs/SelectBlogCategory?page=@i">@i</a>
                                             }
                                         }
 
                                         if (ViewBag.page == ViewBag.MaxPage)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="btn prev disabled" hidden>下一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?page=@next" class="btn prev disabled" hidden>下一頁</a>
                                         }
                                         else
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?page=@next" class="prev">下一頁</a>
                                         }
 
                                     }
@@ -125,11 +120,11 @@
 
                                         if (ViewBag.page == 1)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="btn prev disabled" hidden>上一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="btn prev disabled" hidden>上一頁</a>
                                         }
                                         else
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev">上一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@previous" class="prev">上一頁</a>
                                         }
 
 
@@ -137,21 +132,21 @@
                                         {
                                             if (i == current)
                                             {
-                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i" class="active">@i</a>
+                                                        <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i" class="active">@i</a>
                                             }
                                             else
                                             {
-                                                <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i">@i</a>
+                                                        <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@i">@i</a>
                                             }
                                         }
 
                                         if (ViewBag.page == ViewBag.MaxPage)
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="btn prev disabled" hidden>下一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="btn prev disabled" hidden>下一頁</a>
                                         }
                                         else
                                         {
-                                            <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev">下一頁</a>
+                                                    <a href="~/blogs/SelectBlogCategory?CategoryID=@ViewBag.CategoryID&page=@next" class="prev">下一頁</a>
                                         }
                                     }
                                 }
@@ -205,6 +200,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadSidePopular();
+            const blogUnits = document.querySelectorAll('.post-entry-2');
+            blogUnits.forEach(unit => {
+                const blogId = unit.getAttribute('data-hide-id');
+                const contentContainer = unit.querySelector('p');
+                //console.log(contentContainer);//取到了
+                fetch(`https://localhost:7078/api/Blogs/${blogId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        //console.log(data);
+                        const { content } = data;
+                        contentContainer.innerHTML = getContentSnippet(content, 50) + '. . .';
+                    });
+                       
+            });            
         });
         async function loadSidePopular() {
             const response = await fetch(`https://localhost:7078/api/Blogs/popular6`);

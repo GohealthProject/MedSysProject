@@ -65,6 +65,7 @@ namespace MedSysProject.Controllers
                 {
                     string json = JsonSerializer.Serialize(q);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                    TempData["LoginSuccess"] = "Swal.fire({position: \"top-end\",icon: \"success\",title: \"登入成功！\",showConfirmButton: false,timer: 1000});";
                     return RedirectToAction("MemberCenter", "Accout");
                 }
                 else if (m.member.MemberPassword == c.txtPassWord && !m.IsVerified)
@@ -571,15 +572,31 @@ namespace MedSysProject.Controllers
                 TempData["GAccountName"] = GAccountName;
                 TempData["GAccountEmail"] = GAccountEmail;
 
+                TempData["NotRegister"] = "<div class=\"rounded rounded-3 bg-info text-dark p-3 mb-2\"><i class=\"fas fa-info-circle\"></i> 此帳號尚未註冊，請先註冊。</div>";
                 return RedirectToAction("Register");
             }
             else
             {
-                var qa = _db.Members.FirstOrDefault(n => n.MemberEmail == GAccountEmail);
-                string json = JsonSerializer.Serialize(qa);
-                HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
+                if (_db.Members.FirstOrDefault(n => n.MemberEmail == GAccountEmail).StatusId == 2)
+                {
+                    TempData["Banned"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 您的帳號已遭停權，請<a href=\"mailto:gohealth790@gmail.com\">聯絡客服</a>。</div>";
+                    return RedirectToAction("Login");
+                }
+                else if (_db.Members.FirstOrDefault(n => n.MemberEmail == GAccountEmail).StatusId == 3)
+                {
+                    TempData["Banned"] = "<div class=\"rounded rounded-3 bg-danger text-light p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 您的帳號目前有異常，請<a href=\"mailto:gohealth790@gmail.com\">聯絡客服</a>。</div>";
+                }
+                else
+                {
+                    var qa = _db.Members.FirstOrDefault(n => n.MemberEmail == GAccountEmail);
+                    string json = JsonSerializer.Serialize(qa);
+                    HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
 
-                return RedirectToAction("MemberCenter", "Accout");
+                    return RedirectToAction("MemberCenter", "Accout");
+                }
+
+                TempData["Expired"] = "<div class=\"rounded rounded-3 bg-warning text-dark p-3 mb-2\"><i class=\"fas fa-exclamation-triangle\"></i> 連結已失效，請再試一次。</div>";
+                return RedirectToAction("Login");
             }
 
             //return Json(claims);

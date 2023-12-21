@@ -1,73 +1,49 @@
 ﻿@{
     ViewData["Title"] = "planComeparisonTotal";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+
+   
 }
 @model  System.Data.DataTable
 @using System.Data
 <head>
-    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    
     
    
     @*datatable區*@
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+   @*  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> *@
     <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
     <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  
-   @*  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script> *@
-    @*test區*@
-    @*<script src=" https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>*@
-    @*<script src=""></script>*@
-   
-  @*  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>*@
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    @*轉檔列印區JS*@
+    <script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+    <script src=""></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
    
     
     <style>
-       /*  .text-custom-truncate {
-            display: -webkit-box !important;
-            max-width: 230px;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden
-        }
- */
+       
         .table thead tr th {
-           /*  background-color: white ; */
+         
             z-index: 10;
             color: #705972;
         }
 
         .table tbody tr th {
-          /*   background-color: #5b5d23; */
+         
             color: #a7a5e4;
             z-index: 10
         }
-
-        
-     /*    body {
-            margin: 0;
-            padding: 2rem
-        }
-
-        table {
-            text-align: left;
-            position: relative;
-            border-collapse: collapse
-        }
-
-        th {
-            background: white;
-            position: sticky;
-            top: 0;
-            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4)
-        }
-
-        .table-responsive {
-            overflow-x: inherit !important
-        } */
+              
+     
 
     </style>
 
@@ -101,11 +77,25 @@
         <br>
        
     </div>
-   <div>
-        <p>
-            <button id="submit" class="btn btn-light">
-           選取後跳至自選方案            
-            </button>
+   <div >
+        <p id="btn">
+            @foreach(DataColumn btn in Model.Columns)
+            {
+                if (btn.ColumnName == "檢查類別" )
+                {
+                    continue;
+                }
+                else if (btn.ColumnName == "檢查細項")
+                {
+                    continue;   
+                }
+                else
+                {
+                    
+                    <button id="@btn.ColumnName " class="btn btn-light planbtn" style="background:cornflowerblue" >
+                        @btn.ColumnName
+                    </button>}
+            }
             <input  type="submit"/>
        </p>
    </div>
@@ -120,7 +110,8 @@
             <thead>
                 
                 <tr>
-                       @foreach(DataColumn col in Model.Columns){
+                       @foreach(DataColumn col in Model.Columns)
+                       {
                     <th>@col.ColumnName</th>
                                }       
                 </tr>
@@ -129,20 +120,24 @@
                @foreach(DataRow row in Model.Rows){
                       <tr>   
                           @foreach (DataColumn col in Model.Columns) {
-                      
-                    <td>
-                        <i class="bi bi-flower1" style="color:goldenrod">
-                          @row[col.ColumnName]
-                        </i>
-                    </td>
-                       @* <td>@i["planId"]</td>*@
-                      
+                     <td>
+                                @if (row[col.ColumnName]=="true")
+                                {
+                                        <i class="bi bi-check-square-fill" style="color:green"></i>
+                                        <i hidden>有</i>
+                                }
+                                else if (row[col.ColumnName] == "false")
+                                {
+                                        <i class="bi bi-x-square-fill" style="color:crimson"></i>
+                                        <i hidden>沒有</i>
+                                }
+                                else
+                                {
+                                        <i class="bi bi-triangle-fill" style="color:goldenrod"> @row[col.ColumnName] </i>
+                                }                                                   
+                         
                        
-                      @*  <td>@i["projectid"]:@i["ProjectName"]</td>*@
-                      @*  <td>@i["ProjectPrice"]</td>*@
-                       @* <td>@i["itemId"] : @i["ItemName"]</td>*@
-                   
-               
+                    </td>                                                     
                    }  
                    </tr>}
                  
@@ -160,45 +155,76 @@
     </table>
 </div>
 @section Scripts{
-    <script>
-        //---變數區
-       let table = new DataTable('#datatable');
-        const btnSubmit = document.querySelector("#submit");
-        const table2 = document.querySelector("#datatable");
-        const formdata = new FormData(document.querySelector("#formdata"));
-        const xhr = new XMLHttpRequest();
-        //     $("#datatable").datatable({
+    @* <script>
+      //  //---變數區
+      // let planList="";
+      // let table = new DataTable('#datatable');
+      //  const btnSubmit = document.querySelectorAll("#btn>button");
+      //  const table2 = document.querySelector("#datatable");
+      //  console.log("hello");
+      //  let list = @ViewBag.list;
+      //  console.log(list);
+      //  //     $("#datatable").datatable({
            
-        // });
-      //----傳送區
-        btnSubmit.addEventListener('click', event => {
-            event.preventDefault();
-            async function send() {
-             alert("傳送")
-                const response = await fetch('@Url.Content("https://localhost:7078/api/CPlan/3?planid=3")');//選取方案id
-                window.location.href = ('@Url.Content("~/Home/Customcompare")');
-            };
-            send();
+      //  // });
+      ////----傳送區
+  
+      
+      
+      //  btnSubmit.addEventListener('click', event => {
+      //      event.preventDefault();
+      //      async function send() {
+      //       alert("傳送")
+      //          const response = await fetch('@Url.Content("https://localhost:7078/api/CPlan/3?planid=3")');//選取方案id
+      //          window.location.href = ('@Url.Content("~/Home/Customcompare")');
+      //      };
+      //      send();
            
-        });
+      //  });
       //-----傳送區
-        $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
+        
     //---------------------------------------------test
-        document.addEventListener("keydown",(p)=>{
-        console.log(table2);
-        })
+        
         //-----------------------------------------------------
        
         //----------------datatable資料
         
 
-    </script>
+    </script> *@
+    <script>
 
+        let table = new DataTable('#datatable');
+
+        let list = @ViewBag.list
+        console.log(list);
+        let count =0;
+        let planbtn = document.querySelectorAll(".planbtn");
+        $(document).ready(()=> {
+            $("#datatable").DataTable({
+                destroy: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+
+
+            })
+        });
+        
+        document.addEventListener("DOMContentLoaded", load);
+        function load(){
+            planbtn.forEach((btn) => {
+                btn.value = list[count];
+                count++;
+                btn.addEventListener("click", (event)=>{
+                    change(event.target.value);
+                })
+            })
+        }
+        function change(id){
+            window.location.href = `/Home/Customcompare?planid=${id}`
+        }
+        
+        
+    </script>
 }

@@ -285,7 +285,7 @@ section .section-header p {
     color: var(--color-primary);
   }
   .navbar a:hover {
-    color: var(--color-primary);
+    color: #d2ece9;
   }
   .mobile-nav-toggle {
     display: inline-block;

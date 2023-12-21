@@ -8,7 +8,7 @@
             <div class="container" data-aos="fade-up">
                 <div class="row g-5">
                     <div class="col-lg-4">
-                        <div class="post-entry-1 lg">
+                        <div class="post-entry-1 lg" data-hide-id="@Model[0].BlogId">
                             <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId">
                                 @if (Model[0].BlogImage != null)
                                 {
