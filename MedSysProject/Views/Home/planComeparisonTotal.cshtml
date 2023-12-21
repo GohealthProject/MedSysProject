@@ -72,10 +72,7 @@
     @*搜尋*@
     <div>
         <hr />
-        <p>輸入您想檢查的類別:</p>
-        <input class="form-control" id="myInput" type="text" placeholder="輸入關鍵字，如:新陳代謝檢查">
-        <br>
-       
+        <p>步驟3:選取下方確認方案<i class="bi bi-arrow-90deg-down" style="color:indianred"></i></p>
     </div>
    <div >
         <p id="btn">
@@ -93,10 +90,10 @@
                 {
                     
                     <button id="@btn.ColumnName " class="btn btn-light planbtn" style="background:cornflowerblue" >
-                        @btn.ColumnName
+                        確定方案: @btn.ColumnName
                     </button>}
             }
-            <input  type="submit"/>
+           
        </p>
    </div>
     
@@ -120,22 +117,35 @@
                @foreach(DataRow row in Model.Rows){
                       <tr>   
                           @foreach (DataColumn col in Model.Columns) {
-                     <td>
-                                @if (row[col.ColumnName]=="true")
-                                {
+                                <td>
+                                    @if (row[col.ColumnName] == "true")
+                                    {
                                         <i class="bi bi-check-square-fill" style="color:green"></i>
                                         <i hidden>有</i>
-                                }
-                                else if (row[col.ColumnName] == "false")
-                                {
+                                    }
+                                    else if (row[col.ColumnName] == "false")
+                                    {
                                         <i class="bi bi-x-square-fill" style="color:crimson"></i>
                                         <i hidden>沒有</i>
-                                }
-                                else
-                                {
+                                    }
+                                    else if (row[col.ColumnName] == "truef")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:pink"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">女性限定</i>
+                                        <i hidden>有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "truem")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:royalblue"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">男性限定</i>
+                                        <i hidden>有</i>
+                                    }
+
+                                    else
+                                    {
                                         <i class="bi bi-triangle-fill" style="color:goldenrod"> @row[col.ColumnName] </i>
-                                }                                                   
-                         
+                                    }                                                   
+
                        
                     </td>                                                     
                    }  
@@ -205,9 +215,14 @@
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/zh-HANT.json',
+                },
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
                 ]
-
-
             })
         });
         
