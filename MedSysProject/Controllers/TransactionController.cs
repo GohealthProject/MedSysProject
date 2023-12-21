@@ -8,6 +8,7 @@ using System.Web;
 using static System.Net.WebRequestMethods;
 using MedSysProject.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Encodings.Web;
 
 namespace MedSysProject.Controllers
 {
@@ -101,10 +102,10 @@ namespace MedSysProject.Controllers
             var htrp = form["healthreport"];
             var rpdt = form["reportdetail"];
 
-            Reserve rsggg = JsonSerializer.Deserialize<Reserve>(rs2);
-            ReservedSub rsb = JsonSerializer.Deserialize<ReservedSub>(rss);
-            HealthReport hrp = JsonSerializer.Deserialize<HealthReport>(htrp);
-            ReportDetail rpd = JsonSerializer.Deserialize<ReportDetail>(rpdt);
+            //Reserve rsggg = JsonSerializer.Deserialize<Reserve>(rs2);
+            //ReservedSub rsb = JsonSerializer.Deserialize<ReservedSub>(rss);
+            //HealthReport hrp = JsonSerializer.Deserialize<HealthReport>(htrp);
+            //ReportDetail rpd = JsonSerializer.Deserialize<ReportDetail>(rpdt);
             //_context.Add(rsggg);
             //_context.Add(rsb);
             //_context.Add(hrp);
@@ -174,9 +175,9 @@ namespace MedSysProject.Controllers
         { "MerchantTradeNo",  orderId},//特店訂單編號 不可重複使用
         { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
         { "PaymentType",  "aio"},//交易類型(固定aio)
-        { "TotalAmount",  "1450"},//交易金額
-        { "TradeDesc",  "Test"},//交易描述
-        { "ItemName",  "測試商品"},//商品名稱
+        { "TotalAmount",  "28250"},//交易金額
+        { "TradeDesc",  "健檢預約"},//交易描述
+        { "ItemName",  "活力青年方案 "},//商品名稱
         { "ReturnURL",  $"{website}/Transaction/addOrders"},//付款完成通知回傳網址
         { "ChoosePayment",  "ALL"},//選擇預設付款方式
         { "EncryptType",  "1"},//CheckMacValue加密類型
@@ -198,6 +199,10 @@ namespace MedSysProject.Controllers
             //檢查碼
             order["CheckMacValue"] = GetCheckMacValue(order);
             return View(order);
+            //string neworder = JsonSerializer.Serialize(order);
+            
+              
+            //return Json(neworder);
         }
         ///待修
         private string GetCheckMacValue(Dictionary<string, string> order)
@@ -293,7 +298,7 @@ namespace MedSysProject.Controllers
             ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
             _context.EcpayOrders.Add(ecpayOrder);
             _context.SaveChanges();
-            
+
 
             //var data = new Dictionary<string, string>();
             //foreach (string key in id.Keys)
@@ -312,7 +317,8 @@ namespace MedSysProject.Controllers
             //    //ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
             //    _context.SaveChanges();
             //}
-            return View("EcpayView", data);
+            return RedirectToAction("Accout/MemberCenter");
+            //return View("EcpayView", data);
         }
         /// step5 : 取得虛擬帳號 資訊
         //[HttpPost]

@@ -23,11 +23,11 @@
     <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
-   
+
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
@@ -48,18 +48,18 @@
 
 <body>
     <!-- ======= Header ======= -->
-   <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center">
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center">
 
-      <div class="logo me-auto">
+            <div class="logo me-auto">
                 <h1><a href="~/Home/Index"><img src="~/img/gohealth-logo.png" alt="" class="img-fluid"> GO健康</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
 
-      <nav id="navbar" class="navbar">
+            <nav id="navbar" class="navbar">
                 <!-- =======最上方欄位 ======= -->
-        <ul>
+                <ul>
                     <li class="dropdown fs-4">
                         <a href="~/Home/Index#about"><span class="fs-4">關於GO健康</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
@@ -69,11 +69,11 @@
                         </ul>
                     </li>
                     <li>
-                    
+
                     <li class="dropdown fs-4">
                         <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
-                            
+
                             <li class="dropdown fs-4">
                                 <a href="#"><span class="fs-4">線上預約</span> <i class="bi bi-chevron-right"></i></a>
                                 <ul>
@@ -87,7 +87,7 @@
                     <li>
                         <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
-                    <li><a class="nav-link scrollto fs-4" href="/blogs/indexnew" >健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li><a class="nav-link scrollto fs-4" href="/blogs/indexnew">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:35px">
                         <button type="button" class="btn  position-relative" asp-action="CartList" asp-controller="Shopping">
                             <img src="@Url.Content("~/img/shopping-cart.png")" alt="Inbox Image" class="img-fluid" id="CartListImg" />
@@ -97,33 +97,96 @@
                             </span>
                         </button>
                     </li>
-                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto fs-4"})</li>
-                        }else{
+                        <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto fs-4" })</li>
+                        }
+                        else
+                        {
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
                             MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
-                                <li class="dropdown">
+                        <li class="dropdown">
                             <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
-                                    <ul>
+                            <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
                                 <li><a asp-action="OrderList" asp-controller="Shopping">訂單管理</a></li>
                                 <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
-                                    </ul>
-                                </li>
-                            }
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+                            </ul>
+                        </li>
+                        }
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
 
-    </div>
-  </header><!-- End #header -->
+        </div>
+    </header><!-- End #header -->
     <main id="main" style="background-color:#F2F9F8">
-    @RenderBody()
-    <!-- ======= Footer ======= -->
-    
+        @RenderBody()
+        <!-- ======= Footer ======= -->
+
     </main>
+
+    <!-- chat room button -->
+    <div class="chatroom position-fixed bottom-0 end-0" style="margin-bottom:4rem;">
+        <a onclick="showChatroomWindow()">
+            <img src="~/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="showchatnofitation" hidden>
+                <span class=" p-1" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></span>
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </a>
+    </div>
+
+    <!-- chat room window -->
+    <div class="chatroom-window position-fixed bottom-0 end-0" id="chatroom-window" style="margin-bottom: 4rem;margin-right: 4rem;width: 267px;height: 364px;background-color: antiquewhite;border: double;border-radius: 15px;" hidden>
+        <div class="chatroom-window-header">
+            <div class="chatroom-window-header-title">
+                <img src="/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
+                <span>GO健康客服</span>
+            </div>
+            <div class="chatroom-window-header-close" onclick="showChatroomWindow" style="position: absolute;right: 0;">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="chatroom-window-body">
+            <div class="chatroom-window-body-message" id="chat-message-body">
+                @*                 <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div> *@
+                @*             <div class="chatroom-window-body-message">
+                <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div>
+                <div class="chatroom-window-body-message">
+                <div class="chatroom-window-body-message-time">
+                <span>2021/10/10 10:10</span>
+                </div>
+                <div class="chatroom-window-body-message-content">
+                <span>您好，有什麼可以幫助您的嗎？</span>
+                </div>
+                </div> *@
+
+            </div>
+            <div class="chatroom-window-footer" style="position: absolute;bottom: 0;">
+                <div class="d-inline chatroom-window-footer-input">
+                    <input type="text" id="chat-text" placeholder="請輸入訊息...">
+                </div>
+                <div class="d-inline chatroom-window-footer-send">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer id="footer">
         <div class="container">
             <div class="copyright">
@@ -142,17 +205,34 @@
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"   integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="   crossorigin="anonymous"></script>
-   
+ @*   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>*@
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
     <script src="~/forevendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/forevendor/swiper/swiper-bundle.min.js"></script>
     <script src="~/forevendor/php-email-form/validate.js"></script>
+    @*datatable區*@
+    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    @*datatable區*@
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
 
+    <!-- opanai -->
+    <script src="https://cdn.jsdelivr.net/npm/openai@4.24.0/index.min.js"></script>
 
-  
+
+
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         async function getcartList() {
@@ -170,7 +250,108 @@
                 window.location.href = "@Url.Content("~/Shopping/CartList")";
             })
         })
-        
+
+        function showChatroomWindow() {
+            if (document.querySelector("#chatroom-window").hidden == false) {
+                document.querySelector("#chatroom-window").hidden = true;
+                return;
+            }
+            var datetime = new Date();
+            datetime = Date.now();
+            $('#showchatnofitation').attr('hidden', true);
+            document.querySelector("#chatroom-window").hidden = false;
+            document.querySelector("#chat-text").focus();
+            document.querySelector('#chat-message-body').innerHTML = `
+                                                                                                    <div class="chatroom-window-body-message-time">
+                                                                                                        <span>${datetime} (員工)James</span>
+                                                                                                    </div>
+                                                                                                    <div class="chatroom-window-body-message-content">
+                                                                                                        <span style="color:red;">您好，有什麼可以幫助您的嗎？</span>
+                                                                                                    </div>`
+        };
+
+        document.getElementById('chat-text').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                console.log('Enter pressed');
+                let text = document.getElementById('chat-text').value;
+                console.log(text);
+                document.getElementById('chat-text').value = "";
+
+                var datetime = new Date();
+                datetime = Date.now();
+                document.querySelector('#chat-message-body').innerHTML += `
+                                                                                                <div class="chatroom-window-body-message">
+                                                                                                    <div class="chatroom-window-body-message-time">
+                                                                                                        <span>${datetime}</span>
+                                                                                                    </div>
+                                                                                                    <div class="chatroom-window-body-message-content">
+                                                                                                        <span>${text}</span>
+                                                                                                    </div>
+                                                                                                </div>`
+
+
+            }
+        });
+
+        // 按z彈出通知
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'z') {
+                $('#showchatnofitation').removeAttr('hidden');
+            }
+        });
+
+        // 按x傳入假客服訊息1
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'x') {
+                var datetime = new Date();
+                datetime = Date.now();
+                document.querySelector('#chat-message-body').innerHTML += `
+                                                                                                <div class="chatroom-window-body-message">
+                                                                                                    <div class="chatroom-window-body-message-time">
+                                                                                                           <span>${datetime} (員工)James</span>
+                                                                                                    </div>
+                                                                                                    <div class="chatroom-window-body-message-content">
+                                                                                                       <span style="color:red;">不好意思，讓您有這樣的體驗。我們會再去做改進，感謝您的回報。</span>
+                                                                                                    </div>
+                                                                                                </div>`
+            }
+        });
+
+        // 按c傳入假客服訊息2
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'c') {
+                var datetime = new Date();
+                datetime = Date.now();
+                document.querySelector('#chat-message-body').innerHTML += `
+                                                                                                        <div class="chatroom-window-body-message">
+                                                                                                            <div class="chatroom-window-body-message-time">
+                                                                                                                   <span>${datetime} (員工)James</span>
+                                                                                                            </div>
+                                                                                                            <div class="chatroom-window-body-message-content">
+                                                                                                               <span style="color:red;">謝謝，我們會盡力改進，請問還有什麼服務的嗎?</span>
+                                                                                                            </div>
+                                                                                                        </div>`
+            }
+        });
+
+        // 按v傳入假客服訊息2
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'v') {
+                var datetime = new Date();
+                datetime = Date.now();
+                document.querySelector('#chat-message-body').innerHTML += `
+                                                                                                                <div class="chatroom-window-body-message">
+                                                                                                                    <div class="chatroom-window-body-message-time">
+                                                                                                                           <span>${datetime} (員工)James</span>
+                                                                                                                    </div>
+                                                                                                                    <div class="chatroom-window-body-message-content">
+                                                                                                                       <span style="color:red;">好的，再見。</span>
+                                                                                                                      </span>
+                                                                                                                    </div>
+                                                                                                                </div>`
+            }
+        });
+
     </script>
 </body>
 

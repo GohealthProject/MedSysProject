@@ -140,6 +140,8 @@ namespace MedSysProject.Controllers
         {
             Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
 
+            var form = Request.Form;
+
             if (fileN != null)
             {
                 // 生成唯一的GUID作为新文件名
@@ -163,6 +165,10 @@ namespace MedSysProject.Controllers
             Upm.MemberAddress = m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
             _db.SaveChanges();
+
+            HttpContext.Session.Remove(CDictionary.SK_MEMBER_LOGIN);
+            string json = JsonSerializer.Serialize(Upm);
+            HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
 
             // 其他代码...
 

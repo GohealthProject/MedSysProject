@@ -1,11 +1,18 @@
 ﻿@using System.Text.Json;
+@using System.Web;
+@using System.Text;
+@using System.Security.Cryptography;
 @{
     ViewData["Title"] = "Reserve";
 
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+    var order = ViewBag.order as Dictionary<string, string>;
 }
 @*@model IEnumerable<MedSysProject.Models.Plan>*@
-@model IFormCollection
+@*@model IFormCollection
+*@
+@model Dictionary<string, string>
+    ;
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
@@ -187,13 +194,16 @@
                                 <input type="date"
                                        name="bday"
                                        min= new date()
-                                       max="2023-12-29"
+                                       max=""
                                        required id="bday"/>
                                 <span class="validity"></span>
                             </label>
 
-                            <p>
-                                <button>Submit</button>
+                            <p class="d-none" style="color:red" id="full">
+                                預約已滿
+                            </p>
+                            <p class="d-none" id="ok">
+                                <img src="~/img/icon/check.png"/>"
                             </p>
                             <select class="form-select col-12 mb-2" aria-label="Default select example">
                                 <option selected>付款方式</option>
@@ -255,7 +265,7 @@
                     預約日期:2023/12/01 付費方式:現場付款
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal" >確定</button>
+                        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal" id="finalconfirm">確定</button>
                 </div>
             </div>
         </div>
@@ -266,7 +276,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalToggleLabel2">預約未完成</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="moda2-body">
                     預約未完成
@@ -335,12 +345,46 @@
         <input type="text" value="@jsonhealthreport" id="healthreport" name="healthreport">
         <input type="text" value="@jsonreportdetail" id="reportdetail" name="reportdetail">
     </form>
-    <button id="ttb">123</button>
- 
+   @* <button id="ttb">123</button>*@
+    <form hidden id="tform" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+        <!--step2 : 收到後端的值印出來-->
+        @foreach (var key in @Model.Keys.ToList())
+        {
+            @(key) <input type="text" name="@key" value="@Model[key]" />
+
+            <br />
+        }
+        <button type="submit" id="checkoutBtn">送出</button>
+    </form>
+
+    <form hidden id="formpay" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+        <!--step2 : 收到後端的值印出來-->
+     
+        <input type="text" name="MerchantID" value="3002599" id="MerchantID" />
+        <input type="text" name="MerchantTradeNo" value="" id="MerchantTradeNo" />
+        <input type="text" name="MerchantTradeDate" value="@DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")" id="MerchantTradeDate" />
+        <input type="text" name="PaymentType" value="aio" id="PaymentType" />
+        <input type="text" name="TotalAmount" value="2000" id="TotalAmount" />
+        <input type="text" name="TradeDesc" value="Test" id="TradeDesc" />
+        <input type="text" name="ItemName" value="測試商品" id="ItemName" />
+        <input type="text" name="ReturnURL" value="" id="ReturnURL" />
+        <input type="text" name="ChoosePayment" value="ALL" id="ChoosePayment" />
+        <input type="text" name="EncryptType" value="1" id="EncryptType" />
+        <input type="text" name="OrderResultURL" value="" id="OrderResultURL" />
+        <input type="text" name="IgnorePayment" value="GooglePay#WebATM#CVS#BARCODE" id="IgnorePayment" />
+        <input type="text" name="CheckMacValue" value="" id="CheckMacValue" />
+
+        
+        
+        <button type="submit" id="checkoutBtn">送出</button>
+    </form>
+
 </body>
 </html>
 
 <script>
+    //設定Session
+    //HttpContext.Session.SetString(CDictionary.SK_EMPLOYEE_LOGIN, json);
     @{
         MemberWarp m = new MemberWarp();
         string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
@@ -358,24 +402,36 @@
     })
 
 
+  
     ////日期變更/////
     var bday= document.querySelector("#bday")
     var currentdate = new Date()
-    //bday.min = convertToISO(currentdate)
+    var full = document.querySelector("#full")
+    var ok = document.querySelector("#ok")
+    bday.min = convertToISO(currentdate)
     @{
         string Rday = "";
     }
     bday.addEventListener("change",()=>{
-        @Rday = bday.value
+            console.log(bday.value)
+            if (bday.value == "2023-12-30")
+            {
+                console.log("true")
+                full.removeAttribute("Class","d-none")
+            }
+            else{
+                console.log("false")
+                full.setAttribute("Class", "d-none")
+                ok.removeAttribute("Class", "d-none")
+            }
+
+
+
+        //Rday.Equals(bday.value);
         //Context.Session.Set("date",Rday)
          //Context.Session["Rday"] = "1"
 
-        //$.ajax({
-        //    url: 'https://localhost:7203/Transaction/checkreserve',
-        //    data: Rday,
-        //    success: console.log("ok"),
-        //   // dataType: String,
-        //});
+    
 
     alert("0")
     })
@@ -397,12 +453,12 @@
     table.innerHTML = forminput;
     //console.log(forminput)
     //console.log(table.innerHTML)
-    ttb.addEventListener("click", () => {
-       pricecount()
+    //ttb.addEventListener("click", () => {
+    //   pricecount()
     
-    })
+    //})
     function pricecount(){
-    var ttb = document.querySelector("#ttb")
+    //var ttb = document.querySelector("#ttb")
     
     
         var price = 0;
@@ -661,7 +717,98 @@
     //var table = document.querySelector("#show")
     //table.innerHTML = @ViewBag.item;
 
+    ////////////////////////pay///////////////////
+        ////送出///////
+    var formpay = document.querySelector("#formpay")
+    var MerchantID = document.querySelector("#MerchantID")
+    var MerchantTradeNo = document.querySelector("#MerchantTradeNo")
+    var MerchantTradeDate = document.querySelector("#MerchantTradeDate")
+    var PaymentType = document.querySelector("#PaymentType")
+    var TotalAmount = document.querySelector("#TotalAmount")
+    var TradeDesc = document.querySelector("#TradeDesc")
+    var ItemName = document.querySelector("#ItemName")
+    var ReturnURL = document.querySelector("#ReturnURL")
+    var ChoosePayment = document.querySelector("#ChoosePayment")
+    var EncryptType = document.querySelector("#EncryptType")
+    var OrderResultURL = document.querySelector("#OrderResultURL")
+    var IgnorePayment = document.querySelector("#IgnorePayment")
+    var CheckMacValue = document.querySelector("#CheckMacValue")
+    var datarr;
+    var d1;
+        var finalconfirm = document.querySelector("#finalconfirm")
+            finalconfirm.addEventListener("click",()=>{
+        var tform = document.querySelector("#tform")
+        tform.submit();
 
-  
+        //location.href = '@Url.Content("~/Accout/MemberCenter")';
+
+        //fetch("https://localhost:7203/transaction/payment", {
+        //    headers: {
+        //        'content-type': 'text/plain;charset=UTF-8'
+        //    }})
+        //.then((respone)=>{
+        //         //response.text()
+        //        return respone.json()
+                 
+        //        //console.log(response)
+        //    //return response.text()
+        //}).then((data)=>{
+               
+        //         datarr = JSON.parse(data)
+                
+        //        MerchantID.value = datarr.MerchantID
+        //        MerchantTradeNo.value = datarr.MerchantTradeNo
+        //        MerchantTradeDate.value = datarr.MerchantTradeDate
+        //        PaymentType.value = datarr.PaymentType
+        //        TotalAmount.value = datarr.TotalAmount
+        //        TradeDesc.value = datarr.TradeDesc
+        //        ItemName.value = datarr.ItemName
+        //        ReturnURL.value = datarr.ReturnURL
+        //        ChoosePayment.value = datarr.ChoosePayment
+        //        EncryptType.value = datarr.EncryptType
+        //        OrderResultURL.value = datarr.OrderResultURL
+        //        IgnorePayment.value = datarr.IgnorePayment
+        //        CheckMacValue.value = datarr.CheckMacValue
+               
+        //}
+        //)
+
+        //fetch(`https://localhost:7203/transaction/GetCheckMacValue/${datarr}`, {
+        //    headers: {
+        //        'content-type': 'text/plain;charset=UTF-8'
+        //    }
+        //})
+        //    .then((respone) => {
+        //        //response.text()
+        //        return respone.text
+
+        //        //console.log(response)
+        //        //return response.text()
+        //    }).then((data) => {
+        //        d1 = data
+        //        CheckMacValue.value = data
+        //        formpay.submit();
+        //    })
+
+        //$.get("https://localhost:7203/transaction/payment", function (data, status) {
+        //    //alert("Data: " + data + "\nStatus: " + status);
+        //    var datarr = JSON.parse(data)
+        //    MerchantID.value = datarr.MerchantID
+        //    MerchantTradeNo.value = datarr.MerchantTradeNo
+        //    MerchantTradeDate.value = datarr.MerchantTradeDate
+        //    PaymentType.value = datarr.PaymentType
+        //    TotalAmount.value = datarr.TotalAmount
+        //    TradeDesc.value = datarr.TradeDesc
+        //    ItemName.value = datarr.ItemName
+        //    ReturnURL.value = datarr.ReturnURL
+        //    ChoosePayment.value = datarr.ChoosePayment
+        //    EncryptType.value = datarr.EncryptType
+        //    OrderResultURL.value = datarr.OrderResultURL
+        //    IgnorePayment.value = datarr.IgnorePayment
+        //    CheckMacValue.value = datarr.CheckMacValue
+        //    formpay.submit();
+        //});
+        alert("付款成功")
+    })
 </script>
 

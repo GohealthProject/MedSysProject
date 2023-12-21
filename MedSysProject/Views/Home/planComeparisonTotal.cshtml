@@ -7,24 +7,26 @@
 @model  System.Data.DataTable
 @using System.Data
 <head>
-    <link rel="stylesheet"  type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-    
-   
+
+
+    @*<script src="https://code.jquery.com/jquery-3.7.0.js"></script>*@
     @*datatable區*@
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
-    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+   @*  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> *@
   
-   @*  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script> *@
-    @*test區*@
-    @*<script src=" https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>*@
-    @*<script src=""></script>*@
-   
-  @*  <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>*@
+   @* <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />*@
+    @*轉檔列印區JS*@
+   @* <script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>*@
    
     
     <style>
@@ -70,10 +72,7 @@
     @*搜尋*@
     <div>
         <hr />
-        <p>輸入您想檢查的類別:</p>
-        <input class="form-control" id="myInput" type="text" placeholder="輸入關鍵字，如:新陳代謝檢查">
-        <br>
-       
+        <p>步驟3:選取下方確認方案<i class="bi bi-arrow-90deg-down" style="color:indianred"></i></p>
     </div>
    <div >
         <p id="btn">
@@ -91,10 +90,10 @@
                 {
                     
                     <button id="@btn.ColumnName " class="btn btn-light planbtn" style="background:cornflowerblue" >
-                        @btn.ColumnName
+                        確定方案: @btn.ColumnName
                     </button>}
             }
-            <input  type="submit"/>
+           
        </p>
    </div>
     
@@ -118,20 +117,35 @@
                @foreach(DataRow row in Model.Rows){
                       <tr>   
                           @foreach (DataColumn col in Model.Columns) {
-                     <td>
-                                @if (row[col.ColumnName]=="true")
-                                {
+                                <td>
+                                    @if (row[col.ColumnName] == "true")
+                                    {
                                         <i class="bi bi-check-square-fill" style="color:green"></i>
-                                }
-                                else if (row[col.ColumnName] == "false")
-                                {
+                                        <i hidden>有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "false")
+                                    {
                                         <i class="bi bi-x-square-fill" style="color:crimson"></i>
-                                }
-                                else
-                                {
+                                        <i hidden>沒有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "truef")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:pink"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">女性限定</i>
+                                        <i hidden>有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "truem")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:royalblue"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">男性限定</i>
+                                        <i hidden>有</i>
+                                    }
+
+                                    else
+                                    {
                                         <i class="bi bi-triangle-fill" style="color:goldenrod"> @row[col.ColumnName] </i>
-                                }                                                   
-                         
+                                    }                                                   
+
                        
                     </td>                                                     
                    }  
@@ -151,7 +165,7 @@
     </table>
 </div>
 @section Scripts{
-    <script>
+    @* <script>
       //  //---變數區
       // let planList="";
       // let table = new DataTable('#datatable');
@@ -186,14 +200,32 @@
         //----------------datatable資料
         
 
-    </script>
+    </script> *@
     <script>
-        console.log("hello")
+
+        let table = new DataTable('#datatable');
 
         let list = @ViewBag.list
         console.log(list);
         let count =0;
         let planbtn = document.querySelectorAll(".planbtn");
+        $(document).ready(()=> {
+            $("#datatable").DataTable({
+                destroy: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/zh-HANT.json',
+                },
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ]
+            })
+        });
+        
         document.addEventListener("DOMContentLoaded", load);
         function load(){
             planbtn.forEach((btn) => {
