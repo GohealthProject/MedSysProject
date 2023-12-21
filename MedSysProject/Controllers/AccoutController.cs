@@ -140,6 +140,8 @@ namespace MedSysProject.Controllers
         {
             Member? Upm = _db.Members.FirstOrDefault(n => n.MemberId == m.MemberId);
 
+            var form = Request.Form;
+
             if (fileN != null)
             {
                 // 生成唯一的GUID作为新文件名

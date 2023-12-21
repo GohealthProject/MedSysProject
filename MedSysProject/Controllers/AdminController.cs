@@ -626,6 +626,7 @@ namespace MedSysProject.Controllers
 
         public async Task<IActionResult> Product(CKeywordViewModel vm)
         {
+            // 檢查使用者是否已登錄，如果未登錄，則重新導向到登錄頁面
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
@@ -636,22 +637,33 @@ namespace MedSysProject.Controllers
                 .Distinct()
                 .ToListAsync();
 
+            // 建立查詢物件
             var datas = _db.Products.AsQueryable();
 
+            // 獲取搜索關鍵字並去除前後空格
             var keyword = vm.txtKeyword?.Trim();
+
+            // 如果關鍵字不為空，則進行搜索
             if (!string.IsNullOrEmpty(keyword))
             {
-                datas = datas.Where(p =>
-                    p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.Ingredient.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.License.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                // 將關鍵字轉換為小寫以進行不區分大小寫的比較
+                keyword = keyword.ToLower();
 
-                ViewBag.key = keyword;
+                // 在記憶體中執行字串包含操作以進行模糊搜索
+                datas = datas.Where(p =>
+                    p.ProductName.ToLower().Contains(keyword) ||
+                    p.Ingredient.ToLower().Contains(keyword) ||
+                    p.License.ToLower().Contains(keyword) ||
+                    p.Description.ToLower().Contains(keyword)).AsQueryable();
+
+                // 將原始關鍵字傳遞給視圖以在搜尋框中顯示
+                ViewBag.key = vm.txtKeyword;
             }
 
+            // 設定預設圖片路徑
             var defaultImagePath = "/img-product/default-image.jpg";
 
+            // 根據價格範圍篩選數據
             if (vm.txtMinPrice.HasValue)
             {
                 datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
@@ -662,6 +674,7 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
             }
 
+            // 建立視圖模型並使用ToListAsync()將結果轉換為List
             var viewModel = await datas.Select(product => new CProductsWrap
             {
                 Product = product,
@@ -670,8 +683,10 @@ namespace MedSysProject.Controllers
                     : defaultImagePath
             }).ToListAsync();
 
+            // 返回視圖
             return View(viewModel);
         }
+
 
 
         public List<ProductsCategory> GetCategories()
