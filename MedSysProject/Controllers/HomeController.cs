@@ -236,15 +236,17 @@ namespace MedSysProject.Controllers
                 ViewBag.list = System.Text.Json.JsonSerializer.Serialize(list);
                 //---------------------完整資料
                 List<CPlanViewModel> total = new List<CPlanViewModel>();
+                List<CPlanViewModel> checkplans = new List<CPlanViewModel>();
+                //完整但會抓重複資料
                 var pl = _context.Plans.Where(n => list.Contains(n.PlanId))// list.Contains(n.PlanId)
-                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => list.Contains(p.project.PlanId))
-                     .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
+                     .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project })/*.Where(p => list.Contains(p.project.PlanId))*/
+                     .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it })/*.Where(p => p.Project.ProjectId == p.it.ProjectId)*/
 
                      .Select(t => new
                      {
-                         planId = t.Project.PlanRefs.FirstOrDefault().PlanId,
-                         planName = t.Project.PlanRefs.FirstOrDefault().Plan.PlanName,
-                         PlanDescription = (string)t.Project.PlanRefs.FirstOrDefault().Plan.PlanDescription,
+                         planId = t.Project.PlanRefs.First().PlanId,
+                         planName = t.Project.PlanRefs.First().Plan.PlanName,
+                         //PlanDescription = (string)t.Project.PlanRefs.FirstOrDefault().Plan.PlanDescription,
                          projectid = t.Project.ProjectId,
                          ProjectName = (string)t.Project.ProjectName,
                          ProjectPrice = (double)t.Project.ProjectPrice,
@@ -252,13 +254,13 @@ namespace MedSysProject.Controllers
                          ItemName = (string)t.it.ItemName,
 
                      });
-                foreach (var t in pl)
+    foreach (var t in pl)
                 {
                     total.Add(new CPlanViewModel()
                     {
                         PlanId = t.planId,
                         PlanName = t.planName,
-                        PlanDescription = (string)t.PlanDescription,
+                        //PlanDescription = (string)t.PlanDescription,
                         ProjectId = t.projectid,
                         ProjectName = (string)t.ProjectName,
                         ProjectPrice = (double)t.ProjectPrice,
@@ -268,9 +270,24 @@ namespace MedSysProject.Controllers
 
                 );
                 }
-                //----------------------
+                //完整但會抓重複資料
+              
+            
+                //----------------------check項目
+  var checkplan = _context.Plans.Where(n => list.Contains(n.PlanId)).SelectMany(n => n.PlanRefs, (a, b) => new { a, b }).SelectMany(p => p.b.Project.Items, (c, d) => new { c.b.Project.ProjectName, d.ItemName, c.a.PlanId });
+                  foreach (var c in checkplan)
+                {
+                    checkplans.Add(new CPlanViewModel()
+                    {
+                        PlanId = c.PlanId,
+                        ProjectName = c.ProjectName,
+                        ItemName =c.ItemName
 
-                //-----------------------list轉datatable
+
+                    }
+                    );
+                };
+                //-----------------------
                 DataTable dt = new DataTable();
              
                 dt.Columns.Add(new DataColumn("檢查類別"));
@@ -296,7 +313,7 @@ namespace MedSysProject.Controllers
                     dr["檢查細項"] = tt.ItemName;
                     for (int i = 0; i < list.Count; i++)
                     {
-                        dr[list2[i].ToString()] = Check(list[i], tt.ProjectName, tt.ItemName,total  );
+                        dr[list2[i].ToString()] = Check(list[i], tt.ProjectName, tt.ItemName, checkplans);
                         
                     }
                     dt.Rows.Add(dr);
@@ -328,22 +345,39 @@ namespace MedSysProject.Controllers
 
         private object Check(int v, string projectName, string itemName, List<CPlanViewModel> viewModel)
         { 
-            string flag = "false";
+            string flag = "";
             string t = "true";
-            string f= "false";
+            string f = "false";
+            List<string> genderf= new List<string>() { 
+                "女性內分泌檢查","女性癌症檢查","女性超音波檢查"
+            }; 
+            List<string> genderM = new List<string>() {
+                "男性內分泌檢查","男性癌症檢查","男性超音波檢查"
+            };
+
             foreach (var item in viewModel)
             {
                 if (item.PlanId == v)
                 {
-                                 if (item.ItemName == itemName && projectName == item.ProjectName)
-                                            {
-                                               flag = t;
-                                                 break;
-                                             }              
-            
+                    if (projectName == item.ProjectName && item.ItemName == itemName)
+                    {
+                        flag = t;
+                        if (genderf.Contains(item.ProjectName))
+                        {
+                            flag ="truef";
+                        }
+                        else if(genderM.Contains(item.ProjectName)) { 
+                        flag ="truem";
+                        }
+                        break;
+                    }
+                    else 
+                    {  flag = f; }
+                  
                 }
+                
             }
-            return flag;                   
+                         return flag;      
            
         }
 
