@@ -387,11 +387,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                            <label class="form-check-label" for="${newId}">
-                                                <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
-                                            </label>
-                                        `;
+                                                <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                                <label class="form-check-label" for="${newId}">
+                                                    <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義方案...">
+                                                </label>
+                                            `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -422,11 +422,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                                <label class="form-check-label" for="${newId}">
-                                                    <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
-                                                </label>
-                                            `;
+                                                    <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                    <label class="form-check-label" for="${newId}">
+                                                        <input type="text" class="form-control" name="prjtxt" placeholder="自定義方案...">
+                                                    </label>
+                                                `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -452,8 +452,7 @@
         });
         const state = await response.status;
         if (response.ok) {
-            createPrj(form);
-
+            Projectcreate(form);
 
         } else {
             Swal.fire({
@@ -471,6 +470,28 @@
         createPrj(form);
 
     })
+
+    async function Projectcreate(form) {
+        console.log(form)
+        let url = `https://localhost:7078/api/Projects`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: form,
+        });
+        const state = await response.status;
+        if (response.ok) {
+            createRef(form);
+
+            research();
+
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "有錯誤發生!"
+            });
+        }
+    }
 
     async function createPrj(form) {
         console.log(form)
