@@ -512,15 +512,50 @@ namespace MedSysProject.Controllers
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
+        { 
+            //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
 
-            //var datas = (from s in _context.PlanRefs.Include(p=>p.Project).ThenInclude(p=>p.Items).ThenInclude(p=>p.)
+            
+                //step1 : 網頁導入傳值到前端
 
-            //             select s).Distinct();
+                var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+                //需填入你的網址
+                var website = $"https://localhost:7203/";
+                var order = new Dictionary<string, string>
+    {
+        //綠界需要的參數
 
-            //var datas = (from s in _context.Plans.Include(p => p.PlanRefs).ThenInclude(p => p.Project).ThenInclude(p => p.Items)
+        //必填
+        { "MerchantID",  "3002599"},//特店編號
+        { "MerchantTradeNo",  orderId},//特店訂單編號
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
+        { "PaymentType",  "aio"},//交易類型(固定aio)
+        { "TotalAmount",  "1450"},//交易金額
+        { "TradeDesc",  "Test"},//交易描述
+        { "ItemName",  "測試商品"},//商品名稱
+        { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},//付款完成通知回傳網址
+        { "ChoosePayment",  "ALL"},//選擇預設付款方式
+        { "EncryptType",  "1"},//CheckMacValue加密類型
 
-            //             select s).Distinct();
+        //選填
+        { "ExpireDate",  "3"},//分期
+        { "CustomField1",  ""},//自訂名稱欄位1
+        { "CustomField2",  ""},
+        { "CustomField3",  ""},
+        { "CustomField4",  ""},
+        { "OrderResultURL", $"{website}Home/Index"},
+        //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},//Client端回傳付款結果網址
+        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
+        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},//隱藏付款方式
+        
+        
+        
+    };
+                //檢查碼
+                order["CheckMacValue"] = GetCheckMacValue(order);
+               
+            
 
             ViewBag.item = item["item"];
             ViewBag.mid = item["Mid"];
@@ -529,7 +564,7 @@ namespace MedSysProject.Controllers
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
-            return View();
+            return View(order);
         }
         public IActionResult Member()
         { //會員專項
