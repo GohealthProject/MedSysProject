@@ -359,15 +359,24 @@ namespace MedSysProject.Controllers
         }
         public IActionResult OrderList(int page=1)
         {
-            if(page == 999)
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+            var odo = _db.Orders.Where(n => n.MemberId == m.MemberId);
+            if (!odo.Any())
+            {
+                TempData["OrderList"] = "<div class=\"rounded rounded-3 bg-info text-dark p-3 mb-2\"><i class=\"fas fa-info\"></i> 您尚未擁有訂單，開始購物吧！</div>";
+                return RedirectToAction("Index");
+            }
+
+            if (page == 999)
             {
                 HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
                 HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
                 page = 1;
             }
 
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            
             List<COrderWarp>list = new List<COrderWarp>();
 
             //分頁
