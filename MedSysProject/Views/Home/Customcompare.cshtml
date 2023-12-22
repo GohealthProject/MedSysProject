@@ -300,7 +300,7 @@
 
 @section Scripts{
     <script>
-        getPlan();
+        //getPlan();
         //取得
         function getPlan(){
         //$("#tbt").click(function () {
@@ -378,24 +378,24 @@
             let iid = event.target.parentNode.querySelector(".iid");
             let iprice = event.target.parentNode.querySelector(".iprice");
             //let iid = event.target.parentNode.querySelector(".iid");
-            //var show =
-            //    `
-            //                <tr id="dtr">
-            //                                <td>
-            //                                ${iid.innerHTML}
-            //                                </td>
-            //                                <td>
-            //                                ${event.target.value}
-            //                                </td>
-            //                                <td>
-            //                                ${iprice.innerHTML}
-            //                                </td>
-            //                                <td>
-            //                                   <img src="/img/icon/x.png" onclick="imgdelete()"/>
-            //                                   <p id="${count}" hidden>${iid.innerHTML}</p>
-            //                                </td>
-            //                 </tr>
-            //        `;
+            var show =
+                `
+                            <tr id="dtr">
+                                            <td>
+                                            ${iid.innerHTML}
+                                            </td>
+                                            <td>
+                                            ${event.target.value}
+                                            </td>
+                                            <td>
+                                            ${iprice.innerHTML}
+                                            </td>
+                                            <td>
+                                               <img src="/img/icon/x.png" onclick="imgdelete()"/>
+                                               <p id="${count}" hidden>${iid.innerHTML}</p>
+                                            </td>
+                             </tr>
+                    `;
             list.innerHTML += show;
 
 
