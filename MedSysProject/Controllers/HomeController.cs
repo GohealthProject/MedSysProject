@@ -57,40 +57,15 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult planComeparison()
-        {////方案比較(設計filter篩選方案)+更換圖片ok+加中文名稱ok+排除出現負數情況+調整where條件
-            int test = 3;
-            var projectprice = /*from p in _context.Projects.SelectMany(p => p.PlanRefs, (pj, pr) => new { pj, pr }).SelectMany(p => p.pr.Plan.PlanRefs, (pl, q) => new { pl.pr.Plan.PlanName, q.Project.ProjectPrice })*/
-                   from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
-                   .AsEnumerable()
-                       //from ppp in _context.Plans
-                   group p by p.Plan.PlanName into g
-                   //group p by p.PlanName into g 
-                   //select p;
-                   select new
-                   {
+        {////方案比較(設計filter篩選方案)+更換圖片ok+加中文名稱ok+排除出現負數情況+調整where條件ok
+            
 
-                       PlanName = g.Key,
-                       PlanPrice = g.Sum(p => p.Project.ProjectPrice)
-                   };
-
-            //var price = _context.Plans.Where(p => p.PlanId == test).SelectMany(p => p.PlanRefs, (j, c) => new { j.PlanName, c.Project }).GroupBy(p => p.PlanName).Select(p => new { PlanName = p.Key, PlanPrice = p.Sum(k => k.Project.ProjectPrice) });
-
-
-            var total = from p in projectprice
-                        from pp in _context.Plans
-
-                        select new
-                        {
-                            pp.PlanName,
-                            pp.PlanId,
-
-                            //p.PlanName,
-                            p.PlanPrice
-
-                        };
-            return View(total.ToList());
-            //return View(projectprice.ToList());
-            //return View(_context.Plans);
+            var projectpriceNew =
+                   _context.Plans.SelectMany(p => p.PlanRefs, (j, c) => new { j.PlanName, c.Project,c.PlanId })
+                   .GroupBy(p => p.PlanName).Select(p => new { PlanName = p.Key, PlanPrice = p.Sum(k => k.Project.ProjectPrice), PlanId = p.FirstOrDefault().PlanId });
+                   
+            return View(projectpriceNew.ToList());
+          
         }
 
 
@@ -222,7 +197,7 @@ namespace MedSysProject.Controllers
 
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
-        {////方案比較總計(總項+PDF產生)+篩選比較intersection+
+        {////方案比較總計(總項+PDF產生)ok+篩選比較intersection+
 
             if (planlist != null)
             {
@@ -449,10 +424,11 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  固定item高度+男女差異+價格ok+資料傳送型態可換(datatable)ok
+        { //放方案介紹  固定item高度ok+男女差異ok+價格ok+資料傳送型態可換(datatable)ok
 
             //vm方法
             List<CPlanViewModel> data = new List<CPlanViewModel>();
+            List<CPlanViewModel> dataNew = new List<CPlanViewModel>();
             var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
                        select pl;
 
@@ -465,7 +441,7 @@ namespace MedSysProject.Controllers
                     PlanId = plans.PlanId,
 
                 });
-                //data.Add(new CPlanViewModel() { plan=plans });
+               
             }
             var project = from pj in _context.PlanRefs.Where(p => p.PlanId == id)
                           select pj;
@@ -477,20 +453,27 @@ namespace MedSysProject.Controllers
                     
 
                 });
-                //data.Add(new CPlanViewModel() { planRef=projects });
+             
             }
-            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(i => i.PlanId == id))
-                       select it;
-
-            foreach (Item items in item)
+         
+            var item = _context.PlanRefs.Where(p => p.PlanId == id).SelectMany(p => p.Project.Items, (a, b) => new
+            {
+                b.Project.ProjectName,
+                b.Project.ProjectId,
+                b.ItemName,
+                b.ItemId
+            }) ;
+           
+      
+            foreach (var items in item)
             {
                 data.Add(new CPlanViewModel()
                 {
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                    //ProjectId = (int)items.ProjectId,
-                    ProjectName = items.Project.ProjectName,
-                    ProjectPrice = items.Project.ProjectPrice
+                    ProjectId = (int)items.ProjectId,
+                    ProjectName = items.ProjectName,
+                    
                 });
                 //data.Add(new CPlanViewModel() { item = items });
             }

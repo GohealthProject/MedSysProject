@@ -13,6 +13,8 @@ public partial class Plan
 
     public string PlanDescription { get; set; }
 
+    public string PlanImg { get; set; }
+
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new List<HealthReport>();
 
     public virtual ICollection<PlanRef> PlanRefs { get; set; } = new List<PlanRef>();
