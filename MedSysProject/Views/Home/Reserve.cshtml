@@ -7,6 +7,9 @@
 
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
     var order = ViewBag.order as Dictionary<string, string>;
+
+    string json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+    List<Item> list = JsonSerializer.Deserialize<List<Item>>(json); 
 }
 @*@model IEnumerable<MedSysProject.Models.Plan>*@
 @*@model IFormCollection
@@ -387,8 +390,8 @@
     //HttpContext.Session.SetString(CDictionary.SK_EMPLOYEE_LOGIN, json);
     @{
         MemberWarp m = new MemberWarp();
-        string? json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-        if (!string.IsNullOrEmpty(json))
+        string? json2 = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+        if (!string.IsNullOrEmpty(json2))
         {
              m = JsonSerializer.Deserialize<MemberWarp>(json);
         }
@@ -450,7 +453,7 @@
     var forminput = document.querySelector("#forminput").value
     
     var table = document.querySelector("#show")
-    table.innerHTML = forminput;
+    // table.innerHTML = forminput;
     //console.log(forminput)
     //console.log(table.innerHTML)
     //ttb.addEventListener("click", () => {
