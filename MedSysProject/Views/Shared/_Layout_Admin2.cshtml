@@ -497,9 +497,22 @@
     </div>
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <a class="scroll-to-top rounded" id="show-chat-window" style="margin-bottom:3em;">
+        <i class="fas fa-comment-dots"></i>
+    </a>
+
+    <a class="scroll-to-top rounded" href="">
         <i class="fas fa-angle-up"></i>
     </a>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window-container" id="chat-window-container" style="z-index:9999;position:fixed; bottom:1em; right:5em; width:40em; height:25em; background-color:white; border:solid; border-radius:15px;" hidden>
+        <!-- 放在#show-chat-window 旁邊 -->
+        <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+@*         <div class="chat-window-body" id="chat-window-body" style="display:flex; justify-content:center; align-content:center;">
+            <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+        </div> *@
+    </div>
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -557,6 +570,28 @@
     <script src="~/vendor/moment/moment.js"></script>
 
     <!-- Page Scripts -->
+    <script>
+        document.querySelector("#show-chat-window").addEventListener("click", function () {
+            if (document.querySelector("#chat-window-container").hidden == true) {
+                document.querySelector("#chat-window-container").hidden = false;
+            } else {
+                document.querySelector("#chat-window-container").hidden = true;
+            }
+        })
+
+        // function fetchChat() {
+        //     const url = "@Url.Content("~/signalrtest/chat")"
+
+        //     console.log(url);
+
+        //     fetch(url)
+        //         .then(res => res.text())
+        //         .then(data => {
+        //             document.querySelector("#chat-window-body").innerHTML = data;
+        //         })
+        // }
+    </script>
+
     @RenderSection("Scripts", required: false)
 
 </body>

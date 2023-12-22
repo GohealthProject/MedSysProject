@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MedSysProject.Models;
 
@@ -10,6 +11,6 @@ public partial class OrderPay
     public int PayId { get; set; }
 
     public string PayName { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

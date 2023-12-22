@@ -37,6 +37,8 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<MembersStatus> MembersStatuses { get; set; }
 
+    public virtual DbSet<Message> Messages { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -68,6 +70,10 @@ public partial class MedSysContext : DbContext
     public virtual DbSet<ReservedSub> ReservedSubs { get; set; }
 
     public virtual DbSet<ReturnProduct> ReturnProducts { get; set; }
+
+    public virtual DbSet<Room> Rooms { get; set; }
+
+    public virtual DbSet<RoomRef> RoomRefs { get; set; }
 
     public virtual DbSet<SubProjectBridge> SubProjectBridges { get; set; }
 
@@ -375,6 +381,28 @@ public partial class MedSysContext : DbContext
                 .HasColumnName("statusName");
         });
 
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.ToTable("Message");
+
+            entity.Property(e => e.MessageId).HasColumnName("MessageID");
+            entity.Property(e => e.EmployeeId).HasColumnName("employeeID");
+            entity.Property(e => e.MemberId).HasColumnName("memberID");
+            entity.Property(e => e.RoomId).HasColumnName("roomId");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.EmployeeId)
+                .HasConstraintName("FK_Message_Employees");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_Message_Members");
+
+            entity.HasOne(d => d.Room).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.RoomId)
+                .HasConstraintName("FK_Message_Room");
+        });
+
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.OrderId).HasName("PK_Order_1");
@@ -654,6 +682,36 @@ public partial class MedSysContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.ReturnProducts)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_ReturnProduct_Order");
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.ToTable("Room");
+        });
+
+        modelBuilder.Entity<RoomRef>(entity =>
+        {
+            entity.HasKey(e => e.RoombridgeId);
+
+            entity.ToTable("RoomRef");
+
+            entity.Property(e => e.RoombridgeId).HasColumnName("roombridgeId");
+            entity.Property(e => e.Employeeid).HasColumnName("employeeid");
+            entity.Property(e => e.Memberid).HasColumnName("memberid");
+            entity.Property(e => e.Roomid).HasColumnName("roomid");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Employeeid)
+                .HasConstraintName("FK_RoomRef_Employees");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Memberid)
+                .HasConstraintName("FK_RoomRef_Members");
+
+            entity.HasOne(d => d.Room).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Roomid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RoomRef_Room");
         });
 
         modelBuilder.Entity<SubProjectBridge>(entity =>
