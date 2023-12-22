@@ -32,34 +32,41 @@
     </div>
     <div class="card-body">
         <div>
-            <div class="row g-3">
-                @using (Html.BeginForm())
-                {
-
-                    @: 價格區間
-                    @: <div class="col-auto">最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
-                    @: <div class="col-auto">最大價格：@Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
-                    <div class="col-auto"><input type="submit" class="btn btn-primary" value="查詢" style="margin-top:.5em;" /></div>
-
-                    <div class="col-auto">
-                        @Html.Label("選擇類別：")
-                        @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
+    <div class="row g-3">
+        @using (Html.BeginForm())
+        {
+            <div class="row align-items-end" style="margin-left: 5px;">
+                        <div class="row align-items-end" style="margin-left: 18px;">
+                            <div class="col-auto">
+                                最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control" })
+                            </div>
+                            <div class="col-auto">
+                                最大價格：@Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control" })
+                            </div>
+                            <div class="col-auto">
+                                <input type="submit" class="btn btn-primary" value="查詢" />
+                            </div>
+                            <div class="col-auto">
+                                排序方式：
+                                <a href="@Url.Action("Product", new { sortOrder = "asc"})">價格從低到高</a> |
+                                <a href="@Url.Action("Product", new { sortOrder = "price_desc"})">價格從高到低</a>
+                            </div>
+                        </div>
+            </div>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            @Html.Label("選擇類別：")
+                            @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
+                                <i class="fas fa-plus"></i> 新增產品
+                            </a>
+                        </div>
                     </div>
-
-                }
-            </div>
-            <div class="col-auto">
-                排序方式：
-                <a href="@Url.Action("Product", new { sortOrder = "asc"})">價格從低到高</a> |
-                <a href="@Url.Action("Product", new { sortOrder = "price_desc"})">價格從高到低</a>
-            </div>
-            
-            <p class="mt-3">
-                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </p>
-        </div>
+        }
+    </div>
+</div>
 
         <table class="table table-hover">
             <!-- 表格頭部 -->
