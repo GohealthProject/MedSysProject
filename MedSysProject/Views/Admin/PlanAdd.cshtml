@@ -77,7 +77,9 @@
                                         @{
                                             if (item.PlanImg != null)
                                             {
-                                                <img src="@item.PlanImg" width="100" height="100" />
+                                                string url = Url.Content("~/img/PersonalPlan/");
+                                                string fileName = item.PlanImg;
+                                                <img src="@url@fileName" width="100" height="100" />
                                             }
                                         }
 
@@ -188,7 +190,7 @@
                                 <label class="control-label">方案圖片</label>
                                 <input type="file" class="form-control" id="CinputImage" name="CPlanImage" required />
                                 <div class="invalid-feedback">請輸入方案圖片</div>
-                                <img src="" id="CimgPreview" />
+                                <img src="" id="CimgPreview" width="450" />
                             </div>
 
 
@@ -405,11 +407,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                                <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                                                <label class="form-check-label" for="${newId}">
-                                                                    <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
-                                                                </label>
-                                                            `;
+                                                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                                                        <label class="form-check-label" for="${newId}">
+                                                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
+                                                                        </label>
+                                                                    `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -440,11 +442,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                                    <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                                                    <label class="form-check-label" for="${newId}">
-                                                                        <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
-                                                                    </label>
-                                                                `;
+                                                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                                            <label class="form-check-label" for="${newId}">
+                                                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
+                                                                            </label>
+                                                                        `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -500,7 +502,7 @@
         var data = new FormData(myForm);
         console.log(data)
 
-        const response = await fetch('https://localhost:7203/api/Plan', {
+        const response = await fetch('https://localhost:7203/api/Upload/Plan', {
             method: 'POST',
             body: data
         });
