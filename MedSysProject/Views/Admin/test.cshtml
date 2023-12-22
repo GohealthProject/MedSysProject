@@ -65,6 +65,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">我是內容</h1>
+                        <button type="button" class="btn btn-danger" id="alledit">一鍵XX</button>
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal" @*aria-label="Close"*@>×</button>
             </div>
             <div class="modal-body">
@@ -160,6 +162,8 @@
         alert(text.value)
 
     }
+
+    //class onclick修改
    function editt()
    {
         var ta = event.target.closest("tr")
@@ -233,6 +237,14 @@
         ttt.ajax.reload();
    }
    
+   ///////一鍵///////
+   var alledit = document.querySelector("#alledit")
+   
+   alledit.addEventListener("click",()=>{
+        var allvalue = tableD.querySelectorAll("tr")
+        //console.log(allvalue[i].childNodes[1].innerText)
+
+   })
 
    ///////送出/////////
     async function send(event) {
@@ -246,7 +258,7 @@
             body: form,
             method: "POST",
 
-        })/*.then(alert("已修改"));*/
+        }).then(alert("已修改"));
         const data = await response.text();
         //alert(`data${data}`);
         //window.location.href = ('@Url.Content("~/Home/xxx")');
@@ -255,6 +267,8 @@
     //$table.bootstrapTable('refresh')
     var myModal = document.getElementById('e04');
     var fku = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+
+
     myModal.addEventListener("click",(e)=>{
         edit()
     fku.show();

@@ -343,8 +343,7 @@ public partial class MedSysContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("memberPassword");
             entity.Property(e => e.MemberPhone)
-                .IsRequired()
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .IsFixedLength()
                 .HasColumnName("memberPhone");
             entity.Property(e => e.StatusId).HasColumnName("statusID");
@@ -357,7 +356,6 @@ public partial class MedSysContext : DbContext
 
             entity.HasOne(d => d.Status).WithMany(p => p.Members)
                 .HasForeignKey(d => d.StatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Members_MembersStatus");
 
             entity.HasOne(d => d.Tax).WithMany(p => p.Members)
@@ -480,6 +478,7 @@ public partial class MedSysContext : DbContext
 
             entity.Property(e => e.PlanId).HasColumnName("planId");
             entity.Property(e => e.PlanDescription).HasColumnName("planDescription");
+            entity.Property(e => e.PlanImg).HasColumnName("planImg");
             entity.Property(e => e.PlanName)
                 .IsRequired()
                 .HasColumnName("planName");

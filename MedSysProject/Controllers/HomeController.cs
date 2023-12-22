@@ -22,10 +22,11 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.CodeAnalysis;
 using Microsoft.Build.Evaluation;
 using System.Text.Json.Serialization.Metadata;
-using Newtonsoft.Json;
+
 using Google.Apis.Json;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace MedSysProject.Controllers
 {
@@ -622,13 +623,26 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Customcompare(int planid)
         {
+
+
             //todo 尚未完成:  測試比較後傳送資料
+            //select plan item
             ViewBag.Planid = planid;
+
+
+            List<Item> CustomerItem = new List<Item>();
+            CustomerItem = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+
+
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_CUSTOMER_ITEMLIST))
+            {
+                string json = System.Text.Json.JsonSerializer.Serialize(CustomerItem);
+                HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json);
+            }
+
             
 
-           List<Item> list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
 
-            ViewBag.Items = list;
 
             var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
             _context.Plans.Load();
@@ -861,6 +875,103 @@ namespace MedSysProject.Controllers
                 _logger.LogError("Error fetching projects: " + ex.Message);
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        public IActionResult loadItem()
+        {
+
+            string json =HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult addItem()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+            var form = Request.Form;
+            var id = int.Parse(form["id"]);
+            var item = _context.Items.Find(id);
+
+            list.Add(item);
+
+            string json2 = System.Text.Json.JsonSerializer.Serialize(list);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
+            return Ok();
+        }
+        public IActionResult removeItem(int id)
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+            foreach(var item in list)
+            {
+                if(item.ItemId == id)
+                {
+                    list.Remove(item);
+                    break;
+                }
+            }
+            string json2 = System.Text.Json.JsonSerializer.Serialize(list);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
+
+
+            return Ok();
+        }
+        [HttpPost]
+        public IActionResult enterResult()
+        {
+            var form = Request.Form;
+
+            // const form  = new formdata();
+            //from.append("formReportId","2255,2256,2257,2258,2259,";
+            //form.append("formResult","100,200,300,400,500");
+
+            //let url = `/Home/enterResult`;
+            //const response = await fetch(url,{
+            //  method:"POST",
+            //  body:form,
+            //})
+            string formReportId = form["reportids"];
+            string formResult = form["result"];
+
+            
+            string reportid = "2255,2256,2257,2258,2259,";
+            
+            List<string> relist = formReportId.Split(",").ToList();
+            List<int> ids = new List<int>();
+
+            for(int i =0; i < relist.Count() - 1; i++)
+            {
+                ids.Add(int.Parse(relist[i]));
+            }
+
+            List<string> results = formResult.Split(",").ToList();
+            List<string> resultss = new List<string>();
+            for(int j = 0; j < results.Count() - 1; j++)
+            {
+                resultss.Add(results[j]);
+            }
+            int count = 0;
+            foreach(var item in ids)
+            {
+                var red = _context.ReportDetails.Find(item);
+                red.Result = resultss[count];
+                count++;
+            }
+
+            _context.SaveChanges();
+
+
+            string str = "100,200,300,400,500,";
+
+            return Ok();
         }
 
     }

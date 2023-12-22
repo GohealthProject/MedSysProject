@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
-    string s = Model.UnitPrice.ToString();
-    
+    int s = (int)((int)(Model.UnitPrice) * 0.8);
+
 }
 <section class="breadcrumbs">
     <div class="container">
@@ -68,7 +68,7 @@
                     <ul>
                         <li class="fs-4"><strong>分類</strong>: Web design</li>
                         <li class="fs-4"><strong>出貨商</strong>: ASU Company</li>
-                        <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s.TrimEnd('0').TrimEnd('.')</span></li>
+                        <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s</span></li>
                         <li class="fs-4"><strong>證號</strong>: <a href="#">@Model.License</a></li>
                     </ul>
                 </div>
@@ -410,7 +410,8 @@
                 console.log(item);
                 const productID = item.productId;
                 const productName = item.productName.substring(0,16);
-                const productPrice = item.unitPrice;
+                const productPrice = (item.unitPrice * 0.8).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+               
                 const productImage = item.fimagePath.split(",")[0];
                 console.log(productImage);
                 let html =
