@@ -12,7 +12,15 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>自選方案 @ViewBag.Planid</h2>
+            <h2 id="h2"> 
+                @{
+                    var aa = Context.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+                    var pp = System.Text.Json.JsonSerializer.Deserialize<Plan>(aa);
+
+
+                }
+                @pp.PlanName
+            </h2>
             <ol>
                 <li><a href="~/Home/Index">回到首頁</a></li>
                 <li><a href="~/Home/planComeparison">方案介紹</a></li>
@@ -298,7 +306,7 @@
 
 @section Scripts{
     <script>
-        //getPlan();
+        ///////////////getPlan();
         //取得
         function getPlan(){
         //$("#tbt").click(function () {
@@ -381,6 +389,7 @@
 
 
             let iprice = event.target.parentNode.querySelector(".iprice");
+            let price = iprice.innerText
             //let iid = event.target.parentNode.querySelector(".iid");
             var show =
                 `
@@ -403,19 +412,21 @@
             list.innerHTML += show;
 
             console.log(id);
+            console.log(price);
             // items.push(iid.innerHTML);
 
             // console.log(items);
-            addItem(id);
+            addItem(id,price);
 
             // count++
         }
 
-        async function addItem(id){
+        async function addItem(id,price){
             let url = `/Home/addItem`
 
             let form = new FormData();
             form.append("id", id);
+            form.append("price",price)
 
             const response = await fetch(url, {
                 method:"POST",

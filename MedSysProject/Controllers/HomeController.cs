@@ -27,6 +27,7 @@ using Google.Apis.Json;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace MedSysProject.Controllers
 {
@@ -550,13 +551,19 @@ namespace MedSysProject.Controllers
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { 
-            //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
+        {
 
             
-                //step1 : 網頁導入傳值到前端
+            var temp = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            var ss = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(temp);
+            ViewBag.member = ss.MemberId;
 
-                var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
+
+
+            //step1 : 網頁導入傳值到前端
+
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
                 //需填入你的網址
                 var website = $"https://localhost:7203/";
                 var order = new Dictionary<string, string>
@@ -598,7 +605,7 @@ namespace MedSysProject.Controllers
             ViewBag.item = item["item"];
             ViewBag.mid = item["Mid"];
             ViewBag.pid = item["Pid"];
-            ViewBag.member = HttpContext.Session.Get(CDictionary.SK_MEMBER_LOGIN);
+            
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
@@ -645,6 +652,9 @@ namespace MedSysProject.Controllers
             //todo 尚未完成:  測試比較後傳送資料
             //select plan item
             ViewBag.Planid = planid;
+            Plan s = _context.Plans.Where(p => p.PlanId == planid).FirstOrDefault();
+            string pid = System.Text.Json.JsonSerializer.Serialize<Plan>(s);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_PLAN, pid);
 
 
             List<Item> CustomerItem = new List<Item>();
@@ -909,17 +919,20 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult addItem()
         {
+            ////itemID////////
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
 
             var form = Request.Form;
             var id = int.Parse(form["id"]);
             var item = _context.Items.Find(id);
-
+           
             list.Add(item);
 
             string json2 = System.Text.Json.JsonSerializer.Serialize(list);
             HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
+
+          
             return Ok();
         }
         public IActionResult removeItem(int id)
@@ -941,6 +954,54 @@ namespace MedSysProject.Controllers
 
             return Ok();
         }
+        public IActionResult rsv(int id)
+        {
+            var temp = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+            var p = System.Text.Json.JsonSerializer.Deserialize<Plan>(temp);
+            int pid = p.PlanId;////
+            Reserve rs = new Reserve();
+            rs.MemberId = id;
+            rs.PlanId = pid;////
+            rs.ReserveDate = DateTime.Now.ToShortDateString();
+            rs.ReserveState = "預約中";
+            rs.PaymentStatus = 0;
+
+            _context.Reserves.Add(rs);
+            _context.SaveChanges();
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+            int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n=>n.ReserveId).LastOrDefault().ReserveId;
+            foreach (var item in list)
+            {
+                ReservedSub rss = new ReservedSub();
+                rss.ReservedId = rid;
+
+                rss.ItemId = item.ItemId;
+                _context.ReservedSubs.Add(rss);
+            }
+            
+            _context.SaveChanges();
+            HealthReport hr = new HealthReport();
+            hr.MemberId = id;
+            hr.PlanId = pid;
+            hr.ReportDate = null;
+            hr.ReserveId = rid;
+            hr.Paymentstatus = 0;
+
+            _context.HealthReports.Add(hr);
+            _context.SaveChanges();
+            int hrid = _context.HealthReports.Where(p=>p.MemberId == id).OrderBy(n=>n.ReportId).Last().ReportId;
+            foreach (var item in list)
+            {
+                ReportDetail rdt = new ReportDetail();
+                rdt.ReportId = hrid;/////
+                rdt.ItemId = item.ItemId;
+                _context.ReportDetails.Add(rdt);
+            }
+            _context.SaveChanges();
+            return Ok();
+        }
+
         [HttpPost]
         public IActionResult enterResult()
         {
