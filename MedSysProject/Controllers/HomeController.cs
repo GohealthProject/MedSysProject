@@ -643,12 +643,14 @@ namespace MedSysProject.Controllers
             //todo 尚未完成:  測試比較後傳送資料
             //select plan item
             ViewBag.Planid = planid;
-           // var pitem = _context.Items.Where(p => p.Project.PlanRefs)
+            //var pitem = from s in _context.Items
+            //            where s.Project.PlanRefs[0].PlanId == planid
+            //            select s;
 
 
-            
 
-           List<Item> list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+
+           List < Item > list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
 
             ViewBag.Items = list;
 
