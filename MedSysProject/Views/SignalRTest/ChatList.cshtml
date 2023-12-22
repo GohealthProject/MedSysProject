@@ -255,39 +255,39 @@
                     }
 
                 /*                     .chat-container .right .write .write-link.attach:before {
-                                                                                                                display: inline-block;
-                                                                                                                float: left;
-                                                                                                                width: 20px;
-                                                                                                                height: 42px;
-                                                                                                                content: '';
-                                                                                                                background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
-                                                                                                                background-repeat: no-repeat;
-                                                                                                                background-position: center;
-                                                                                                            } */
+                                                                                                                                        display: inline-block;
+                                                                                                                                        float: left;
+                                                                                                                                        width: 20px;
+                                                                                                                                        height: 42px;
+                                                                                                                                        content: '';
+                                                                                                                                        background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
+                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                        background-position: center;
+                                                                                                                                    } */
 
                 /*                     .chat-container .right .write .write-link.smiley:before {
-                                                                                                                display: inline-block;
-                                                                                                                float: right;
-                                                                                                                width: 20px;
-                                                                                                                height: 42px;
-                                                                                                                margin-right: 11px;
-                                                                                                                content: '';
-                                                                                                                background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
-                                                                                                                background-repeat: no-repeat;
-                                                                                                                background-position: center;
-                                                                                                            } */
+                                                                                                                                        display: inline-block;
+                                                                                                                                        float: right;
+                                                                                                                                        width: 20px;
+                                                                                                                                        height: 42px;
+                                                                                                                                        margin-right: 11px;
+                                                                                                                                        content: '';
+                                                                                                                                        background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
+                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                        background-position: center;
+                                                                                                                                    } */
 
                 /*                     .chat-container .right .write .write-link.send:before {
-                                                                                                                display: inline-block;
-                                                                                                                float: right;
-                                                                                                                width: 20px;
-                                                                                                                height: 42px;
-                                                                                                                margin-right: 11px;
-                                                                                                                content: '';
-                                                                                                                background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
-                                                                                                                background-repeat: no-repeat;
-                                                                                                                background-position: center;
-                                                                                                            } */
+                                                                                                                                        display: inline-block;
+                                                                                                                                        float: right;
+                                                                                                                                        width: 20px;
+                                                                                                                                        height: 42px;
+                                                                                                                                        margin-right: 11px;
+                                                                                                                                        content: '';
+                                                                                                                                        background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
+                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                        background-position: center;
+                                                                                                                                    } */
 
                 .chat-container .right .bubble {
                     font-size: 16px;
@@ -424,173 +424,11 @@
     <div class="wrapper" style="max-width: 100%; max-height:100%;">
         <div class="chat-container">
             <div class="left">
-                <ul class="people">
-                    <li class="person" data-chat="person1">
-                        <img src="https://bestdori.com/assets/jp/characters/resourceset/res036003_rip/card_after_training.png" alt="">
-                        <span class="name">安安</span>
-                        <span class="time"></span>
-                        <span class="preview"></span>
-                    </li>
-                    <li class="person active" data-chat="person2">
-                        <img src="https://bestdori.com/assets/jp/characters/resourceset/res036003_rip/card_after_training.png" alt="">
-                        <span class="name">順順</span>
-                        <span class="time"></span>
-                        <span class="preview"></span>
-                    </li>
+                <ul class="people" id="employee-online-list">
                 </ul>
             </div>
             <div class="right">
-                <div class="top"><span>傳送訊息給: <span class="name">順順</span></span></div>
-                <div class="chat" data-chat="person1">
-                    <div class="conversation-start">
-                        <span>Today, 6:48 AM</span>
-                    </div>
-                    <div class="bubble you">
-                        Hello,
-                    </div>
-                    <div class="bubble you">
-                        it's me.
-                    </div>
-                    <div class="bubble you">
-                        I was wondering...
-                    </div>
-                    <div class="bubble you">
-                        Hello,
-                    </div>
-                    <div class="bubble you">
-                        it's me.
-                    </div>
-                    <div class="bubble you">
-                        I was wondering...
-                    </div>
-                    <div class="bubble you">
-                        Hello,
-                    </div>
-                    <div class="bubble me">
-                        it's me.
-                    </div>
-                    <div class="bubble me">
-                        I was wondering...
-                    </div>
-                    <div class="bubble me">
-                        Hello,
-                    </div>
-
-
-                </div>
-                <div class="chat active-chat" data-chat="person2" id="aaatest">
-                    <div class="conversation-start">
-                        <span>Today, 5:38 PM</span>
-                    </div>
-                    <div class="bubble you">
-                        Hello, can you hear me?
-                    </div>
-                    <div class="bubble you">
-                        I'm in California dreaming
-                    </div>
-                    <div class="bubble me">
-                        ... about who we used to be.
-                    </div>
-                    <div class="bubble me">
-                        Are you serious?
-                    </div>
-                    <div class="bubble you">
-                        When we were younger and free...
-                    </div>
-                    <div class="bubble you">
-                        I've forgotten how it felt before
-                    </div>
-                </div>
-                <div class="chat" data-chat="person3">
-                    <div class="conversation-start">
-                        <span>Today, 3:38 AM</span>
-                    </div>
-                    <div class="bubble you">
-                        Hey human!
-                    </div>
-                    <div class="bubble you">
-                        Umm... Someone took a shit in the hallway.
-                    </div>
-                    <div class="bubble me">
-                        ... what.
-                    </div>
-                    <div class="bubble me">
-                        Are you serious?
-                    </div>
-                    <div class="bubble you">
-                        I mean...
-                    </div>
-                    <div class="bubble you">
-                        It’s not that bad...
-                    </div>
-                    <div class="bubble you">
-                        But we’re probably gonna need a new carpet.
-                    </div>
-                </div>
-                <div class="chat" data-chat="person4">
-                    <div class="conversation-start">
-                        <span>Yesterday, 4:20 PM</span>
-                    </div>
-                    <div class="bubble me">
-                        Hey human!
-                    </div>
-                    <div class="bubble me">
-                        Umm... Someone took a shit in the hallway.
-                    </div>
-                    <div class="bubble you">
-                        ... what.
-                    </div>
-                    <div class="bubble you">
-                        Are you serious?
-                    </div>
-                    <div class="bubble me">
-                        I mean...
-                    </div>
-                    <div class="bubble me">
-                        It’s not that bad...
-                    </div>
-                </div>
-                <div class="chat" data-chat="person5">
-                    <div class="conversation-start">
-                        <span>Today, 6:28 AM</span>
-                    </div>
-                    <div class="bubble you">
-                        Wasup
-                    </div>
-                    <div class="bubble you">
-                        Wasup
-                    </div>
-                    <div class="bubble you">
-                        Wasup for the third time like is <br>you blind bitch
-                    </div>
-
-                </div>
-                <div class="chat" data-chat="person6">
-                    <div class="conversation-start">
-                        <span>Monday, 1:27 PM</span>
-                    </div>
-                    <div class="bubble you">
-                        So, how's your new phone?
-                    </div>
-                    <div class="bubble you">
-                        You finally have a smartphone :D
-                    </div>
-                    <div class="bubble me">
-                        Drake?
-                    </div>
-                    <div class="bubble me">
-                        Why aren't you answering?
-                    </div>
-                    <div class="bubble you">
-                        howdoyoudoaspace
-                    </div>
-                </div>
-                <div class="write">
-                    @* <a href="javascript:;" class="write-link attach"></a> *@
-                    <input type="text" placeholder="輸入訊息..." id="chat-messagebox">
-                    <a href="javascript:;" class="btn btn-primary"><i class="fas fa-smile"></i></a>
-                    <a href="javascript:;" class="btn btn-success" id="chat-btnsend"><i class="fas fa-paper-plane"></i></a>
-                </div>
+                <p>請選擇聊天對象</p>
             </div>
         </div>
     </div>
@@ -598,48 +436,17 @@
 
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
-        // singalR
-        var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-        connection.on("ReceiveMessage", function (userid, user, message) {
-            var msg = message;
-            // var encodedMsg = user + " says " + msg;
-            var li = document.createElement("li");
-            li.textContent = msg;
-            document.getElementById("aaatest").innerHTML += `<div class="bubble you">${msg}</div>`
-        });
-
-        connection.start().then(function () {
-            connection.invoke("SendMessage", "1", "James", "Hello").catch(function (err) {
-                return console.error(err.toString());
-            });
-            console.log("connection start");
-        }).catch(function (err) {
-            return console.error(err.toString());
-        });
-
-        document.getElementById("chat-btnsend").addEventListener("click", function (event) {
-            if (document.getElementById("chat-messagebox").value == "") {
-                return;
+        connection.on("RefreshEmployeeOnlineList", function (employeeOnlineList) {
+            var employeeOnlineListHtml = "";
+            for (var i = 0; i < employeeOnlineList.length; i++) {
+                employeeOnlineListHtml += "<li class='person' data-employee-id='" + employeeOnlineList[i].EmployeeID + "' data-employee-name='" + employeeOnlineList[i].EmployeeName + "'><img src='https://s11.postimg.org/icusxmuur/img1.jpg' alt='' />" + employeeOnlineList[i].EmployeeName + "<span class='time'>2:09 PM</span><span class='preview'>I was wondering...</span></li>";
             }
-
-            let text = document.getElementById("chat-messagebox").value;
-            document.getElementById("chat-messagebox").value = "";
-
-            document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
-
-            document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
-
-            connection.invoke("SendMessage", "1", "James", text).catch(function (err) {
-                return console.error(err.toString());
-            });
+            $("#employee-online-list").html(employeeOnlineListHtml);
         });
 
-        document.querySelector("#chat-messagebox").addEventListener("keypress", function (event) {
-            if (event.keyCode === 13) {
-                document.querySelector("#chat-btnsend").click();
-            }
-        });
+
     </script>
 
 

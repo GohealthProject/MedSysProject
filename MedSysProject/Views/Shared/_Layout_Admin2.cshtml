@@ -508,6 +508,14 @@
     <!-- 聊天視窗 -->
     <div class="chat-window-container" id="chat-window-container" style="z-index:9999;position:fixed; bottom:1em; right:5em; width:40em; height:25em; background-color:white; border:solid; border-radius:15px;" hidden>
         <!-- 放在#show-chat-window 旁邊 -->
+        @{
+            if (Context.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+            {
+                string json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
+                Employee emp = JsonSerializer.Deserialize<Employee>(json);
+                <iframe src="~/signalrtest/chatlist?employeeid=@emp.EmployeeId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+            }
+        }
         <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
 @*         <div class="chat-window-body" id="chat-window-body" style="display:flex; justify-content:center; align-content:center;">
             <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>

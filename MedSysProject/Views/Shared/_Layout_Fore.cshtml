@@ -139,52 +139,19 @@
     </div>
 
     <!-- chat room window -->
-    <div class="chatroom-window position-fixed bottom-0 end-0" id="chatroom-window" style="margin-bottom: 4rem;margin-right: 4rem;width: 267px;height: 364px;background-color: antiquewhite;border: double;border-radius: 15px;" hidden>
-        <div class="chatroom-window-header">
-            <div class="chatroom-window-header-title">
-                <img src="/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
-                <span>GO健康客服</span>
-            </div>
-            <div class="chatroom-window-header-close" onclick="showChatroomWindow" style="position: absolute;right: 0;">
-                <i class="fas fa-times"></i>
-            </div>
-        </div>
-        <div class="chatroom-window-body">
-            <div class="chatroom-window-body-message" id="chat-message-body">
-                @*                 <div class="chatroom-window-body-message-time">
-                <span>2021/10/10 10:10</span>
-                </div>
-                <div class="chatroom-window-body-message-content">
-                <span>您好，有什麼可以幫助您的嗎？</span>
-                </div>
-                </div> *@
-                @*             <div class="chatroom-window-body-message">
-                <div class="chatroom-window-body-message-time">
-                <span>2021/10/10 10:10</span>
-                </div>
-                <div class="chatroom-window-body-message-content">
-                <span>您好，有什麼可以幫助您的嗎？</span>
-                </div>
-                </div>
-                <div class="chatroom-window-body-message">
-                <div class="chatroom-window-body-message-time">
-                <span>2021/10/10 10:10</span>
-                </div>
-                <div class="chatroom-window-body-message-content">
-                <span>您好，有什麼可以幫助您的嗎？</span>
-                </div>
-                </div> *@
-
-            </div>
-            <div class="chatroom-window-footer" style="position: absolute;bottom: 0;">
-                <div class="d-inline chatroom-window-footer-input">
-                    <input type="text" id="chat-text" placeholder="請輸入訊息...">
-                </div>
-                <div class="d-inline chatroom-window-footer-send">
-                    <i class="fas fa-paper-plane"></i>
-                </div>
-            </div>
-        </div>
+    <div class="chatroom-window position-fixed bottom-0 end-0" id="chatroom-window" style="margin-bottom: 4rem;margin-right: 4rem;width:40em; height:25em;background-color: antiquewhite;border: double;border-radius: 15px;" hidden>
+        @{
+            if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            {
+                <p>請先登入會員</p>
+            }
+            else
+            {
+                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+                <iframe src="~/signalrtest/chatlist?memberid=@m.MemberId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+            }
+        }
     </div>
 
     <footer id="footer">
@@ -254,132 +221,41 @@
         })
 
         function showChatroomWindow() {
-            if (document.querySelector("#chatroom-window").hidden == false) {
+            if (document.querySelector("#chatroom-window").hidden == true) {
+                document.querySelector("#chatroom-window").hidden = false;
+                document.querySelector("#showchatnofitation").hidden = true;
+            }
+            else {
                 document.querySelector("#chatroom-window").hidden = true;
-                return;
             }
-            var datetime = new Date();
-            datetime = Date.now();
-            $('#showchatnofitation').attr('hidden', true);
-            document.querySelector("#chatroom-window").hidden = false;
-            document.querySelector("#chat-text").focus();
-            document.querySelector('#chat-message-body').innerHTML = `
-                                                                                                                                    <div class="chatroom-window-body-message-time">
-                                                                                                                                        <span>${datetime} (員工)James</span>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="chatroom-window-body-message-content">
-                                                                                                                                        <span style="color:red;">您好，有什麼可以幫助您的嗎？</span>
-                                                                                                                                    </div>`
-        };
+        }
 
-        document.getElementById('chat-text').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                console.log('Enter pressed');
-                let text = document.getElementById('chat-text').value;
-                console.log(text);
-                document.getElementById('chat-text').value = "";
+        // // singalR
+        // var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
 
-                var datetime = new Date();
-                datetime = Date.now();
-                document.querySelector('#chat-message-body').innerHTML += `
-                                                                                                                                <div class="chatroom-window-body-message">
-                                                                                                                                    <div class="chatroom-window-body-message-time">
-                                                                                                                                        <span>${datetime}</span>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="chatroom-window-body-message-content">
-                                                                                                                                        <span>${text}</span>
-                                                                                                                                    </div>
-                                                                                                                                </div>`
+        // connection.on("ReceiveMessage", function (userId, user, message) {
+        //     var datetime = new Date();
+        //     datetime = Date.now();
+        //     document.querySelector('#chat-message-body').innerHTML += `
+        //                                                                                                                                                 <div class="chatroom-window-body-message">
+        //                                                                                                                                                     <div class="chatroom-window-body-message-time">
+        //                                                                                                                                                            <span>${datetime} (員工)James</span>
+        //                                                                                                                                                     </div>
+        //                                                                                                                                                     <div class="chatroom-window-body-message-content">
+        //                                                                                                                                                        <span style="color:red;">${message}</span>
+        //                                                                                                                                                       </span>
+        //                                                                                                                                                     </div>
+        //                                                                                                                                                 </div>`
+        // });
 
-
-            }
-        });
-
-        // 按z彈出通知
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'z') {
-                $('#showchatnofitation').removeAttr('hidden');
-            }
-        });
-
-        // 按x傳入假客服訊息1
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'x') {
-                var datetime = new Date();
-                datetime = Date.now();
-                document.querySelector('#chat-message-body').innerHTML += `
-                                                                                                                                <div class="chatroom-window-body-message">
-                                                                                                                                    <div class="chatroom-window-body-message-time">
-                                                                                                                                           <span>${datetime} (員工)James</span>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="chatroom-window-body-message-content">
-                                                                                                                                       <span style="color:red;">不好意思，讓您有這樣的體驗。我們會再去做改進，感謝您的回報。</span>
-                                                                                                                                    </div>
-                                                                                                                                </div>`
-            }
-        });
-
-        // 按c傳入假客服訊息2
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'c') {
-                var datetime = new Date();
-                datetime = Date.now();
-                document.querySelector('#chat-message-body').innerHTML += `
-                                                                                                                                        <div class="chatroom-window-body-message">
-                                                                                                                                            <div class="chatroom-window-body-message-time">
-                                                                                                                                                   <span>${datetime} (員工)James</span>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="chatroom-window-body-message-content">
-                                                                                                                                               <span style="color:red;">謝謝，我們會盡力改進，請問還有什麼服務的嗎?</span>
-                                                                                                                                            </div>
-                                                                                                                                        </div>`
-            }
-        });
-
-        // 按v傳入假客服訊息2
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'v') {
-                var datetime = new Date();
-                datetime = Date.now();
-                document.querySelector('#chat-message-body').innerHTML += `
-                                                                                                                                                <div class="chatroom-window-body-message">
-                                                                                                                                                    <div class="chatroom-window-body-message-time">
-                                                                                                                                                           <span>${datetime} (員工)James</span>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div class="chatroom-window-body-message-content">
-                                                                                                                                                       <span style="color:red;">好的，再見。</span>
-                                                                                                                                                      </span>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>`
-            }
-        });
-
-        // singalR
-        var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
-
-        connection.on("ReceiveMessage", function (userId, user, message) {
-            var datetime = new Date();
-            datetime = Date.now();
-            document.querySelector('#chat-message-body').innerHTML += `
-                                                                                                                                                <div class="chatroom-window-body-message">
-                                                                                                                                                    <div class="chatroom-window-body-message-time">
-                                                                                                                                                           <span>${datetime} (員工)James</span>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div class="chatroom-window-body-message-content">
-                                                                                                                                                       <span style="color:red;">${message}</span>
-                                                                                                                                                      </span>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>`
-        });
-
-        connection.start().then(function () {
-            connection.invoke("SendMessage", "1", "James", "Hello").catch(function (err) {
-                return console.error(err.toString());
-            });
-            console.log("connection start");
-        }).catch(function (err) {
-            return console.error(err.toString());
-        });
+        // connection.start().then(function () {
+        //     connection.invoke("SendMessage", "1", "James", "Hello").catch(function (err) {
+        //         return console.error(err.toString());
+        //     });
+        //     console.log("connection start");
+        // }).catch(function (err) {
+        //     return console.error(err.toString());
+        // });
 
     </script>
 </body>
