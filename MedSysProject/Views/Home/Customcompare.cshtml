@@ -11,7 +11,7 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>自選方案</h2>
+            <h2>自選方案 @ViewBag.Planid</h2>
             <ol>
                 <li><a href="~/Home/Index">回到首頁</a></li>
                 <li><a href="~/Home/planComeparison">方案介紹</a></li>
@@ -304,11 +304,12 @@
         //取得
         function getPlan(){
         //$("#tbt").click(function () {
-            $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
+            var url = "https://localhost:7078/api/CPlan"
+            $.get(url+`/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`, function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var datarr = JSON.parse(data)
                 var tbody = document.querySelector("#ilist")
-
+                alert(url + `/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`)
 
 
                 console.log(datarr)
