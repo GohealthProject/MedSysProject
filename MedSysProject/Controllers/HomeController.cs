@@ -535,7 +535,9 @@ namespace MedSysProject.Controllers
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
         {
-
+              ///////////////////todo controll處理 綠界所需/////////
+       //TradeDesc.value = `健檢套餐:${ @pp.PlanName}`
+       // ItemName.value = @pp.PlanName *@
             
             var temp = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             var ss = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(temp);
@@ -937,8 +939,12 @@ namespace MedSysProject.Controllers
 
             return Ok();
         }
-        public IActionResult rsv(int id)
+        public IActionResult rsv(/*int id*/)
         {
+            var form = Request.Form;
+            var id = int.Parse(form["mid"]);
+            var date = form["date"];
+
             var temp = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
             var p = System.Text.Json.JsonSerializer.Deserialize<Plan>(temp);
             int pid = p.PlanId;////
@@ -953,7 +959,7 @@ namespace MedSysProject.Controllers
             _context.SaveChanges();
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
-            int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n=>n.ReserveId).LastOrDefault().ReserveId;
+            int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n => n.ReserveId).LastOrDefault().ReserveId;
             foreach (var item in list)
             {
                 ReservedSub rss = new ReservedSub();
@@ -962,7 +968,7 @@ namespace MedSysProject.Controllers
                 rss.ItemId = item.ItemId;
                 _context.ReservedSubs.Add(rss);
             }
-            
+
             _context.SaveChanges();
             HealthReport hr = new HealthReport();
             hr.MemberId = id;
@@ -973,7 +979,7 @@ namespace MedSysProject.Controllers
 
             _context.HealthReports.Add(hr);
             _context.SaveChanges();
-            int hrid = _context.HealthReports.Where(p=>p.MemberId == id).OrderBy(n=>n.ReportId).Last().ReportId;
+            int hrid = _context.HealthReports.Where(p => p.MemberId == id).OrderBy(n => n.ReportId).Last().ReportId;
             foreach (var item in list)
             {
                 ReportDetail rdt = new ReportDetail();

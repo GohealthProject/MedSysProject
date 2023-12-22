@@ -372,10 +372,31 @@
         <!--step2 : 收到後端的值印出來-->
         @foreach (var key in @Model.Keys.ToList())
         {
-            @(key) <input type="text" name="@key" value="@Model[key]" />
+            @*
+            if (key == "TradeDesc")
+            {
+                @(key) <input type="text" name="@key" value="@Model[key]" />
+            }
+            else
+            {
+                @(key) <input type="text" name="@key" value="@Model[key]" />
+            }
+            if (key == "ItemName")
+            {
+                @(key) <input type="text" name="@key" value="@Model[key]" />
+            }
+            else*@
+            {
+                @(key) <input type="text" name="@key" value="@Model[key]" />
+                
+            }
 
             <br />
         }
+        ///////////////////todo controll處理/////////
+       @* TradeDesc.value = `健檢套餐:${@pp.PlanName}`
+        ItemName.value = @pp.PlanName*@
+
         <button type="submit" id="checkoutBtn">送出</button>
     </form>
 
@@ -745,18 +766,30 @@
     }
 
     //////////////預約////////////////////
-
-    var tttt = document.querySelector("#tttt")
+    var temp = @m.MemberId
+    var dd = bday.value;
+    var tttt = document.querySelector("#tttt")//////////////////todo 修改按鈕
     tttt.addEventListener("click", () => {
         alert("00")
-        res(40)
+        res(temp,dd)
 
     })
 
-    async function res(mid) {
-        let url = `https://localhost:7203/Home/rsv?id=${mid}`;
-        const response = await fetch(url)
-    }
+    async function res(mid,date) {
+        //let url = `https://localhost:7203/Home/rsv?id=${mid}`;
+       // const response = await fetch(url)
+       ///////////todo 測試
+        let url = `~/Home/rsv`
+
+        let form = new FormData();
+        form.append("mid", mid);
+        form.append("date", date)
+
+        const response = await fetch(url, {
+            method: "POST",
+            body: form,
+
+    })
 
     //var table = document.querySelector("#show")
     //table.innerHTML = @ViewBag.item;
@@ -798,7 +831,7 @@
     TotalAmount.value = @totalprice;
     TradeDesc.value = `健檢套餐:${@pp.PlanName}`
     ItemName.value = @pp.PlanName
-    
+   
 
 ////////////////////綠界送出///////////
         //tform.submit();
@@ -873,6 +906,6 @@
         //});
         //alert("付款成功")
         
-    })
+  //  })
 </script>
 
