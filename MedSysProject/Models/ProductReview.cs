@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MedSysProject.Models;
 
@@ -18,8 +19,8 @@ public partial class ProductReview
     public DateTime? Timestamp { get; set; }
 
     public bool? IsLike { get; set; }
-
+    [JsonIgnore]
     public virtual Member Member { get; set; }
-
+    [JsonIgnore]
     public virtual Product Product { get; set; }
 }

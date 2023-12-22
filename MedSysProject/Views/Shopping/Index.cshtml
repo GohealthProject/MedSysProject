@@ -54,9 +54,9 @@
                             }
                                                                         @:<div class='row'>
                             }
-                            int maxPrice = ((int)Model[i].UnitPrice + 200);
+                            int maxPrice = ((int)Model[i].UnitPrice);
                             string? max =maxPrice.ToString("N0");
-                            int price = (int)Model[i].UnitPrice;
+                            int price = (int)((int)(Model[i].UnitPrice)*0.8);
                             string s = price.ToString("N0");
                                                                         <div class=" col " >
                                                                         <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:300px; width:300px;object-fit: cover;"  />
@@ -205,8 +205,8 @@
             const datas = data[0].productsClassifications.$values
             const info = datas.map(product=>{
                 const Name = product.product.productName.substring(0,9);
-                const maxPrice = (product.product.unitPrice + 200).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
-                const Price = product.product.unitPrice.toLocaleString('en-US', {minimumFractionDigits: 0}, {maximumFractionDigits: 0});
+                const maxPrice = product.product.unitPrice.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                const Price = (product.product.unitPrice*0.8).toLocaleString('en-US', {minimumFractionDigits: 0}, {maximumFractionDigits: 0});
                 const Path = product.product.fimagePath;
                 const imgIndex = Path.indexOf(",");
                 const img = Path.substring(0,imgIndex);

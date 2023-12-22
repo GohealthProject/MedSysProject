@@ -37,7 +37,7 @@ public partial class Member
 
     public bool IsVerified { get; set; }
 
-    public int StatusId { get; set; }
+    public int? StatusId { get; set; }
 
     public string VieifiedId { get; set; }
 
@@ -53,11 +53,15 @@ public partial class Member
 
     public virtual Twaddress MemberCityDistrictRoad { get; set; }
 
+    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
     public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
 
     public virtual ICollection<Reserve> Reserves { get; set; } = new List<Reserve>();
+
+    public virtual ICollection<RoomRef> RoomRefs { get; set; } = new List<RoomRef>();
 
     public virtual MembersStatus Status { get; set; }
 

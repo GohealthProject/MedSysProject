@@ -28,4 +28,8 @@ public partial class Employee
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual EmployeeClass EmployeeClass { get; set; }
+
+    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
+    public virtual ICollection<RoomRef> RoomRefs { get; set; } = new List<RoomRef>();
 }
