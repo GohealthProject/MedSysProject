@@ -8,8 +8,7 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
     var order = ViewBag.order as Dictionary<string, string>;
 
-    string json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
-    List<Item> list = JsonSerializer.Deserialize<List<Item>>(json); 
+
 }
 @*@model IEnumerable<MedSysProject.Models.Plan>*@
 @*@model IFormCollection
@@ -141,31 +140,44 @@
             <div class="col-4"></div>
             <div class="overflow-auto col-6 A #bigC">
                 <div id="rsitem">
-                    <table border="1" data-toggle="table" data-show-print="false" data-show-footer="true" id="table">
+                    <table class="table">
                         <thead>
                             <tr>
-                                <th data-field="id" data-falign="center" data-footer-formatter="idFormatter" class="col-1">
+                                <th  class="col-1">
                                 編號
                             </th>
-                                <th data-field="name" data-falign="center" data-footer-formatter="nameFormatter" class="col-8">
+                                <th  class="col-8">
                                     項目
                                 </th>
-                                <th data-field="price" data-falign="center" data-footer-formatter="priceFormatter" class="col-2">
+                                <th  class="col-2">
                                     價格
                                 </th>
-                                <th data-field="del" class="col-1">
+                                <th  class="col-1">
                                     移除
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="show " id="show">
-                     
-                           
-                        </tbody>
-                        
-                            
+                        <tbody >
+                            @{
+                                string json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+                                List<Item> itemList = JsonSerializer.Deserialize<List<Item>>(json);
+                                int count = 0;
+                                foreach(var item in itemList)
+                                {
+                                    count++;
+                                    <tr scope="row">
+                                        <td>@count</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.ItemPrice</td>
+                                        <td><img src="img/icon/X.png" onclick="imgdelete()"/></td>
+                                    </tr>
+                                }
 
-                       
+
+
+                            }
+                            
+                        </tbody>
                     </table>
                   
                  </div>
@@ -393,7 +405,7 @@
         string? json2 = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
         if (!string.IsNullOrEmpty(json2))
         {
-             m = JsonSerializer.Deserialize<MemberWarp>(json);
+             m = JsonSerializer.Deserialize<MemberWarp>(json2);
         }
     }
     
@@ -714,7 +726,9 @@
         //console.log(t.innerHTML)
         pricecount()
     }
+    async function delItem(){
 
+    }
 
 
     //var table = document.querySelector("#show")
