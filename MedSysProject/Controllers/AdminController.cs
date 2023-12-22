@@ -624,7 +624,7 @@ namespace MedSysProject.Controllers
 
 
 
-        public async Task<IActionResult> Product(CKeywordViewModel vm)
+        public async Task<IActionResult> Product(CKeywordViewModel vm, string sortOrder)
         {
             // 檢查使用者是否已登錄，如果未登錄，則重新導向到登錄頁面
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -658,6 +658,17 @@ namespace MedSysProject.Controllers
 
                 // 將原始關鍵字傳遞給視圖以在搜尋框中顯示
                 ViewBag.key = vm.txtKeyword;
+            }
+
+            // 根據 sortOrder 參數對結果集進行排序
+            switch (sortOrder)
+            {
+                case "price_desc":
+                    datas = datas.OrderByDescending(p => p.UnitPrice);
+                    break;
+                default:   // 價格從低到高
+                    datas = datas.OrderBy(p => p.UnitPrice);
+                    break;
             }
 
             // 設定預設圖片路徑
