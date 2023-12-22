@@ -40,6 +40,12 @@
                     @: <div class="col-auto">最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
                     @: <div class="col-auto">最大價格：@Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
                     <div class="col-auto"><input type="submit" class="btn btn-primary" value="查詢" style="margin-top:.5em;" /></div>
+
+                    <div class="col-auto">
+                        @Html.Label("選擇類別：")
+                        @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
+                    </div>
+
                 }
             </div>
             <div class="col-auto">
@@ -47,12 +53,7 @@
                 <a href="@Url.Action("Product", new { sortOrder = "asc"})">價格從低到高</a> |
                 <a href="@Url.Action("Product", new { sortOrder = "price_desc"})">價格從高到低</a>
             </div>
-          @*   @using (Html.BeginForm("FilterProducts", "Admin", FormMethod.Get))
-            {
-                @Html.Label("選擇類別：")
-                @Html.DropDownListFor(model => model.WrappedCategoryId, new SelectList(Model, "CategoryId", "CategoryName"), "全部類別")
-                <input type="submit" value="篩選">
-            } *@
+            
             <p class="mt-3">
                 <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
                     <i class="fas fa-plus"></i>
@@ -424,6 +425,21 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        var categorySelect = document.getElementById("categorySelect");
+        if (categorySelect) {
+            categorySelect.addEventListener("change", function () {
+            
+                if (this.form) {
+                    this.form.submit();
+                } else {
+                    console.error("下拉列表不在表单内");
+                }
+            });
+        } else {
+            console.error("未找到下拉列表元素");
+        }
+    });
 
 
 

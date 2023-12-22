@@ -624,7 +624,7 @@ namespace MedSysProject.Controllers
 
 
 
-        public async Task<IActionResult> Product(CKeywordViewModel vm, string sortOrder)
+        public async Task<IActionResult> Product(CKeywordViewModel vm, string sortOrder, int? categoryId)
         {
             // 檢查使用者是否已登錄，如果未登錄，則重新導向到登錄頁面
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -671,6 +671,13 @@ namespace MedSysProject.Controllers
                     break;
             }
 
+            if (categoryId.HasValue)
+            {
+                
+                datas = datas.Where(p => p.ProductsClassifications.Any(pc => pc.CategoriesId == categoryId.Value));
+            }
+
+            ViewBag.Categories = await _db.ProductsCategories.ToListAsync();
             // 設定預設圖片路徑
             var defaultImagePath = "/img-product/default-image.jpg";
 
