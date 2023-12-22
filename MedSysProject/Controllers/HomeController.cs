@@ -646,13 +646,18 @@ namespace MedSysProject.Controllers
             //select plan item
             ViewBag.Planid = planid;
 
-            HttpContext.Session.Remove(CDictionary.SK_CUSTOMER_ITEMLIST);
 
             List<Item> CustomerItem = new List<Item>();
             CustomerItem = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+
+
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_CUSTOMER_ITEMLIST))
+            {
+                string json = System.Text.Json.JsonSerializer.Serialize(CustomerItem);
+                HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json);
+            }
+
             
-            string json = System.Text.Json.JsonSerializer.Serialize(CustomerItem);
-            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json);
 
 
 
@@ -888,22 +893,38 @@ namespace MedSysProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        public IActionResult addItem(int id)
+
+        public IActionResult loadItem()
         {
-            string json = HttpContext.Session.GetString("reserveitem");
+
+            string json =HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
 
+
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult addItem()
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+            var form = Request.Form;
+            var id = int.Parse(form["id"]);
             var item = _context.Items.Find(id);
 
             list.Add(item);
 
             string json2 = System.Text.Json.JsonSerializer.Serialize(list);
-            HttpContext.Session.SetString("reserveitem", json2);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
             return Ok();
         }
         public IActionResult removeItem(int id)
         {
-            string json = HttpContext.Session.GetString("reserveitem");
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
 
             foreach(var item in list)
@@ -911,10 +932,11 @@ namespace MedSysProject.Controllers
                 if(item.ItemId == id)
                 {
                     list.Remove(item);
+                    break;
                 }
             }
             string json2 = System.Text.Json.JsonSerializer.Serialize(list);
-            HttpContext.Session.SetString("reserveitem", json2);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
 
 
             return Ok();
