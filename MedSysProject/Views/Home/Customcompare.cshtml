@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Text.Json
+@{
 
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -262,6 +263,30 @@
                 </tr>
             </thead>
             <tbody id="ilist">
+                @{
+                    string? json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+                    List<Item> itemList = JsonSerializer.Deserialize<List<Item>>(json);
+                    int count = 0;
+                    foreach(var item in itemList)
+                    {
+                        count++;
+                        <tr>
+                            <td class="count">
+                                @count
+                            </td>
+                            <td>
+                                @item.ItemName
+                            </td>
+                            <td>
+                                @item.ItemPrice
+                            </td>
+                            <td>
+                                <img src="~/img/icon/x.png" onclick="imgdelete()"/>
+                                <p id="@item.ItemId" hidden>@item.ItemId</p>
+                            </td>
+                        </tr>
+                    }
+                }
                 @*   <tr>
                 <td>
                 A
@@ -275,19 +300,6 @@
                 <td><img src="~/img/icon/x.png" /></td>
                 </tr>*@
 
-                @* <tr>
-                <td>
-                A
-                </td>
-                <td>
-                B
-                </td>
-                <td>
-                100
-                </td>
-                <td><img src="~/img/icon/x.png" /></td>
-
-                </tr>*@
 
             </tbody>
         </table>
@@ -374,15 +386,20 @@
         function itemadd(event) {
             console.log(event.target);
             console.log()
-
+            let count = document.querySelectorAll(".count").length+1;
+            
             let iid = event.target.parentNode.querySelector(".iid");
+            console.log(iid);
+
+
+
             let iprice = event.target.parentNode.querySelector(".iprice");
             //let iid = event.target.parentNode.querySelector(".iid");
             var show =
                 `
                             <tr id="dtr">
-                                            <td>
-                                            ${iid.innerHTML}
+                                            <td class="count">
+                                            ${count}
                                             </td>
                                             <td>
                                             ${event.target.value}
@@ -402,6 +419,9 @@
             items.push(iid.innerHTML)
             console.log(items);
             count++
+        }
+        async function addItem(id){
+            let url =`/Home/AddItem/${id}`;
         }
 
         function submit() {

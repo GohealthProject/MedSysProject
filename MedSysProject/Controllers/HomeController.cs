@@ -640,19 +640,21 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Customcompare(int planid)
         {
+
+
             //todo 尚未完成:  測試比較後傳送資料
             //select plan item
             ViewBag.Planid = planid;
-            //var pitem = from s in _context.Items
-            //            where s.Project.PlanRefs[0].PlanId == planid
-            //            select s;
+
+            HttpContext.Session.Remove(CDictionary.SK_CUSTOMER_ITEMLIST);
+
+            List<Item> CustomerItem = new List<Item>();
+            CustomerItem = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+            
+            string json = System.Text.Json.JsonSerializer.Serialize(CustomerItem);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json);
 
 
-
-
-           List < Item > list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
-
-            ViewBag.Items = list;
 
             var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
             _context.Plans.Load();

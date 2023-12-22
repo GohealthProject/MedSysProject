@@ -17,5 +17,7 @@
 
         public static readonly string SK_PLAN_COMPARERE_RESULT = "SK_PLAN_COMPARERE_RESULT";
 
+        public static readonly string SK_CUSTOMER_ITEMLIST ="SK_CUSTOMER_ITEMLIST";
+
     }
 }
