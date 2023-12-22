@@ -106,7 +106,7 @@ namespace MedSysProject.Controllers
                 {
                     string json = JsonSerializer.Serialize(member);
                     HttpContext.Session.SetString(CDictionary.SK_MEMBER_LOGIN, json);
-                    return RedirectToAction("SinglePost", "Blogs", new { SingleBlogId = blogId });
+                    return RedirectToAction("SinglePost", "Blogs", new { SingleBlogId = blogId ,LoginSuccess=true});
                 }
                 else if (mem.member.MemberPassword == blogReader.txtPassWord && !mem.IsVerified) 
                 { 
