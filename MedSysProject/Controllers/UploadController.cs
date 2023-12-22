@@ -50,7 +50,7 @@ namespace MedSysProject.Controllers
         }
 
         // POST api/<UploadController>
-        [HttpPost("plan/{id}")]
+        [HttpPost("plan")]
         public IActionResult PostPlanImg()
         {
             var fail = Request.Form;

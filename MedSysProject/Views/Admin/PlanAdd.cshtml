@@ -52,7 +52,8 @@
                             <th>
                                 方案描述
                             </th>
-                            <th></th>
+                            <th>方案圖片</th>
+                            <th>執行動作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +72,9 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.PlanDescription)
+                                    </td>
+                                    <td>
+                                        
                                     </td>
                                     <td>
                                         <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
@@ -176,9 +180,11 @@
 
                             <div class="form-group">
                                 <label class="control-label">方案圖片</label>
-                                <input type="file" class="form-control" id="CinputImage" name="CPlanImage"  required />
+                                <input type="file" class="form-control" id="CinputImage" name="CPlanImage" required />
                                 <div class="invalid-feedback">請輸入方案圖片</div>
+                                <img src="" id="CimgPreview" />
                             </div>
+
 
                             <div class="form-group" id="Cprjchoose">
                                 <label class="control-label">方案選擇</label>
@@ -393,11 +399,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                    <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                                    <label class="form-check-label" for="${newId}">
-                                                        <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
-                                                    </label>
-                                                `;
+                                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                                        <label class="form-check-label" for="${newId}">
+                                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
+                                                        </label>
+                                                    `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -428,11 +434,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                        <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                                        <label class="form-check-label" for="${newId}">
-                                                            <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
-                                                        </label>
-                                                    `;
+                                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                            <label class="form-check-label" for="${newId}">
+                                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
+                                                            </label>
+                                                        `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -450,6 +456,7 @@
         create(form);
 
     })
+
     async function create(form) {
         let url = `https://localhost:7078/api/Plans`;
         const response = await fetch(url, {
@@ -458,6 +465,7 @@
         });
         const state = await response.status;
         if (response.ok) {
+            UploadImg(form);
             Projectcreate(form);
 
         } else {
@@ -467,6 +475,33 @@
                 text: "有錯誤發生!"
             });
         }
+    }
+
+    //當選擇圖片後 預覽圖片
+    document.querySelector("#CinputImage").onchange = function (e) {
+        let reader = new FileReader();
+        reader.onload = function () {
+            document.querySelector("#CimgPreview").src = reader.result;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    //接著上傳圖片
+    async function UploadImg() {
+        var fileInput = document.getElementById('CinputImage');
+        var file = fileInput.files[0];
+        var myForm = document.getElementById("myCreatedataform");
+        var data = new FormData(myForm);
+        console.log(data)
+
+        const response = await fetch('https://localhost:7203/api/Plan', {
+            method: 'POST',
+            body: data
+        });
+        const res = await response.text();
+        console.log(res);
+
+
     }
 
     document.querySelector("#Cbtnprj").addEventListener("click", () => {
@@ -486,6 +521,7 @@
         });
         const state = await response.status;
         if (response.ok) {
+
             createRef(form);
 
             research();
@@ -498,6 +534,7 @@
             });
         }
     }
+
 
     async function createPrj(form) {
         console.log(form)
