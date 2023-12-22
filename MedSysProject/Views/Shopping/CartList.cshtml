@@ -33,6 +33,7 @@
             foreach (var item in Model)
             {
                 總計 += item.小計;
+                
                                                                                                 <tr>
                                                                                                     <td>
                                                                                                         <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
@@ -40,7 +41,7 @@
                                                                                                     </td>
                                                                                                     <td>
                                                                                                         
-                                                                                                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                                                                                                        @item.UnitPrice
                                                                                                     </td>
                                                                                                     <td>
 

@@ -37,7 +37,7 @@ public partial class Member
 
     public bool IsVerified { get; set; }
 
-    public int StatusId { get; set; }
+    public int? StatusId { get; set; }
 
     public string VieifiedId { get; set; }
 

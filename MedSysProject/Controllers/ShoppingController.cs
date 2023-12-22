@@ -126,8 +126,8 @@ namespace MedSysProject.Controllers
             CCartItem item = new CCartItem();
             item.Product = q;
             item.ProductName = q.ProductName;
-            item.UnitPrice = (int)q.UnitPrice;
-            item.小計 = Int32.Parse(data["count"]) * (int)q.UnitPrice;
+            item.UnitPrice = (int)((int)q.UnitPrice*0.8);
+            item.小計 = Int32.Parse(data["count"]) * (int)((int)q.UnitPrice * 0.8);
             item.count = Int32.Parse(data["count"]);
             cart.Add(item);
             count = cart.Count().ToString();
@@ -234,7 +234,7 @@ namespace MedSysProject.Controllers
             return RedirectToAction("OrderList",new {page =999});
         }
        
-        public IActionResult CartList()
+        public IActionResult CartList() 
         {
             if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                 return RedirectToAction("Index");
