@@ -789,14 +789,15 @@
         foreach (var item in fitemList)
         {
             totalprice += item.ItemPrice;
-          
+
         }
-        //string fplan 
+        string fplan = Context.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+        var pp = System.Text.Json.JsonSerializer.Deserialize<Plan>(fplan);
     }
    
     TotalAmount.value = @totalprice;
-    TradeDesc.value = "健檢套餐"
-    //ItemName.value = planname
+    TradeDesc.value = `健檢套餐:${@pp.PlanName}`
+    ItemName.value = @pp.PlanName
     
 
 ////////////////////綠界送出///////////
