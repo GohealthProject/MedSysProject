@@ -50,6 +50,25 @@ namespace MedSysProject.Controllers
         }
 
         // POST api/<UploadController>
+        [HttpPost("plan")]
+        public IActionResult PostPlanImg()
+        {
+            var fail = Request.Form;
+
+            IFormFile file = Request.Form.Files[0];
+
+            string webPath = Path.Combine(_host.WebRootPath, "img\\PersonalPlan", file.FileName);
+            using (var fileStream = new FileStream(webPath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            return Ok();
+
+        }
+
+
+        // POST api/<UploadController>
         [HttpPost("Crop/{id}")]
         public IActionResult PostCrop()
         {
