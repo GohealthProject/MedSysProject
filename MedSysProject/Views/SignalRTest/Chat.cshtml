@@ -254,40 +254,40 @@
                         font-weight: 400;
                     }
 
-/*                     .chat-container .right .write .write-link.attach:before {
-                        display: inline-block;
-                        float: left;
-                        width: 20px;
-                        height: 42px;
-                        content: '';
-                        background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
-                        background-repeat: no-repeat;
-                        background-position: center;
-                    } */
+                /*                     .chat-container .right .write .write-link.attach:before {
+                                                                                                        display: inline-block;
+                                                                                                        float: left;
+                                                                                                        width: 20px;
+                                                                                                        height: 42px;
+                                                                                                        content: '';
+                                                                                                        background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
+                                                                                                        background-repeat: no-repeat;
+                                                                                                        background-position: center;
+                                                                                                    } */
 
-/*                     .chat-container .right .write .write-link.smiley:before {
-                        display: inline-block;
-                        float: right;
-                        width: 20px;
-                        height: 42px;
-                        margin-right: 11px;
-                        content: '';
-                        background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
-                        background-repeat: no-repeat;
-                        background-position: center;
-                    } */
+                /*                     .chat-container .right .write .write-link.smiley:before {
+                                                                                                        display: inline-block;
+                                                                                                        float: right;
+                                                                                                        width: 20px;
+                                                                                                        height: 42px;
+                                                                                                        margin-right: 11px;
+                                                                                                        content: '';
+                                                                                                        background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
+                                                                                                        background-repeat: no-repeat;
+                                                                                                        background-position: center;
+                                                                                                    } */
 
-/*                     .chat-container .right .write .write-link.send:before {
-                        display: inline-block;
-                        float: right;
-                        width: 20px;
-                        height: 42px;
-                        margin-right: 11px;
-                        content: '';
-                        background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
-                        background-repeat: no-repeat;
-                        background-position: center;
-                    } */
+                /*                     .chat-container .right .write .write-link.send:before {
+                                                                                                        display: inline-block;
+                                                                                                        float: right;
+                                                                                                        width: 20px;
+                                                                                                        height: 42px;
+                                                                                                        margin-right: 11px;
+                                                                                                        content: '';
+                                                                                                        background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
+                                                                                                        background-repeat: no-repeat;
+                                                                                                        background-position: center;
+                                                                                                    } */
 
                 .chat-container .right .bubble {
                     font-size: 16px;
@@ -478,7 +478,7 @@
 
 
                 </div>
-                <div class="chat active-chat" data-chat="person2">
+                <div class="chat active-chat" data-chat="person2" id="aaatest">
                     <div class="conversation-start">
                         <span>Today, 5:38 PM</span>
                     </div>
@@ -587,17 +587,49 @@
                 </div>
                 <div class="write">
                     @* <a href="javascript:;" class="write-link attach"></a> *@
-                    <input type="text" placeholder="輸入訊息...">
+                    <input type="text" placeholder="輸入訊息..." id="chat-messagebox">
                     <a href="javascript:;" class="btn btn-primary"><i class="fas fa-smile"></i></a>
-                    <a href="javascript:;" class="btn btn-success"><i class="fas fa-paper-plane"></i></a>
+                    <a href="javascript:;" class="btn btn-success" id="chat-btnsend"><i class="fas fa-paper-plane"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
 
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
-        
+        // singalR
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+
+        connection.on("ReceiveMessage", function (userid, user, message) {
+            var msg = message;
+            // var encodedMsg = user + " says " + msg;
+            var li = document.createElement("li");
+            li.textContent = msg;
+            document.getElementById("aaatest").innerHTML += `<div class="bubble you">${msg}</div>`
+        });
+
+        connection.start().then(function () {
+            connection.invoke("SendMessage", "1", "James", "Hello").catch(function (err) {
+                return console.error(err.toString());
+            });
+            console.log("connection start");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("chat-btnsend").addEventListener("click", function (event) {
+            let text = document.getElementById("chat-messagebox").value;
+            document.getElementById("chat-messagebox").value = "";
+
+            document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
+        });
+
+         document.querySelector("#chat-messagebox").addEventListener("keypress", function (event) {
+            if (event.keyCode === 13) {
+                document.querySelector("#chat-btnsend").click();
+            }
+        });
     </script>
 
 
