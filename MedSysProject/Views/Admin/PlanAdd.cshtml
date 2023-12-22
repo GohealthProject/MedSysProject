@@ -74,7 +74,13 @@
                                         @Html.DisplayFor(modelItem => item.PlanDescription)
                                     </td>
                                     <td>
-                                        
+                                        @{
+                                            if (item.PlanImg != null)
+                                            {
+                                                <img src="@item.PlanImg" width="100" height="100" />
+                                            }
+                                        }
+
                                     </td>
                                     <td>
                                         <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
@@ -399,11 +405,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                                        <label class="form-check-label" for="${newId}">
-                                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
-                                                        </label>
-                                                    `;
+                                                                <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                                                <label class="form-check-label" for="${newId}">
+                                                                    <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
+                                                                </label>
+                                                            `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -434,11 +440,11 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                                            <label class="form-check-label" for="${newId}">
-                                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
-                                                            </label>
-                                                        `;
+                                                                    <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                                    <label class="form-check-label" for="${newId}">
+                                                                        <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
+                                                                    </label>
+                                                                `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
