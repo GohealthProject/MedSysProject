@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MedSysProject.Models;
 
@@ -10,6 +11,6 @@ public partial class ProductsCategory
     public int CategoriesId { get; set; }
 
     public string CategoriesName { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<ProductsClassification> ProductsClassifications { get; set; } = new List<ProductsClassification>();
 }

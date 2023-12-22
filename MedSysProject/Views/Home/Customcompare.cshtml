@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Text.Json
+@{
 
     ViewData["Title"] = "planComeparison";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
@@ -11,7 +12,15 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>自選方案</h2>
+            <h2 id="h2"> 
+                @{
+                    var aa = Context.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+                    var pp = System.Text.Json.JsonSerializer.Deserialize<Plan>(aa);
+
+
+                }
+                @pp.PlanName
+            </h2>
             <ol>
                 <li><a href="~/Home/Index">回到首頁</a></li>
                 <li><a href="~/Home/planComeparison">方案介紹</a></li>
@@ -146,7 +155,7 @@
                     {
                         <li data-filter=".@items.ProjectName" class="col-3" style="width:150px;height:150px;">
                             <img src="~/img/customcompare/p-@{
-                            @Html.DisplayFor(m =>items.ProjectId)
+                                                @Html.DisplayFor(m =>items.ProjectId)
                              }.jpg" class="img-fluid" alt="" style="width:150px;height:110px;">
                             <div>
                             </div>
@@ -262,33 +271,30 @@
                 </tr>
             </thead>
             <tbody id="ilist">
-                @*   <tr>
-                <td>
-                A
-                </td>
-                <td>
-                B
-                </td>
-                <td>
-                150
-                </td>
-                <td><img src="~/img/icon/x.png" /></td>
-                </tr>*@
-
-                @* <tr>
-                <td>
-                A
-                </td>
-                <td>
-                B
-                </td>
-                <td>
-                100
-                </td>
-                <td><img src="~/img/icon/x.png" /></td>
-
-                </tr>*@
-
+                @{
+                    string? json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+                    List<Item> itemList = JsonSerializer.Deserialize<List<Item>>(json);
+                    int count = 0;
+                    foreach(var item in itemList)
+                    {
+                        count++;
+                                            <tr>
+                                                <td class="count">
+                                                    @count
+                                                </td>
+                                                <td>
+                                                    @item.ItemName
+                                                </td>
+                                                <td>
+                                                    @item.ItemPrice
+                                                </td>
+                                                <td>
+                                                    <img src="~/img/icon/x.png" onclick="imgdelete()"/>
+                                                    <p id="@item.ItemId" class="iid" hidden>@item.ItemId</p>
+                                                </td>
+                                            </tr>
+                    }
+                }
             </tbody>
         </table>
         
@@ -300,15 +306,16 @@
 
 @section Scripts{
     <script>
-        getPlan();
+        ///////////////getPlan();
         //取得
         function getPlan(){
         //$("#tbt").click(function () {
-            $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
+            var url = "https://localhost:7078/api/CPlan"
+            $.get(url+`/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`, function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var datarr = JSON.parse(data)
                 var tbody = document.querySelector("#ilist")
-
+                alert(url + `/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`)
 
 
                 console.log(datarr)
@@ -356,8 +363,9 @@
             let img = document.querySelectorAll(".imgdelete");
             var dtr = document.querySelectorAll("#dtr");
             let iid = event.target.parentNode.querySelector(".iid");
-
+            let id = iid.innerText;
             console.log(event.target.this);
+            removeItem(id);
             //var t = dtr.removeChild(event.target.parentNode);
             var del = list.removeChild(event.target.parentNode.parentNode);
             var tar = event.target.nextElementSibling.id;
@@ -373,15 +381,21 @@
         function itemadd(event) {
             console.log(event.target);
             console.log()
-
+            let count = document.querySelectorAll(".count").length+1;
+            
             let iid = event.target.parentNode.querySelector(".iid");
+            console.log(iid);
+            let id = iid.innerText;
+
+
             let iprice = event.target.parentNode.querySelector(".iprice");
+            let price = iprice.innerText
             //let iid = event.target.parentNode.querySelector(".iid");
             var show =
                 `
                             <tr id="dtr">
-                                            <td>
-                                            ${iid.innerHTML}
+                                            <td class="count">
+                                            ${count}
                                             </td>
                                             <td>
                                             ${event.target.value}
@@ -397,12 +411,35 @@
                     `;
             list.innerHTML += show;
 
+            console.log(id);
+            console.log(price);
+            // items.push(iid.innerHTML);
 
-            items.push(iid.innerHTML)
-            console.log(items);
-            count++
+            // console.log(items);
+            addItem(id,price);
+
+            // count++
         }
 
+        async function addItem(id,price){
+            let url = `/Home/addItem`
+
+            let form = new FormData();
+            form.append("id", id);
+            form.append("price",price)
+
+            const response = await fetch(url, {
+                method:"POST",
+                body:form,
+           });
+           
+           console.log(response.status);
+            console.log(response.statusText);
+        }
+        async function removeItem(id) {
+            let url = `/Home/removeItem?id=${id}`;
+            const response = await fetch(url);
+        }
         function submit() {
             var total = document.querySelector("#ilist");
             var form = document.querySelector("#form");

@@ -181,7 +181,7 @@
                                         int total = 0;
                                         foreach (var item in Model[i].order.OrderDetails)
                                         {
-                                            total += (int)item.Quantity * (int)item.Product.UnitPrice;
+                                            total += (int)item.Quantity * (int)((int)item.Product.UnitPrice*0.8);
                                             pcount++;
                                                                     <li class="list-group-item ">
                                                                         <div class="row">
@@ -190,7 +190,7 @@
                                                                             <div class="col-3 ">件數 : @item.Quantity</div>
                                                                             <div class="col-3  text-danger" style="text-align: right;">
                                                                                 $@{
-                                                            int pd = (int)item.Quantity * (int)item.Product.UnitPrice; string p = pd.ToString("N0");
+                                                            int pd = (int)item.Quantity * (int)((int)item.Product.UnitPrice*0.8); string p = pd.ToString("N0");
                                                                                                 @p
                                                                                 }
                                                                             </div>
@@ -227,7 +227,7 @@
             <input type="hidden" value="" name="orderID"  id="ReOrderID"/>
             <input type="hidden" value="" name="orderAmount" id="ReOrderAmount" />
             <div class="modal-body">
-                <span>請輸入退款理由</span><br /><span>訂單編號：</span><br />
+                <span>請輸入退款理由</span><br /><br />
                 <textarea name="ReturnReason"></textarea>
             </div>
             </form>

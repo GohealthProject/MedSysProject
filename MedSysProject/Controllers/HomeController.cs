@@ -22,10 +22,12 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.CodeAnalysis;
 using Microsoft.Build.Evaluation;
 using System.Text.Json.Serialization.Metadata;
-using Newtonsoft.Json;
+
 using Google.Apis.Json;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 
 namespace MedSysProject.Controllers
 {
@@ -56,40 +58,15 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult planComeparison()
-        {////方案比較(設計filter篩選方案)+更換圖片ok+加中文名稱ok+排除出現負數情況+調整where條件
-            int test = 3;
-            var projectprice = /*from p in _context.Projects.SelectMany(p => p.PlanRefs, (pj, pr) => new { pj, pr }).SelectMany(p => p.pr.Plan.PlanRefs, (pl, q) => new { pl.pr.Plan.PlanName, q.Project.ProjectPrice })*/
-                   from p in _context.PlanRefs.Include(p => p.Project).Include(p => p.Plan)
-                   .AsEnumerable()
-                       //from ppp in _context.Plans
-                   group p by p.Plan.PlanName into g
-                   //group p by p.PlanName into g 
-                   //select p;
-                   select new
-                   {
+        {////方案比較(設計filter篩選方案)+更換圖片ok+加中文名稱ok+排除出現負數情況+調整where條件ok
+            
 
-                       PlanName = g.Key,
-                       PlanPrice = g.Sum(p => p.Project.ProjectPrice)
-                   };
-
-            //var price = _context.Plans.Where(p => p.PlanId == test).SelectMany(p => p.PlanRefs, (j, c) => new { j.PlanName, c.Project }).GroupBy(p => p.PlanName).Select(p => new { PlanName = p.Key, PlanPrice = p.Sum(k => k.Project.ProjectPrice) });
-
-
-            var total = from p in projectprice
-                        from pp in _context.Plans
-
-                        select new
-                        {
-                            pp.PlanName,
-                            pp.PlanId,
-
-                            //p.PlanName,
-                            p.PlanPrice
-
-                        };
-            return View(total.ToList());
-            //return View(projectprice.ToList());
-            //return View(_context.Plans);
+            var projectpriceNew =
+                   _context.Plans.SelectMany(p => p.PlanRefs, (j, c) => new { j.PlanName, c.Project,c.PlanId })
+                   .GroupBy(p => p.PlanName).Select(p => new { PlanName = p.Key, PlanPrice = p.Sum(k => k.Project.ProjectPrice), PlanId = p.FirstOrDefault().PlanId });
+                   
+            return View(projectpriceNew.ToList());
+          
         }
 
 
@@ -221,7 +198,7 @@ namespace MedSysProject.Controllers
 
         [HttpGet]
         public IActionResult planComeparisonTotal(string planlist)
-        {////方案比較總計(總項+PDF產生)+篩選比較intersection+
+        {////方案比較總計(總項+PDF產生)ok+篩選比較intersection+
 
             if (planlist != null)
             {
@@ -448,10 +425,11 @@ namespace MedSysProject.Controllers
         }
 
         public IActionResult PlanIntroductionProject(int? id)
-        { //放方案介紹  固定item高度+男女差異+價格ok+資料傳送型態可換(datatable)ok
+        { //放方案介紹  固定item高度ok+男女差異ok+價格ok+資料傳送型態可換(datatable)ok
 
             //vm方法
             List<CPlanViewModel> data = new List<CPlanViewModel>();
+            List<CPlanViewModel> dataNew = new List<CPlanViewModel>();
             var plan = from pl in _context.Plans.Where(p => p.PlanId == id)
                        select pl;
 
@@ -464,7 +442,7 @@ namespace MedSysProject.Controllers
                     PlanId = plans.PlanId,
 
                 });
-                //data.Add(new CPlanViewModel() { plan=plans });
+               
             }
             var project = from pj in _context.PlanRefs.Where(p => p.PlanId == id)
                           select pj;
@@ -476,20 +454,27 @@ namespace MedSysProject.Controllers
                     
 
                 });
-                //data.Add(new CPlanViewModel() { planRef=projects });
+             
             }
-            var item = from it in _context.Items.Include(i => i.Project).ThenInclude(i => i.PlanRefs.Where(i => i.PlanId == id))
-                       select it;
-
-            foreach (Item items in item)
+         
+            var item = _context.PlanRefs.Where(p => p.PlanId == id).SelectMany(p => p.Project.Items, (a, b) => new
+            {
+                b.Project.ProjectName,
+                b.Project.ProjectId,
+                b.ItemName,
+                b.ItemId
+            }) ;
+           
+      
+            foreach (var items in item)
             {
                 data.Add(new CPlanViewModel()
                 {
                     ItemId = (int)items.ItemId,
                     ItemName = items.ItemName,
-                    //ProjectId = (int)items.ProjectId,
-                    ProjectName = items.Project.ProjectName,
-                    ProjectPrice = items.Project.ProjectPrice
+                    ProjectId = (int)items.ProjectId,
+                    ProjectName = items.ProjectName,
+                    
                 });
                 //data.Add(new CPlanViewModel() { item = items });
             }
@@ -549,13 +534,21 @@ namespace MedSysProject.Controllers
 
         //[HttpPost]
         public IActionResult Reserve(IFormCollection item)
-        { 
+        {
+              ///////////////////todo controll處理 綠界所需/////////
+       //TradeDesc.value = `健檢套餐:${ @pp.PlanName}`
+       // ItemName.value = @pp.PlanName *@
+            
+            var temp = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            var ss = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(temp);
+            ViewBag.member = ss.MemberId;
+
             //todo 預約總覽   尚未完成:日曆限制人數+第三方金流
 
-            
-                //step1 : 網頁導入傳值到前端
 
-                var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            //step1 : 網頁導入傳值到前端
+
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
                 //需填入你的網址
                 var website = $"https://localhost:7203/";
                 var order = new Dictionary<string, string>
@@ -597,7 +590,7 @@ namespace MedSysProject.Controllers
             ViewBag.item = item["item"];
             ViewBag.mid = item["Mid"];
             ViewBag.pid = item["Pid"];
-            ViewBag.member = HttpContext.Session.Get(CDictionary.SK_MEMBER_LOGIN);
+            
             //ViewBag.test = "test123";
             //ViewBag.item = item;
 
@@ -639,13 +632,29 @@ namespace MedSysProject.Controllers
         }
         public IActionResult Customcompare(int planid)
         {
+
+
             //todo 尚未完成:  測試比較後傳送資料
+            //select plan item
             ViewBag.Planid = planid;
+            Plan s = _context.Plans.Where(p => p.PlanId == planid).FirstOrDefault();
+            string pid = System.Text.Json.JsonSerializer.Serialize<Plan>(s);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_PLAN, pid);
+
+
+            List<Item> CustomerItem = new List<Item>();
+            CustomerItem = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
+
+
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_CUSTOMER_ITEMLIST))
+            {
+                string json = System.Text.Json.JsonSerializer.Serialize(CustomerItem);
+                HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json);
+            }
+
             
 
-           List<Item> list = _context.Plans.Where(n => n.PlanId == planid).SelectMany(n => n.PlanRefs.SelectMany(m => m.Project.Items)).ToList();
 
-            ViewBag.Items = list;
 
             var data = HttpContext.Session.GetString(CDictionary.SK_PLAN_COMPARERE_RESULT);
             _context.Plans.Load();
@@ -878,6 +887,158 @@ namespace MedSysProject.Controllers
                 _logger.LogError("Error fetching projects: " + ex.Message);
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        public IActionResult loadItem()
+        {
+
+            string json =HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult addItem()
+        {
+            ////itemID////////
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+            var form = Request.Form;
+            var id = int.Parse(form["id"]);
+            var item = _context.Items.Find(id);
+           
+            list.Add(item);
+
+            string json2 = System.Text.Json.JsonSerializer.Serialize(list);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
+
+          
+            return Ok();
+        }
+        public IActionResult removeItem(int id)
+        {
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+
+            foreach(var item in list)
+            {
+                if(item.ItemId == id)
+                {
+                    list.Remove(item);
+                    break;
+                }
+            }
+            string json2 = System.Text.Json.JsonSerializer.Serialize(list);
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
+
+
+            return Ok();
+        }
+        public IActionResult rsv(/*int id*/)
+        {
+            var form = Request.Form;
+            var id = int.Parse(form["mid"]);
+            var date = form["date"];
+
+            var temp = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+            var p = System.Text.Json.JsonSerializer.Deserialize<Plan>(temp);
+            int pid = p.PlanId;////
+            Reserve rs = new Reserve();
+            rs.MemberId = id;
+            rs.PlanId = pid;////
+            rs.ReserveDate = DateTime.Now.ToShortDateString();
+            rs.ReserveState = "預約中";
+            rs.PaymentStatus = 0;
+
+            _context.Reserves.Add(rs);
+            _context.SaveChanges();
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+            int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n => n.ReserveId).LastOrDefault().ReserveId;
+            foreach (var item in list)
+            {
+                ReservedSub rss = new ReservedSub();
+                rss.ReservedId = rid;
+
+                rss.ItemId = item.ItemId;
+                _context.ReservedSubs.Add(rss);
+            }
+
+            _context.SaveChanges();
+            HealthReport hr = new HealthReport();
+            hr.MemberId = id;
+            hr.PlanId = pid;
+            hr.ReportDate = null;
+            hr.ReserveId = rid;
+            hr.Paymentstatus = 0;
+
+            _context.HealthReports.Add(hr);
+            _context.SaveChanges();
+            int hrid = _context.HealthReports.Where(p => p.MemberId == id).OrderBy(n => n.ReportId).Last().ReportId;
+            foreach (var item in list)
+            {
+                ReportDetail rdt = new ReportDetail();
+                rdt.ReportId = hrid;/////
+                rdt.ItemId = item.ItemId;
+                _context.ReportDetails.Add(rdt);
+            }
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult enterResult()
+        {
+            var form = Request.Form;
+
+            // const form  = new formdata();
+            //from.append("formReportId","2255,2256,2257,2258,2259,";
+            //form.append("formResult","100,200,300,400,500");
+
+            //let url = `/Home/enterResult`;
+            //const response = await fetch(url,{
+            //  method:"POST",
+            //  body:form,
+            //})
+            string formReportId = form["reportids"];
+            string formResult = form["result"];
+
+            
+            string reportid = "2255,2256,2257,2258,2259,";
+            
+            List<string> relist = formReportId.Split(",").ToList();
+            List<int> ids = new List<int>();
+
+            for(int i =0; i < relist.Count() - 1; i++)
+            {
+                ids.Add(int.Parse(relist[i]));
+            }
+
+            List<string> results = formResult.Split(",").ToList();
+            List<string> resultss = new List<string>();
+            for(int j = 0; j < results.Count() - 1; j++)
+            {
+                resultss.Add(results[j]);
+            }
+            int count = 0;
+            foreach(var item in ids)
+            {
+                var red = _context.ReportDetails.Find(item);
+                red.Result = resultss[count];
+                count++;
+            }
+
+            _context.SaveChanges();
+
+
+            string str = "100,200,300,400,500,";
+
+            return Ok();
         }
 
     }

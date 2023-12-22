@@ -9,6 +9,7 @@ using static System.Net.WebRequestMethods;
 using MedSysProject.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
+using Google.Apis.Http;
 
 namespace MedSysProject.Controllers
 {
@@ -16,9 +17,10 @@ namespace MedSysProject.Controllers
     {
         
         private readonly MedSysContext _context;
-        public TransactionController(MedSysContext medSysContext)
+        //IHttpClientFactory _httpClientFactory;
+        public TransactionController(MedSysContext medSysContext /*IHttpClientFactory httpClientFactory*/)
         {
-            
+            //_httpClientFactory = httpClientFactory;
             _context = medSysContext;
         }
         public IActionResult Index()
@@ -343,7 +345,75 @@ namespace MedSysProject.Controllers
         //    return View("EcpayView", data);
         //}
 
+        //public IActionResult paySussess(IFormCollection id)
+        //{
+        //    var data = new Dictionary<string, string>();
+        //    foreach (string key in id.Keys)
+        //    {
+        //        data.Add(key, id[key]);
+        //    }
+        //    var order = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+        //    order.TradeNo = data["TradeNo"];
+        //    order.StateId = 14;
+        //    _db.SaveChanges();
+        //    string Memberemail = data["CustomField1"];
+        //    string ProName = data["CustomField2"];
+        //    string ProCount = data["CustomField3"];
+        //    string total = data["CustomField4"];
+        //    string proID = "";
+        //    List<int> proList = new List<int>();
+        //    var Pid = ProName.Split("#").ToList();
+        //    foreach (var item in Pid)
+        //    {
+        //        proList.Add(Int32.Parse(item));
+        //    }
+        //    var Ps = _db.Products.Where(n => proList.Contains(n.ProductId)).ToList();
+        //    foreach (var item in Ps)
+        //    {
+        //        proID += item.ProductName + "#";
+        //    }
+        //    using (var httpclient = _httpClientFactory.CreateClient())
+        //    {
+        //        string url = "https://localhost:7078/api/Email";
 
+        //        EmailData email = new EmailData();
+        //        email.Address = Memberemail;
+
+        //        email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount, total);
+        //        email.Subject = "訂單成立";
+        //        string emailjson = JsonSerializer.Serialize(email);
+        //        HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+        //        HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+        //    }
+        //    var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+
+
+        //    return RedirectToAction("OrderList", new { page = 999 });
+        //}
+
+        //public static string EmailText(string TradeNo, string proname, string proCount, string total)
+        //{
+        //    string html = "";
+        //    List<string> proList = new List<string>();
+        //    List<string> proCountList = new List<string>();
+        //    proCountList = proCount.Split('#').ToList();
+        //    total = Int32.Parse(total).ToString("N0");
+        //    proList = proname.Split('#').ToList();
+        //    List<Product> products = new List<Product>();
+
+        //    html = "<h2>你好！很高興您能來我們網站消費。</h2>";
+        //    html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
+        //    html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
+        //    for (int i = 0; i < proList.Count - 1; i++)
+        //    {
+        //        html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + proList[i] + "</td><td style='padding:8px;'>" + proCountList[i] + "</td></tr>";
+        //    }
+        //    html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>總價格:<td style='padding:8px;'> " + total + "元<td></tr>";
+        //    html += "</tbody></table>";
+        //    html += "期待你能回到我們網站再次消費，謝謝！<br />";
+        //    html += "MedSys團隊敬上";
+        //    return html;
+        //}
 
     }
 }
