@@ -140,7 +140,7 @@
             <div class="col-4"></div>
             <div class="overflow-auto col-6 A #bigC">
                 <div id="rsitem">
-                    <table class="table">
+                    <table class="table" id="table">
                         <thead>
                             <tr>
                                 <th  class="col-1">
@@ -157,7 +157,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody >
+                        <tbody id="show">
                             @{
                                 string json = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
                                 List<Item> itemList = JsonSerializer.Deserialize<List<Item>>(json);
@@ -169,10 +169,17 @@
                                         <td>@count</td>
                                         <td>@item.ItemName</td>
                                         <td>@item.ItemPrice</td>
-                                        <td><img src="img/icon/X.png" onclick="imgdelete()"/></td>
+                                        <td>
+                                        <img src="~/img/icon/X.png" onclick="imgdelete()"/>
+                                            <p hidden>@item.ItemId</p>
+                                        </td>
                                     </tr>
                                 }
-
+                                <tr id="foot">
+                                <td id="price" colspan="4">
+                                總價:
+                                </td>
+                                </tr>
 
 
                             }
@@ -191,7 +198,7 @@
             
 
     </div>
-
+    <button id="tttt">123</button>
         @*預約詳細*@
         <div class="modal" tabindex="-1" id="detail">
             <div class="modal-dialog">
@@ -416,7 +423,7 @@
         $('#reserve').modal('hide');
     })
 
-
+    
   
     ////日期變更/////
     var bday= document.querySelector("#bday")
@@ -478,17 +485,20 @@
     
         var price = 0;
         var tbody = document.querySelector("#show")
-        var tfoot = document.querySelector("tfoot")
+        //var tfoot = document.querySelector("tfoot")
         for (var i = 0; i <= tbody.childElementCount - 1; i++) {
             
             price = price+parseInt(tbody.childNodes[i].children[2].innerText)
         }
         console.log(tfoot.children[0].children[2].children[0].innerHTML)
         //價格
-        tfoot.children[0].children[2].children[0].innerHTML = price;
+        //tfoot.children[0].children[2].children[0].innerHTML = price;
         //數量
-        tfoot.children[0].children[1].children[0].innerHTML = tbody.childElementCount;
+        //tfoot.children[0].children[1].children[0].innerHTML = tbody.childElementCount;
 
+
+        var totalprice = document.querySelector("#price")
+        totalprice.innerHTML = price
 
         //console.log(Int16Array(tbody.childNodes[i].children[2].innerText))
         //console.log(price)
@@ -716,20 +726,37 @@
     ////////
     ////////
     //imgdel//
+    /////////////////todo
     function imgdelete() {
         let img = document.querySelectorAll(".imgdelete");
-        var dtr = document.querySelectorAll("#dtr");
+        
         var body = document.querySelector("#show");
-        //var t = dtr.removeChild(event.target.parentNode);
         body.removeChild(event.target.parentNode.parentNode);
+        var id = event.target.closest("tr").children[3].children[1].innerHTML
+        console.log(event.target.closest("tr").children[3].children[1].innerHTML)
         //priceFormatter(1000);
         //console.log(t.innerHTML)
-        pricecount()
+        delItem(id)
+        //pricecount()
     }
-    async function delItem(){
-
+    async function delItem(id){
+        let url = `/Home/removeItem?id=${id}`;
+        const response = await fetch(url);
     }
 
+    //////////////預約////////////////////
+
+    var tttt = document.querySelector("#tttt")
+    tttt.addEventListener("click", () => {
+        alert("00")
+        res(40)
+
+    })
+
+    async function res(mid) {
+        let url = `https://localhost:7203/Home/rsv?id=${mid}`;
+        const response = await fetch(url)
+    }
 
     //var table = document.querySelector("#show")
     //table.innerHTML = @ViewBag.item;
@@ -755,7 +782,26 @@
         var finalconfirm = document.querySelector("#finalconfirm")
             finalconfirm.addEventListener("click",()=>{
         var tform = document.querySelector("#tform")
-        tform.submit();
+    @{
+        string fjson = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+        List<Item> fitemList = JsonSerializer.Deserialize<List<Item>>(fjson);
+        int? totalprice = 0;
+        foreach (var item in fitemList)
+        {
+            totalprice += item.ItemPrice;
+
+        }
+        string fplan = Context.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+        var pp = System.Text.Json.JsonSerializer.Deserialize<Plan>(fplan);
+    }
+   
+    TotalAmount.value = @totalprice;
+    TradeDesc.value = `健檢套餐:${@pp.PlanName}`
+    ItemName.value = @pp.PlanName
+    
+
+////////////////////綠界送出///////////
+        //tform.submit();
 
         //location.href = '@Url.Content("~/Accout/MemberCenter")';
 
@@ -826,6 +872,7 @@
         //    formpay.submit();
         //});
         //alert("付款成功")
+        
     })
 </script>
 

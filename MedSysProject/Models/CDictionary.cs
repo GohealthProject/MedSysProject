@@ -19,5 +19,7 @@
 
         public static readonly string SK_CUSTOMER_ITEMLIST ="SK_CUSTOMER_ITEMLIST";
 
+        public static readonly string SK_CUSTOMER_PLAN = "SK_CUSTOMER_PLAN";
+
     }
 }
