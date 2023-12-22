@@ -110,12 +110,12 @@
                 <div class="col-lg-12">
                 <ul id="portfolio-flters">
                     <li data-filter="*" class="filter-active">全部類別</li>
-                    <li data-filter=".filter-heart">心血管相關</li>
-                    <li data-filter=".filter-metabloism">新陳代謝相關</li>
+                    <li data-filter=".filter-3">心血管相關</li>
+                    <li data-filter=".filter-2">新陳代謝相關</li>
                     <li data-filter=".filter-endocrine">內分泌疾病</li>
-                    <li data-filter=".filter-dementia">失智症相關</li>
-                    <li data-filter=".filter-AMA">高齡生育相關</li>
-                    <li data-filter=".filter-order">自訂方案</li>
+                    <li data-filter=".filter-5">失智症相關</li>
+                    <li data-filter=".filter-4">高齡生育相關</li>
+                    <li data-filter=".filter-6">自訂方案</li>
                 </ul>
                     </div>
             </div>
@@ -158,143 +158,54 @@
 
         <div class="row portfolio-container">
 
-            
-          @foreach(var plan in Model)//if設分類條件
+           
+          @foreach(var plan in Model)
             {
 
-                if (plan.PlanId == 4)
-                {
-                    if (plan.PlanPrice == 25550)
-                    {
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-AMA">
+             
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-@{@plan.PlanId}">
                             <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
                                 <p>
-                                    @plan.PlanName <i class="bi bi-arrow-down-circle"></i> 價格NT$ @plan.PlanPrice  <br>
+                                    @plan.PlanName
+                            @if (plan.PlanId == 6)
+                            {
+                                <i class="bi bi-arrow-down-circle"></i>
+                            }
+                            else{
+                                <i class="bi bi-arrow-down-circle">價格  </i>
+                                @plan.PlanPrice
+                                <i>元</i>
+                                }
+                              
+                            <br>
+
                                 </p>
                                 <img src="~/img/PersonalPlan/p4-1-@{@plan.PlanId}.jpg" class="img-fluid" alt="">
                                 <div class="portfolio-info">
-                                    
-                                    <div>
 
-                                        <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
+                                    <div>
+                                @if (plan.PlanId == 6)
+                                {
+                                    <a href="~/Home/Customcompare/@plan.PlanId" title="自選方案"><i class="bi bi-pin-angle" style="color:turquoise">@plan.PlanName</i></a>
+                                }
+                                else
+                                {
+                                      <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
                                         <a href="~/Home/planComeparisonTotal" title="Details" style="color:gold"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId}" value="checkbox">加入方案比較</a>
+                                }                                                               
+                                  
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                    else
+                        </div>                      
+                        
+
+
+               }
                  
-                    continue;
-                }
-                if (plan.PlanId == 6)
-                {
-                    if (plan.PlanPrice == 25550)
-                    {
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-order">
-                            <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
-                                <p>
-                                    @plan.PlanName <i class="bi bi-arrow-down-circle"></i><br>
-                                </p>
-                                <img src="~/img/PersonalPlan/self.jpg" class="img-fluid" alt="">
-                                <div class="portfolio-info">
-                                    <div>
-                                        <a href="~/Home/Customcompare" data-gallery="portfolioGallery" title="點選後至自選方案區"><i class="bi bi-plus">@plan.PlanName</i></a>
 
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                  continue;
-                }
-                if (plan.PlanId == 2 )
-                {
-                    if (plan.PlanPrice == 32650)
-                    {
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-heart filter-metabloism">
-                            <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
-                              <p>
-                                    @plan.PlanName <i class="bi bi-arrow-down-circle"></i> 價格NT$ @plan.PlanPrice  <br>
-                                </p>
-                                <img src="~/img/PersonalPlan/p4-1-@{@plan.PlanId}.jpg" class="img-fluid" alt="">
-                                <div class="portfolio-info">
-                                    <div>
-
-
-                                        <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details" style="color:gold"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId}" value="checkbox">加入方案比較</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                   
-                    continue;
-                }
-                if (plan.PlanId == 3)
-                {
-                    if (plan.PlanPrice == 24450)
-                    {
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-dementia filter-metabloism">
-                            <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
-                                <p>
-                                    @plan.PlanName <i class="bi bi-arrow-down-circle"></i> 價格NT$ @plan.PlanPrice  <br>
-                                </p>
-                                <img src="~/img/PersonalPlan/p4-1-@{@plan.PlanId}.jpg" class="img-fluid" alt="">
-                                <div class="portfolio-info">
-                                    <div>
-                                        
-                                        <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details" style="color:gold"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId}" value="checkbox">加入方案比較</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else                    
-                 
-                    continue;
-                }
-
-                if (plan.PlanId == 5)
-                {
-                    if (plan.PlanPrice == 20750)
-                    {
-                        <div class="col-lg-4 col-md-6 portfolio-item filter-dementia filter-metabloism">
-                            <div class="portfolio-wrap" style="color:aquamarine ;text-align:center ">
-                                <p>
-                                    @plan.PlanName <i class="bi bi-arrow-down-circle"></i> 價格NT$ @plan.PlanPrice  <br>
-                                </p>
-                                <img src="~/img/PersonalPlan/p4-1-@{@plan.PlanId}.jpg" class="img-fluid" alt="">
-                                <div class="portfolio-info">
-                                    <div>
-
-
-                                        <a href="~/Home/PlanIntroductionProject/@plan.PlanId" title="方案詳細"><i class="bi bi-card-list">方案詳細</i></a>
-                                        <a href="~/Home/planComeparisonTotal" title="Details" style="color:gold"><input class="form-check-input chbox" type="checkbox" id="@{@plan.PlanId}" value="checkbox">加入方案比較</a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
                 
-                    continue;
-                }
-
-
-            }
-
-           
-
-        </div>
+                </div>
        
     </div>
         

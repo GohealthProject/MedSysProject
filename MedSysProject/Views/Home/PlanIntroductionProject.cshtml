@@ -71,11 +71,24 @@
                                 
                             <ul class="list-group list-group-flush ">
                                 <li class="list-group-item" id="price"><strong style="color:#b1297d">價格</strong>: NT$
-                                          
-                                   </li>
+
+                                            <i>元</i>
+                                        </li>
                                 <li class="list-group-item"><strong style="color:#51966d">適合族群</strong>: 中高年齡層</li>
                                  <li class="list-group-item"><strong style="color:#51966d">方案介紹</strong>: @plandetail.PlanDescription</li>
-                                <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i>/女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></li>
+                                        @if (plandetail.PlanId == 4)
+                                        {
+                                            <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></li>
+                                        }
+                                        else if (plandetail.PlanId == 5)
+                                        {
+                                            <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="list-group-item"><strong style="color:#84af45">性別限制</strong>: 男<i class="bi bi-bookmark-check-fill" style="color:#4584af"></i>/女<i class="bi bi-bookmark-check-fill" style="color:#af4584"></i></li>
+                                        }
+                                       
                             
                                     </ul>
                                 }
@@ -104,13 +117,13 @@
                         <div style="height:200px;overflow:auto;">
                                 <div class="table-responsive-lg  table-dialog table-dialog-scrollable" style="height:fit-content">
                                     <div class="overflow-auto " style="height:fit-content">
-                                    <table class="table order-column " style="width:100% ;height:fit-content" id="Plan">
+                                    <table class="table order-column " style="width:100% ;height:fit-content;" id="Plan">
                                     <thead>
-                                        <tr class="">
+                                        <tr style="">
                                             <th scope="col" disable></th>
-                                            <th scope="col" >項目內容</th>                                                                      
-                                                                                     
-                                            <th scope="col">男</th>
+                                            <th scope="col" >項目內容</th>                                                                    
+                                                                
+                                              <th scope="col">男</th>
                                             <th scope="col">女</th>
                                         </tr>
                                     </thead>
@@ -132,10 +145,47 @@
                                                             }
                                                            
                                                         }
-                                                    </th>                                                  
-                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
-                                                    <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>                                                                                             
-                                                     continue;
+                                                    </th>         
+                                                            @if (project.ProjectId ==7)
+                                                            {
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                            }
+                                                            else if (project.ProjectId == 8)
+                                                            {
+                                                                
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                            }
+                                                            else if (project.ProjectId ==9)
+                                                            {
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+
+                                                            }
+                                                            else if (project.ProjectId == 10)
+                                                            { 
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                               
+                                                            }
+                                                            else if (project.ProjectId == 16)
+                                                            {
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                            }
+                                                            else if (project.ProjectId == 17)
+                                                            {
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                                <td><i class="bi bi-x-square" style="color:firebrick"></i></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                                <td><i class="bi bi-check2-square" style="color:#36edae"></i></td>
+                                                            }
+
+                                                    continue;
                                                 }                                                 
                                         </tr>
                                         
@@ -179,7 +229,7 @@
             price.innerHTML ="<a>"+data[0].PlanPrice+"</a>";
             price.innerHTML =
             `
-               <strong style="color:#b1297d">NT$ : ${Price}</strong>
+               <strong style="color:#b1297d">價格 ${Price} 元</strong>
             `
 
    }
