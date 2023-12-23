@@ -20,7 +20,33 @@
     .half-width {
         width: 50%; 
     }
+
+    <style >
+    .custom-btn {
+        min-width: 80px; /* 確保所有按鈕具有相同的最小寬度 */
+        height: 40px; /* 確保所有按鈕具有相同的高度 */
+        padding: 5px 10px; /* 設置內邊距 */
+        font-size: 16px; /* 統一字體大小 */
+        line-height: 1.5; /* 行高，影響按鈕的垂直間距 */
+        border-radius: 5px; /* 邊框圓角 */
+        text-align: center; /* 文字居中 */
+    }
+
+    .custom-btn {
+        width: 30px;
+        height: 30px;
+        padding: 0; /* 移除內邊距以確保按鈕不會變得太大 */
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .custom-icon {
+        font-size: 15px; /* 或其他適當的大小，以確保圖標看起來和諧 */
+    }
 </style>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -63,7 +89,7 @@
                             @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
                         </div>
                         <div class="col-md-6 text-right">
-                            <a style=" margin-top: 30px; margin-right:-75px" class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
+                            <a style=" margin-top: 30px; margin-right:-75px" class="btn btn-outline-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
                                 <i class="fas fa-plus"></i> 新增產品
                             </a>
                         </div>
@@ -125,11 +151,15 @@
                                 }
                             </td>
                             <td>
-                                <a onclick="getProductDetails(@item.WrappedProductId)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                    <i class="fas fa-edit"></i>
+                                <a class="btn btn-info custom-btn" onclick="loadProductDetails(@Html.Raw(item.WrappedProductId))">
+                                    <i class="fas fa-info-circle custom-icon"></i>
                                 </a>
-                                <a class="btn btn-danger" onclick="deleteProduct(@item.WrappedProductId)">
-                                    <i class="fas fa-trash-alt"></i>
+                                <a onclick="getProductDetails(@item.WrappedProductId)" class="btn btn-primary custom-btn" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-edit custom-icon"></i>
+                                </a>
+                                
+                                <a class="btn btn-danger custom-btn" onclick="deleteProduct(@item.WrappedProductId)">
+                                    <i class="fas fa-trash-alt custom-icon"></i>
                                 </a>
                             </td>
                         </tr>
@@ -171,6 +201,15 @@
     </div>
 </div>
 @* ---修改彈窗結束--- *@
+
+<!-- 產品詳細資訊彈窗 -->
+<div class="modal fade" id="modalProductDetail" tabindex="-1" role="dialog" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="productDetailDiv">
+            <!-- 彈窗內容將通過 AJAX 動態加載 -->
+        </div>
+    </div>
+</div>
 
 <!-- 載入 Bootstrap 的 JavaScript -->
 
@@ -451,6 +490,22 @@
             console.error("未找到下拉列表元素");
         }
     });
+
+
+    function loadProductDetails(productId) {
+        console.log("ProductId:", productId); 
+        $.ajax({
+            url: '@Url.Action("ProductDetail", "Admin")?productId=' + productId,
+            type: 'GET',
+            success: function (data) {
+                $('#productDetailDiv').html(data);
+                $('#modalProductDetail').modal('show');
+            },
+            error: function (error) {
+                console.error('加载产品详细信息失败：' + error.statusText);
+            }
+        });
+    }
 
 
 
