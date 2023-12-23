@@ -1048,6 +1048,36 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Product");
         }
 
+        [HttpGet]
+        public IActionResult ProductDetail(int? productId)
+        {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = _db.Products.FirstOrDefault(e => e.ProductId == productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // 在這裡初始化 ViewBag.Categories
+            var categories = _db.ProductsCategories.ToList();
+            ViewBag.Categories = categories;
+
+            var productWrap = new CProductsWrap(product);
+            productWrap.SelectedCategories = _db.ProductsClassifications
+                .Where(e => e.ProductId == productId)
+                .Select(e => e.CategoriesId)
+                .ToList();
+
+            // 使用一個新的 Partial View 或現有的，只顯示不可編輯的資訊
+            return PartialView("_DetailProductModal", productWrap);
+        }
+
+
 
         public IActionResult GetImageByte(int? id)
         {
