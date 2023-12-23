@@ -16,6 +16,10 @@
     .custom-modal-dialog {
         max-width: 100%;
     }
+
+    .half-width {
+        width: 50%; 
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -35,8 +39,8 @@
     <div class="row g-3">
         @using (Html.BeginForm())
         {
-            <div class="row align-items-end" style="margin-left: 5px;">
-                        <div class="row align-items-end" style="margin-left: 18px;">
+            <div class="row align-items-end" style="margin-left: 1px;">
+                        <div class="row align-items-end" style="margin-left: 8px;">
                             <div class="col-auto">
                                 最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control" })
                             </div>
@@ -54,12 +58,12 @@
                         </div>
             </div>
                     <div class="row align-items-center">
-                        <div class="col-md-6">
-                            @Html.Label("選擇類別：")
+                        <div class="col-md-5" style="margin-left: 20px; margin-bottom: 20px; margin-top:10px">
+                            @Html.Label("選擇產品類別：")
                             @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
                         </div>
                         <div class="col-md-6 text-right">
-                            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
+                            <a style=" margin-top: 30px; margin-right:-75px" class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
                                 <i class="fas fa-plus"></i> 新增產品
                             </a>
                         </div>
