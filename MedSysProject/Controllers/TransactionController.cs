@@ -17,8 +17,8 @@ namespace MedSysProject.Controllers
     {
         
         private readonly MedSysContext _context;
-        //IHttpClientFactory _httpClientFactory;
-        public TransactionController(MedSysContext medSysContext /*IHttpClientFactory httpClientFactory*/)
+        System.Net.Http.IHttpClientFactory _httpClientFactory;
+        public TransactionController(MedSysContext medSysContext , System.Net.Http.IHttpClientFactory httpClientFactory)
         {
             //_httpClientFactory = httpClientFactory;
             _context = medSysContext;
@@ -29,9 +29,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult checkreserve(string date)
         {
-            var t = _context.Reserves.Where(p => p.ReserveDate == date).Count();
-
-            return View(t);
+           
+            return View();
         }
 
             public IActionResult editreport()
@@ -271,6 +270,11 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public ActionResult payInfo(IFormCollection id)
         {
+            
+            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp m = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(json);
+            var rs = _context.Reserves.Where(p=>p.MemberId == m.MemberId).OrderBy(p=>p.ReserveId).LastOrDefault();
+            var hr = _context.HealthReports.Where(p => p.MemberId == m.MemberId).OrderBy(p => p.ReserveId).LastOrDefault();
             var data = new Dictionary<string, string>();
             foreach (string key in id.Keys)
             {
@@ -285,7 +289,12 @@ namespace MedSysProject.Controllers
             ecpayOrder.RtnCode = int.Parse(id["RtnCode"]);
             if (id["RtnMsg"] == "Succeeded")
             {
-                ecpayOrder.RtnMsg = "已付款";
+                rs.PaymentStatus = 1;
+                hr.Paymentstatus = 1;
+;                ecpayOrder.RtnMsg = "已付款";
+                _context.Reserves.Add(rs);
+                _context.HealthReports.Add(hr);
+                _context.SaveChanges();
             }
             else {
                 ecpayOrder.RtnMsg = "未付款";
@@ -319,9 +328,58 @@ namespace MedSysProject.Controllers
             //    //ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
             //    _context.SaveChanges();
             //}
-            return RedirectToAction("Accout/MemberCenter");
+            return RedirectToAction("Accout/Index");//MemberCenter
             //return View("EcpayView", data);
         }
+
+        //public IActionResult aaa()
+        //{
+        //    using (var httpclient = _httpClientFactory.CreateClient())
+        //    {
+        //        string url = "https://localhost:7078/api/Email";
+
+        //        EmailData email = new EmailData();
+        //        email.Address = Memberemail;
+
+        //        email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount, total);
+        //        email.Subject = "訂單成立";
+        //        string emailjson = JsonSerializer.Serialize(email);
+        //        HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+        //        HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+        //    }
+        //    var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+
+
+        //    return RedirectToAction("OrderList", new { page = 999 });
+        //    return View();
+
+        //}
+
+        public static string EmailText(string TradeNo, string proname, string proCount, string total)
+        {
+            string html = "";
+            List<string> proList = new List<string>();
+            List<string> proCountList = new List<string>();
+            proCountList = proCount.Split('#').ToList();
+            total = Int32.Parse(total).ToString("N0");
+            proList = proname.Split('#').ToList();
+            List<Product> products = new List<Product>();
+
+            html = "<h2>你好！很高興您能來我們網站消費。</h2>";
+            html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
+            html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
+            for (int i = 0; i < proList.Count - 1; i++)
+            {
+                html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + "產品名稱" + "</td><td style='padding:8px;'>" + 1 + "</td></tr>";
+            }
+            html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>總價格:<td style='padding:8px;'> " + total + "元<td></tr>";
+            html += "</tbody></table>";
+            html += "期待你能回到我們網站再次消費，謝謝！<br />";
+            html += "MedSys團隊敬上";
+            return html;
+        }
+
+
         /// step5 : 取得虛擬帳號 資訊
         //[HttpPost]
         //public ActionResult AccountInfo(FormCollection id)
