@@ -1,0 +1,28 @@
+﻿
+<div class="top"><span>傳送訊息給: <span class="name">@ViewBag.EmployeeName</span></span></div>
+<input type="hidden" value="@ViewBag.EmployeeId" />
+
+<!-- 訊息內容 -->
+
+<div class="chat" data-chat="person1">
+    <div class="conversation-start">
+@*         @foreach (var mgs in Model){
+            if (mgs. == )
+            {
+                <div class="bubble me">@mgs.MessageContent</div>
+            }
+            else
+            {
+                <div class="bubble you">@mgs.MessageContent</div>
+            }
+        } *@
+        @* <span>Today, 6:48 AM</span> *@
+    </div>
+</div>
+
+<div class="write">
+    @* <a href="javascript:;" class="write-link attach"></a> *@
+    <input type="text" placeholder="輸入訊息..." id="chat-messagebox">
+    <a href="javascript:;" class="btn btn-primary"><i class="fas fa-smile"></i></a>
+    <a href="javascript:;" class="btn btn-success" id="chat-btnsend"><i class="fas fa-paper-plane"></i></a>
+</div>

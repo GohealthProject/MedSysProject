@@ -74,11 +74,15 @@ namespace MedSysProject.Controllers
             else if (member != null)
             {
                 ViewBag.MemberId = MemberId;
+                ViewBag.MemberName = member.MemberName;
+                ViewBag.RoomId = roomid;
                 return PartialView(member);
             }
             else if (employee != null)
             {
                 ViewBag.EmployeeId = EmployeeId;
+                ViewBag.EmployeeName = employee.EmployeeName;
+                ViewBag.RoomId = roomid;
                 return PartialView(employee);
             }
 
