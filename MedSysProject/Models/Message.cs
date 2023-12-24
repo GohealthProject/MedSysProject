@@ -19,7 +19,7 @@ public partial class Message
 
     public bool? ReadState { get; set; }
 
-    public string SendTime { get; set; }
+    public DateTime? SendTime { get; set; }
 
     public virtual Employee Employee { get; set; }
 

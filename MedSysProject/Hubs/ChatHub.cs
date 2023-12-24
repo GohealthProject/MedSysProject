@@ -29,7 +29,7 @@ namespace MedSysProject.Hubs
             var userisEmployee = _db.Employees.FirstOrDefault(u => u.EmployeeId == COnlineUser.onlineemployeeid);
             if (userisMember != null || userisEmployee != null)
             {
-                if (userisMember != null && userisEmployee == null)
+                if (userisMember != null && userisEmployee == null) //用戶是會員
                 {
                     if (!MemberIDList.Contains(userisMember.MemberId))
                         MemberIDList.Add(userisMember.MemberId);
@@ -60,7 +60,7 @@ namespace MedSysProject.Hubs
 
 
                 }
-                else if (userisMember == null && userisEmployee != null)
+                else if (userisMember == null && userisEmployee != null) //用戶是員工
                 {
                     if (!EmployeeIDList.Contains(userisEmployee.EmployeeId))
                     {
@@ -148,9 +148,71 @@ namespace MedSysProject.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string userId, string user, string message)
+        public async Task SendMessage(int? roomid,int? memberid,int? employeeid,string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", userId, user, message);
+            //先判斷送出訊息的是誰，是會員還是員工
+            var member = _db.Members.Find(memberid);
+            var employee = _db.Employees.Find(employeeid);
+
+            var room = roomid;
+
+            if (member != null && employee == null) //會員
+            {
+                //找出該會員的連線ID
+                var memberconnection = _db.Members.Where(m => m.MemberId == member.MemberId).Select(c => c.ConnectionId).FirstOrDefault();
+
+                //找出該會員的房間ID
+                //var roomidlist = _db.RoomRefs.Where(r => r.Memberid == member.MemberId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist2 = _db.RoomRefs.Where(r => r.Employeeid == employee.EmployeeId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist3 = roomidlist.Intersect(roomidlist2).ToList();
+
+                //如果有包含，就把該房間ID指定給room
+                //if (roomidlist3.Count() > 0)
+                //{
+                //    room = roomidlist3[0];
+                //}
+                //else
+                //{
+                //    //如果沒有包含，就新增一筆房間資料
+                //    var newroom = new Room();
+                //    newroom.RoomName = member.MemberName + "和" + employee.EmployeeName + "的聊天室";
+                //    _db.Rooms.Add(newroom);
+                //    _db.SaveChanges();
+
+                //    //新增房間參考資料
+                //    var newroomref = new RoomRef();
+                //    newroomref.Roomid = newroom.RoomId;
+                //    newroomref.Memberid = member.MemberId;
+                //    newroomref.Employeeid = employee.EmployeeId;
+                //    _db.RoomRefs.Add(newroomref);
+                //    _db.SaveChanges();
+
+                //    room = newroom.RoomId;
+                //}
+
+                //找出該房間的所有訊息
+                //var messagelist = _db.Messages.Where(m => m.RoomId == room).ToList();
+
+                //新增訊息
+                var newmessage = new Message();
+                newmessage.RoomId = room;
+                if (member != null)
+                    newmessage.MemberId = member.MemberId;
+                if (employee != null)
+                    newmessage.EmployeeId = employee.EmployeeId;
+                newmessage.MessageContent = message;
+                newmessage.SendTime = DateTime.Now;
+                _db.Messages.Add(newmessage);
+                _db.SaveChanges();
+
+                //將訊息傳送給該房間的所有人
+                await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", member.MemberName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            }
         }
     }
 }
