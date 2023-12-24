@@ -44,7 +44,7 @@
             }
 
             // 截取前几个字符作为摘要（这里示例截取前200个字符）
-            snippet = snippet.slice(0, 200);
+            snippet = snippet.slice(0, 50);
             console.log(snippet);
             return snippet;
         }
@@ -69,7 +69,7 @@
     <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-            <a href="@Url.Content("~/Blogs/Index")" class="logo" style="font-size:2rem;">GoHealthBlog</a>
+            <a href="@Url.Content("~/Home/Index")" class="logo" style="font-size:2rem;">GO健康</a>
             <nav id="navbar" class="navbar">
                 <ul>
                     <li>@Html.ActionLink("部落格首頁", "Indexnew", "Blogs", null, null)</li>
