@@ -532,18 +532,22 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
         ///// ====end這裡是partialview區=====
-        public IActionResult DateCheck()
+        public IActionResult DateCheck(string ss)
         {
-            var form = Request.Form;
-            string date =  form["date"];
-            var taget =_context.Reserves.Where(p => p.ReserveDate == date).Count();
+            //var form = Request.Form;
+            //string date =  form["date"];
+            var taget =_context.Reserves.Where(p => p.ReserveDate == ss).Count();
+            string s = "";
             if (taget >5) 
             {
-                return Ok("OK");
+                s = "NO";
+                
+                return Json(s);
             }
             else
             {
-                return Json("NO");
+                s = "YES";
+                return Json(s);
             }
 
 
@@ -588,7 +592,7 @@ namespace MedSysProject.Controllers
                 string url = "https://localhost:7078/api/Email";
 
                 EmailData email = new EmailData();
-                email.Address = "waynewang1990@hotmail.com";          //m.MemberEmail;
+                email.Address = m.MemberEmail;
 
                 email.Body = EmailText2(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
                 email.Subject = "訂單成立";
@@ -605,8 +609,8 @@ namespace MedSysProject.Controllers
             //[HttpPost]
             public IActionResult Reserve(IFormCollection item)
         {
-           
-            ///////////////////todo OrderURL轉跳 MAIL 後台一鑑 Modal內容修改 日曆效果////////
+            HttpContext.Session.SetString("rdate", "");
+            ///////////////////todo OrderURL轉跳 MAIL 後台一鑑 Modal內容修改 日曆效果  總價////////
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
             int? totalprice = 0;
@@ -1042,6 +1046,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult rsv(/*int id*/)
         {
+
+            /////////////SaveChange()////////
             var form = Request.Form;
             int id = int.Parse(form["mid"]);
             string date = form["date"];
@@ -1094,55 +1100,7 @@ namespace MedSysProject.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public IActionResult enterResult()
-        {
-            var form = Request.Form;
-
-            // const form  = new formdata();
-            //from.append("formReportId","2255,2256,2257,2258,2259,";
-            //form.append("formResult","100,200,300,400,500");
-
-            //let url = `/Home/enterResult`;
-            //const response = await fetch(url,{
-            //  method:"POST",
-            //  body:form,
-            //})
-            string formReportId = form["reportids"];
-            string formResult = form["result"];
-
-            
-            string reportid = "2255,2256,2257,2258,2259,";
-            
-            List<string> relist = formReportId.Split(",").ToList();
-            List<int> ids = new List<int>();
-
-            for(int i =0; i < relist.Count() - 1; i++)
-            {
-                ids.Add(int.Parse(relist[i]));
-            }
-
-            List<string> results = formResult.Split(",").ToList();
-            List<string> resultss = new List<string>();
-            for(int j = 0; j < results.Count() - 1; j++)
-            {
-                resultss.Add(results[j]);
-            }
-            int count = 0;
-            foreach(var item in ids)
-            {
-                var red = _context.ReportDetails.Find(item);
-                red.Result = resultss[count];
-                count++;
-            }
-
-            _context.SaveChanges();
-
-
-            string str = "100,200,300,400,500,";
-
-            return Ok();
-        }
+      
 
 
       
