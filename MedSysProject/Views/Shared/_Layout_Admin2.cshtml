@@ -429,6 +429,7 @@
                                             string json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
                                             Employee emp = JsonSerializer.Deserialize<Employee>(json);
                                             @emp.EmployeeName
+                                            <input type="hidden" id="hiddenEmpId" value="@emp.EmployeeId" />
                                         }
                                     }
 
@@ -517,8 +518,8 @@
             }
         }
         <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
-@*         <div class="chat-window-body" id="chat-window-body" style="display:flex; justify-content:center; align-content:center;">
-            <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+        @*         <div class="chat-window-body" id="chat-window-body" style="display:flex; justify-content:center; align-content:center;">
+        <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
         </div> *@
     </div>
 
@@ -577,6 +578,9 @@
     <!-- Moments -->
     <script src="~/vendor/moment/moment.js"></script>
 
+    <!-- SignalR -->
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
     <!-- Page Scripts -->
     <script>
         document.querySelector("#show-chat-window").addEventListener("click", function () {
@@ -598,6 +602,17 @@
         //             document.querySelector("#chat-window-body").innerHTML = data;
         //         })
         // }
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        var hiddenMemberid = document.getElementById("hiddenMemberid").value;
+        var hiddenEmployeeid = document.getElementById("hiddenEmpId").value;
+
+        connection.on("ReceiveMessage", function (memberId, employeeId, message) {
+            if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+                document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
+                document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+            }
+        }
 
 
 
