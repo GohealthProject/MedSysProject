@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using MedSysProject.Models;
 using Microsoft.EntityFrameworkCore;
-using SignalRChat.Hubs;
+using MedSysProject.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
 
@@ -9,6 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+    });
+
+builder.Services.AddHttpClient();
 builder.Services.AddSession();
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
@@ -18,6 +33,10 @@ builder.Services.AddDbContext<MedSysContext>(
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -35,9 +54,10 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ChatHub>("/ChatHub");
 
-
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllerRoute(
     name: "default",

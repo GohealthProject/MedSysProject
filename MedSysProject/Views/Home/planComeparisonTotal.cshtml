@@ -1,68 +1,49 @@
 ﻿@{
     ViewData["Title"] = "planComeparisonTotal";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+
+   
 }
-@model List<MedSysProject.ViewModels.CPlanViewModel>
+@model  System.Data.DataTable
+@using System.Data
 <head>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
-   @*  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/print/bootstrap-table-print.min.js"></script> *@
-    @*test區*@
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.7.0.js"></script>*@
+    @*datatable區*@
+   @*  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> *@
+  
+   @* <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />*@
+    @*轉檔列印區JS*@
+   @* <script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+    
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> *@
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>*@
+   
     
     <style>
-       /*  .text-custom-truncate {
-            display: -webkit-box !important;
-            max-width: 230px;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden
-        }
- */
+       
         .table thead tr th {
-           /*  background-color: white ; */
+         
             z-index: 10;
             color: #705972;
         }
 
         .table tbody tr th {
-          /*   background-color: #5b5d23; */
+         
             color: #a7a5e4;
             z-index: 10
         }
-
-        
-     /*    body {
-            margin: 0;
-            padding: 2rem
-        }
-
-        table {
-            text-align: left;
-            position: relative;
-            border-collapse: collapse
-        }
-
-        th {
-            background: white;
-            position: sticky;
-            top: 0;
-            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4)
-        }
-
-        .table-responsive {
-            overflow-x: inherit !important
-        } */
+              
+     
 
     </style>
 
@@ -91,117 +72,174 @@
     @*搜尋*@
     <div>
         <hr />
-        <p>輸入您想檢查的類別:</p>
-        <input class="form-control" id="myInput" type="text" placeholder="輸入關鍵字，如:新陳代謝檢查">
-        <br>
-       
+        <p>步驟3:選取下方確認方案<i class="bi bi-arrow-90deg-down" style="color:indianred"></i></p>
     </div>
-   
+   <div >
+        <p id="btn">
+            @foreach(DataColumn btn in Model.Columns)
+            {
+                if (btn.ColumnName == "檢查類別" )
+                {
+                    continue;
+                }
+                else if (btn.ColumnName == "檢查細項")
+                {
+                    continue;   
+                }
+                else
+                {
+                    
+                    <button id="@btn.ColumnName " class="btn btn-light planbtn" style="background:cornflowerblue" >
+                        確定方案: @btn.ColumnName
+                    </button>}
+            }
+           
+       </p>
+   </div>
     
 
 
     @*移動區*@
     <div class="container-fluid navbar-nav-scroll">
-        <table class="table table-striped  table-bordered" id="dt-basic-checkbox" cellspacing="0" width="100%">
-
+        <form id="formdata">
+        <table class="table table-striped  table-bordered " id="datatable" cellspacing="0" width="100%">
+          
             <thead>
+                
                 <tr>
-                    <th>
-                    @foreach(var name in Model)
-                    {
-                        if (name.PlanId !=0)
-                            {
-                                <i class="bi bi-flower1" style="color:goldenrod">
-                            @Html.DisplayFor(p=>name.PlanName)</i>
-                        }
-                        }
-                    </th>
-                    
-                    <th>類別名稱</th>
-                    <th>方案價格</th>
-                    <th>方案項目</th>
-                    
+                       @foreach(DataColumn col in Model.Columns)
+                       {
+                    <th>@col.ColumnName</th>
+                               }       
                 </tr>
             </thead>
             <tbody id="myTable">
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                </tr>
-              @*   @foreach (var plan in Model)
-                {
-                    <tr>
-                        @if (plan.ProjectName != null)
-                        {    <td></td>
-                            <td>
-                                @Html.DisplayFor(p=>plan.ProjectName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p=>plan.ProjectPrice)
-                            </td>
-                            @if (plan.ItemId != 0)
-                            { <td>
-                                @for (int i = 0; i < plan.ItemName.Count(); i++)
-                                {
-                                   
-                                        @Html.DisplayFor(p=>plan.ItemName[i])
-                                    
-                                }
-                                </td>
-                            }
-                               
-                        }
-                    </tr>
-                        
-                        } *@
-            </tbody>
+               @foreach(DataRow row in Model.Rows){
+                      <tr>   
+                          @foreach (DataColumn col in Model.Columns) {
+                                <td>
+                                    @if (row[col.ColumnName] == "true")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:green"></i>
+                                        <i hidden>有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "false")
+                                    {
+                                        <i class="bi bi-x-square-fill" style="color:crimson"></i>
+                                        <i hidden>沒有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "truef")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:pink"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">女性限定</i>
+                                        <i hidden>有</i>
+                                    }
+                                    else if (row[col.ColumnName] == "truem")
+                                    {
+                                        <i class="bi bi-check-square-fill" style="color:royalblue"></i>
+                                        <i class="bi bi-star-fill" style="color:mediumslateblue">男性限定</i>
+                                        <i hidden>有</i>
+                                    }
+
+                                    else
+                                    {
+                                        <i class="bi bi-triangle-fill" style="color:goldenrod"> @row[col.ColumnName] </i>
+                                    }                                                   
+
+                       
+                    </td>                                                     
+                   }  
+                   </tr>}
+                 
+                
+                 </tbody>
             <tfoot></tfoot>
         </table>
-    </div>
+        </form>
+    </div>    
+</div>
+<div class="table-responsive table container-fluid navbar-nav-scroll">
+    <table class="table table-striped fa-check text-successtable-border border-light" width="100%">
 
-
-
-
-    
+       
+    </table>
 </div>
 @section Scripts{
-    <script>
-        let table=new DataTable('#dt-basic-checkbox');
-        $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
+    @* <script>
+      //  //---變數區
+      // let planList="";
+      // let table = new DataTable('#datatable');
+      //  const btnSubmit = document.querySelectorAll("#btn>button");
+      //  const table2 = document.querySelector("#datatable");
+      //  console.log("hello");
+      //  let list = @ViewBag.list;
+      //  console.log(list);
+      //  //     $("#datatable").datatable({
+           
+      //  // });
+      ////----傳送區
+  
+      
+      
+      //  btnSubmit.addEventListener('click', event => {
+      //      event.preventDefault();
+      //      async function send() {
+      //       alert("傳送")
+      //          const response = await fetch('@Url.Content("https://localhost:7078/api/CPlan/3?planid=3")');//選取方案id
+      //          window.location.href = ('@Url.Content("~/Home/Customcompare")');
+      //      };
+      //      send();
+           
+      //  });
+      //-----傳送區
+        
     //---------------------------------------------test
-        $(document).ready(function () {
-            var table = $('#dt-basic-checkbox').DataTable({
-                lengthChange: false,
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
-            });
-
-            table.buttons().container()
-                .appendTo('#table_wrapper .col-md-6:eq(0)');
-        });
+        
         //-----------------------------------------------------
-        $('#dt-basic-checkbox').DataTable({
+       
+        //----------------datatable資料
+        
 
-            columnDefs: [{
-                orderable: false,
-                className: 'select-checkbox',
-                targets: 0
-            }],
-            select: {
-                style: 'os',
-                selector: 'td:first-child'
-            }
+    </script> *@
+    <script>
+
+        let table = new DataTable('#datatable');
+
+        let list = @ViewBag.list
+        console.log(list);
+        let count =0;
+        let planbtn = document.querySelectorAll(".planbtn");
+        $(document).ready(()=> {
+            $("#datatable").DataTable({
+                destroy: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/zh-HANT.json',
+                },
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ]
+            })
         });
-
-
+        
+        document.addEventListener("DOMContentLoaded", load);
+        function load(){
+            planbtn.forEach((btn) => {
+                btn.value = list[count];
+                count++;
+                btn.addEventListener("click", (event)=>{
+                    change(event.target.value);
+                })
+            })
+        }
+        function change(id){
+            window.location.href = `/Home/Customcompare?planid=${id}`
+        }
+        
+        
     </script>
-
 }

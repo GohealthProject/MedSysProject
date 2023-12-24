@@ -8,6 +8,9 @@
     <div style="height:50px"></div>
     <div class="row g-5">
       <div class="col-md-5 col-lg-4 order-md-last">
+            <div class="mb-3">
+                <img class="rounded rounded-3" src="~/img/MemberImg/@Model.member.MemberImage" width=400 />
+            </div>
         <ul class="list-group mb-3">
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
@@ -16,18 +19,15 @@
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-              <a asp-action="VerifyemailPassword" >修改會員密碼</a>
+              <a asp-action="ResetPasswordLogined" >修改會員密碼</a>
             </div>
           </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
+@*           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
                 <a asp-action="MemberState" asp-controller="Accout">會員詳細資料</a>
             </div>
-          </li>
+          </li> *@
         </ul>
-            <div>
-                <img src="~/img/MemberImg/@Model.member.MemberImage" />
-            </div>
       </div>
       <div class="col-md-7 col-lg-8">
         <form class="needs-validation" novalidate>
@@ -80,7 +80,7 @@
 
             
                     </div>
-          <hr class="my-4">
+@*           <hr class="my-4">
                     <p class="fs-2">快速登入</p>
                     <div class="row">
                         <div class="col-sm-4 mb-3 mb-sm-0">
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         </div>
-          <hr class="my-4">
+          <hr class="my-4"> *@
 
           
         </form>

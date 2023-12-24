@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,17 @@
     <Content Remove="wwwroot\img\PersonalPlan\4481481.jpg" />
     <Content Remove="wwwroot\img\PersonalPlan\hand-drawn-tree-life-brown-shades_23-2148703761.jpg" />
     <Content Remove="wwwroot\img\PersonalPlan\leaf1.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-1-5.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-2.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-3.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-4.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-5.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p1-6.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p2-2-5.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p2-2.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p2-3.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p2-4.jpg" />
+    <Content Remove="wwwroot\img\PersonalPlan\p2-5.jpg" />
     <Content Remove="wwwroot\img\PersonalPlan\tree-clipart-1520959433vmu.jpg" />
   </ItemGroup>
 
@@ -66,6 +78,9 @@
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js" />
     <None Include="wwwroot\assets\vendor\swiper\swiper-bundle.min.js.map" />
     <None Include="wwwroot\js\AdminJavaScript.js" />
+    <None Include="wwwroot\js\dist\tw-city-selector.js" />
+    <None Include="wwwroot\js\dist\tw-city-selector.js.map" />
+    <None Include="wwwroot\js\dist\tw-city-selector.min.js" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.js" />
     <None Include="wwwroot\vendor\chart.js\Chart.bundle.min.js" />
@@ -75,8 +90,10 @@
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.2" />
+    <PackageReference Include="Chronos.Blazor.Cropper" Version="1.2.16" />
     <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
@@ -86,6 +103,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
     <PackageReference Include="SweetAlert" Version="1.0.0" />
     <PackageReference Include="Tinify" Version="1.6.0" />
     <PackageReference Include="TinyMCE" Version="6.7.3" />

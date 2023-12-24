@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using TinifyAPI;
+using MedSysProject.ViewModels;
+using System.Runtime.Intrinsics.X86;
 
 namespace MedSysProject.Controllers
 {
@@ -16,6 +18,7 @@ namespace MedSysProject.Controllers
             _db = db;
         }
 
+        #region 回收桶
         /// <summary>
         /// 主畫面，可能要改寫成Ajax?
         /// </summary>
@@ -75,18 +78,29 @@ namespace MedSysProject.Controllers
             #endregion
             return View(post);
         }
+        #endregion
+
+        /// <summary>
+        /// 新首頁
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult IndexNew() 
+        {
+            return View();
+        }
 
         //單篇貼文
         public IActionResult SinglePost(int? singleBlogID)
         {
-            //singleBlogID = 37;
-            IEnumerable<Blog> singlePost = null;
+            List<Blog> singlePost = null;
             if (singleBlogID != null)
             {
                 singlePost = (from blog in _db.Blogs.Include(blog => blog.ArticleClass)
                                           .Include(blog => blog.Employee)
+                                          .Include(blog=>blog.Employee.EmployeeClass)
                                           .Where(blog => blog.BlogId == singleBlogID)
                               select blog).ToList();
+                singlePost[0].Views += 1;
             }
             else
             {
@@ -94,27 +108,18 @@ namespace MedSysProject.Controllers
                                                   .Include(blog => blog.Employee)
                                                   .OrderByDescending(blog => blog.BlogId).Take(1)
                               select blog).ToList();
+                singlePost[0].Views += 1;
             }
-
-            var q = _db.Comments.Where(n => n.BlogId ==singleBlogID&&n.ParentCommentId==null).Select(n => n.CommentId);
-            ViewBag.CommentId = JsonSerializer.Serialize(q.ToList());
-
-            
-
-
-
-
-
+            _db.SaveChanges();
+            //共幾則留言?
+           
             return View(singlePost);
-
-
         }
         public IActionResult SelectBlogCategory(int? CategoryID, int page = 1)
         {//
          //var q = _db.BlogCategories.Where(c => c.BlogClassId == CategoryID);
          //var q = _db.Blogs.Include(e => e.Employee).Include(e => e.ArticleClass.BlogCategory1).Where(c => c.ArticleClassId == CategoryID);
             IEnumerable<Blog> q = null;
-
             int pageSize = 5;
             int total;
 
@@ -132,7 +137,7 @@ namespace MedSysProject.Controllers
                 //    .Include(e => e.ArticleClass)
                 //    select blog;
 
-                ViewBag.Cate = "";
+                ViewBag.Cate = "";//沒有類別
             }
 
             else
@@ -165,6 +170,60 @@ namespace MedSysProject.Controllers
             return View(q);
         }
 
+        /// <summary>
+        ///關鍵字搜尋 
+        /// </summary>
+        /// <param name="vm">關鍵字</param>
+        /// <param name="page">分頁標籤</param>
+        /// <returns></returns>
+        public IActionResult QueryByKeyword(CKeywordViewModel? vm,int page=1)  
+        {//可能要檢查輸入是否為人名
+            IEnumerable<Blog> blogs = null;
+            int perPageCount = 5;
+            int total;
+            var author = _db.Employees.FirstOrDefault(employee => employee.EmployeeName == vm.txtKeyword);
+            if (author != null)
+            {
+                total = _db.Blogs.Count(blog => blog.Employee.EmployeeName == author.EmployeeName);
+                blogs = _db.Blogs.Include(blog => blog.Employee)
+                                 .Include(blog => blog.ArticleClass)
+                                 .Where(blog => blog.Employee.EmployeeName == author.EmployeeName)
+                                 .OrderByDescending(blog => blog.BlogId)
+                                 .Skip((page - 1) * perPageCount)
+                                 .Take(perPageCount);
+            }
+            else 
+            {
+                var t = _db.Blogs.Include(blog => blog.Employee)
+                            .Include(blog => blog.ArticleClass)
+                            .Where(blog => blog.Title.Contains(vm.txtKeyword) ||
+                            blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword) ||
+                            blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                            blog.Content.Contains(vm.txtKeyword));
+                total = t.Count();//關鍵字搜尋總數
+                blogs = _db.Blogs.Include(blog => blog.Employee)
+                                 .Include(blog => blog.ArticleClass)
+                                 .Where(blog => blog.Title.Contains(vm.txtKeyword) ||
+                                 blog.ArticleClass.BlogCategory1.Contains(vm.txtKeyword) ||
+                                 blog.Employee.EmployeeName.Contains(vm.txtKeyword) ||
+                                 blog.Content.Contains(vm.txtKeyword))
+                                 .OrderByDescending(blog => blog.BlogId)
+                                 .Skip((page - 1) * perPageCount)
+                                 .Take(perPageCount);//take5
+            }
+           
+            int maxPage = total%perPageCount==0?total/perPageCount:total/perPageCount+1;
+            if (page < 1) { page = 1; }
+            if (page > maxPage) { page = maxPage; }
+            ViewBag.Page = page;
+            ViewBag.MaxPage = maxPage;
+            ViewBag.Total = total;
+            ViewBag.PerPageCount = perPageCount;
+            ViewBag.Key = vm.txtKeyword;
+            return View(blogs);
+
+        }
+
         public IActionResult GetBlogImageByte(int? id)
         {
             Blog emp = _db.Blogs.Find(id);
@@ -188,54 +247,35 @@ namespace MedSysProject.Controllers
             }
             return NotFound();
         }
-        /// <summary>
-        /// 測試partial View用
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Index2() 
-        {
-            return View();
-        }
+     
         public IActionResult Slider() 
         {
-            //var sliderBlog = _db.Blogs.Include(blog => blog.Employee)
-            //                          .Include(blog => blog.ArticleClass)
-            //                          .OrderByDescending(blog => blog.BlogId)
-            //                          .Take(5).ToList();
 
             return PartialView();
         }
-        public IActionResult ad (int id)
-        {
-            // var 最新的文章 = _db.Blogs.Where(n=>n.EmployeeId == id).OrderByDescending(n=>n.BlogId).Take(5).Select(n=>n.BlogId);
-            //var 最多觀看的 = _db.Blogs.Where(n => n.EmployeeId == id).OrderByDescending(n => n.Views).Take(5).Select(n => n.BlogId);
 
-            //List<int> ne = 最新的文章.ToList();
-            //List<int> top5 = 最多觀看的.ToList();
-            var q = _db.Comments.Where(n=>n.CommentId==id).Include(n=>n.Member).Include(n=>n.Employee).FirstOrDefault();
-            Comment com = new Comment();
-            com = q;
-            
-            return View(com);
+        public IActionResult DemoTeachersCode() 
+        {
+            return View();
         }
 
-
-        public IActionResult Show2 (int id)
-        {
-            var q = _db.Comments.Find(id);
-
-            return PartialView(q);
-        }
+        #region 載入留言相關
+        /// <summary>
+        /// 顯示留言
+        /// </summary>
+        /// <param name="BlogId"></param>
+        /// <returns></returns>
         public IActionResult ShowComments(int BlogId)
         {
             var mainComments = (_db.Comments.Include(comment => comment.Member)
                                             .Include(comment => comment.Employee)
-                                            .Include(comment=>comment.Employee.EmployeeClass)
-                                            .Where(comment => comment.BlogId == BlogId&&comment.ParentCommentId==null)
+                                            .Include(comment => comment.Employee.EmployeeClass)
+                                            .Where(comment => comment.BlogId == BlogId && comment.ParentCommentId == null)
                                 .Select(comment => comment)).ToList();
+            int totalComment = _db.Comments.Count(n => n.BlogId == BlogId);
+            ViewBag.TotalComment = totalComment;
             return PartialView(mainComments);
         }
-        #region 遞迴
         public IActionResult ShowReplies(int mainCommentId) 
         {
             List<Comment> allReplies = new List<Comment>();
@@ -263,6 +303,73 @@ namespace MedSysProject.Controllers
                 howManyExactly(reply.CommentId, ref allReplies);
             }             
         }
+
+        public IActionResult BackShowReplies(int mainCommentId) 
+        { 
+            List<Comment> backAllReplies = new List<Comment>();
+            backHowManyExactly(mainCommentId, ref backAllReplies);
+            return PartialView("BackShowReplies", backAllReplies);
+        }
+
+        private void backHowManyExactly(int parentCommentId, ref List<Comment> backAllReplies)
+        {
+            var subReplies = _db.Comments.Include(reply => reply.Member)
+                                         .Include(reply => reply.Employee)
+                                         .Include(reply => reply.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment)
+                                         .Include(reply => reply.ParentComment.Employee)
+                                         .Include(reply => reply.ParentComment.Employee.EmployeeClass)
+                                         .Include(reply => reply.ParentComment.Member)
+                                         .Where(reply => reply.ParentCommentId == parentCommentId).ToList();
+            foreach (var reply in subReplies)
+            {
+                backAllReplies.Add(reply);
+                backHowManyExactly(reply.CommentId, ref backAllReplies);
+            }
+        }
         #endregion
+
+        public IActionResult LoadRecentPost() 
+        {
+            var recent = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .OrderByDescending(blog => blog.BlogId)
+                                               .Take(7)
+                          select blog;
+            
+            return PartialView("_RecentPost",recent.ToList());
+        }
+
+        public IActionResult LoadNewActivity() 
+        { 
+            var newAct = from blog in _db.Blogs.Include(blog=>blog.Employee)
+                                               .Include(blog => blog.ArticleClass)
+                                               .Where(blog=>blog.ArticleClassId==1)
+                                               .OrderByDescending (blog=>blog.BlogId)
+                                               .Take(4)
+                                               select blog;
+            return PartialView("_NewActivity",newAct.ToList());
+        }
+        public IActionResult LoadMedicalNews()
+        {
+            var medical = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                                .Include(blog => blog.ArticleClass)
+                                                .Where(blog => blog.ArticleClassId == 2)
+                                                .OrderByDescending(blog => blog.BlogId)
+                                                .Take(4)
+                          select blog;
+            return PartialView("_MedicalNews", medical.ToList());
+        }
+
+        public IActionResult LoadCelebritySharing()
+        {
+            var celebrity = from blog in _db.Blogs.Include(blog => blog.Employee)
+                                                .Include(blog => blog.ArticleClass)
+                                                .Where(blog => blog.ArticleClassId == 3)
+                                                .OrderByDescending(blog => blog.BlogId)
+                                                .Take(9)
+                            select blog;
+            return PartialView("_CelebritySharing", celebrity.ToList());
+        }
     }
 }

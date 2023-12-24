@@ -11,6 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using Humanizer;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Azure;
+using Microsoft.CodeAnalysis.FlowAnalysis;
+using System.Collections.Generic;
+using static MedSysProject.Controllers.HomeController;
+using System.Data;
 
 namespace MedSysProject.Controllers
 {
@@ -87,93 +91,152 @@ namespace MedSysProject.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult MemberManager(CKeywordViewModel? vm, int page = 1)
+        //public IActionResult MemberManager(CKeywordViewModel? vm, int page = 1)
+        //{
+        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+        //        return RedirectToAction("Login");
+
+        //    IEnumerable<Member> datas = null;
+
+        //    if (string.IsNullOrEmpty(vm.txtKeyword))
+        //    {
+
+        //        int pgsize = 5;
+        //        int total = _db.Members.Count();
+        //        int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+        //        if (page < 1) page = 1;
+        //        if (page > maxpage) page = maxpage;
+        //        datas = _db.Members.Skip((page - 1) * pgsize).Take(pgsize);
+        //        ViewBag.page = page;
+        //        ViewBag.maxpage = maxpage;
+        //        ViewBag.total = total;
+        //        ViewBag.pgsize = pgsize;
+
+
+        //        //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+        //        //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+        //        //        select t;
+
+        //    }
+
+        //    else
+        //    {
+        //        datas = _db.Members.Where(p => p.MemberName.Contains(vm.txtKeyword) ||
+        //        p.MemberPhone.Contains(vm.txtKeyword) ||
+        //        p.MemberEmail.Contains(vm.txtKeyword));
+
+        //        ViewBag.key = vm.txtKeyword;
+        //    }
+
+        //    return View(datas);
+        //}
+
+        //會員管理區塊--------------------------------------------------------------
+        public IActionResult Member()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
-            IEnumerable<Member> datas = null;
+            return View();
+        }
 
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+        //Member Json
+        public IActionResult MemberJson(int? id)
+        {
+            if (id != null)
             {
-
-                int pgsize = 5;
-                int total = _db.Members.Count();
-                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
-                if (page < 1) page = 1;
-                if (page > maxpage) page = maxpage;
-                datas = _db.Members.Skip((page - 1) * pgsize).Take(pgsize);
-                ViewBag.page = page;
-                ViewBag.maxpage = maxpage;
-                ViewBag.total = total;
-                ViewBag.pgsize = pgsize;
-
-
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                //        select t;
-
+                return Json(_db.Members.Find(id));
             }
-
             else
             {
-                datas = _db.Members.Where(p => p.MemberName.Contains(vm.txtKeyword) ||
-                p.MemberPhone.Contains(vm.txtKeyword) ||
-                p.MemberEmail.Contains(vm.txtKeyword));
-
-                ViewBag.key = vm.txtKeyword;
+                return Json(_db.Members);
             }
-
-            return View(datas);
         }
 
-        public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        public IActionResult MemberDetail(int id)
         {
-            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
-                return RedirectToAction("Login");
+            IEnumerable<Member> data = null;
 
-            IEnumerable<Employee> datas = null;
+            data = _db.Members.Where(p => p.MemberId == id);
 
-            if (string.IsNullOrEmpty(vm.txtKeyword))
+            if (data == null)
+                return RedirectToAction("Member");
+
+            return PartialView("MemberDetail", data);
+        }
+        //會員管理區塊--------------------------------------------------------------
+
+        //public IActionResult EmpManager(CKeywordViewModel? vm, int page = 1)
+        //{
+        //    if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
+        //        return RedirectToAction("Login");
+
+        //    IEnumerable<Employee> datas = null;
+
+        //    if (string.IsNullOrEmpty(vm.txtKeyword))
+        //    {
+
+        //        int pgsize = 5;
+        //        int total = _db.Employees.Count();
+        //        int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
+        //        if (page < 1) page = 1;
+        //        if (page > maxpage) page = maxpage;
+        //        datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
+        //        ViewBag.page = page;
+        //        ViewBag.maxpage = maxpage;
+        //        ViewBag.total = total;
+        //        ViewBag.pgsize = pgsize;
+
+
+        //        //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
+        //        //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
+        //        //        select t;
+
+        //    }
+
+        //    else
+        //    {
+        //        datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
+        //        p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
+        //        p.EmployeeEmail.Contains(vm.txtKeyword));
+
+        //        ViewBag.key = vm.txtKeyword;
+        //    }
+
+        //    return View(datas);
+        //}
+
+        //員工管理區塊--------------------------------------------------------------
+        public IActionResult Employee()
+        {
+            return View();
+        }
+
+        //Employee Json
+        public IActionResult EmployeeJson(int? id)
+        {
+            if (id != null)
             {
-
-                int pgsize = 5;
-                int total = _db.Employees.Count();
-                int maxpage = (total % pgsize == 0 ? total / pgsize : total / pgsize + 1);
-                if (page < 1) page = 1;
-                if (page > maxpage) page = maxpage;
-                datas = _db.Employees.Include(p => p.EmployeeClass).Skip((page - 1) * pgsize).Take(pgsize);
-                ViewBag.page = page;
-                ViewBag.maxpage = maxpage;
-                ViewBag.total = total;
-                ViewBag.pgsize = pgsize;
-
-
-                //datas = from t in _db.Employees.Include(p=>p.EmployeeClass)
-                //datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                //        select t;
-
+                return Json(_db.Employees.Find(id));
             }
-
             else
             {
-                datas = _db.Employees.Where(p => p.EmployeeName.Contains(vm.txtKeyword) ||
-                p.EmployeePhoneNum.Contains(vm.txtKeyword) ||
-                p.EmployeeEmail.Contains(vm.txtKeyword));
-
-                ViewBag.key = vm.txtKeyword;
+                return Json(_db.Employees);
             }
-
-            return View(datas);
         }
 
-        public IActionResult EmpJSON()
+        public IActionResult EmployeeImage(int? id)
         {
-            IEnumerable<Employee> datas = null;
-            datas = from t in _db.Employees.Include(p => p.EmployeeClass)
-                    select t;
-            return Json(datas);
+            Employee emp = _db.Employees.Find(id);
+            byte[]? img = emp?.EmployeePhoto;
+
+            if (img != null)
+            {
+                return File(img, "image/jpeg");
+            }
+            return NotFound();
         }
+        //員工管理區塊--------------------------------------------------------------
 
         public IActionResult EmpCreate()
         {
@@ -250,6 +313,7 @@ namespace MedSysProject.Controllers
             else
             {
                 datas = _db.Plans.Where(p => p.PlanName.Contains(vm.txtKeyword));
+                ViewBag.key = vm.txtKeyword;
             }
 
             return View(datas);
@@ -400,6 +464,91 @@ namespace MedSysProject.Controllers
             return View(datas);
         }
 
+        public IActionResult OrderDetail(int id)
+        {
+            IEnumerable<Order> data = null;
+
+            data = _db.Orders.Where(p => p.OrderId == id)
+                    .Include(m => m.Member)
+                    .Include(s => s.State)
+                    .Include(h => h.Ship)
+                    .Include(p => p.Pay)
+                    .Include(n => n.OrderDetails)
+                    .ThenInclude(n => n.Product)
+                    .ToList();
+
+
+
+            //List<COrderWarp> data = new List<COrderWarp>();
+            //var q = _db.Orders
+            //    .Include(n => n.Member)
+            //    .Include(n => n.Pay)
+            //    .Include(n => n.Ship)
+            //    .Include(n => n.State)
+            //    .Include(n => n.OrderDetails)
+            //    .ThenInclude(n => n.Product)
+            //    .Where(n => n.OrderId == id);
+
+            //foreach (var item in q)
+            //{
+            //    COrderWarp od = new COrderWarp();
+            //    od.order = item;
+            //    data.Add(od);
+            //}
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return PartialView("OrderDetail", data);
+        }
+
+        public IActionResult OrderDetailJSON(int id)
+        {
+            //IEnumerable<Order> data = null;
+
+            //data = _db.Orders.Where(p => p.OrderId == id)
+            //        .Include(m => m.Member)
+            //        .Include(s => s.State)
+            //        .Include(h => h.Ship)
+            //        .Include(p => p.Pay)
+            //        .Include(n => n.OrderDetails)
+            //        .ThenInclude(n => n.Product);
+
+            List<COrderWarp> data = new List<COrderWarp>();
+            var q = _db.Orders
+                .Include(n => n.Member)
+                .Include(n => n.Pay)
+                .Include(n => n.Ship)
+                .Include(n => n.State)
+                .Include(n => n.OrderDetails)
+                .ThenInclude(n => n.Product)
+                .Where(n => n.OrderId == id);
+
+            //這個訂單有哪些產品
+
+
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                data.Add(od);
+            }
+
+            if (data == null)
+                return RedirectToAction("Order");
+
+            return Json(data);
+        }
+
+        //todo 順哥幫我做
+        public IActionResult ODProductsJSON(int id)
+        {
+            IEnumerable<OrderDetail> data = new List<OrderDetail>();
+            List<OrderDetail> dataList = _db.OrderDetails.Where(n => n.OrderId == id).Include(n => n.Product).ToList();
+
+            return Json(dataList);
+        }
+
         public IActionResult Data()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -408,8 +557,9 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report(CKeywordViewModel vm,int page=1)
+        public IActionResult Report(CKeywordViewModel vm, int page = 1)
         {
+            //尚未完成 :報告寄出提示功能(次要)
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
@@ -423,7 +573,7 @@ namespace MedSysProject.Controllers
                 int maxpage = (total % pagesize == 0 ? total / pagesize : total / pagesize + 1);
                 datas = _db.ReportDetails.Include(p => p.Item).OrderByDescending(p => p.ReportId).Skip((page - 1) * pagesize).Take(pagesize);
                 ViewBag.page = page; //目前頁數
-                ViewBag.TotalPage = maxpage; //總頁數
+                ViewBag.maxpage = maxpage; //總頁數
                 ViewBag.total = total; //資料總筆數
                 ViewBag.pagesize = pagesize; //每頁顯示幾筆資料
             }
@@ -474,8 +624,9 @@ namespace MedSysProject.Controllers
 
 
 
-        public async Task<IActionResult> Product(CKeywordViewModel vm)
+        public async Task<IActionResult> Product(CKeywordViewModel vm, string sortOrder, int? categoryId)
         {
+            // 檢查使用者是否已登錄，如果未登錄，則重新導向到登錄頁面
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
                 return RedirectToAction("Login");
 
@@ -486,22 +637,51 @@ namespace MedSysProject.Controllers
                 .Distinct()
                 .ToListAsync();
 
+            // 建立查詢物件
             var datas = _db.Products.AsQueryable();
 
+            // 獲取搜索關鍵字並去除前後空格
             var keyword = vm.txtKeyword?.Trim();
+
+            // 如果關鍵字不為空，則進行搜索
             if (!string.IsNullOrEmpty(keyword))
             {
-                datas = datas.Where(p =>
-                    p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.Ingredient.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.License.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                    p.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                // 將關鍵字轉換為小寫以進行不區分大小寫的比較
+                keyword = keyword.ToLower();
 
-                ViewBag.key = keyword;
+                // 在記憶體中執行字串包含操作以進行模糊搜索
+                datas = datas.Where(p =>
+                    p.ProductName.ToLower().Contains(keyword) ||
+                    p.Ingredient.ToLower().Contains(keyword) ||
+                    p.License.ToLower().Contains(keyword) ||
+                    p.Description.ToLower().Contains(keyword)).AsQueryable();
+
+                // 將原始關鍵字傳遞給視圖以在搜尋框中顯示
+                ViewBag.key = vm.txtKeyword;
             }
 
+            // 根據 sortOrder 參數對結果集進行排序
+            switch (sortOrder)
+            {
+                case "price_desc":
+                    datas = datas.OrderByDescending(p => p.UnitPrice);
+                    break;
+                default:   // 價格從低到高
+                    datas = datas.OrderBy(p => p.UnitPrice);
+                    break;
+            }
+
+            if (categoryId.HasValue)
+            {
+                
+                datas = datas.Where(p => p.ProductsClassifications.Any(pc => pc.CategoriesId == categoryId.Value));
+            }
+
+            ViewBag.Categories = await _db.ProductsCategories.ToListAsync();
+            // 設定預設圖片路徑
             var defaultImagePath = "/img-product/default-image.jpg";
 
+            // 根據價格範圍篩選數據
             if (vm.txtMinPrice.HasValue)
             {
                 datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value >= vm.txtMinPrice.Value);
@@ -512,6 +692,7 @@ namespace MedSysProject.Controllers
                 datas = datas.Where(p => p.UnitPrice.HasValue && p.UnitPrice.Value <= vm.txtMaxPrice.Value);
             }
 
+            // 建立視圖模型並使用ToListAsync()將結果轉換為List
             var viewModel = await datas.Select(product => new CProductsWrap
             {
                 Product = product,
@@ -520,8 +701,34 @@ namespace MedSysProject.Controllers
                     : defaultImagePath
             }).ToListAsync();
 
+            // 返回視圖
             return View(viewModel);
         }
+
+
+
+        public List<ProductsCategory> GetCategories()
+        {
+            // 使用 LINQ 查詢從數據庫中獲取所有類別
+            List<ProductsCategory> categories = _db.ProductsCategories.ToList();
+
+            return categories;
+        }
+
+
+        public ActionResult FilterProducts()
+        {
+            var products = _db.Products.ToList(); // 假設 _db 是您的資料庫上下文
+            var categories = GetCategories(); // 假設 GetCategories 是一個獲取類別清單的方法
+            var productsWithCategories = products.Select(product => new CProductsWrap(product, product.ProductsClassifications.ToList())).ToList();
+
+            return View(productsWithCategories);
+        }
+
+
+
+
+
 
         [HttpPost]
         public IActionResult ToggleDiscontinued(int productId, bool discontinued)
@@ -691,120 +898,120 @@ namespace MedSysProject.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    // 記錄或處理錯誤...
-                    // 輸出所有錯誤信息到控制台
-                    foreach (var key in ModelState.Keys)
+                    if (IsAjaxRequest())
                     {
-                        var errors = ModelState[key].Errors;
-                        foreach (var error in errors)
-                        {
-                            Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
-                        }
+                        // 對 AJAX 請求返回 JSON 錯誤信息
+                        return Json(new { success = false, message = "模型驗證失敗" });
                     }
-
+                    // 非 AJAX 請求重定向
                     return RedirectToAction("Product");
                 }
 
-                // 新增此部分以處理 AJAX 請求，獲取產品詳細資訊
-                if (HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    var product = _db.Products
-                        .Where(p => p.ProductId == model.WrappedProductId)
-                        .Select(p => new
-                        {
-                            p.ProductId,
-                            p.ProductName,
-                            p.UnitPrice,
-                            p.License,
-                            p.Ingredient,
-                            p.Description,
-                            p.UnitsInStock,
-                            p.Discontinued,
-                            p.FimagePath
-                        })
-                        .FirstOrDefault();
+                // 查找產品
+                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == wrappedProductId);
 
-                    return Json(new { success = true, product });
+                if (pDb == null)
+                {
+                    if (IsAjaxRequest())
+                    {
+                        // 對 AJAX 請求返回 JSON 錯誤信息
+                        return Json(new { success = false, message = "找不到產品" });
+                    }
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
                 }
 
-                // 非 AJAX 請求，執行原有的編輯邏輯
-                Product pDb = _db.Products.FirstOrDefault(p => p.ProductId == model.WrappedProductId);
+                // 更新產品資料
+                pDb.ProductName = model.WrappedProductName;
+                pDb.UnitsInStock = model.WrappedUnitsInStock;
+                pDb.License = model.WrappedLicense;
+                pDb.UnitPrice = model.WrappedUnitPrice;
+                pDb.Ingredient = model.WrappedIngredient;
+                pDb.Description = model.WrappedDescription;
+                pDb.Discontinued = model.WrappedDiscontinued;
 
-                if (pDb != null)
+                // 處理圖片上傳
+                if (model.FormFiles != null && model.FormFiles.Count > 0)
                 {
-
+                    // 清空原有的圖片路徑
                     pDb.FimagePath = string.Empty;
 
-                    var newImagePaths = new List<string>();
-
-
-                    if (model.FormFiles != null && model.FormFiles.Count > 0)
+                    foreach (var file in model.FormFiles)
                     {
-                        foreach (var formFile in model.FormFiles)
+                        var uploadsFolder = Path.Combine(_host.WebRootPath, "img-product"); // 圖片保存的文件夾
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
-                            string photoName = Guid.NewGuid().ToString() + ".jpg";
-                            string filePath = Path.Combine(_host.WebRootPath, "img-product", photoName);
-
-                            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await formFile.CopyToAsync(fileStream);
-                            }
-
-                            newImagePaths.Add(photoName);
+                            file.CopyTo(fileStream);
                         }
-                    }
 
-
-                    pDb.FimagePath = string.Join(",", newImagePaths);
-
-                    // 處理其他欄位
-                    pDb.ProductName = model.WrappedProductName;
-                    pDb.UnitsInStock = model.WrappedUnitsInStock;
-                    pDb.License = model.WrappedLicense;
-                    pDb.UnitPrice = model.WrappedUnitPrice;
-                    pDb.Ingredient = model.WrappedIngredient;
-                    pDb.Description = model.WrappedDescription;
-                    pDb.Discontinued = model.WrappedDiscontinued;
-
-                    // 處理 ProductsClassification 資料表
-                    if (model.SelectedCategories != null && model.SelectedCategories.Any())
-                    {
-                        // 移除所有現有的 CategoriesId 記錄
-                        _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
-
-                        // 新增選擇的 CategoriesId 記錄
-                        foreach (var categoryId in model.SelectedCategories)
-                        {
-                            var classification = new ProductsClassification
-                            {
-                                ProductId = model.WrappedProductId,
-                                CategoriesId = categoryId
-                            };
-
-                            _db.ProductsClassifications.Add(classification);
-                        }
-                    }
-
-                    try
-                    {
-                        _db.SaveChanges();
-                        return RedirectToAction("Product");
-                    }
-                    catch (Exception ex)
-                    {
-                        // 處理異常，例如記錄日誌
-                        return Json(new { success = false, message = ex.Message });
+                        // 更新數據庫中的圖片路徑，將多個圖片路徑以逗號分隔
+                        pDb.FimagePath += string.IsNullOrEmpty(pDb.FimagePath) ? uniqueFileName : $",{uniqueFileName}";
                     }
                 }
 
-                return RedirectToAction("Product");
+                // 處理 ProductsClassification 資料表
+                if (model.SelectedCategories != null && model.SelectedCategories.Any())
+                {
+                    // 移除所有現有的 CategoriesId 記錄
+                    _db.ProductsClassifications.RemoveRange(_db.ProductsClassifications.Where(pc => pc.ProductId == model.WrappedProductId));
+
+                    // 新增選擇的 CategoriesId 記錄
+                    foreach (var categoryId in model.SelectedCategories)
+                    {
+                        var classification = new ProductsClassification
+                        {
+                            ProductId = model.WrappedProductId,
+                            CategoriesId = categoryId
+                        };
+
+                        _db.ProductsClassifications.Add(classification);
+                    }
+                }
+
+                try
+                {
+                    // 保存變更
+                    _db.SaveChanges();
+
+                    if (IsAjaxRequest())
+                    {
+                        // 對 AJAX 請求返回 JSON 成功信息
+                        return Json(new { success = true, message = "產品資料已更新" });
+                    }
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
+                }
+                catch (Exception ex)
+                {
+                    if (IsAjaxRequest())
+                    {
+                        // 對 AJAX 請求返回 JSON 錯誤信息
+                        return Json(new { success = false, message = ex.Message });
+                    }
+                    // 非 AJAX 請求重定向
+                    return RedirectToAction("Product");
+                }
             }
             catch (Exception ex)
-            {  // 處理異常，例如記錄日誌
-                return Json(new { success = false, message = ex.Message });
+            {
+                if (IsAjaxRequest())
+                {
+                    // 對 AJAX 請求返回 JSON 錯誤信息
+                    return Json(new { success = false, message = ex.Message });
+                }
+                // 非 AJAX 請求重定向
+                return RedirectToAction("Product");
             }
         }
 
+
+        private bool IsAjaxRequest()
+        {
+            return HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        }
 
 
 
@@ -815,7 +1022,21 @@ namespace MedSysProject.Controllers
             Product x = _db.Products.FirstOrDefault(p => p.ProductId == id);
             if (x != null)
             {
-                // 刪除相關聯的 ProductsClassification 記錄
+                // 刪除與產品相關的圖片
+                if (!string.IsNullOrEmpty(x.FimagePath))
+                {
+                    string[] images = x.FimagePath.Split(',');
+                    foreach (var image in images)
+                    {
+                        string filePath = Path.Combine(_host.WebRootPath, "img-product", image);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                }
+
+                // 刪除產品和相關聯的 ProductsClassification 記錄
                 var relatedClassifications = _db.ProductsClassifications
                     .Where(pc => pc.ProductId == id)
                     .ToList();
@@ -826,6 +1047,36 @@ namespace MedSysProject.Controllers
             }
             return RedirectToAction("Product");
         }
+
+        [HttpGet]
+        public IActionResult ProductDetail(int? productId)
+        {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = _db.Products.FirstOrDefault(e => e.ProductId == productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // 在這裡初始化 ViewBag.Categories
+            var categories = _db.ProductsCategories.ToList();
+            ViewBag.Categories = categories;
+
+            var productWrap = new CProductsWrap(product);
+            productWrap.SelectedCategories = _db.ProductsClassifications
+                .Where(e => e.ProductId == productId)
+                .Select(e => e.CategoriesId)
+                .ToList();
+
+            // 使用一個新的 Partial View 或現有的，只顯示不可編輯的資訊
+            return PartialView("_DetailProductModal", productWrap);
+        }
+
 
 
         public IActionResult GetImageByte(int? id)
@@ -857,34 +1108,96 @@ namespace MedSysProject.Controllers
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails
-                        orderby s.ReportId
-                        select s;
+            //if (string.IsNullOrEmpty(vm.txtKeyword))
+            //    datas = from s in _db.ReportDetails
+            //            orderby s.ReportId
+            //            select s;
 
-            else
-                datas = _db.ReportDetails.Where(p =>
-                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
-            return View(datas);
+            //else
+            //    datas = _db.ReportDetails.Where(p =>
+            //    p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            return View(/*datas*/);
 
         }
 
-        public IActionResult test1(CKeywordViewModel vm)
+        public IActionResult test1(int id = 0)
         {
-            IEnumerable<ReportDetail> datas = null;
+            //IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
             //datas2 = new CReportWrap().Report();
-            if (string.IsNullOrEmpty(vm.txtKeyword))
-                datas = from s in _db.ReportDetails
-                        orderby s.ReportId
-                        select s;
+            //if (id == 0)
+            //    datas = from s in _db.ReportDetails
+            //            orderby s.ReportId
+            //            select s;
 
-            else
-                datas = _db.ReportDetails.Where(p =>
-                p.ReportId.Equals(Convert.ToInt32(vm.txtKeyword)));
+            //else
+              var  datas = _db.ReportDetails.Where(p => p.Report.ReportId.Equals(id))
+                        .Select(p => new{name = p.Item.ItemName, result =p.Result , ReportId = p.Report.ReportId, ReportDetailId=p.ReportDetailId});
             return Json(datas);
+            
 
+
+
+
+
+
+
+            //var pl = _context.Plans.Where(p => p.PlanId == planid)
+            //   .SelectMany(p => p.PlanRefs, (plan, project) => new { plan, project }).Where(p => p.project.PlanId == planid)
+            //   .SelectMany(p => p.project.Project.Items, (prbg, it) => new { prbg.project.Project, it }).Where(p => p.Project.ProjectId == p.it.ProjectId)
+
+            //   //.SelectMany(p => p.project.Project.Items, (projectid, item) => new { projectid, item }).Where(p => p.item.ProjectId == p.projectid.project.ProjectId)
+            //   .Select(t => new
+            //   {
+            //       planId = t.Project.PlanRefs.First().PlanId,
+            //       planName = t.Project.PlanRefs.First().Plan.PlanName,
+            //       projectid = t.Project.ProjectId,
+            //       ProjectName = (string)t.Project.ProjectName,
+            //       ProjectPrice = (double)t.Project.ProjectPrice,
+            //       itemId = t.it.ItemId,
+            //       ItemName = (string)t.it.ItemName,
+            //       ItemPrice = (int)t.it.ItemPrice,
+            //   });
+            ////------datatable 轉json區--------
+            //DataTable dt = new DataTable();
+            //dt.Columns.Add(new DataColumn("planId"));
+            //dt.Columns.Add(new DataColumn("planName"));
+
+            //dt.Columns.Add(new DataColumn("projectid"));
+            //dt.Columns.Add(new DataColumn("ProjectName"));
+            //dt.Columns.Add(new DataColumn("ProjectPrice"));
+            //dt.Columns.Add(new DataColumn("itemId"));
+            //dt.Columns.Add(new DataColumn("ItemName"));
+            //dt.Columns.Add(new DataColumn("ItemPrice"));
+            //foreach (var t in pl)
+            //{
+            //    DataRow dr = dt.NewRow();
+
+            //    dr["planId"] = t.planId;
+            //    dr["PlanName"] = t.planName;
+
+            //    dr["projectid"] = t.projectid;
+            //    dr["ProjectName"] = t.ProjectName;
+            //    dr["ProjectPrice"] = t.ProjectPrice;
+            //    dr["itemId"] = t.itemId;
+            //    dr["ItemName"] = t.ItemName;
+            //    dr["ItemPrice"] = t.ItemPrice;
+            //    dt.Rows.Add(dr);
+            //}
+            //DataTableToJsonConverter converter = new DataTableToJsonConverter();
+            //string js = converter.ConverterDataTableToJson(dt);
+
+            ////------datatable 轉json區--------
+
+
+
+            //string json = System.Text.Json.JsonSerializer.Serialize(pl);
+
+
+            //return js;
         }
+
+
 
     }
 }

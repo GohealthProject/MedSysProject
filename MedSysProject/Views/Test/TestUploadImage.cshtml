@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "TestUploadImage";
+}
+
+<h1>TestUploadImage</h1>
+
+<form id="aaa">
+    <input type="file" name="formFile" id="aaafile" />
+</form>
+<button onclick="bbbb()">Submit</button>
+
+<script>
+    function bbbb() {
+        var aaafile = document.getElementById("aaafile");
+        var formData = new FormData();
+        //string($binary) -> byte[] -> string($binary)
+        formData.append('file', aaafile.files[0]);
+        fetch('../api/Upload', {
+            method: 'POST',
+            body: formData,
+            "Content-Type": "multipart/form-data"
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            console.log(data);
+        });
+    }
+
+</script>

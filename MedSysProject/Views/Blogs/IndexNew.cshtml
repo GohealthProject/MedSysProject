@@ -1,0 +1,348 @@
+﻿@{
+    ViewData["Title"] = "IndexNew";
+    Layout = "~/Views/Shared/_Layout_Blogs.cshtml";
+}
+<main id="main">
+    <section id="hero-slider" class="hero-slider">
+        <div class="container-md" data-aos="fade-in">
+            <div class="row">
+                <div class="col-12">
+                    <div class="swiper sliderFeaturedPosts">
+                        <div class="swiper-wrapper">
+                            @*投影片塞這*@
+                        </div>
+                        <div class="custom-swiper-button-next">
+                            <span class="bi-chevron-right"></span>
+                        </div>
+                        <div class="custom-swiper-button-prev">
+                            <span class="bi-chevron-left"></span>
+                        </div>
+
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+@section Scripts{
+    <script>
+        const main = document.querySelector('#main');
+        document.addEventListener('DOMContentLoaded', async() => {
+            await loadSlider();
+            await loadRecentPost();
+            await loadNewActivity();
+            await loadMedicalNews();
+            await loadCelebritySharing();
+            initSlider();
+            snippet();            
+        })
+        function snippet() 
+        {
+            const needSnippet1 = document.querySelector('.post-entry-1.lg');//取到
+            console.log(needSnippet1);
+            const firstId = needSnippet1.getAttribute('data-hide-id');
+            const need1Container = needSnippet1.querySelector('p');
+            console.log(need1Container);
+            fetch(`https://localhost:7078/api/Blogs/${firstId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need1Container.innerHTML = getContentSnippet(content, 200) + ' . . .';
+                });
+            const needSnippet2 = document.querySelector('.need2');
+            const secondId = needSnippet2.getAttribute('data-hide-id');
+            const need2Container = needSnippet2.querySelector('p');
+            console.log(need2Container);
+            fetch(`https://localhost:7078/api/Blogs/${secondId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need2Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet3 = document.querySelector('.need3');
+            console.log(needSnippet3);
+            const thirdId = needSnippet3.getAttribute('data-hide-id');
+            const need3Container = needSnippet3.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${thirdId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need3Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet4 = document.querySelector('.need4');
+            const forthId = needSnippet4.getAttribute('data-hide-id');
+            const need4Container = needSnippet4.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${forthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need4Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet5 = document.querySelector('.need5');
+            console.log(needSnippet5);
+            const fifthId = needSnippet5.getAttribute('data-hide-id');
+            const need5Container = needSnippet5.querySelector('p');
+            console.log(need5Container);
+            fetch(`https://localhost:7078/api/Blogs/${fifthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need5Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+            const needSnippet6 = document.querySelector('.need6');
+            const sixthId = needSnippet6.getAttribute('data-hide-id');
+            const need6Container = needSnippet6.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${sixthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need6Container.innerHTML = getContentSnippet(content, 50) + ' . . .';
+                });
+            const needSnippet7 = document.querySelector('.need7');
+            const seventhId = needSnippet7.getAttribute('data-hide-id');
+            const need7Container = needSnippet7.querySelector('p');
+            console.log(need7Container);
+            fetch(`https://localhost:7078/api/Blogs/${seventhId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need7Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+            const needSnippet8 = document.querySelector('.need8');
+            const eighthId = needSnippet8.getAttribute('data-hide-id');
+            const need8Container = needSnippet8.querySelector('p');
+            fetch(`https://localhost:7078/api/Blogs/${eighthId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { content } = data;
+                    need8Container.innerHTML = getContentSnippet(content, 100) + ' . . .';
+                });
+        }
+        function initSlider() 
+        {
+            var swiper = new Swiper(".sliderFeaturedPosts", {
+                spaceBetween: 0,
+                speed: 500,
+                centeredSlides: true,
+                loop: true,
+                slideToClickedSlide: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".custom-swiper-button-next",
+                    prevEl: ".custom-swiper-button-prev",
+                },
+            });
+        }
+
+        //
+        async function loadSlider() 
+        { //call Api
+            const response = await fetch(`https://localhost:7078/api/Blogs/latest6`)
+            const data = await response.json();
+            const slideContainer = document.querySelector('.swiper-wrapper');
+            const slider6 = data.$values.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views,blogImage,content } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                const displayContent = getContentSnippet(content);
+                let imageUrl = '';
+                if (blog.blogImage != null) {
+                    var binary = atob(blog.blogImage);
+                    var byteArray = new Uint8Array(binary.length);
+                    for (var i = 0; i < binary.length; i++) {
+                        byteArray[i] = binary.charCodeAt(i);
+                    }
+                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    imageUrl = URL.createObjectURL(blob);
+                }
+                return `
+                            <div class="swiper-slide">
+                                        <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=${blogId}"
+                                           class="img-bg d-flex align-items-end"
+                                           style="background-image: url('${imageUrl}');">
+                                            <div class="img-bg-inner">
+                                                <h2>
+                                                     ${title}
+                                                </h2>
+                                                <p>
+                                                    ${displayContent}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                `;
+            });
+            slideContainer.innerHTML = slider6.join('');
+
+        }
+        
+
+        //
+        async function loadRecentPost() 
+        { 
+            const response = await fetch(`@Url.Content("~/Blogs/LoadRecentPost")`);
+            const data = await response.text();
+            main.innerHTML += data;
+            loadSidePopular();
+        }
+        async function loadSidePopular() 
+        {
+            const response = await fetch(`https://localhost:7078/api/Blogs/popular6`);
+            const data = await response.json();
+            const take5 = data.$values.slice(0, 5);
+            const popularContainer = document.querySelector('.trending-post');
+            const popular5 = take5.map((blog, index) => {
+                const { blogId, title, author, articleClass, createdAt, views } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                return `
+                                    <li>
+                                         <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=${blogId}">
+                                             <span class="number">${index + 1}</span>
+                                                      <h3>
+                                                      ${title}
+                                                      </h3>
+                                                      <h6>瀏覽人次:${views}</h6>
+                                                      <span class="author">${author}</span>
+                                         </a>
+                                    </li>
+                                `
+            })
+            popularContainer.innerHTML = popular5.join('');
+
+        }
+        //
+        async function loadNewActivity() {
+            const response = await fetch(`@Url.Content("~/Blogs/LoadNewActivity")`);
+            const data = await response.text();
+            main.innerHTML += data;
+            loadSideActivity6();
+        }
+        async function loadSideActivity6()  
+        {
+            const response = await fetch(`https://localhost:7078/api/Blogs/activity6`);
+            const data = await response.json();
+            const activityContainer = document.querySelector('.sideActivity');
+            const activity6 = data.$values.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                return`
+                                <div class="post-entry-1 border-bottom">
+                            <div class="post-meta">
+                                <span class="date">${articleClass}</span>
+                                <span class="mx-1">&bullet;</span> <span>${formattedDate}</span>
+                            </div>
+                            <h2 class="mb-2">
+                                        <a href=""@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">
+                                    ${title}
+                                    
+                                </a>
+                            </h2>
+                                    <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
+                        </div>
+                `
+            });
+            activityContainer.innerHTML = activity6.join('');
+        }
+
+        async function loadMedicalNews() 
+        { 
+            const response = await fetch(`@Url.Content("~/Blogs/LoadMedicalNews")`);
+            const data = await response.text();
+            main.innerHTML += data;
+            loadSideMedical6();
+        }
+
+        async function loadSideMedical6()
+        {
+            const response = await fetch(`https://localhost:7078/api/Blogs/medical6`);
+            const data = await response.json();
+            const medicalContainer = document.querySelector('.sideMedical');
+            const medical6 = data.$values.map(blog => { 
+                const { blogId, title, author, articleClass, createdAt, views } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                return `
+                                        <div class="post-entry-1 border-bottom">
+                                    <div class="post-meta">
+                                        <span class="date">${articleClass}</span>
+                                        <span class="mx-1">&bullet;</span> <span>${formattedDate}</span>
+                                    </div>
+                                    <h2 class="mb-2">
+                                                <a href=""@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">
+                                            ${title}
+
+                                        </a>
+                                    </h2>
+                                            <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
+                                </div>
+                        `
+            });
+            medicalContainer.innerHTML = medical6.join('');
+        }
+       
+        async function loadCelebritySharing() 
+        { 
+            const response = await fetch(`@Url.Content("~/Blogs/LoadCelebritySharing")`)
+            const data = await response.text();
+            main.innerHTML += data;
+            loadSideCelebrity6();
+        }
+        async function loadSideCelebrity6() 
+        {
+            const response = await fetch(`https://localhost:7078/api/Blogs/celebrity6`);
+            const data = await response.json();
+            const celebrityContainer = document.querySelector('.sideCelebrity');
+            const celebrity6 = data.$values.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views } = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                return `
+                                                <div class="post-entry-1 border-bottom">
+                                            <div class="post-meta">
+                                                <span class="date">${articleClass}</span>
+                                                <span class="mx-1">&bullet;</span> <span>${formattedDate}</span>
+                                            </div>
+                                            <h2 class="mb-2">
+                                                        <a href=""@Url.Content("~/Blogs/SinglePost")?SingleBlogID=${blogId}">
+                                                    ${title}
+
+                                                </a>
+                                            </h2>
+                                                    <span class="author mb-3 d-block">${author}&nbsp;&nbsp;瀏覽人次:${views}</span>
+                                        </div>
+                                `
+            });
+            celebrityContainer.innerHTML = celebrity6.join('');
+        }
+
+    </script>
+}

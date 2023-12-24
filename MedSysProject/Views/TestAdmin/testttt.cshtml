@@ -1,0 +1,787 @@
+﻿@{
+    ViewData["Title"] = "000";
+    Layout = "_Layout_Admin2";
+}
+
+@{
+}
+<style>
+    #A {
+        background-color: aquamarine;
+    }
+</style>
+<!-- Button trigger modal -->
+<!-- Button trigger modal -->
+<meta charset="UTF-8">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Launch static backdrop modal
+</button>
+<button id="e04">123</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">我是內容</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <table id="tableD">
+                    <thead>
+                        <tr>
+                            <th>下拉</th>
+                            <th>reportDetailId</th>
+                            <th>reportId</th>
+                            <th>itemId</th>
+                            <th>rs</th>
+                            <th>input</th>
+                            <th>empty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table id="tableM" class="">
+    <thead>
+        <tr>
+            <th>序</th>
+            <th>會員ID</th>
+            <th>會員姓名</th>
+
+
+        </tr>
+    </thead>
+</table>
+
+
+
+<button id="dd">123</button>
+
+
+<div id="toolbar">
+    <button id="button" class="btn btn-secondary">refreshOptions</button>
+</div>
+<table id="table" hidden
+@*data-toggle="table"
+       data-height="460"
+       data-ajax="ajaxRequest"
+       data-search="true"
+       data-side-pagination="server"
+       data-pagination="true"
+       data-show-refresh="true"*@>
+    @* <thead>
+    <tr>
+    <th data-field="reportDetailId">reportDetailId</th>
+    <th data-field="reportId">reportId</th>
+    <th data-field="itemId">itemId</th>
+    <th data-field="result">itemId</th>
+    </tr>
+    </thead>*@
+</table>
+
+<script>
+
+    //test
+    //$table.bootstrapTable('refresh')
+    var myModal = document.getElementById('e04');
+    var fku = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    myModal.addEventListener("click", (e) => {
+        fku.show();
+    })
+
+    //var errorModal = document.getElementById('e04'); //Modal的id
+    //console.log(errorModal)
+    //var modal = Modal.getOrCreateInstance(errorModal); //創建或取得modal實例
+    //myModal.show();
+
+    var tableM = document.querySelector("#tableM")
+    var tableD = document.querySelector("#tableD")
+    var btn = document.querySelector("#btn")
+    ////不報錯///
+    //$.fn.dataTable.ext.errMode = 'throw';
+    /////////////
+
+    //內表////////////dd
+    var ttt = $('#tableD').DataTable({
+        //設定語言
+        "language": {
+            "processing": "處理中...",
+            "loadingRecords": "載入中...",
+            "lengthMenu": "每頁 _MENU_ 位會員",
+            "zeroRecords": "沒有符合的會員",
+            "info": "顯示第 _START_ 至 _END_ 位會員，共 _TOTAL_ 位",
+            "infoEmpty": "顯示第 0 至 0 位會員，共 0 位",
+            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+            "infoPostFix": "",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            },
+            "aria": {
+                "sortAscending": ": 升冪排列",
+                "sortDescending": ": 降冪排列"
+            }
+        },
+        //移除預設的搜尋框
+        "dom": '<"top"lpB>rt<"bottom"ip>',
+        "buttons": [
+            {
+                extend: 'excel',
+                text: '匯出Excel',
+                className: 'btn btn-success',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                }
+            },
+            {
+                extend: 'print',
+                text: '列印',
+                className: 'btn btn-info',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                }
+            },
+            {
+                extend: 'pdf',
+                text: '匯出PDF',
+                className: 'btn btn-danger',
+                exportOptions: {
+                    modifier: {
+                        page: 'all'
+                    }
+                },
+                customize: function (doc) {
+                    doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
+                }
+            }
+        ],
+        "autoWidth": false,
+        "ajax": {
+            "url": "https://localhost:7203/admin/test1/",
+            //默认为data,这里定义为空，则只需要传不带属性的数据
+            "dataSrc": ""
+        },
+        //給table內自定義按鈕
+        "columnDefs": [
+            {
+                "className": "dt-center align-middle",
+                "targets": "_all"
+            },
+            {
+
+                // targets用於指定操作的列，從第0列開始，-1爲最後一列，這裏第六列
+                // return後邊是我們希望在指定列填入的按鈕代碼
+                "targets": -1,
+                "render": function (data, type, full, meta) {
+                    return (
+                        `
+                            <a class="btn btn-primary" data-toggle="modal">
+                            <i class="fas fa-edit"></i>
+                            </a>
+                           <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+                            <i class="fas fa-trash-alt"></i>
+                             </a>
+                        `
+                    )
+                }
+
+            },
+            {
+
+                "targets": 5,
+                "render": function (data, type, full, meta) {
+                    return ("<input type='text' id = 'text'>")
+                }
+            },
+
+
+
+            //},
+            //       {
+            //           ////隱藏
+            //    target: 4,
+            //    visible: false,
+            //    searchable: false
+            //},
+        ],
+        columns: [
+            {
+                className: 'dt-control',
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            { data: 'reportDetailId', title: "健檢詳細ID" },
+            { data: 'reportId', title: "健檢報告ID" },
+            { data: 'name', title: "項目" },
+            { data: 'result', title: "結果" },
+            { data: null },
+            { data: null },
+        ],
+
+        //{
+        //    extend: 'print',
+        //    text: '列印',
+        //    className: 'btn btn-info',
+        //    exportOptions: {
+        //        modifier: {
+        //            page: 'all'
+        //        }
+        //    }
+        //},
+        //{
+        //    extend: 'pdf',
+        //    text: '匯出PDF',
+        //    className: 'btn btn-danger',
+        //    exportOptions: {
+        //        modifier: {
+        //            page: 'all'
+        //        }
+        //    },
+        //    customize: function (doc) {
+        //        doc.defaultStyle.font = 'SimSun'; // 或者 'Microsoft YaHei'
+        //    }
+        //}
+
+
+
+
+
+
+
+    });
+    //外表//
+    var count = 0
+    var table = $('#tableM').DataTable({
+        "autoWidth": false,
+        ajax: {
+            url: 'https://localhost:7203/transaction/members',
+            dataSrc: ''
+        },
+        columns: [
+            {
+                data: null,
+                width: "20px",
+                render: function (data, type, row) {
+                    count++;
+                    return count;
+                }
+
+            },
+            { data: 'memberId', title: "會員編號" },
+            { data: 'memberName', title: "姓名" },
+            //{ data: "healthReports", title: "mid" },
+            //{ data: 'state_date' },
+            //{ data: 'office' },
+            //{ data: 'extn' }
+        ],
+
+    })
+    //if (row.child.isShown()) {
+    //    // This row is already open - close it
+    //    row.child.hide();
+    //}
+    //else {
+    //    // Open this row
+    //    row.child(format(row.data())).show();
+    //}
+
+    ///外細表 報告 日期
+    var select;
+    table.on('click',/* 'td.dt-control',*/ function (event) {
+        var thistr = event.target.closest("tr")
+        var tar = event.target.closest("tr").children[1].innerHTML
+        var test = document.querySelector("div")
+        var title = document.querySelector("h1")
+        var tbody = document.querySelector("#tbody")
+        //var A = document.querySelectorAll()
+        console.log(tar)
+        var url = `https://localhost:7203/transaction/members/${tar}`;
+        $.get(url, function (data, status) {
+            //console.log(thistr.nextSibling.className)
+            var datarr = data
+            let tabletr = event.target.closest('tr');
+            let tablerow = table.row(tabletr);
+
+
+            ////彈窗
+            if (thistr.className == "A") {
+                ////ttt更新
+                var id = (event.target.closest('tr').children[2].innerHTML)
+                //    console.log(id)
+                title.innerHTML = `健檢報告ID:${id}`
+                ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
+                $.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
+
+                    var datarr = data
+                    if (datarr.length == 0) {
+                        alert("null")
+                    }
+                    else {
+                        fku.show();
+                    }
+                    console.log(datarr)
+                })
+
+                ////自建表
+                //$.get(`https://localhost:7203/admin/test1/${id}`, function (data, status) {
+
+                //    var datarr = data
+                //    console.log(datarr)
+                ////tableD.
+
+                //var ttd1 = document.createElement("td")
+                //var ttd2 = document.createElement("td");
+                //var ttd3 = document.createElement("td");
+                //var ttd4 = document.createElement("td");
+
+                //var newtr = document.createElement("tr");
+
+                //ttd1.innerHTML = datarr[0].item.itemName
+                //ttd2.innerHTML = "2"
+                //ttd3.innerHTML = "3"
+                //ttd4.innerHTML = "4"
+
+                //newtr.appendChild(ttd2);
+                //newtr.appendChild(ttd4);
+                //newtr.appendChild(ttd3);
+                //newtr.appendChild(ttd1);
+                //newtr.setAttribute("Class", "A");
+                //newtr.setAttribute("style", "background-color:#5CADAD");
+                //tbody.appendChild(newtr);
+
+                //fku.show();
+
+                //})
+
+
+            }
+            else {
+
+                //收縮
+                if (thistr.id == "on") {
+                    // This row is already open - close it
+                    for (var i = 0; i < data[0].healthReports.length; i++) {
+                        if (thistr.nextSibling != null) {
+                            if (thistr.nextSibling.className == "" || thistr.nextSibling.className != "A")
+                                continue;
+                            var rm = document.querySelector(".A")
+                            //thistr.nextsibilings.remove()
+                            thistr.parentNode.removeChild(rm)
+                        }
+                        else {
+                            break
+                        }
+
+                    }
+                    alert("a")
+                    thistr.removeAttribute("id")
+                } else {
+                    //Open this row
+                    //擴展
+                    console.log(tablerow)
+                    thistr.setAttribute("id", "on")
+                    //head
+                    //var ttabletd1 = document.createElement("td")
+                    //var ttabletd2 = document.createElement("td");
+                    //var ttabletd3 = document.createElement("td");
+                    //var ttabletd4 = document.createElement("td");
+                    //var tnewtr = document.createElement("tr");
+                    ////tabletd1.innerHTML = ""
+                    //ttabletd2.innerHTML = "預約日期"
+                    //ttabletd3.innerHTML = "健檢報告ID"
+                    ////tabletd4.innerHTML = ""
+                    //tnewtr.appendChild(ttabletd1);
+                    //tnewtr.appendChild(ttabletd2);
+                    //tnewtr.appendChild(ttabletd3);
+                    //tnewtr.appendChild(ttabletd4);
+                    //tnewtr.setAttribute("Class", "A");
+                    //tnewtr.setAttribute("style", "background-color:green");
+
+
+
+                    for (var i = 0; i <= data[0].healthReports.length; i++) {
+                        var tabletd1 = document.createElement("td")
+                        var tabletd2 = document.createElement("td");
+                        var tabletd3 = document.createElement("td");
+                        var tabletd4 = document.createElement("td");
+
+                        var newtr = document.createElement("tr");
+                        //data[0].healthReports[i].reportId
+                        //data[0].healthReports[i].reserve.reserveDate
+                        tabletd1.innerHTML = "1"
+                        tabletd2.innerHTML = "2"
+                        tabletd3.innerHTML = data[0].healthReports[i].reportId
+                        //if (data[0].healthReports[i].reserve=!null)
+                        tabletd4.innerHTML = data[0].healthReports[i].reserve.reserveDate
+
+                        newtr.appendChild(tabletd2);
+                        newtr.appendChild(tabletd4);
+                        newtr.appendChild(tabletd3);
+                        newtr.appendChild(tabletd1);
+                        newtr.setAttribute("Class", "A");
+                        newtr.setAttribute("style", "background-color:#5CADAD");
+                        thistr.after(newtr)
+
+                    }
+                    //thistr.after(tnewtr)
+
+
+                }
+            }
+        })
+    });
+
+
+
+
+    //dd.addEventListener("click", () => {
+    //    $('#tableM').DataTable({
+    //        buttons: [
+    //            {
+    //                extend: 'pdf',
+    //                text: 'Save current page',
+    //                exportOptions: {
+    //                    modifier: {
+    //                        page: 'current'
+    //                    }
+    //                }
+    //            }
+    //        ]
+    //    });
+    //})
+
+    /////摺疊
+    ttt.on('click', 'td.dt-control', function (event) {
+
+        let tr = event.target.closest('tr');
+        let row = ttt.row(tr);
+        console.log(tr)
+
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+
+        var trr = document.createElement("tr");
+
+        td1.innerHTML = "1"
+        trr.appendChild(td1);
+        td2.innerHTML = "2"
+        trr.appendChild(td2);
+        td3.innerHTML = "3"
+        trr.appendChild(td3)
+        td4.innerHTML = "4"
+        trr.appendChild(td4);
+
+        tr.after(trr).show();
+
+
+
+
+
+    });
+
+    // Formatting function for row details - modify as you need
+    function format(event) {
+        // `d` is the original data object for the row
+        console.log(event)
+        return (
+
+            '<tr>' +
+            '<td>' +
+            "aa" +
+            '</td>' +
+            '<td>' +
+            event.result +
+            '</td>' +
+            '<td>' +
+            "aa" +
+            '</td>' +
+            '<td>' +
+            event.result +
+            '</td>' +
+            '</tr>'
+
+        );
+    }
+
+    //'<dl>' +
+    //    '<dt>Full name:</dt>' +
+    //    '<dd>' +
+    //    event.result +
+    //    '</dd>' +
+    //    '<dt>Extension number:</dt>' +
+    //    '<dd>' +
+
+    //    '</dd>' +
+    //    '<dt>Extra info:</dt>' +
+    //    '<dd>And any further details here (images etc)...</dd>' +
+    //    '</dl>'
+
+
+    //console.log(event.target.closest('tr').children[0].innerHTML)///該選取欄位之ID
+    //tableM.addEventListener("click", () => {
+
+    //modalshow
+    //fku.show();
+
+
+    //btn.setAttribute("data-ajax", "ajaxRequest2")
+    //ajaxRequest2(params)
+    //console.log(btn)
+    //var table = $('#example').DataTable();
+    //table.ajax.reload();
+
+    //bs
+    //var table = document.querySelector('#table');
+    //var $button = $('#button')
+
+    //$.ajax({
+    //    url: 'https://localhost:7203/admin/test1',
+    //    data: data,
+    //    success: success,
+    //    dataType: dataType
+    //});
+    //// var datasss = $.get('https://localhost:7203/admin/test1/')
+
+
+    //$('#myModal').on('shown.bs.modal', function () {
+    //    alert("00")
+    //})
+    //    var id = (event.target.closest('tr').children[0].innerHTML)
+    //    console.log(id)
+    //    ttt.ajax.url(`https://localhost:7203/admin/test1/${id}`).load();
+
+
+
+
+    //})
+
+
+
+
+
+
+    function g8() {
+
+
+        //tableD.setAttribute("hidden", false);
+        tableM.setAttribute("hidden", "");
+        tableD.removeAttribute("hidden");
+        table2.ajax.url('https://localhost:7203/admin/test1').load();
+        //dt
+        //$('#table3').DataTable({
+        //    ajax: {
+        //        url: 'https://localhost:7203/admin/test1',
+        //        dataSrc: ''
+        //    },
+        //    columns: [
+        //        { data: 'reportDetailId' },
+        //        { data: 'reportId' },
+        //        { data: 'itemId' },
+        //        { data: 'result' },
+        //    ]
+        //});
+        //$('#table2').DataTable({
+        //    ajax: {
+        //        url: 'https://localhost:7203/transaction/members',
+        //        dataSrc: ''
+        //    },
+        //    columns: [
+        //        { data: 'id' },
+        //        { data: 'name' },
+        //        //{ data: 'salary' },
+        //        //{ data: 'state_date' },
+        //        //{ data: 'office' },
+        //        //{ data: 'extn' }
+        //    ]
+        //});
+
+        //$('#table2').DataTable().ajax.reload();
+
+        //var table = $('#table2').DataTable();
+        //table.ajax.reload();
+
+    };
+    ////dd
+    //$('#table2').DataTable({
+    //    ajax: {
+    //        url: 'https://localhost:7203/transaction/members',
+    //        dataSrc: ''
+    //    },
+    //    columns: [
+    //        { data: 'id' },
+    //        { data: 'name' },
+    //        //{ data: 'salary' },
+    //        //{ data: 'state_date' },
+    //        //{ data: 'office' },
+    //        //{ data: 'extn' }
+    //    ]
+    //});
+
+
+
+    ////////XXXXXX
+    //$('#tableD').DataTable({
+    //    ajax: {
+    //        url: 'https://localhost:7203/admin/test1',
+    //        dataSrc: ''
+    //    },
+    //    columns: [
+    //        { data: 'reportDetailId' },
+    //        { data: 'reportId' },
+    //        { data: 'itemId' },
+    //        { data: 'result' },
+    //    ]
+    //})
+
+    //var table2 = $('#tableD').DataTable({
+    //    ajax: {
+    //        url: '',
+    //        dataSrc: ''
+    //    },
+    //    columns: [
+    //        { data: 'reportDetailId' },
+    //              { data: 'reportId' },
+    //              { data: 'itemId' },
+    //              { data: 'result' },
+    //    ]
+    //})
+
+    //// your custom ajax request here
+    //function ajaxRequest(params) {
+    //    var url = 'https://localhost:7203/transaction/members'
+    //    $.get(url + '?' + $.param(params.data)).then(function (res) {
+    //        params.success(res)
+    //    })
+    //}
+    ////document.addEventListener('DOMContentLoaded',()=>{
+    ////    test();
+    ////})
+    ////async function test (){
+    ////    const response = await fetch("https://localhost:7203/transaction/members");
+    ////    const data = await response.json();
+    ////    //console.log(data);
+    ////}
+
+    ////Table.on('click', function (e) {
+    ////    let data = table.row(e.target.closest('tr')).data();
+
+    ////    alert(data[0] + "'s salary is: " + data[5]);
+    ////})
+
+    //function ajaxRequest2(params) {
+    //    var url = 'https://localhost:7203/admin/test1'
+    //    $.get(url + '?' + $.param(params.data)).then(function (res) {
+    //        params.success(res)
+    //    })
+    //}
+    //    document.addEventListener('DOMContentLoaded',()=>{
+    //        test();
+    //    })
+    //    async function test (){
+    //    const response = await fetch("https://localhost:7203/admin/test1");
+    //        const data = await response.json();
+    //        //console.log(data);
+    //    }
+
+    //Table.on('click', function (e) {
+    //    let data = table.row(e.target.closest('tr')).data();
+
+    //    alert(data[0] + "'s salary is: " + data[5]);
+    //})
+
+    //var $table = $('#table')
+
+    //$(function () {
+
+    //    $table.bootstrapTable()
+    //})
+    //$table.bootstrapTable('refreshOptions', { url: 'https://localhost:7203/admin/test1' })
+
+    var $table = $('#table')
+
+    $(function () {
+        $table.bootstrapTable({
+            url: 'https://localhost:7203/transaction/members',
+            idField: 'memberId',
+            showColumns: true,
+            columns: [
+                {
+                    field: 'ck',
+                    checkbox: true
+                },
+                {
+                    field: 'memberId',
+                    title: 'MID',
+                    sortable: true,
+                    align: 'center',
+
+                },
+                {
+                    field: 'memberName',
+                    title: 'name'
+                },
+
+                {
+                    field: 'memberGender',
+                    title: 'Gender'
+                }
+            ],
+            //treeShowField: 'memberName',
+            //parentIdField: 'healthReports',
+            //onPostBody: function () {
+            //    var columns = $table.bootstrapTable('getOptions').columns
+
+            //    if (columns && columns[0][1].visible) {
+            //        $table.treegrid({
+            //            treeColumn: 1,
+            //            onChange: function () {
+            //                $table.bootstrapTable('resetView')
+            //            }
+            //        })
+            //}
+            //}
+        })
+    })
+
+    function typeFormatter(value, row, index) {
+        if (value === 'menu') {
+            return '菜单'
+        }
+        if (value === 'button') {
+            return '按钮'
+        }
+        if (value === 'api') {
+            return '接口'
+        }
+        return '-'
+    }
+
+    function statusFormatter(value, row, index) {
+        if (value === 1) {
+            return '<span class="label label-success">正常</span>'
+        }
+        return '<span class="label label-default">锁定</span>'
+    }
+
+</script>

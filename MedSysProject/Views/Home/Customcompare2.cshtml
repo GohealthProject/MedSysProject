@@ -1,0 +1,444 @@
+﻿@{
+    
+    ViewData["Title"] = "planComeparison";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+@*@model List<CProjectWarp>*@
+@model IEnumerable<Project>?
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+@*這是回上頁抬頭*@
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>自選方案</h2>
+            <ol>
+                <li><a href="~/Home/Index">回到首頁</a></li>
+                <li><a href="~/Home/planComeparison">方案介紹</a></li>
+                <li><a href="">自選方案</a></li>
+            </ol>
+        </div>
+
+    </div>
+    @*<button type="button" class="btn btn-outline-danger" style="background-color:saddlebrown"><a asp-action="planComeparisonTotal" asp-controller="Home">測試跳轉用</a></button>*@
+</section>
+<style>
+    /*div,table{border:dashed 3px red}*/
+    /* table{
+        align-content:center;
+        text-align:center;
+    }
+    .col-3{
+        height:230px;
+    }*/
+
+    .offcanvas-body{
+    position:relative;
+    }
+    #rsbtn{
+        position:absolute;
+        bottom:5px;
+        left:30%;
+    }
+
+
+</style>
+
+
+<section id="portfolio" class="portfolio">
+
+  @* @foreach (var item in Model)
+    {
+        item.PlanRefs.First().Plan.PlanName;
+
+
+    }*@
+    <div class="container">
+
+    <div class="row">
+    <div class="col-lg-12">
+                
+                <ul id="portfolio-flters" class="row" style="margin-left:6%;" >
+                    <li data-filter="*" class="filter-active col-3" style="width:150px;height:150px;">
+                        <img src="~/img/customcompare/p-00.jpg" class="img-fluid bi-backpack-fill" alt="" style="width:150px;height:110px;">
+                            <div class=" portfolio-item filter-app">
+                                全部類別
+                            </div>
+                        </li>
+
+                  @*  <li data-filter=".filter-app" class="col-3">
+                        <img src="~/img/customcompare/p-01.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-app">
+                            一般生理檢查
+                            </div>
+                        </li>*@
+                   @* @{
+                        List<Plan> list = new List<Plan>();
+                        List<Item> listt = new List<Item>();
+                        foreach(var q in Model[0].project.Items)
+                        {
+
+                        }
+                        foreach(var q in Model)
+                        {
+                            foreach(var g in q.project.PlanRefs)
+                            {
+                                list.Add(g.Plan);
+                            }
+                            foreach(var gg in q.project.Items)
+                            {
+                                <div>@gg.ItemName</div>
+                                <input type="text" value="@gg.ItemId">
+                                
+                            }
+                        }
+                        
+                        var qq = list.Distinct().Select(n => n);
+                        foreach(var pp in qq)
+                        {
+                            <div>@pp.PlanName</div>
+                            <input type="text" value="@pp.PlanId">
+                        }
+                    }*@
+
+                    
+                        
+                 @*   //    List<Plan> list = new List<Plan>();
+                    //    foreach (var q in Model)
+                    //    {
+                    //        foreach (var g in q.PlanRefs)
+                    //        {
+                    //            list.Add(g.Plan);
+                    //        }
+                    //        foreach (var gg in q.Items)
+                    //        {
+                    //            //<div>@gg.ItemName</div>
+                    //            //<input type="text" value="@gg.ItemId">
+
+                    //        }
+                    //    }
+
+                    //    var qq = list.Distinct().Select(n => n);
+                    //    foreach (var pp in qq)
+                    //    {
+                    //        <div>@pp.PlanName</div>
+                    //        <input type="text" value="@pp.PlanId">
+                    //    }
+                    //*@
+
+                    @*plan匯入*@
+
+                  @*  @{
+                        List<Plan> list = new List<Plan>();
+                        @foreach(var s in Model)
+                    {
+                            foreach (var ss in s.PlanRefs)
+                            {
+                                list.Add(ss.Plan);
+                            }
+                        
+                    }
+                    }*@
+
+                    @*project匯入*@
+                        @foreach (var items in Model)
+                        {
+                        <li data-filter=".@items.ProjectName" class="col-3" style="width:150px;height:150px;">
+                            <img src="~/img/customcompare/p-@{@Html.DisplayFor(m =>items.ProjectId)}.jpg" class="img-fluid" alt="" style="width:150px;height:110px;">
+                            <div>
+                            </div>
+                            <div class="portfolio-item">
+                                @items.ProjectName
+                            </div>
+                        </li>
+                        }
+                    
+                    
+                        
+                 @*       <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/customcompare/p-02.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-web">
+                            尿液一般檢查
+                            </div>
+                        </li>
+                        <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/customcompare/p-03.jpg" class="img-fluid" alt="">
+                            <div class="portfolio-item filter-web">
+                            血液常規檢查
+                            </div>
+                        </li>
+                    <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/customcompare/p-04.jpg" class="img-fluid" alt="" style="height:230px">
+                        <div class="portfolio-item filter-web">
+                            腎功能檢查
+                        </div>
+                    </li>
+                    <li data-filter=".filter-card" class="col-3">
+                        <img src="~/img/customcompare/p-05.jpg" class="img-fluid" alt="" style="height:230px">
+                        <div class="portfolio-item filter-web">
+                            腎功能檢查
+                        </div>
+                    </li>*@
+    </ul>
+    </div>
+    </div>
+
+
+        @*item導入*@
+            <div class="row portfolio-container portfolio-flters p-5" id="btng" style="margin-left:5%;">
+            @foreach (var items in Model)
+            {
+                int i = 0;
+                @foreach (var s in items.Items)
+                {
+                    i++;
+                    <div>
+                    <button class="portfolio-item @items.ProjectName col-2 m-1 btn btn-success ibtn"  value="@s.ItemName">
+                     
+                     @Html.DisplayFor(m => s.ItemName)
+                     <br>
+                     @Html.DisplayFor(m => s.ItemPrice)
+                     
+                   
+                    
+                   
+                            <p type="text" class="iprice" hidden>@s.ItemPrice</p>
+                            <p type="text" class="iid" hidden>@s.ItemId</p>
+                    </button>
+                    
+                    </div>
+               }
+                
+                
+
+            }
+           
+
+            </div>
+
+            <form id="form" method="post" action="~/Home/Reserve">
+            <input type="text" value="" id="forminput" name="item">
+            <input type="text" value="" id="Mid" name="Mid">
+            <input type="text" value="" id="Pid" name="Pid">
+            <button id="formbtn" type="submit">btn</button>
+            </form>
+        </div>
+        </section>
+    
+
+     
+
+    
+    @*canvas*@
+    <div class="row fixed-bottom">
+        <div class="col-10"></div>
+    <button class="btn btn-primary col-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">我的自選方案</button>
+    </div>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="false" data-bs-scroll="true">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">已選項目</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <table class="table table-hover">
+              <thead>
+                    <tr>
+                        <th class="col-2">
+                            編號
+                        </th>
+
+                        <th class="col-5">
+                            項目
+                        </th>
+                        <th class="col-3">
+                            價格
+                        </th>
+                        <th class="col-2">
+                            移除
+                        </th>
+                    </tr>
+              </thead>
+                <tbody id="ilist">
+               @*   <tr>
+                      <td>
+                          A
+                      </td>
+                        <td>
+                            B
+                        </td>
+                    <td>
+                        150
+                    </td>
+                        <td><img src="~/img/icon/x.png" /></td>
+                  </tr>*@
+                 
+                   @* <tr>
+                        <td>
+                            A
+                        </td>
+                        <td>
+                            B
+                        </td>
+                    <td>
+                        100
+                    </td>
+                        <td><img src="~/img/icon/x.png" /></td>
+                        
+                    </tr>*@
+       
+              </tbody>
+            </table>
+        
+        @*<button class="btn btn-primary  col-6" type="button" id="rsbtn"><a href="~/Home/Reserve" onclick="submit()">馬上預約</a></button>*@
+        <button class="btn btn-primary  col-6" type="button" id="rsbtn" onclick="submit()">馬上預約</button>
+        </div>
+    </div>
+
+@section Scripts{
+    <script>
+        var count=0;///不能點太快
+        const items = [];
+        //todo 選後enable
+        let btn = document.querySelectorAll(".ibtn");
+        let list = document.querySelector("#ilist");
+        for(var i =0 ; i<btn.length;i++){
+            btn[i].addEventListener('click',itemadd);
+        }
+        //let img = document.querySelectorAll(".imgdelete");
+        //console.log(img);
+        //for(var i=0; i<img.length;i++){
+        //    img[i].addEventListener('click',()=>{
+        //        console.log("hello");
+        //    });
+        //};
+        function imgdelete() {
+            let img = document.querySelectorAll(".imgdelete");
+            var dtr = document.querySelectorAll("#dtr");
+            let iid = event.target.parentNode.querySelector(".iid");
+           
+            console.log(event.target.this);
+            //var t = dtr.removeChild(event.target.parentNode);
+            var del =list.removeChild(event.target.parentNode.parentNode);
+            var tar = event.target.nextElementSibling.id;
+            //console.log(t.innerHTML)
+            var index = items.indexOf(event.target)
+            console.log(tar)
+            console.log(tar)
+            items.splice(tar, 1)
+            console.log(index);
+            console.log(items);
+            count--;
+        }
+        function itemadd (event){
+            console.log(event.target);
+            console.log()
+            
+            let iid = event.target.parentNode.querySelector(".iid");
+            let iprice = event.target.parentNode.querySelector(".iprice");
+            //let iid = event.target.parentNode.querySelector(".iid");
+            var show =
+            `
+                    <tr id="dtr">
+                                    <td>
+                                    ${iid.innerHTML}
+                                    </td>
+                                    <td>
+                                    ${event.target.value}
+                                    </td>
+                                    <td>
+                                    ${iprice.innerHTML}
+                                    </td>
+                                    <td>
+                                       <img src="/img/icon/x.png" onclick="imgdelete()"/>
+                                       <p id="${count}">${iid.innerHTML}</p>
+                                    </td>
+                     </tr>
+            `;
+            list.innerHTML +=show;
+            
+            
+            items.push(iid.innerHTML)
+            console.log(items);
+            count++
+        }
+
+        function submit()
+        {
+            var total = document.querySelector("#ilist");
+            var form = document.querySelector("#form");
+            var forminput = document.querySelector("#forminput");
+            var Mid = document.querySelector("#Mid");
+            var Pid = document.querySelector("#Pid");
+            var sumbit = document.querySelector("#submit")
+            forminput.value= total.innerHTML;
+            
+            Mid.value = 7;//
+            Pid.value = 6;
+            console.log(form.value)
+            console.log(total.innerHTML)
+            form.submit();
+
+        }
+        //取得
+        $("#button").click(function () {
+            $.get("https://localhost:7078/api/CPlan/3?planid=3", function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+
+
+
+
+            });
+        });
+
+        //$("#btng:has(#ibtn)").click(()=>{
+        //   var itembtn = document.querySelector("#btng:has(#ibtn)").textContent;
+        //    //var suck = document.querySelector("event.target");
+        //    //console.log(event.currentTarget)
+        //    console.log(event.target.value)
+        //    event.target.addEventListener("click",()=>{
+        //        document.querySelector("#ilist").innerHTML +=
+        //            `<tr>
+        //                    <td>
+        //                    AA
+        //                    </td>
+        //                    <td>
+        //                           ${event.target.value}
+        //                    </td>
+        //                            <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //                 </tr>`
+        //    })
+            //document.querySelector("#ilist").innerHTML += 
+            //    `<tr>
+            //            <td>
+            //            ${this.itembtn}
+            //            </td>
+            //            <td>
+            //           BB
+            //            </td>
+            //                    <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+            //         </tr>`
+        //})
+
+
+        //const itembtn = document.querySelector("#btng:has(#ibtn)");
+        //itembtn.addEventListener('click',() => {
+        //    console.log(event.target)
+           
+        //    //console.log(this.document.querySelector("#btng:has(#ibtn)").textContent)
+        //    document.querySelector("#ilist").innerHTML +=
+        //    `<tr>
+        //        <td>
+        //        ${this.itembtn}
+        //        </td>
+        //        <td>
+        //       BB
+        //        </td>
+        //                <td><button class="btn btn-danger m-1"><i class="bi bi-trash-fill"></i></td>
+        //     </tr>`
+            
+
+        //})
+    </script>
+}
+
+

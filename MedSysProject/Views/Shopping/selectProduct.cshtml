@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "selectProduct";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
-    string s = Model.UnitPrice.ToString();
-    
+    int s = (int)((int)(Model.UnitPrice) * 0.8);
+
 }
 <section class="breadcrumbs">
     <div class="container">
@@ -28,16 +28,34 @@
 
             <div class="col-lg-8">
                 <div class="portfolio-details-slider swiper">
-                    <div class="swiper-wrapper align-items-center">
+                    <div class="swiper-wrapper align-items-center" >
                         @{
-                            int count = 0;
+                            if (Model.UnitsInStock < 10)
+                            {
+                                int count = 0;
                             foreach(var img in Model.Path)
                             {
-                                                <div class="swiper-slide">
-                                                    <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px">
-                                                </div>
-                                count++;
+                                    <div class="swiper-slide" >
+                                      <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px;object-fit:cover;">
+                                      @if(count ==0){
+                                          <img src="@Url.Content("~/img/icon/limitedquantity-removebg-preview-removebg-preview.png")" style="height:300px;width:300px;position:absolute; top: -30px; left: -22px;">
+                                      }
+                                        </div>
+                                    count++;
+                                }
                             }
+                            else
+                            {
+                                int count = 0;
+                                foreach(var img in Model.Path)
+                            {
+                                    <div class="swiper-slide" >
+                                      <img src="@Url.Content("~/img-product/")@Model.Path[count]" alt="" style="height:856px;width:856px;object-fit:cover;">
+                                    </div>
+                                    count++;
+                                }
+                            }
+
                         } 
                     </div>
                     <div class="swiper-pagination"></div>
@@ -50,7 +68,7 @@
                     <ul>
                         <li class="fs-4"><strong>分類</strong>: Web design</li>
                         <li class="fs-4"><strong>出貨商</strong>: ASU Company</li>
-                        <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s.TrimEnd('0').TrimEnd('.')</span></li>
+                        <li class="fs-4"><strong>產品價格</strong><span class="text-danger">    $@s</span></li>
                         <li class="fs-4"><strong>證號</strong>: <a href="#">@Model.License</a></li>
                     </ul>
                 </div>
@@ -66,10 +84,10 @@
                                 @{
                                     for(int i = 1; i <= Model.UnitsInStock; i++)
                                     {
-                                                        <option value="@i">@i</option>
+                                                                                                                                                                                                                    <option value="@i">@i</option>
                                         if (i >= 50)
                                         {
-                                                            <option>...</option>
+                                                                                                                                                                                                                        <option>...</option>
                                             break;
                                         }
                                     }
@@ -80,7 +98,7 @@
                             @{
                                 if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                                 {
-                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                                                                                                                                                                                <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
@@ -89,11 +107,11 @@
                                 var q = Model.Product.TrackingLists.Where(n => n.ProductId == Model.ProductId && n.MemberId == member.MemberId);
                                 if (!q.Any())
                                 {
-                                    <img src="~/img/Noheart.png" id="ProductTracking" />
+                                              <img src="~/img/Noheart.png" id="ProductTracking" />
                                 }
                                 else
                                 {
-                                    <img src="~/img/heart.png" id="ProductTracking" />
+                                             <img src="~/img/heart.png" id="ProductTracking" />
                                 }
                                 }
                                 
@@ -101,6 +119,12 @@
                         <button class="btn btn-info" onclick="addToCart(event)">加入購物車</button>
                         </form>
                     </p>
+                    @{
+                        if (Model.UnitsInStock < 10)
+                        {
+                            <span class="text-danger fs-2">庫存不足 僅剩 @Model.UnitsInStock 個!!</span>
+                        }
+                        }
                 </div>
             </div>
 
@@ -109,59 +133,52 @@
     </div>
 </section><!-- End Portfolio Details Section -->
 <div class="container">
-<div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <p>This is the first item's accordion body.</p> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-        <div class="input-group input-group-lg">
-            @{
-                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
-                <span class="input-group-text" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@member.MemberImage" style="height:40px;height:40px;"/></span>
-            }
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg"placeholder="輸入留言">
+<div style="height:430px;width:100%;" class=" mt-3 ">
+    <div style="height:400px" class="">
+        <div style="height:100px" class=" d-flex align-items-center ">
+            <span class="fs-1 ps-4">你可能對這個有興趣</span>
         </div>
-</div>
-</div>
+        <div >
+                <div class="row ps-3" id="Suggestedhere">
+                        
+            </div>
+        </div>
 
+    </div>
+</div>
+</div>
+<div class="container mb-3" >
+    
+</div>
+<div class="container bg-white" id="reviewList" >
+    
+</div>
 @section Scripts{
     <script>
+        const reviewList = document.querySelector("#reviewList");
         const item = document.querySelector("#datas");
-        const id = @Model.ProductId;
-        console.log(id);
+        const Pid = @Model.ProductId;
+        let count = 0;
+        let likecount = @Model.Product.Likecount
+            
+        @{
+            int memberid = 0;
+            string memberImage = "";
+            if (Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            {
+                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp member = JsonSerializer.Deserialize<MemberWarp>(json);
+                memberid = member.MemberId;
+                memberImage = member.MemberImage;
+            }
+            else
+            {
+                
+            }
+        }
+        Mid= @memberid;
+        let reviewInput = "";
+        console.log(`產品ID${Pid}會員ID${Mid}`);
         var data = new FormData(item);
         let heart = document.querySelector("#ProductTracking");
         heart.addEventListener("click", ProductTracking);
@@ -174,7 +191,6 @@
             })
             const re = await response.text();
             getcartList()
-            alert("加入購物車成功");
         }
         async function ProductTracking(event){
             event.preventDefault()
@@ -183,34 +199,233 @@
             let imgName = imgPath.substring(img + 1);
 
             if (imgName === "Noheart.png") {
-                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${Pid}&heart=${imgName}`
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
                 if(data === "請先登入"){
-                    alert(data);
                     return;
                 }
                 event.target.src= "/img/heart.png";
-                alert(data);
             } else if(imgName === "heart.png") {
-                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${id}&heart=${imgName}`
+                let url = `@Url.Content("/Shopping/ProductTracking?")Pid=${Pid}&heart=${imgName}`
                 const response = await fetch(url)
                 const data = await response.text();
                 console.log(data);
                 if(data === "請先登入"){
-                    alert(data);
                     return;
                 }
                 event.target.src = "/img/Noheart.png";
-                alert(data);
             }
         }
-        function changeImg(imgElement) {
-            $("#imgList>img").css("border", "");
-            const src = imgElement.src;
-            document.querySelector("#mainImg").src = src;
-            imgElement.style.border = "1px dashed red";
+        document.addEventListener("DOMContentLoaded", () => {
+            reviewSearch();
+            document.addEventListener("keydown", process);
+            document.addEventListener("input", updateInput);
+            SuggestedItems();
+        })
+        function updateInput() {
+            reviewInput=document.querySelector("#review").value;
+        }
+        async function changeLike(event) {
+            let ReviewID = event.target.parentNode.parentNode.querySelector(".reviewID").value;
+            console.log(ReviewID);
+            let imgPath = event.target.src;
+            let img = imgPath.lastIndexOf("/");
+            let imgName = imgPath.substring(img + 1);
+            console.log(imgName);
+            let url = `https://localhost:7078/api/ProductReviews/changeLike/${imgName}&${ReviewID}&${Mid}`
+            if(imgName=="good.png"){
+                const response = await fetch(url);
+                const data = await response.text();
+                if (response.status == 400) {
+                    return;
+                }
+                event.target.src="/img/icon/nogood-review.png";
+                console.log(response.status);
+                likecount--;
+                if(likecount<0){
+                    likecount = 0;
+                }
+            }else{
+                const response = await fetch(url);
+                const data = await response.text();
+                if (response.status == 400) {
+                    return;
+                }
+                event.target.src="/img/icon/good.png";
+                console.log(response.status);
+                likecount++;
+            }
+            reviewSearch()
+        }
+        async function process(event){
+            review(event)
+        }
+        async function reviewSearch() {
+            count = 0;
+            const url = `https://localhost:7078/api/ProductReviews/pid=${Pid}`
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data);
+            if (data.length != 0) {
+                const value = data.map(reviewItem => {
+                    const reviewID = reviewItem.ProductReviewId;
+                    count++;
+                    const content = reviewItem.ReviewContent;
+                    const member = reviewItem.Member.MemberImage;
+                    const memberid = reviewItem.MemberId;
+                    const memberNickname = reviewItem.Member.MemberNickname;
+                    let feedback = "";
+                    if (reviewItem.IsLike) {
+                        feedback = "good.png";
+                    } else {
+                        feedback = "nogood-review.png";
+                    }
+                    const date = reviewItem.Timestamp;
+                    var dataobj = new Date(date);
+                    const year = dataobj.getFullYear();
+                    const month = dataobj.getMonth() + 1;
+                    const day = dataobj.getDate();
+
+                    let html =
+                        `
+                                <div class="row mb-3 p-3" >
+                                    <div class="col-1">
+                                    <img src="/img/MemberImg/${member}" style="height:80px;width:80px;margin-right:10px" onclick=""/>
+                                    </div>
+                                    <div class="col-11">
+                                    <span  id="inputGroup-sizing-lg">${memberNickname}<img src="/img/icon/${feedback}" style="display:inline;" class="reviewImg" value="${reviewID}"/><br>${year}-${month}-${day}<br></span>
+                                    <span class="fs-3">${content}</span>
+                                    <input type="hidden"  class="memberID" value="${memberid}"/>
+                                    <input type="hidden"  class="reviewID" value="${reviewID}"/>"
+                                    </div>
+                                    <hr class="mt-3">
+                                </div>
+                        `
+                    return html;
+                })
+
+                reviewList.innerHTML = `<div class="fs-2 mb-5">商品評價 讚數${likecount}</div>`;
+                reviewList.innerHTML += value.join("");
+                console.log(document.querySelectorAll(".reviewImg"));
+                console.log(Mid == 0);
+                if (Mid == 0) {
+                    return;
+                }
+                if (count == data.length) {
+                    reviewList.innerHTML +=
+                        `
+                                                    <span class="input-group-text  input" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@memberImage" style="height:80px;width:80px" /><input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="輸入留言" id="review"></span>
+                        `
+                }
+            }else {
+                reviewList.innerHTML +=
+                    `
+                                                   <span class="input-group-text  input" id="inputGroup-sizing-lg"><img src="@Url.Content("~/img/MemberImg/")@memberImage" style="height:80px;width:80px" /><input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="輸入留言" id="review"></span>
+                   `
+            }
+            
+            document.querySelectorAll(".reviewImg").forEach(item => {
+                item.removeEventListener("click", changeLike);
+                item.addEventListener("click", changeLike);
+            })
+        }
+        async function review(event) {
+            
+            if(event.key=="Enter"){
+                if (reviewInput == "") {
+                    return;
+                }else {
+                    const url = `https://localhost:7078/api/ProductReviews/mid=${Mid}&pid=${Pid}`
+                    console.log(url);
+                    console.log(JSON.stringify(reviewInput));
+                    let form = new FormData();
+                    form.append("review", reviewInput);
+                    const response = await fetch(url, {
+                        method:"POST",
+                        body: form,
+                    })
+                    const data = await response.json();
+                    console.log(data)
+                    const member = data.member;
+                    let feedback = "";
+                    if (data.isLike) {
+                        feedback = "good.png";
+                    } else {
+                        feedback = "nogood-review.png";
+                    }
+                    const content = data.reviewContent;
+                    const reviewID = data.productReviewId;
+                    const date = data.timestamp;
+                    const dataobj = new Date(date);
+                    const year = dataobj.getFullYear();
+                    const month = dataobj.getMonth() + 1;
+                    const day = dataobj.getDate();
+                    const memberid = member.memberId;
+                    const div = document.createElement("div");
+                    div.className="row mb-3 p-3";
+                    div.innerHTML=
+                    `
+                             <div class="col-1">
+                                                    <img src="/img/MemberImg/${member.memberImage}" style="height:80px;width:80px;margin-right:10px" onclick=""/>
+                                                    </div>
+                                                    <div class="col-11">
+                                                    <span  id="inputGroup-sizing-lg">${member.memberNickname}<img src="/img/icon/${feedback}" style="display:inline;" class="reviewImg" value="${reviewID}"/><br>${year}-${month}-${day}<br></span>
+                                                    <span class="fs-3">${content}</span>
+                                                    <input type="hidden"  class="memberID" value="${memberid}"/>
+                                                    <input type="hidden"  class="reviewID" value="${reviewID}"/>"
+                                                    </div>
+                                                    <hr class="mt-3">
+                    `
+                    reviewList.appendChild(div);
+                    if (Mid == 0) {
+                        return;
+                    } 
+                    let span = document.createElement("span");
+                    span.className = "input-group-text  input";
+                    span.id="inputGroup-sizing-lg";
+                    span.innerHTML=
+                    `
+                                <img src="/img/MemberImg/@memberImage" style="height:80px;width:80px" /><input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="輸入留言" id="review">
+                    `
+                    reviewList.appendChild(span);
+                    reviewList.querySelector(".input").remove();
+                    document.querySelectorAll(".reviewImg").forEach(item => {
+                        item.removeEventListener("click", changeLike);
+                        item.addEventListener("click", changeLike);
+                    })
+                    return;
+                }
+            }
+            
+        }
+
+        async function SuggestedItems() {
+            let url = `https://localhost:7078/api/Products/Suggested/${Pid}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data);
+            const value = data.$values.map(item => {
+                console.log(item);
+                const productID = item.productId;
+                const productName = item.productName.substring(0,16);
+                const productPrice = (item.unitPrice * 0.8).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+               
+                const productImage = item.fimagePath.split(",")[0];
+                console.log(productImage);
+                let html =
+                    `
+                        <div class="col   text-center">
+                               <img src="/img-product/${productImage}" style="height:200px; width:200px; object-fit:cover"><br />
+                               <a href="/Shopping/selectProduct/${productID}" class="fs-3"> ${productName} </a><br />
+                               <span class="fs-3 text-danger">特價 ：$${productPrice}</span>
+                        </div>
+                `
+                return html;
+            });
+            document.querySelector("#Suggestedhere").innerHTML= value.join("");
+            console.log(value);
         }
     </script>
 }

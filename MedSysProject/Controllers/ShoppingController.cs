@@ -7,23 +7,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using NuGet.Packaging.Signing;
+using OxyPlot;
 using System.Collections.Generic;
 using System.Net.WebSockets;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using System.Web;
 
 namespace MedSysProject.Controllers
 {
     public class ShoppingController : Controller
     {
         MedSysContext? _db = null;
-        public ShoppingController(MedSysContext db)
+        IHttpClientFactory _httpClientFactory;
+
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory)
         {
             _db = db;
+            _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
             List<CProductWarp> list = new List<CProductWarp>();
-            var q = _db.Products.OrderByDescending(n => n.ProductId).Select(n => n).Take(6);
+            var q = _db.Products.Where(n=>n.Discontinued==true&&n.UnitsInStock!=0).OrderByDescending(n => n.ProductId).Select(n => n).Take(6);
             foreach(var product in q)
             {
                 CProductWarp item = new CProductWarp();
@@ -35,7 +42,19 @@ namespace MedSysProject.Controllers
                 item.Path = item.FimagePath.Split(',');
                 list.Add(item);
             }
-
+            List<int> catList = new List<int>();
+            catList  = _db.ProductsCategories.Select(n=>n.CategoriesId).ToList();
+            var qq = _db.ProductsClassifications.Where(n => catList.Contains((int)n.CategoriesId)).GroupBy(n => n.CategoriesId).Select(n => new
+            {
+                n.Key,
+                count = n.Count()
+            });
+            List<int> cat = new List<int>();
+            foreach(var item in qq)
+            {
+                cat.Add(item.count);
+            }
+            ViewBag.carCount= cat;
             return View(list);
         }
         public IActionResult CatProduct(int id)
@@ -107,8 +126,8 @@ namespace MedSysProject.Controllers
             CCartItem item = new CCartItem();
             item.Product = q;
             item.ProductName = q.ProductName;
-            item.UnitPrice = (int)q.UnitPrice;
-            item.小計 = Int32.Parse(data["count"]) * (int)q.UnitPrice;
+            item.UnitPrice = (int)((int)q.UnitPrice*0.8);
+            item.小計 = Int32.Parse(data["count"]) * (int)((int)q.UnitPrice * 0.8);
             item.count = Int32.Parse(data["count"]);
             cart.Add(item);
             count = cart.Count().ToString();
@@ -137,6 +156,25 @@ namespace MedSysProject.Controllers
             HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
             return RedirectToAction("CartList");
         }
+        public IActionResult changeQta(int id,int nqta)
+        {
+            string json = "";
+            List<CCartItem>? cart = null;
+            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
+
+            foreach(var item in cart)
+            {
+                if(item.Product.ProductId == id)
+                {
+                    item.count= nqta;
+                    item.小計 = item.count * item.UnitPrice;
+                    break;
+                }
+            }
+            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
+            return RedirectToAction("CartList");
+        }
         public IActionResult getcartList()
         {
             if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
@@ -150,8 +188,142 @@ namespace MedSysProject.Controllers
             }
             
         }
-        public IActionResult CartList()
+        public IActionResult paySussess(IFormCollection id)
         {
+            var data = new Dictionary<string, string>();
+            foreach (string key in id.Keys)
+            {
+                data.Add(key, id[key]);
+            }
+            var order = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+            order.TradeNo= data["TradeNo"];
+            order.StateId = 14;
+            _db.SaveChanges();
+            string Memberemail = data["CustomField1"];
+            string ProName = data["CustomField2"];
+            string ProCount = data["CustomField3"];
+            string total = data["CustomField4"];
+            string proID = "";
+            List<int> proList = new List<int>();
+            var Pid  = ProName.Split("#").ToList();
+            foreach(var item in Pid)
+            {
+                proList.Add(Int32.Parse(item));
+            }
+            var Ps = _db.Products.Where(n => proList.Contains(n.ProductId)).ToList();
+            foreach(var item in Ps)
+            {
+                proID += item.ProductName + "#";
+            }
+            using (var httpclient = _httpClientFactory.CreateClient())
+            {
+                string url = "https://localhost:7078/api/Email";
+
+                EmailData email = new EmailData();
+                email.Address = Memberemail;
+
+                email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount,total);
+                email.Subject = "訂單成立";
+                string emailjson = JsonSerializer.Serialize(email);
+                HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+            }
+            var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
+
+            
+            return RedirectToAction("OrderList",new {page =999});
+        }
+       
+        public IActionResult CartList() 
+        {
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                return RedirectToAction("Index");
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
+            List<CCartItem> cartList = new List<CCartItem>();
+            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+                return RedirectToAction("Index");
+           
+            string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+            cartList = JsonSerializer.Deserialize<List<CCartItem>>(json);
+            string mjson = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(mjson);
+
+            int total = 0;
+            string proName = "";
+            string proCount = "";
+            string proProductName = "";
+            
+            foreach (var pro in cartList)
+            {
+                proName += pro.Product.ProductId + "#";
+                proProductName +=pro.Product.ProductName + "#";
+                 total += pro.UnitPrice * pro.count;
+                proCount += pro.count.ToString() + "#";
+            }
+            if (proName.Length == 0)
+            {
+                return RedirectToAction("Index");
+            }
+            proName = proName.Substring(0, proName.Length - 1);
+            string memberEmail = m.MemberEmail;
+            total = total + (int)(total * 0.05);
+            //需填入你的網址
+            var website = $"https://localhost:7203/";
+
+            var orderGreen = new Dictionary<string, string>
+    {
+        //綠界需要的參數
+        { "MerchantTradeNo",  orderId},
+        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
+        { "TotalAmount",  total.ToString()},
+        { "TradeDesc",  "無"},
+        { "ItemName", proProductName},
+        { "ExpireDate",  "3"},
+        { "CustomField1",  memberEmail},
+        { "CustomField2",  proName},
+        { "CustomField3",  proCount},
+        { "CustomField4",  total.ToString()},
+        { "ReturnURL",  $"{website}Shopping/paymethodinfo"},
+        { "OrderResultURL", $"{website}Shopping/paySussess/{orderId}"},
+        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
+        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
+        { "MerchantID",  "2000132"},
+        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
+        { "PaymentType",  "aio"},
+        { "ChoosePayment",  "ALL"},
+        { "EncryptType",  "1"},
+    };
+            //檢查碼
+            orderGreen["CheckMacValue"] = PayMethod.GetCheckMacValue(orderGreen);
+            ViewBag.order = orderGreen;
+
+            Order o = new Order();
+            o.OrderDate = DateTime.Now;
+            o.ShipDate = DateTime.Now.AddDays(2);
+            o.DeliveryDate = DateTime.Now.AddDays(3);
+            o.MemberId = m.MemberId;
+            o.PayId = 1;
+            o.ShipId = 1;
+            o.StateId = 13;
+            o.MerchantTradeNo = orderId;
+            _db.Orders.Add(o);
+
+            _db.SaveChanges();
+
+            var q = _db.Orders.Where(n => n.MerchantTradeNo == orderId).FirstOrDefault();
+
+            foreach (var product in cartList)
+            {
+                OrderDetail od = new OrderDetail();
+                od.OrderId = q.OrderId;
+                od.ProductId = product.Product.ProductId;
+                var op = _db.Products.Find(product.Product.ProductId);
+                op.UnitsInStock -= product.count;
+                od.Quantity = product.count;
+                od.UnitPrice = product.UnitPrice;
+                _db.OrderDetails.Add(od);
+            }
+            _db.SaveChanges();
             if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
             {
                 return RedirectToAction("Login", "Accout");
@@ -162,51 +334,12 @@ namespace MedSysProject.Controllers
             }
             else
             {
-                string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                List<CCartItem>? cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-                return View(cart);
+                string? json2 = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
+                List<CCartItem>? carts = JsonSerializer.Deserialize<List<CCartItem>>(json2);
+                return View(carts);
             }
         }
-        [HttpPost]
-        public IActionResult CartLIst()
-        {
-            int count = 0;
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
-            var data = Request.Form;
-            var pid = data["ProductID"];
-            var qta = data["ProductQta"];
-            var pay = data["odPay"];
-            var ship = data["odShip"];
-            Order o = new Order();
-            o.MemberId = m.MemberId;
-            o.OrderDate = System.DateTime.Now;
-            o.PayId = Int32.Parse(pay);
-            o.ShipId = Int32.Parse(ship);
-            o.StateId = 2;
-            o.ShipDate= System.DateTime.Now.AddDays(2);
-            o.DeliveryDate = System.DateTime.Now.AddDays(3);
-            _db.Orders.Add(o);
-            _db.SaveChanges();
-            var lastOrder = _db.Orders.OrderByDescending(n=>n.OrderId).FirstOrDefault().OrderId;
-            foreach (var id in pid)
-            {
-                var q = _db.Products.Find(Int32.Parse(id));
-                q.UnitsInStock -= int.Parse(qta[count]);
-                OrderDetail od = new OrderDetail();
-                od.ProductId = Int32.Parse(id);
-                od.Quantity = int.Parse(qta[count]);
-                od.OrderId = lastOrder;
-                od.UnitPrice = q.UnitPrice;
-                _db.OrderDetails.Add(od);
-                count++;
-            }
-            _db.SaveChanges();
-
-            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
-            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
-            return RedirectToAction("index");
-        }
+       
         public IActionResult KeySearch(string Key)
         {
             if (Key == null)
@@ -228,6 +361,22 @@ namespace MedSysProject.Controllers
         {
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+
+            var odo = _db.Orders.Where(n => n.MemberId == m.MemberId);
+            if (!odo.Any())
+            {
+                TempData["OrderList"] = "<div class=\"rounded rounded-3 bg-info text-dark p-3 mb-2\"><i class=\"fas fa-info\"></i> 您尚未擁有訂單，開始購物吧！</div>";
+                return RedirectToAction("Index");
+            }
+
+            if (page == 999)
+            {
+                HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+                HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+                page = 1;
+            }
+
+            
             List<COrderWarp>list = new List<COrderWarp>();
 
             //分頁
@@ -245,7 +394,10 @@ namespace MedSysProject.Controllers
             ViewBag.PageSize = pageSize;
 
 
+
             var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
 
             //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
             foreach (var item in q)
@@ -258,6 +410,26 @@ namespace MedSysProject.Controllers
              
             return View(list);
         }
+
+        public IActionResult OrderListJSON(int id)
+        {
+
+            List<COrderWarp> list = new List<COrderWarp>();
+            var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == id);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
+
+            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
+            foreach (var item in q)
+            {
+                COrderWarp od = new COrderWarp();
+                od.order = item;
+                list.Add(od);
+            }
+
+            return Json(list);
+        }
+
         [HttpPost]
         public IActionResult OrderList(string key,int page=1)
         {
@@ -295,7 +467,7 @@ namespace MedSysProject.Controllers
                     }
                     return View(list);
                 }
-                else
+                else 
                 {
                     string? keyword = Request.Form["keyword"];
                     List<int> pids = new List<int>();
@@ -367,6 +539,20 @@ namespace MedSysProject.Controllers
                 }
                 return View(list);
             }
+            else if(key == "monthKey")
+            {
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year);
+                List<COrderWarp> list = new List<COrderWarp>();
+                foreach (var o in q)
+                {
+                    COrderWarp od = new COrderWarp();
+                    od.order = o;
+                    list.Add(od);
+                }
+                int total = list.Count();
+                ViewBag.Total = total;
+                return View(list);
+            }
             else
             {
                 return Content("ok");
@@ -399,6 +585,63 @@ namespace MedSysProject.Controllers
                 _db.SaveChanges();
                 return Ok("移除追蹤清單成功");
             }
+        }
+
+        public IActionResult payMethod()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult changeState()
+        {
+            var form = Request.Form;
+            int orderid= Int32.Parse(form["orderid"]);
+            string state = form["state"];
+            var order = _db.Orders.Include(n => n.OrderDetails).Where(n => n.OrderId == orderid).FirstOrDefault();
+            List<int> productList = new List<int>();
+            foreach(var item in order.OrderDetails)
+            {
+                productList.Add((int)item.ProductId);
+            }
+            
+            var returnOrder = _db.ReturnProducts.Where(n=>n.OrderId== orderid).FirstOrDefault();
+
+
+            if(state == "退款申請中")
+            {
+                order.StateId = 16;
+                returnOrder.ReturnState = "退款處理中";
+                returnOrder.ProcessedDate= System.DateTime.Now;
+                _db.SaveChanges();
+                return Content("退款處理中");
+            }
+            else if(state=="退款處理中")
+            {
+                order.StateId = 17;
+                returnOrder.ReturnState= "退款完成";
+
+                foreach(var item in productList)
+                {
+                    var product = _db.Products.Find(item);
+                    product.UnitsInStock += order.OrderDetails.Where(n => n.ProductId == item).FirstOrDefault().Quantity;
+                }
+
+                _db.SaveChanges();
+                return Content("退款完成");
+            }
+            else if(state=="退款完成")
+            {
+                order.StateId = 15;
+                returnOrder.ReturnState = "退款申請中";
+                returnOrder.ProcessedDate = null;
+                _db.SaveChanges();
+                return Content("退款申請中");
+            }
+            else
+            {
+                return Content("錯誤");
+            }
+
         }
     }
 }

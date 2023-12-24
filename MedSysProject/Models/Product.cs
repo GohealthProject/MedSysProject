@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MedSysProject.Models;
 
@@ -26,10 +27,12 @@ public partial class Product
     public string FimagePath { get; set; }
 
     public int? Likecount { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
+    [JsonIgnore]
+    public virtual ICollection<ProductReview> ProductReviews { get; set; } = new List<ProductReview>();
+    [JsonIgnore]
     public virtual ICollection<ProductsClassification> ProductsClassifications { get; set; } = new List<ProductsClassification>();
-
+    [JsonIgnore]
     public virtual ICollection<TrackingList> TrackingLists { get; set; } = new List<TrackingList>();
 }

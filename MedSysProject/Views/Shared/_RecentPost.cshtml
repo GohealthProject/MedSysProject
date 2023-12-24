@@ -1,0 +1,206 @@
+﻿@model List<MedSysProject.Models.Blog>
+@{
+    int recentCount = Model.Count;
+
+    if (Model.Any())
+    {
+        <section id="posts" class="posts">
+            <div class="container" data-aos="fade-up">
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <div class="post-entry-1 lg" data-hide-id="@Model[0].BlogId">
+                            <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId">
+                                @if (Model[0].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
+                                    alt=""
+                                    class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                    alt=""
+                                    class="img-fluid" />
+                                }
+
+                            </a>
+                            <div class="post-meta">
+                                <span class="date">@Model[0].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>@Model[0].CreatedAt</span>
+                            </div>
+                            <h2>
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId">@Model[0].Title</a>
+                            </h2>
+                            <p class="mb-4 d-block">
+                                @*@Html.Raw(Model[0].Content)不做截斷邏輯會出事*@
+                                <!--記得放文章 -->
+                            </p>
+
+                            <div class="d-flex align-items-center author">
+                                <div class="photo">
+                                    @if (Model[0].Employee.EmployeePhoto != null)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].Employee.EmployeePhoto)"
+                                        alt=""
+                                        class="img-fluid" />
+                                    }
+
+                                </div>
+                                <div class="name">
+                                    <h3 class="m-0 p-0">@Model[0].Employee.EmployeeName</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="row g-5">
+                            @if (recentCount > 1)
+                            {
+                                <div class="col-lg-4 border-start custom-border">
+                                    @for (int i = 1; i <= 3; i++)
+                                    {
+                                        @if (i < recentCount)
+                                        {
+                                            <div class="post-entry-1">
+                                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                                    @if (Model[i].BlogImage != null)
+                                                    {
+                                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                        alt=""
+                                                        class="img-fluid" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/assets/img/empty.png"
+                                                        alt=""
+                                                        class="img-fluid" />
+                                                    }
+
+                                                </a>
+                                                <div class="post-meta">
+                                                    <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span>@Model[i].CreatedAt</span>
+                                                </div>
+                                                <h2>
+                                                    <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                                </h2>
+                                            </div>
+                                        }
+                                        else
+                                        {//可能要看postentry高度
+                                            <div class="post-entry-1" style="visibility:hidden">
+                                                <a href="#">
+                                                    <img src="~/assets/img/empty.png"
+                                                    alt=""
+                                                    class="img-fluid" />
+                                                </a>
+                                                <div class="post-meta">
+                                                    <span class="date"></span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span></span>
+                                                </div>
+                                                <h2>
+                                                    請期待更多貼文
+                                                </h2>
+                                            </div>
+
+                                        }
+
+                                    }
+
+                                </div>
+
+
+
+                                <div class="col-lg-4 border-start custom-border">
+                                    @for (int i = 4; i <= 6; i++)
+                                    {
+                                        if (i < recentCount)
+                                        {
+                                            <div class="post-entry-1">
+                                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[i].BlogId">
+                                                    @if (Model[i].BlogImage != null)
+                                                    {
+                                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[i].BlogImage)"
+                                                        alt=""
+                                                        class="img-fluid" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/assets/img/empty.png"
+                                                        alt=""
+                                                        class="img-fluid" />
+                                                    }
+
+                                                </a>
+                                                <div class="post-meta">
+                                                    <span class="date">@Model[i].ArticleClass.BlogCategory1</span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span>@Model[i].CreatedAt</span>
+                                                </div>
+                                                <h2>
+                                                    <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[i].BlogId">@Model[i].Title</a>
+                                                </h2>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="post-entry-1" style="visibility:hidden">
+                                                <a href="#">
+                                                    <img src="~/assets/img/empty.png"
+                                                    alt=""
+                                                    class="img-fluid" />
+                                                </a>
+                                                <div class="post-meta">
+                                                    <span class="date"></span>
+                                                    <span class="mx-1">&bullet;</span>
+                                                    <span></span>
+                                                </div>
+                                                <h2>
+                                                    請期待更多貼文
+                                                </h2>
+                                            </div>
+
+                                        }
+
+                                    }
+                                    }
+
+                                </div>
+
+                            }
+
+
+                            <!-- Trending Section -->
+                            <div class="col-lg-4">
+                                <div class="trending">
+                                    <h3>最多觀看</h3>
+                                    <ul class="trending-post">
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Trending Section -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End .row -->
+            </div>
+        </section>
+    }
+    else
+    {
+        <section id="posts" class="posts">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-12">
+                        <p>No posts available.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}

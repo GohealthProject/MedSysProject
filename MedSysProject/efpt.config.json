@@ -60,6 +60,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[MembersStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Message]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Order]",
          "ObjectType": 0
       },
@@ -120,11 +128,27 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ReturnProduct]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Room]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoomRef]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[subProjectBridges]",
          "ObjectType": 0
       },
       {
          "Name": "[dbo].[TrackingList]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TWAddress]",
          "ObjectType": 0
       }
    ],

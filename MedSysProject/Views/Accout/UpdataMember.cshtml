@@ -4,31 +4,43 @@
     ViewData["Title"] = "UpdataMember";
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
-@section LinkStyle{
+@section LinkStyle {
+    <link rel="stylesheet" href="~/vendor/croppie/croppie.css" />
     <link rel="stylesheet" href="~/css/AccoutUpdataMember.css" />
 }
 
-<div class="UPdiv"style="width:70%">
-<form class="row g-3 fromP" method="post" enctype="multipart/form-data">
+<div class="UPdiv" style="width:70%">
+    <form class="row g-3 fromP" method="post" id="formAAA" enctype="multipart/form-data">
         <input type="hidden" name="MemberId" value=@Model.MemberId />
-    <div class="col-12">
+        <div class="col-12">
             <label for="inputEmail4" class="form-label" name="MemberEmail">電子郵件</label>
             <input type="email" class="form-control" id="inputEmail4" name="MemberEmail" value="@Model.MemberEmail">
-    </div>
-    
-    <div class="col-12">
-         <label for="inputAddress" class="form-label" name="MemberAddress">地址</label>
+        </div>
+
+        <div class="col-12">
+            <label for="inputAddress" class="form-label" name="MemberAddress">地址</label>
             <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="MemberAddress" value="@Model.MemberAddress">
-    </div>
+            @*             @{
+            string address = Model.MemberAddress;
+            string[] addressArray = address.Split(' ');
+
+            }
+            // select 縣市
+            <select class="form-control" id="inputAddressCity" name="MemberAddressCity"></select>
+            // select 鄉鎮市區
+            <select class="form-control" id="inputAddressArea" name="MemberAddressArea"></select>
+            // text 詳細地址
+            <input type="text" class="form-control" id="inputAddressDetail" placeholder="詳細地址" name="MemberAddressDetail" value="@addressArray[2]"> *@
+        </div>
         <div class="col-md-6">
-            <label  class="form-label" name="MemberNickname">暱稱</label>
+            <label class="form-label" name="MemberNickname">暱稱</label>
             <input type="text" class="form-control" id="MemberNickname" name="MemberNickname" value="@Model.MemberNickname">
         </div>
         <div class="col-md-6">
-            <label  class="form-label" name="MemberName">會員姓名</label>
+            <label class="form-label" name="MemberName">會員姓名</label>
             <input type="text" class="form-control" id="MemberName" name="MemberName" value="@Model.MemberName">
         </div>
-        
+
         <div class="col-12">
             <div class="form-group">
                 <label asp-for="MemberBirthdate" class="control-label"></label>
@@ -36,21 +48,182 @@
                 <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
             </div>
         </div>
-    <div class="col-12">
-        <span >瀏覽圖片</span>
-            <input type="file" name="fileN" />
-    </div>
-    
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">儲存並修改</button>
-    </div>
-</form>
+        <div class="col-12">
+            <span>瀏覽圖片</span>
+            <input type="file" name="fileN" id="fileN" />
+        </div>
+
+        <!-- 上傳圖片預覽 -->
+        @{
+            if (Model.MemberImage != null)
+            {
+                string imgFN = Model.MemberImage;
+
+                <div class="col-12">
+                    <img class="rounded rounded-3" src="@Url.Content("~/img/MemberImg/" + imgFN)" id="btnImg" style="width: 200px; height: 200px;" />
+                    @*<img class="rounded rounded-3" src="@Url.Content("~/img/MemberImg/" + imgFN)" id="btnImgPreview" style="width: 200px; height: 200px;" hidden />*@
+                </div>
+            }
+        }
+
+        @* <button id="crop_img" class="btn btn-info"><i class="fa fa-scissors"></i> 裁剪圖片</button> *@
+
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" id="btn_submit">儲存並修改</button>
+        </div>
+    </form>
+    @*     <div class="col-12">
+    <button class="btn btn-primary" id="btn_crop" hidden>裁剪圖片</button>
+    </div> *@
 
 </div>
-@section Scripts{
+@section Scripts {
+    <script src="~/js/dist/tw-city-selector.js"></script>
+    @* <script src="~/vendor/croppie/croppie.js"></script> *@
     <script>
-        const btnImg =document.querySelector('#btnImg');
+        const btnImg = document.querySelector('#btnImg');
+        const btnImgPreview = document.querySelector('#btnImgPreview');
+        const fileN = document.querySelector('#fileN');
+        const formAAA = document.querySelector('#formAAA');
+        const btn_submit = document.querySelector('#btn_submit');
 
+        // var basic = $('#btnImg').croppie({
+        //     viewport: {
+        //         width: 200,
+        //         height: 200
+        //     },
+        //     boundary: {
+        //         width: 300,
+        //         height: 300
+        //     },
+        //     showZoomer: true
+        // });
+        var upload;
+
+        fileN.addEventListener('change', function () {
+            //#btnimg = fileN
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    btnImg.setAttribute('src', this.result);
+                });
+                reader.readAsDataURL(file);
+            }
+
+        });
+
+
+
+
+                // fileN.addEventListener('change', function () {
+                //     const file = this.files[0];
+                //     if (file) {
+                //         const reader = new FileReader();
+                //         reader.addEventListener('load', function () {
+                //             btnImg.setAttribute('src', this.result);
+
+                            // Destroy the existing Croppie instance (if any)
+                            // if (upload) {
+                            //     upload.croppie('destroy');
+                            // }
+
+                            // // Initialize Croppie with the new image
+                            // upload = $('#btnImg').croppie({
+                            //     viewport: {
+                            //         width: 200,
+                            //         height: 200
+                            //     },
+                            //     boundary: {
+                            //         width: 500,
+                            //         height: 500
+
+                            //     },
+                            //     showZoomer: true
+                            // });
+                        // });
+        // reader.readAsDataURL(file);
+        //         $('#btn_submit').attr('disabled', true);
+        //         $('#btn_crop').removeAttr('hidden');
+        //         $('.croppie-container').removeAttr('hidden');
+        //         $('#btnImgPreview').attr('hidden', true);
+
+        //         $('#btn_crop').on('click', function (ev) {
+        //             upload.croppie('result', {
+        //                 type: 'canvas',
+        //                 size: 'viewport'
+        //             }).then(function (resp) {
+        //                 //隱藏croppie
+        //                 $('#btn_crop').attr('hidden', true);
+        //                 $('.croppie-container').attr('hidden', true);
+        //                 //顯示上傳按鈕
+        //                 $('#btn_submit').removeAttr('disabled');
+        //                 //顯示預覽圖
+        //                 $('#btnImgPreview').removeAttr('hidden');
+        //                 $('#btnImgPreview').attr('src', resp);
+        //                 //將base64轉成blob
+        //                 var blob = dataURItoBlob(resp);
+
+        //                 //blob to file in #formAAA
+        //                 var formdata = new FormData(formAAA);
+        //                 formdata.append('fileN', blobToFile(blob, 'fileN'));
+
+        //             });
+        //         });
+        //     }
+        // });
+
+        // btn_submit.addEventListener('click', function () {
+        //     var formdata = new FormData(formAAA);
+        //     formdata.append('fileN', blobToFile(blob, 'fileN'));
+        //     console.log(formdata);
+        //     $.ajax({
+        //         url: '/Accout/UpdataMember',
+        //         type: 'POST',
+        //         data: formdata,
+        //         processData: false,
+        //         contentType: false,
+        //         success: function (data) {
+        //             console.log(data);
+        //         }
+        //     });
+        // });
+
+        function dataURItoBlob(resp) {
+            // Split the Data URI into metadata and data parts
+            var parts = resp.split(',');
+
+            // Check if the Data URI is base64-encoded
+            var isBase64 = parts[0].indexOf(';base64') !== -1;
+
+            // Extract the MIME type from metadata
+            var mimeType = parts[0].split(':')[1].split(';')[0];
+
+            // Convert the data part to binary
+            var binaryData;
+            if (isBase64) {
+                binaryData = atob(parts[1]);
+            } else {
+                binaryData = decodeURIComponent(parts[1]);
+            }
+
+            // Create a Uint8Array from the binary data
+            var array = new Uint8Array(binaryData.length);
+            for (var i = 0; i < binaryData.length; i++) {
+                array[i] = binaryData.charCodeAt(i);
+            }
+
+            // Create a Blob from the Uint8Array
+            return new Blob([array], { type: mimeType });
+        }
+
+        function blobToFile(blob, fileName) {
+            // Create a File object from the Blob
+            var file = new File([blob], fileName, { type: blob.type });
+
+            return file;
+        }
 
     </script>
 }

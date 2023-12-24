@@ -1,0 +1,579 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Employee
+@model IEnumerable<MedSysProject.Models.Employee>
+
+@{
+    ViewData["Title"] = "員工管理";
+    Layout = "_Layout_Admin2";
+
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const EmpManager = document.getElementById("li-EmpManager");
+    const Index = document.getElementById("li-index");
+    EmpManager.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">員工管理</h6>
+    </div>
+    <div class="card-body">
+        <p>
+            <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate">
+                <i class="fas fa-user-plus"></i>
+            </a>
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>序</th>
+                        <th style="display:none">員工ID</th>
+                        <th>照片</th>
+                        <th>姓名</th>
+                        <th>職位</th>
+                        <th>生日</th>
+                        <th>電話</th>
+                        <th>信箱</th>
+                        <th>密碼</th>
+                        <th>執行動作</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@* ---新增彈窗開始--- *@
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">新增員工</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form id="myCreatedataform" novalidate class="needs-validation">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <input type="hidden" id="CinputId" value="" name="EmployeeId" />
+                                <label class="control-label">姓名</label>
+                                <input class="form-control" id="CinputName" name="EmployeeName" required />
+                                <div class="invalid-feedback">請輸入姓名</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">類別</label>
+                                <select class="form-control" id="CinputClass" name="EmployeeClassId" required>
+                                    <option value="1">醫生</option>
+                                    <option value="2">護理師</option>
+                                    <option value="3">行政人員</option>
+                                    <option value="19">系統管理員</option>
+                                </select>
+                                <div class="invalid-feedback">請選擇類別</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">生日</label>
+                                <input type="date" class="form-control" id="CinputDate" name="employeeBirthDate" required />
+                                <div class="invalid-feedback">請選擇生日</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">電話</label>
+                                <input class="form-control" id="CinputPhone" name="EmployeePhoneNum" required />
+                                <div class="invalid-feedback">請輸入電話號碼</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">信箱</label>
+                                <input type="email" class="form-control" id="CinputEmail" name="EmployeeEmail" required />
+                                <div class="invalid-feedback">請輸入有效的信箱地址</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">密碼</label>
+                                <input type="password" class="form-control" id="CinputPwd" name="EmployeePassWord" required />
+                                <div class="invalid-feedback">請輸入密碼</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="imgformFile" class="form-label">照片</label>
+                                <input type="file" class="form-control" id="CimgformFile" name="formFile" />
+                                <span class="text-danger"></span>
+                                <div class="invalid-feedback">請選擇圖片檔案</div>
+                                <!-- show image -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img id="CimgPreview" src="~/img/no_member_image.jpg" alt="preview image" class="img-fluid" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="CancelEmpCreate" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" onclick="postdata2()" id="Cbtn">確定新增</button>
+                    <button class="btn btn-dark" id="demoEmpCreate">DEMO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---新增彈窗結束--- *@
+
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">修改員工</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <form asp-action="EmpCreate" id="myUpdataform">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input type="hidden" id="inputId" value="" name="EmployeeId" />
+                                <label class="control-label">姓名</label>
+                                <input class="form-control" value="James" id="inputName" name="EmployeeName" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">類別</label>
+                                <select class="form-control" value="醫生" id="inputClass" name="EmployeeClassId">
+                                    <option value="1">醫生</option>
+                                    <option value="2">護理師</option>
+                                    <option value="3">行政人員</option>
+                                    <option value="19">系統管理員</option>
+                                </select>
+                                <span class="text-danger"></span>
+                            </div>
+                            @* 生日 *@
+                            <div class="form-group">
+                                <label class="control-label">生日</label>
+                                <input type="date" class="form-control" value="1997-10-13" id="inputDate" name="employeeBirthDate" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">電話</label>
+                                <input class="form-control" value="789446" id="inputPhone" name="EmployeePhoneNum" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">信箱</label>
+                                <input class="form-control" value="James555@gmail.com" id="inputEmail" name="EmployeeEmail" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">密碼</label>
+                                <input class="form-control" value="James555" id="inputPwd" name="EmployeePassWord" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="formFile" class="form-label">圖片</label>
+                                <input type="file" class="form-control" id="formFile" name="formFile" />
+                                <!-- show image -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img id="imgPreview" src="~/img/no_member_image.jpg" alt="preview image" class="img-fluid" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @*
+                @section Scripts {
+                @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                }
+                } *@
+
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                    <button class="btn btn-success" onclick="putdata2()">確定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+@section Scripts
+{
+    <script>
+        let count = 0;
+        var ttt = $('#dataTable').DataTable({
+            "ajax": {
+                "url": "https://localhost:7203/Admin/EmployeeJSON",
+                "dataSrc": ""
+            },
+            columns: [
+                {
+                    data: null,
+                    width: "20px",
+                    render: function (data, type, row) {
+                        count++;
+                        return count;
+                    }
+                }, //序
+                {
+                    data: "employeeId",
+                    className: "d-none"
+                }, //員工ID
+                {
+                    data: "employeeId",
+                    //欄位寬度
+                    width: "100px",
+                    render: function (data, type, row) {
+                        return "<img src='" + '@Url.Content("~/Admin/EmployeeImage/")' + data + "' width='100' height='100'>";
+                    }
+                }, //照片
+                { data: "employeeName", width: "150px" }, //姓名
+                {
+                    data: "employeeClassId",
+                    width: "100px",
+                    render: function (data, type, row) {
+                        if (data == 1) {
+                            return "醫生";
+                        } else if (data == 2) {
+                            return "護理師";
+                        } else if (data == 3) {
+                            return "行政人員";
+                        } else if (data == 19) {
+                            return "系統管理員";
+                        }
+                    }
+                }, //職位
+                { data: "employeeBirthDate" }, //生日
+                { data: "employeePhoneNum" }, //電話
+                { data: "employeeEmail" }, //信箱
+                { data: "employeePassWord" }, //密碼
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `
+                                                                                                                                                                                                                                                                                                                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                                                                                                                                                                                                                                            <i class="fas fa-user-edit"></i>
+                                                                                                                                                                                                                                                                                                                                        </a>
+
+                                                                                                                                                                                                                                                                                                                                        <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                                                                                                                                                                                                                                            <i class="fas fa-user-times"></i>
+                                                                                                                                                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                                                                                                                                        `;
+                    }
+                }
+            ],
+            //設定欄位寬度
+            "columnDefs": [{
+                "className": "dt-center align-middle",
+                "targets": "_all"
+            },
+            {
+                "targets": 5,
+                "render": function (data, type, row) {
+                    // 这里的data是日期的原始数据
+                    // 使用moment.js或其他日期库来格式化日期
+                    return moment(data).format('YYYY/MM/DD');
+                }
+            }],
+            //設定語言
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "每頁 _MENU_ 位員工",
+                "zeroRecords": "沒有符合的員工",
+                "info": "顯示第 _START_ 至 _END_ 位員工，共 _TOTAL_ 位",
+                "infoEmpty": "顯示第 0 至 0 位員工，共 0 位",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            },
+            //移除預設的搜尋框
+            "dom": '<"top"lpB>rt<"bottom"ip>',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: '匯出Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '列印',
+                    className: 'btn btn-info',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+            ],
+        });
+
+        //用#txtKeyword的值來搜尋
+        $("#txtKeyword").keyup(function () {
+            ttt.search($(this).val()).draw();
+        });
+
+        //新增員工
+        async function postdata2() {
+
+            let apiurl = `https://localhost:7078/api/Employees`
+            var myForm = document.querySelector("#myCreatedataform");
+            var data = new FormData(myForm);
+            const response = await fetch(apiurl, {
+                method: 'POST',
+                body: data
+            });
+            const state = await response.status;
+            if (response.ok) {
+
+                $('#modalCreate').modal('hide');
+
+                await new Promise(resolve => setTimeout(resolve, 200));
+                $(".modal-backdrop").remove();
+
+                Swal.fire({
+                    title: "新增成功!",
+                    text: state,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                research();
+            }
+            else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "有錯誤發生!"
+                });
+            }
+        }
+
+        //主畫面按下去要彈框框的事件
+        function updata(element) {
+            showTogget(element)
+        }
+
+        //把資料印到彈出來的視窗
+        function showTogget(element) {
+            const id = element.parentNode.parentNode.children[1].innerHTML;
+            const url = `https://localhost:7203/Admin/EmployeeJSON/${id}`;
+
+            fetch(url)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    document.querySelector("#inputId").value = data.employeeId;
+                    document.querySelector("#inputName").value = data.employeeName.trim();
+                    // document.querySelector("#inputClass").value = data.employeeClassId;
+                    let empclass = data.employeeClassId;
+                    //醫生
+                    if (empclass == 1) {
+                        document.querySelector("#inputClass").value = "1";
+                        //護理師
+                    } else if (empclass == 2) {
+                        document.querySelector("#inputClass").value = "2";
+                        //行政人員
+                    } else if (empclass == 3) {
+                        document.querySelector("#inputClass").value = "3";
+                        //系統管理員
+                    } else if (empclass == 19) {
+                        document.querySelector("#inputClass").value = "19";
+                    } else {
+                        document.querySelector("#inputClass").value = "1";
+                    }
+
+
+                    document.querySelector("#inputDate").value = moment(data.employeeBirthDate).format('YYYY-MM-DD');
+                    document.querySelector("#inputPhone").value = data.employeePhoneNum.trim();
+                    document.querySelector("#inputEmail").value = data.employeeEmail.trim();
+                    document.querySelector("#inputPwd").value = data.employeePassWord;
+                    // document.querySelector("#imgformFile").value = data.employeeImage;
+
+                    // if (data.employeeImage == null) {
+                    //     document.querySelector("#imgPreview").src = "~/img/no_member_image.jpg";
+                    // } else {
+                    document.querySelector("#imgPreview").src = `https://localhost:7203/Admin/EmployeeImage/${data.employeeId}`;
+                    // }
+                });
+        }
+
+        //當選擇圖片後 預覽圖片
+        document.querySelector("#CimgformFile").onchange = function (e) {
+            let reader = new FileReader();
+            reader.onload = function () {
+                document.querySelector("#CimgPreview").src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        document.querySelector("#formFile").onchange = function (e) {
+            let reader = new FileReader();
+            reader.onload = function () {
+                document.querySelector("#imgPreview").src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        //修改員工
+        async function putdata2() {
+            let id = document.querySelector("#inputId").value;
+            let apiurl = `https://localhost:7078/api/Employees/Up/${id}`
+            var myForm = document.querySelector("#myUpdataform");
+            var data = new FormData(myForm);
+            const response = await fetch(apiurl, {
+                method: 'PUT',
+                body: data
+            });
+            const state = await response.status;
+            if (response.ok) {
+                $('#modalEdit').modal('hide');
+
+                await new Promise(resolve => setTimeout(resolve, 200));
+                $(".modal-backdrop").remove();
+
+                Swal.fire({
+                    title: "修改成功!",
+                    text: state,
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                research();
+            }
+        }
+
+        //刪除員工(先抓到id)
+        function get(element) {
+            let id = element.parentNode.parentNode.children[1].innerHTML;
+            console.log(id);
+            del(id);
+
+        }
+
+        //刪除員工
+        async function del(id) {
+            const result = await Swal.fire({
+                title: "確定要刪除嗎？",
+                text: "此步驟將無法復原！",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "確定刪除"
+            });
+
+            if (result.isConfirmed) {
+
+                const response = await fetch(`https://localhost:7078/api/Employees/${id}`, {
+                    method: 'DELETE'
+                });
+                let data = await response.status
+                if (response.ok) {
+                    Swal.fire({
+                        title: "刪除成功!",
+                        text: data,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "有錯誤發生!"
+                    });
+                }
+                research()
+            }
+        }
+
+        //重新整理
+        async function research() {
+            await new Promise(resolve => setTimeout(resolve, 1600));
+            count = 0;
+            ttt.ajax.reload();
+        }
+
+        //取消新增
+        document.querySelector("#CancelEmpCreate").onclick = function () {
+            document.querySelector("#CinputName").value = "";
+            document.querySelector("#CinputClass").value = "";
+            document.querySelector("#CinputDate").value = "";
+            document.querySelector("#CinputPhone").value = "";
+            document.querySelector("#CinputEmail").value = "";
+            document.querySelector("#CinputPwd").value = "";
+            document.querySelector("#imgformFile").value = "";
+            document.querySelector("#imgPreview").src = "";
+        }
+
+        //DEMO
+        $("#demoEmpCreate").click(function () {
+            $("#CinputName").val("Tomori");
+            // $("#inputClass")
+            $("#CinputDate").val("1998-11-10");
+            $("#CinputPhone").val("0923232323");
+            $("#CinputEmail").val("tomori@gmail.com");
+            $("#CinputPwd").val("tomoriaaa");
+        });
+
+        $("#CancelEmpCreate").click(function () {
+            $("#CinputId").val("");
+            $("#CinputName").val("");
+            $("#CinputClass").val("");
+            $("#CinputDate").val("");
+            $("#CinputPhone").val("");
+            $("#CinputEmail").val("");
+            $("#CinputPwd").val("");
+        });
+    </script>
+}

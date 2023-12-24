@@ -158,7 +158,6 @@ push(data);
         push (data);
     }
     async function loadhots(event){
-        debugger;
         let url = `https://localhost:7078/api/Products/hot/key=${key}`
         const response = await fetch(url);
         const data = await response.json();

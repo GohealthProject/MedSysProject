@@ -1,0 +1,65 @@
+﻿@model List<ReturnProduct>
+
+@{
+    ViewData["Title"] = "TrackingList";
+    Layout = "~/Views/Shared/_Layout_Fore.cshtml";
+}
+
+<div class="container">
+    <div class="py-5">
+        <span class="fs-4">你的追蹤清單</span>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">序</th>
+                <th scope="col">退款申請編號</th>
+                <th scope="col">訂單編號</th>
+                <th scope="col">退款申請日期</th>
+                <th scope="col">退款處理日期</th>
+                <th scope="col">退款理由</th>
+                <th scope="col">退款狀態</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                int count = 0;
+                int RegularPrice = 0;
+                int SpecialPrice = 0;
+                string ReturnNum = "";
+                string ReturnID = "";
+                string color = "";
+                foreach (var item in Model)
+                {
+                    if (item.ReturnState == "退款完成")
+                    {
+                        color = " text-success fs-3 ";
+                    }
+                    else
+                    {
+                        color="text-danger fs-3";
+                    }
+                    ReturnNum = item.ReturnDate.ToString();
+                    ReturnNum = ReturnNum.Split(" ")[0];
+                    ReturnID = ReturnNum.Replace("/", "")+item.ReturnId;
+                    count++;
+                    <tr style="vertical-align: middle">
+
+                        <td style="vertical-align: middle" class="fs-4">@count</td>
+                        <td class="fs-4">@ReturnID</td>
+                        <td style="vertical-align: middle " class="fs-4">@item.OrderId</td>
+                        <td class=" fs-4" style="vertical-align: middle">@ReturnNum</td>
+                        <td class=" fs-4" style="vertical-align: middle">@item.ProcessedDate</td>
+                        <td class=" fs-4" style="vertical-align: middle">@item.ReturnReason</td>
+                        <td class="@color" style="vertical-align: middle">@item.ReturnState</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+
+
+</div>

@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "CartList";
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    var order = ViewBag.order as Dictionary<string, string>;
+}
+<form method="post" id="payform" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+
+@foreach(var item in order.Keys.ToList())
+{
+    <input type="text" name="@item" value="@order[item]" />
+}
+<input type="submit" value="綠界測試中" />
+<button id="test">測試</button>
+</form>
+
+@section Scripts{
+    <script>
+        let btn = document.querySelector("#test");
+        function test(event) {
+           
+        }
+        
+        
+    </script>
+}

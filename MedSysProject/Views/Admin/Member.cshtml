@@ -1,0 +1,662 @@
+﻿@using MedSysProject.Models
+@using MedSysProject.Controllers
+@using static MedSysProject.Models.Member
+@model IEnumerable<MedSysProject.Models.Member>
+
+@{
+    ViewData["Title"] = "會員管理";
+    Layout = "_Layout_Admin2";
+}
+
+@* 這邊是確保左側邊欄的目前區域標亮 *@
+@* ---------------------------------------------- *@
+<script>
+    const MemberManager = document.getElementById("li-MemberManager");
+    const Index = document.getElementById("li-index");
+    MemberManager.className = "nav-item active";
+    Index.className = "nav-item";
+</script>
+@* ------------------------------------- *@
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">會員管理</h6>
+    </div>
+    <div class="card-body">
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>序</th>
+                        <th style="display:none">會員ID</th>
+                        <th>照片</th>
+                        <th>姓名</th>
+                        <th>性別</th>
+                        <th>生日</th>
+                        <th>電話</th>
+                        <th>信箱</th>
+                        <th>信箱驗證</th>
+                        <th>目前狀態</th>
+                        <th>執行動作</th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@* ---修改彈窗開始--- *@
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+
+                <h4 class="modal-title" id="myModalLabel">修改會員資料</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <form asp-action="MemberCreate" id="myUpdataform" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input type="hidden" id="inputId" value="" name="MemberId" />
+                                <label class="control-label">姓名</label>
+                                <input class="form-control" value="" id="inputName" name="MemberName" />
+                                <span class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">姓別</label>
+                                @*                                 <select class="form-control" value="" id="inputGender" name="Gender">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                                </select> *@
+                                <div class="form-control">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="men" value="男">
+                                        <label class="form-check-label" for="men">
+                                            男
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="women" value="女">
+                                        <label class="form-check-label" for="women">
+                                            女
+                                        </label>
+                                    </div>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                            @* 生日 *@
+                            <div class="form-group">
+                                <label class="control-label">生日</label>
+                                <input type="date" class="form-control" value="" id="inputDate" name="MemberBirthDate" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">手機</label>
+                                <input class="form-control" value="" id="inputPhone" name="MemberPhoneNum" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">信箱</label>
+                                <input class="form-control" value="" id="inputEmail" name="MemberEmail" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">地址</label>
+                                <input class="form-control" value="" id="inputAddress" name="MemberAddress" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">連絡電話</label>
+                                <input class="form-control" value="" id="inputContact" name="MemberContact" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">暱稱</label>
+                                <input class="form-control" value="" id="inputNick" name="MemberNick" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">密碼</label>
+                                <input class="form-control" value="" id="inputPwd" name="MemberPassWord" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="imgformFile" class="form-label">照片</label>
+                                <input type="file" class="form-control" id="imgformFile" name="formFile" />
+                                <span class="text-danger"></span>
+                                <!-- show image -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img id="imgPreview" src="" alt="preview image" class="img-fluid" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @*
+                @section Scripts {
+                @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                }
+                } *@
+
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">取消</button>
+                    <button class="btn btn-success" onclick="putdata2()">確定修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* ---修改彈窗結束--- *@
+
+@* ---詳細資料彈窗開始--- *@
+<div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">會員詳細資料</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+
+
+                @* 詳細資料 *@
+
+                @* <iframe id="iMemberDetail" src="" frameborder="0" style="width:100%;height:700px;"></iframe> *@
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@* ---詳細資料彈窗結束--- *@
+
+@section Scripts
+{
+    <script>
+        let count = 0;
+        var ttt = $('#dataTable').DataTable({
+            "ajax": {
+                "url": "https://localhost:7203/Admin/MemberJSON",
+                "dataSrc": ""
+            },
+            columns: [
+                {
+                    data: null,
+                    width: "20px",
+                    render: function (data, type, row) {
+                        count++;
+                        return count;
+                    }
+                }, //序
+                {
+                    data: "memberId",
+                    className: "d-none"
+                }, //會員ID
+                {
+                    data: "memberImage",
+                    //欄位寬度
+                    width: "100px",
+                    render: function (data, type, row) {
+                        if (data == null) {
+                            return "<img src='" + '@Url.Content("~/img/no_member_image.jpg")' + "' width='100' height='100'>";
+                        }
+                        else {
+                            return "<img src='" + '@Url.Content("~/img/MemberImg/")' + data + "' width='100' height='100'>";
+                        }
+                    }
+                }, //照片
+                { data: "memberName", width: "150px" }, //姓名
+                { data: "memberGender", width: "50px" }, //性別
+                { data: "memberBirthdate" }, //生日
+                { data: "memberPhone" }, //電話
+                { data: "memberEmail" }, //信箱
+                {
+                    data: "isVerified",
+                    render: function (data, type, row) {
+                        if (data == true) {
+                            return '<h4><span class="badge badge-pill badge-success h4">已驗證</span></h4>';
+                        }
+                        else {
+                            return '<h4><span class="badge badge-pill badge-success h4">未驗證</span></h4>';
+                        }
+                    }
+                }, //信箱驗證
+                {
+                    data: "statusId",
+                    render: function (data, type, row) {
+                        if (data == 1) {
+                            return '<h4><span class="badge badge-pill badge-success h4">正常</span></h4>';
+                        }
+                        else if (data == 2) {
+                            return '<h4><span class="badge badge-pill badge-danger h4">停權</span></h4>';
+                        }
+                        else if (data == 3) {
+                            return '<h4><span class="badge badge-pill badge-warning h4">異常</span></h4>';
+                        }
+                        else {
+                            return '<h4><span class="badge badge-pill badge-warning h4">異常</span></h4>';
+                        }
+                    }
+                }, //目前狀態
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `
+                                                                                                                                                                                                                                                        <a onclick="updata(this)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
+                                                                                                                                                                                                                                                            <i class="fas fa-user-edit"></i>
+                                                                                                                                                                                                                                                        </a>
+
+                                                                                                                                                                                                                                                        <a onclick="detail(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
+                                                                                                                                                                                                                                                            <i class="fas fa-info-circle"></i>
+                                                                                                                                                                                                                                                        </a>
+
+                                                                                                                                                                                                                                                        <a class="btn btn-warning" onclick="ban(this)">
+                                                                                                                                                                                                                                                             <i class="fas fa-user-lock"></i>
+                                                                                                                                                                                                                                                        </a>
+
+                                                                                                                                                                                                                                                        <a class="btn btn-danger" onclick="get(this)">
+                                                                                                                                                                                                                                                            <i class="fas fa-user-times"></i>
+                                                                                                                                                                                                                                                        </a>
+                                                                                                                                                                                                                                                        `;
+                    }
+                }
+            ],
+            //設定欄位寬度
+            "columnDefs": [{
+                "className": "dt-center align-middle",
+                "targets": "_all"
+            },
+            {
+                "targets": 5,
+                "render": function (data, type, row) {
+                    // 这里的data是日期的原始数据
+                    // 使用moment.js或其他日期库来格式化日期
+                    return moment(data).format('YYYY/MM/DD');
+                }
+            }],
+            //設定語言
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "每頁 _MENU_ 位會員",
+                "zeroRecords": "沒有符合的會員",
+                "info": "顯示第 _START_ 至 _END_ 位會員，共 _TOTAL_ 位",
+                "infoEmpty": "顯示第 0 至 0 位會員，共 0 位",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            },
+            //移除預設的搜尋框
+            "dom": '<"top"lpB>rt<"bottom"ip>',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: '匯出Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '列印',
+                    className: 'btn btn-info',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '匯出PDF',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+            ],
+        });
+
+        //用#txtKeyword的值來搜尋
+        $("#txtKeyword").keyup(function () {
+            ttt.search($(this).val()).draw();
+        });
+
+
+        // const id = element.parentNode.parentNode.children[1].innerHTML;
+        //詳細資料彈窗的事件
+        function detail(element) {
+            showDetailTogget(element)
+        }
+
+        //把詳細資料印到彈出來的詳細資料視窗(modalDetail)
+        function showDetailTogget(element) {
+
+            const id = element.parentNode.parentNode.children[1].innerHTML;
+            const url = `https://localhost:7203/Admin/MemberDetail/${id}`;
+
+            fetch(url)
+                .then(res => res.text())
+                .then(data => {
+                    document.querySelector("#modalDetail .modal-body").innerHTML = data;
+                })
+
+            // document.querySelector("#iMemberDetail").src = url;
+        }
+
+        //點下刪除按鈕
+        function get(element) {
+            const id = element.parentNode.parentNode.children[1].innerHTML;
+            del(id);
+        }
+
+        //主畫面按下去要彈框框的事件
+        function updata(element) {
+            showTogget(element)
+        }
+
+        //把資料印到修改視窗
+        function showTogget(element) {
+            const id = element.parentNode.parentNode.children[1].innerHTML;
+            const url = `https://localhost:7203/Admin/MemberJSON/${id}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    document.querySelector("#inputId").value = data.memberId;
+                    document.querySelector("#inputName").value = data.memberName.trim();
+                    // document.querySelector("#inputGender").value = data.memberGender;
+                    let datagender = data.memberGender.trim();
+                    if (datagender == "男") {
+                        document.querySelector("#men").checked = true;
+                    }
+                    if (datagender == "女") {
+                        document.querySelector("#women").checked = true;
+                    }
+
+                    document.querySelector("#inputDate").value = moment(data.memberBirthdate).format('YYYY-MM-DD');
+                    document.querySelector("#inputPhone").value = data.memberPhone.trim();
+                    document.querySelector("#inputEmail").value = data.memberEmail.trim();
+                    document.querySelector("#inputAddress").value = data.memberAddress.trim();
+                    document.querySelector("#inputContact").value = data.memberContactNumber.trim();
+                    document.querySelector("#inputNick").value = data.memberNickname.trim();
+                    document.querySelector("#inputPwd").value = data.memberPassword;
+
+                    if (data.memberImage == null) {
+                        document.querySelector("#imgPreview").src = `https://localhost:7203/img/no_member_image.jpg`;
+                    }
+                    else {
+                        document.querySelector("#imgPreview").src = `https://localhost:7203/img/MemberImg/${data.memberImage}`;
+                    }
+                })
+        }
+
+        //當選擇圖片後 預覽圖片
+        document.querySelector("#imgformFile").onchange = function (e) {
+            let reader = new FileReader();
+            reader.onload = function () {
+                document.querySelector("#imgPreview").src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        //修改會員資料
+        async function putdata2() {
+            try {
+                let id = document.getElementById("inputId").value;
+                console.log(id)
+                let apiurl = `https://localhost:7078/api/Members/Up/${id}`;
+                var myForm = document.getElementById("myUpdataform");
+                var data = new FormData(myForm);
+                const response = await fetch(apiurl, {
+                    method: 'PUT',
+                    body: data
+                });
+                const status = await response.status;
+                if (response.ok) {
+                    UploadImg()
+
+                    $('#modalEdit').modal('hide');
+
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    $(".modal-backdrop").remove();
+
+                    Swal.fire({
+                        title: "修改成功!",
+                        text: status,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    research();
+                    //wait 1.5 sec
+                    await new Promise(resolve => setTimeout(resolve, 1600));
+                    window.location.reload();
+
+                }
+            } catch {
+                // const status = await response.status;
+                // Swal.fire({
+                //     title: "有錯誤發生!",
+                //     text: status,
+                //     icon: "error",
+                // });
+            }
+        }
+
+        //接著上傳圖片
+        async function UploadImg() {
+            var fileInput = document.getElementById('imgformFile');
+            var file = fileInput.files[0];
+            var myForm = document.getElementById("myUpdataform");
+            var data = new FormData(myForm);
+            console.log(data)
+
+            const response = await fetch('https://localhost:7203/api/Upload', {
+                method: 'POST',
+                body: data
+            });
+            const res = await response.text();
+            console.log(res);
+
+
+        }
+
+        //切換停權
+        async function ban(element) {
+            //先確認目前狀態
+            const memberstatus = element.parentNode.parentNode.children[9].children[0].children[0].innerHTML;
+            const id = element.parentNode.parentNode.children[1].innerHTML;
+            const url = `https://localhost:7078/api/Members/ban/${id}`;
+            var result = "";
+
+            if (memberstatus == "正常") {
+                result = await Swal.fire({
+                    title: "確定要停權嗎？",
+                    text: "此帳號目前狀態：" + memberstatus,
+                    icon: "question",
+                    showCancelButton: true,
+                    cancelButtonText: "取消",
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "確定停權"
+                })
+            }
+            else if (memberstatus == "停權") {
+                result = await Swal.fire({
+                    title: "確定要解除停權嗎？",
+                    text: "此帳號目前狀態：" + memberstatus,
+                    icon: "question",
+                    showCancelButton: true,
+                    cancelButtonText: "取消",
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "確定解除停權"
+                })
+            }
+            else if (memberstatus == "異常") {
+                result = await Swal.fire({
+                    title: "確定要解除停權嗎？",
+                    text: "此帳號目前狀態：" + memberstatus,
+                    icon: "question",
+                    showCancelButton: true,
+                    cancelButtonText: "取消",
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "確定解除停權"
+                })
+            }
+
+            if (result.isConfirmed) {
+                const response = await fetch(url, {
+                    method: 'PUT'
+                });
+                const status = await response.status;
+                if (response.ok) {
+                    if (memberstatus == "正常") {
+                        Swal.fire({
+                            title: "停權成功!",
+                            text: status + ",您已經停權此會員",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                    else if (memberstatus == "停權") {
+                        Swal.fire({
+                            title: "解除停權成功!",
+                            text: status + ",您已經解除停權此會員",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                    else if (memberstatus == "異常") {
+                        Swal.fire({
+                            title: "解除停權成功!",
+                            text: status + ",您已經解除停權此會員",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+
+                    research();
+
+                } else {
+                    Swal.fire({
+                        title: "停權失敗!",
+                        text: status + ",請重新操作",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            }
+
+        }
+
+        //刪除
+        async function del(id) {
+            const result = await Swal.fire({
+                title: "確定要刪除嗎？",
+                text: "此步驟將無法復原！",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: "取消",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "確定刪除"
+            });
+
+            if (result.isConfirmed) {
+                const response = await fetch(`https://localhost:7078/api/Members/${id}`, {
+                    method: 'DELETE'
+                });
+                let data = await response.status
+                if (response.ok) {
+                    Swal.fire({
+                        title: "刪除成功!",
+                        text: data + ",您已經刪除此筆資料",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        title: "刪除失敗!",
+                        text: data + ",請重新操作",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+                research();
+            }
+        }
+
+        //顯示密碼(這裡是詳細資料內彈窗的按鈕)--------------
+        function showpwd() {
+            const password = document.getElementById('pwd');
+            const showpwd = document.getElementById('showpwd');
+            console.log(password)
+            console.log("dasdasdas");
+            if (password.type === 'password') {
+                password.type = 'text';
+                showpwd.innerHTML = '<i class="fas fa-eye-slash"></i>';
+
+            } else {
+                password.type = 'password';
+                showpwd.innerHTML = '<i class="fas fa-eye"></i>';
+
+            }
+        }
+        //顯示密碼(這裡是詳細資料內彈窗的按鈕)-------------
+
+
+        async function research() {
+            await new Promise(resolve => setTimeout(resolve, 1600));
+            count = 0;
+            ttt.ajax.reload();
+        }
+    </script>
+}

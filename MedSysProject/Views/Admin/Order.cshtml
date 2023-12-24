@@ -33,18 +33,18 @@
         <div class="card" id="choose" style="margin:1em 1em 1em 1em;padding:1em 1em 1em 1em; display:none">
             <form method="post">
                 @{
-                        <input type="hidden" value="dateKey" name="key" />
-                        <div class="row p-3">
-                            <div class="col-auto">下訂日期：</div>
-                            <div class="col-auto">
-                                <input class="form-control" type="date" name="txtMinDate" value="@ViewBag.mindate" />
-                            </div>
-                            -
-                            <div class="col-auto">
-                                <input class="form-control" type="date" name="txtMaxDate" value="@ViewBag.maxdate" />
-                            </div>
-
+                    <input type="hidden" value="dateKey" name="key" />
+                    <div class="row p-3">
+                        <div class="col-auto">下訂日期：</div>
+                        <div class="col-auto">
+                            <input class="form-control" type="date" name="txtMinDate" value="@ViewBag.mindate" />
                         </div>
+                        -
+                        <div class="col-auto">
+                            <input class="form-control" type="date" name="txtMaxDate" value="@ViewBag.maxdate" />
+                        </div>
+
+                    </div>
 
                 }
                 <p style="width: 10%;">
@@ -60,31 +60,31 @@
                                         {
                                             if (ViewBag.Checked.Contains((int)item.StateId))
                                             {
-                                                    <div class="form-check-inline" style="margin-left:1em; display:inline;">
-                                                        <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId" checked>
-                                                        <label class="form-check-label badge badge-success" for="@item.StateId">
-                                                            @item.StateName
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                    <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId" checked>
+                                                    <label class="form-check-label badge badge-success" for="@item.StateId">
+                                                        @item.StateName
+                                                    </label>
+                                                </div>
                                             }
                                             else
                                             {
-                                                    <div class="form-check-inline" style="margin-left:1em; display:inline;">
-                                                        <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
+                                                <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                    <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
                                                     <label class="form-check-label badge badge-success" for="@item.StateId">
-                                                            @item.StateName
-                                                        </label>
-                                                    </div>
+                                                        @item.StateName
+                                                    </label>
+                                                </div>
                                             }
                                         }
                                         else
                                         {
-                                                <div class="form-check-inline" style="margin-left:1em; display:inline;">
-                                                    <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
-                                                    <label class="form-check-label" for="@item.StateId">
-                                                        @item.StateName
-                                                    </label>
-                                                </div>
+                                            <div class="form-check-inline" style="margin-left:1em; display:inline;">
+                                                <input class="form-check-input" type="checkbox" name="statechk" value="@item.StateId" id="@item.StateId">
+                                                <label class="form-check-label" for="@item.StateId">
+                                                    @item.StateName
+                                                </label>
+                                            </div>
                                         }
 
                                     }
@@ -111,46 +111,48 @@
                     else
                     {
                         string PPath = "~/Admin/Order?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.TotalPage - 4)); // Changed ViewBag.maxpage to ViewBag.TotalPage
+                        int endPage = Math.Min(ViewBag.TotalPage, startPage + 4); // Changed ViewBag.maxpage to ViewBag.TotalPage
+
                         if (ViewBag.page == 1)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.TotalPage)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
-
                     }
                 }
             </ul>
@@ -187,7 +189,7 @@
                     <th>
                     @Html.DisplayNameFor(model => model.DeliveryDate)
                     </th> *@
-                    <th></th>
+                    <th>訂單詳細</th>
                 </tr>
             </thead>
             <tbody>
@@ -200,113 +202,128 @@
                     foreach (var item in Model)
                     {
                         count++;
-                            <tr class="table-info">
-                                <td>
-                                    @count
-                                </td>
-                                <td>
-                                    @item.OrderDate.ToString("yyyyMMdd")@item.OrderId.ToString()
-                                    <input type="hidden" value="@item.OrderId"/>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Member.MemberName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OrderDate)
-                                </td>
-                                <td style="display:none;">
-                                    @Html.DisplayFor(modelItem => item.Ship.ShipName)
-                                </td>
-                                <td style="display:none;">
-                                    @Html.DisplayFor(modelItem => item.Pay.PayName)
-                                </td>
-                                <td>
-                                    @{
-                                            @*Html.DisplayFor(modelItem => item.State.StateName)*@
+                        <tr class="table-info">
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @item.OrderDate.ToString("yyyyMMdd")@item.OrderId.ToString()
+                                <input type="hidden" value="@item.OrderId" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Member.MemberName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrderDate)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Ship.ShipName)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Pay.PayName)
+                            </td>
+                            <td>
+                                @{
+                                    @*Html.DisplayFor(modelItem => item.State.StateName)*@
                                     //1.順利送達 2.轉運中 3.配送中 4.配送中(當日) 5.取件中 6.已集貨 7.取消取件 8.未順利取件 9.暫置營業所 10.調查處理中 11.不在家 12.公司行號休息
                                     if (item.StateId == 1)
                                     {
-                                                <span class="badge badge-success" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-success state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 2)
                                     {
-                                                <span class="badge badge-warning" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 3)
                                     {
-                                                <span class="badge badge-warning" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 4)
                                     {
-                                                <span class="badge badge-warning" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 5)
                                     {
-                                                <span class="badge badge-warning" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 6)
                                     {
-                                                <span class="badge badge-warning" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-warning state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 7)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 8)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 9)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 10)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 11)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else if (item.StateId == 12)
                                     {
-                                                <span class="badge badge-danger" style="font-size:large;">@item.State.StateName</span>
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 13)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 14)
+                                    {
+                                        <span class="badge badge-success state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 15)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 16)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
+                                    }
+                                    else if (item.StateId == 17)
+                                    {
+                                        <span class="badge badge-danger state" style="font-size:large;">@item.State.StateName</span>
                                     }
                                     else
                                     {
-                                                <span class="badge badge-secondary" style="font-size:large;">@item.State.StateName</span>
-
+                                        <span class="badge badge-secondary state" style="font-size:large;">@item.State.StateName</span>
                                     }
-                                    }
-                                </td>
-                                @*             <td>
+                                }
+                            </td>
+                            @*             <td>
                     @Html.DisplayFor(modelItem => item.ShipDate)
                     </td>*@
-                                <td style="display:none;">
-                                    @Html.DisplayFor(modelItem => item.Member.MemberAddress)
-                                </td>
-                                <td style="display:none;">
-                                    @Html.DisplayFor(modelItem => item.DeliveryDate)
-                                </td>
-                                <td>
-                                    <a onclick="DetailTogget(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    <a class="btn btn-danger" id="btnDel" onclick="get(this)">
-                                        @*href="@Url.Action("Delete", new { id = item.EmployeeId })"*@
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                    @*                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }) *@
-                                </td>
-                            </tr>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Member.MemberAddress)
+                            </td>
+                            <td style="display:none;">
+                                @Html.DisplayFor(modelItem => item.DeliveryDate)
+                            </td>
+                            <td>
+                                <a onclick="DetailTogget(this)" class="btn btn-info" data-toggle="modal" data-target="#modalDetail">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                                <a class="btn btn-danger changeState">
+                                    <i class="bi bi-cart-x-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
         </table>
 
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" style="margin-top:1em;">
             <ul class="pagination pagination-sm">
                 @{
                     if (ViewBag.page == null)
@@ -317,46 +334,48 @@
                     else
                     {
                         string PPath = "~/Admin/Order?page=";
-
                         int previous = ViewBag.page - 1;
                         int next = ViewBag.page + 1;
                         int current = ViewBag.page;
-                        int Home = 1;
-                        int Total = ViewBag.TotalPage;
+
+                        int halfWindowSize = 2; // Adjust this value to change the number of pages displayed on each side of the current page
+
+                        int startPage = Math.Max(1, Math.Min(current - halfWindowSize, ViewBag.TotalPage - 4)); // Changed ViewBag.maxpage to ViewBag.TotalPage
+                        int endPage = Math.Min(ViewBag.TotalPage, startPage + 4); // Changed ViewBag.maxpage to ViewBag.TotalPage
+
                         if (ViewBag.page == 1)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Home)">首頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + 1)">首頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + previous)">上一頁</a></li>
                         }
 
-                        for (int i = 1; i <= ViewBag.TotalPage; i++)
+                        for (int i = startPage; i <= endPage; i++)
                         {
                             if (i == ViewBag.page)
                             {
-                                    <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item active"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                             else
                             {
-                                    <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
+                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + i)">@i</a></li>
                             }
                         }
 
                         if (ViewBag.page == ViewBag.TotalPage)
                         {
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
                         else
                         {
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
-                                <li class="page-item"><a class="page-link" href="@Url.Content(PPath + Total)">末頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + next)">下一頁</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Content(PPath + ViewBag.TotalPage)">末頁</a></li>
                         }
-
                     }
                 }
             </ul>
@@ -368,11 +387,11 @@
 @* ---詳細彈窗開始--- *@
 <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <!--Header-->
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">訂單詳細資料</h4>
+                <h4 class="modal-title" id="myModalLabel">訂單明細</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -403,17 +422,48 @@
 @* ---詳細彈窗結束--- *@
 
 <script>
-    console.log(document.querySelector("#back"));
-    document.querySelector("#back").addEventListener("click", () => {
-        window.location.href = "/Admin/Order";
-    });
     function get(element) {
         let par = element.parentNode.parentNode;
         var hidd = par.querySelector('input[type="hidden"]');
         console.log(hidd.value);
         del(hidd.value);
+    }
+    let orderid = 0;
+    let state = "";
+    let data = "";
+    const changeBtn = document.querySelectorAll(".changeState");
+    changeBtn.forEach(btn => {
+        btn.addEventListener("click", ch)
+    });
+    function ch(event) {
+        console.log(event.target.closest("tr").querySelector('input[type="hidden"]').value);
+        console.log(event.target.closest("tr").querySelector(".state").innerText);
+        // console.log(event.target.parentNode.parentNode.parentNode.querySelector("td").innerText);
+        // console.log(event.target.parentNode.parentNode.parentNode.querySelector("td"));
+        // console.log(event.target.parentNode.parentNode.parentNode.querySelector('input[type="hidden"]').value);
+        orderid = event.target.closest("tr").querySelector('input[type="hidden"]').value;
+        state = event.target.closest("tr").querySelector(".state").innerText;
+        // console.log(state);
+        changeState(event);
+    }
+    async function changeState(event) {
+        let url = `/Shopping/ChangeState`;
+        const form = new FormData();
+        form.append("orderid", orderid);
+        form.append("state", state);
+        const response = await fetch(url, {
+            method: 'POST',
+            body: form
+        })
+        const Returndata = await response.text();
+        console.log(Returndata);
+        if (Returndata != "錯誤") {
+            event.target.closest("tr").querySelector(".state").innerText = Returndata;
+        }
+
 
     }
+
 
     const choose = document.getElementById("choosebtn");
     const choost = document.getElementById("choost");
@@ -434,32 +484,69 @@
         showTogget(element)
     }
 
-    //把資料印到彈出來的視窗，分別是訂單編號、訂購人、下訂日期、配送方式、配送地址、付款方式、預計到達日期、訂單狀態
+    //把OrderDetail PartalView印到彈出來的視窗
     function showTogget(element) {
-        var tr = element.parentNode.parentNode;
-        var td = tr.getElementsByTagName("td");
-        var OrderId = td[1].innerHTML;
-        var OrderDate = td[3].innerHTML;
-        var MemberName = td[2].innerHTML;
-        var ShipName = td[4].innerHTML;
-        var MemberAddress = td[7].innerHTML;
-        var PayName = td[5].innerHTML;
-        var DeliveryDate = td[8].innerHTML;
-        var StateName = td[6].innerHTML;
 
-        var modal = document.getElementById("modalDetail");
-        var ul = modal.getElementsByTagName("ul");
-        var li = ul[0].getElementsByTagName("li");
-        li[0].innerHTML = "訂單編號：" + OrderId;
-        li[1].innerHTML = "訂購人：" + MemberName;
-        li[2].innerHTML = "下訂日期：" + OrderDate;
-        li[3].innerHTML = "配送地址：" + MemberAddress;
-        li[4].innerHTML = "付款方式：" + PayName;
-        li[5].innerHTML = "配送方式：" + ShipName;
-        li[6].innerHTML = "預計到達日期：" + DeliveryDate;
-        li[7].innerHTML = "訂單目前狀態：" + StateName;
+        const id = element.parentNode.parentNode.querySelector('input[type="hidden"]').value;
+        const url = `https://localhost:7203/admin/OrderDetail/${id}`;
+
+        fetch(url)
+            .then((response) => {
+                return response.text();
+            })
+            .then((data) => {
+                const modalBody = document.querySelector(".modal-body");
+                modalBody.innerHTML = data;
+                loadDetail()
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
     }
+    async function loadDetail() {
+        const id = document.querySelector("#oid").value;
+        let orderTotal = 0;
+        console.log(id);
+        let url = `/Admin/ODProductsJSON/${id}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        const tbody = document.querySelectorAll("tbody")[1];
+        const value = data.map(od => {
+            const name = od.product.productName;
+            const image = od.product.fimagePath.split(",")[0];
+            const price = od.product.unitPrice;
 
+            const price2 = price.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+            const quantity = od.quantity;
+            const total = price * quantity;
+            orderTotal += total;
+            const total2 = total.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+            const html =
+                `
+                        <tr>
+                              <td><img src="/img-product/${image}" style="width: 100px; height: 100px;"></td>
+                              <td>${name}</td>
+                              <td>${price2}</td>
+                              <td>${quantity}</td>
+                              <td>${total2}</td>
+                        </tr>
+                `
+            return html;
+        });
+        tbody.innerHTML = value.join("");
+        tbody.innerHTML +=
+            `
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>總價格:</td>
+                    <td>${orderTotal}</td>
+                </tr>
+            `
+    }
     //刪除按鈕的事件
     async function del(id) {
         const result = await Swal.fire({
@@ -496,7 +583,7 @@
             }
             research()
         }
-        
+
     }
-    
+
 </script>

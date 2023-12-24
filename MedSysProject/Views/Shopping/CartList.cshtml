@@ -3,12 +3,13 @@
 @{
     ViewData["Title"] = "CartList";
     Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+    var order = ViewBag.order as Dictionary<string, string>;
 }
-<form method="post">
+
 <div class="container" style="margin-top:30px">
     <img src="~/img/Login2.png" style="margin:auto"/>
     <div style="margin-top:20px"><span class="fs-1">購物車</span></div>
-    
+        
 <table class="table">
         <tr>
             <th>
@@ -32,77 +33,90 @@
             foreach (var item in Model)
             {
                 總計 += item.小計;
-                                                                <tr>
-                                                                    <td>
-                                                                        <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
-                                                                        @Html.DisplayFor(modelItem => item.ProductName)
-                                                                    </td>
-                                                                    <td>
-                                                                        
-                                                                        @Html.DisplayFor(modelItem => item.UnitPrice)
-                                                                    </td>
-                                                                    <td>
+                
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <input type="hidden" value="@item.Product.ProductId" name="ProductID" class="Pid"/>
+                                                                                                        <span class="items">@item.ProductName</span>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        
+                                                                                                        @item.UnitPrice
+                                                                                                    </td>
+                                                                                                    <td>
 
-                                                                        @Html.DisplayFor(modelItem => item.小計)
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="hidden" value="@item.count" name="ProductQta" />
-                                                                        @Html.DisplayFor(modelItem => item.count)
-                                                                    </td>
-                                                                    <td>
-                                                                            <img src="~/img/trash.png" class="trash"/>
-                                                                    </td>
-                                                                </tr>
+                                                                                                        @Html.DisplayFor(modelItem => item.小計)
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        
+                                                            <select name="ProductQta" class="qta">
+                                                                @{
+                                    for(int i =0; i < item.Product.UnitsInStock; i++)
+                                    {
+                                        
+                                        if(item.count == i)
+                                        {
+                                                                                                            <option value="@i" selected>@i</option>
+                                        }
+                                        else{
+                                                                                                            <option value="@i">@i</option>
+                                        }
+                                        if (i == 50)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    
+                                                                                                            }
+                                                                                                            
+                                                                                                        </select>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                            <img src="~/img/trash.png" class="trash"/>
+                                                                                                    </td>
+                                                                                                </tr>
             }
             稅 = (int)(總計 * 0.05);
             應付金額 = 總計 + 稅;
-                                                            <tr>
-                                                                <td>
-                                                                </td>
-                                                                <td>
-                                                                </td>
-                                                                <td>
-                                                                    訂單總計:@總計
-                                                                </td>
-                                                                <td>
-                                                                    稅額:@稅
-                                                                </td>
-                                                                <td>
-                                                                應付金額:@應付金額
-                                                                </td>
-                                                            </tr>
-        }
-            </table>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    訂單總計:@總計
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    稅額:@稅
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                應付金額:@應付金額
+                                                                                                </td>
+                                                                                            </tr>
+            }
+        </table>
+    <form id="payform" method="post" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+        
+    
       
-</div>
-<div class="container " style="margin-top:30px">
-    <span class="fs-1">宅配方式</span>
-    <hr class="hr-dashed "/>
-        <label style="margin-right:10px"><input type="radio" value="1" name="odship" />中華郵政</label>
-        <label style="margin-right:10px"><input type="radio" value="2" name="odship" />黑貓宅急便</label>
-        <label style="margin-right:10px"> <input type="radio" value="3" name="odship" />全球快遞</label>
-        <label style="margin-right:10px"><input type="radio" value="4" name="odship" />新竹物流</label>
-        <label style="margin-right:10px"><input type="radio" value="5" name="odship" />嘉里大榮</label>
-        <label style="margin-right:10px"><input type="radio" value="6" name="odship" />蝦皮店到店</label>
-    <hr class="hr-dashed" />
-</div>
-<div class="container" style="height:1000px; margin-top100px;">
-    <span style="margin-bottom:20px" class="fs-1">付款方式</span><br />
-        <label><input type="radio" value="1" name="odPay" />信用卡</label>
-        <label><input type="radio" value="2" name="odPay" />超商取貨付款</label>
-        <label><input type="radio" value="3" name="odPay" />PAY</label>
-        <label><input type="radio" value="4" name="odPay" />先享後付</label>
-        <label><input type="radio" value="5" name="odPay" />ATM</label>
-        <label><input type="radio" value="6" name="odPay" />銀行轉帳</label>
-        <label><input type="radio" value="7" name="odPay" />貨到付款</label>
+        @{
+            foreach (var Key in order.Keys.ToList())
+            {
+                     <input type="hidden" name="@Key" value="@order[Key]" />
+            }       
+        }
+        <input type="submit" value="送出" />
+        <input type="submit" value="綠界測試" />
+    </form>
 </div>
 
-<input type="submit" value="送出" />
-</form>
+
+
 
    @section Scripts {
         <script>
             let del = document.querySelectorAll(".trash");
+            let change = document.querySelectorAll(".qta");
             document.addEventListener("DOMContentLoaded", () => {
                 del.forEach((item) => {
                     item.addEventListener("click", () => {
@@ -110,11 +124,14 @@
                         if (userConfirmed) {
                             let id = item.parentElement.parentElement.querySelector(".Pid").value;
                             delCart(id);
-                        }
+                        };
                     })
-                })
-            })
-            
+                });
+                change.forEach((item) => {
+                    item.addEventListener("change", changeQta)
+                });
+                payinfo()
+            });
             async function delCart(id) {
             const response = await fetch(`/Shopping/removeCart/${id}`)
                 
@@ -122,6 +139,45 @@
                 window.location.href= "/Shopping/CartList";
                 }
                 
+            }
+            function payinfo(){
+            var ProductList = "";
+            let itemList = document.querySelectorAll(".items");
+            itemList.forEach(item => {
+                console.log(item.innerText);
+                ProductList += `#${item.innerText}`
+            })
+
+            // document.querySelector("input[name='ItemName']").value = ProductList.substring(1)
+            // document.querySelector("input[name='TradeDesc']").value = "產品訂單";
+            // MacCheck()
+            };
+            async function MacCheck(){
+                let url = `/Shopping/CheckMac`;
+            const form = document.querySelector("#payform");
+                const formData = new FormData(form);
+                
+                const response = await fetch(url, {
+                    body:formData,
+                    method:"POST",
+                });
+                const data = await response.json();
+                console.log(data);
+                document.querySelector("input[name='CheckMacValue']").value = data.CheckMacValue;
+            }
+            function changeQta(event) {
+            let qta = event.target.value;
+            let id = event.target.parentElement.parentElement.querySelector(".Pid").value;
+            console.log(id);
+            
+
+            AchangeQta(id, qta)
+            };
+            async function AchangeQta(id, qta) {
+            let url = `/Shopping/changeQta?id=${id}&nqta=${qta}`
+            const response = await fetch(url);
+                const data = response.status;
+                window.location.href= "/Shopping/CartList";
             }
         </script>
         }

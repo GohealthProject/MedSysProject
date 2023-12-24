@@ -1,5 +1,4 @@
 ﻿@using System.Text.Json;
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +22,12 @@
     <link href="~/forevendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="~/forevendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/forevendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-   
+
+    <!-- Custom fonts for this template-->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
     <!-- Template Main CSS File -->
     <link href="~/css/forestyle.css" rel="stylesheet">
 
@@ -35,107 +39,169 @@
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
     @await RenderSectionAsync("LinkStyle", required: false)
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="@Url.Content("~/js-Account/LayoutFore.js")"></script>
+
+
 </head>
 
 <body>
     <!-- ======= Header ======= -->
-   <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center">
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center">
 
-      <div class="logo me-auto">
+            <div class="logo me-auto">
                 <h1><a href="~/Home/Index"><img src="~/img/gohealth-logo.png" alt="" class="img-fluid"> GO健康</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
 
-      <nav id="navbar" class="navbar">
+            <nav id="navbar" class="navbar">
                 <!-- =======最上方欄位 ======= -->
-        <ul>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#about" >關於GO健康</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#services">GO健康與您</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#team">GO健康團隊</a>
-                    <a class="nav-link scrollto fs-5" href="~/Home/Index#contact">意見反映與交通資訊</a>
-
-                    
-                    <li class="dropdown fs-5">
-                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                <ul>
+                    <li class="dropdown fs-4">
+                        <a href="~/Home/Index#about"><span class="fs-4">關於GO健康</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
-                            
-                            <li class="dropdown fs-5">
-                                <a href="#"><span>線上預約</span> <i class="bi bi-chevron-right"></i></a>
-                                <ul>
-                                    <li><a href="~/Home/planComeparison">個人方案選擇與比較</a></li>
-                                    <li><a href="~/Home/testplan">企業健檢方案選擇</a></li>
-                                    <li><a href="#">xx健檢</a></li>
-                                    <li><a href="#">xx健檢</a></li>
-                                    <li><a href="#">xx健檢</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="~/Home/live">現場狀況(Fore)</a></li>
+                            <li><a href="~/Home/Index#services">GO健康與您</a></li>
+                            <li><a href="~/Home/Index#team">GO健康團隊</a></li>
+                            <li><a href="~/Home/Index#contact">意見反映與交通資訊</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+
+                    <li class="dropdown fs-4">
+                        <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+
+                            <li class="dropdown fs-4">
+                                <a href="#"><span class="fs-4">線上預約</span> <i class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                    <li><a href="~/Home/planComeparison">個人方案選擇與比較</a></li>
+                                    <li><a href="~/Home/CompanyPlan">企業健檢方案選擇</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="~/Home/live" class="dropdown fs-4">現場狀況</a></li>
+                        </ul>
                     </li>
-                    <li><a class="nav-link scrollto" href="/blogs/index">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+                    </li>
+                    <li><a class="nav-link scrollto fs-4" href="/blogs/indexnew">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:35px">
-                        <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
-                        <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping">
-                        </a>
+                        <button type="button" class="btn  position-relative" asp-action="CartList" asp-controller="Shopping">
+                            <img src="@Url.Content("~/img/shopping-cart.png")" alt="Inbox Image" class="img-fluid" id="CartListImg" />
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span class=" p-1" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></span>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
                     </li>
-                    @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                         {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
-                        }else{
+                        <li>@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto fs-4" })</li>
+                        }
+                        else
+                        {
                             string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-                            Member m = new Member();
-                            m = JsonSerializer.Deserialize<Member>(json);
-                                <li class="dropdown">
-                                    <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
-                                    <ul>
+                            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+                        <li class="dropdown">
+                            <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                            <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
                                 <li><a asp-action="OrderList" asp-controller="Shopping">訂單管理</a></li>
                                 <li><a asp-action="Logout" asp-controller="Accout" id="logout">登出</a></li>
-                                    </ul>
-                                </li>
-                            }
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+                            </ul>
+                        </li>
+                        }
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
 
-    </div>
-  </header><!-- End #header -->
+        </div>
+    </header><!-- End #header -->
     <main id="main" style="background-color:#F2F9F8">
-    @RenderBody()
-    <!-- ======= Footer ======= -->
-    <footer id="footer">
-    <div class="container">
-      <div class="copyright">
-        <strong><span>GO健康 版權所有</span></strong>
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-                    <a href="~/">GO健康</a>
-      </div>
-    </div>
-  </footer><!-- End #footer -->
+        @RenderBody()
+        <!-- ======= Footer ======= -->
+
     </main>
+
+    <!-- chat room button -->
+    <div class="chatroom position-fixed bottom-0 end-0" style="margin-bottom:4rem;">
+        <a onclick="showChatroomWindow()">
+            <img src="~/img/chat_message_icon.png" alt="chatroom" class="img-fluid" style="width: 40px;margin-right: 1em;">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="showchatnofitation" hidden>
+                <span class=" p-1" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></span>
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </a>
+    </div>
+
+    <!-- chat room window -->
+    <div class="chatroom-window position-fixed bottom-0 end-0" id="chatroom-window" style="margin-bottom: 4rem;margin-right: 4rem;width:40em; height:25em;background-color: antiquewhite;border: double;border-radius: 15px;" hidden>
+        @{
+            if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            {
+                <p>請先登入會員</p>
+            }
+            else
+            {
+                string json = Context.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(json);
+                <iframe src="~/signalrtest/chatlist?memberid=@m.MemberId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+            }
+        }
+    </div>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                <strong><span>GO健康 版權所有</span></strong>
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+                <a href="~/">GO健康</a>
+            </div>
+        </div>
+    </footer><!-- End #footer -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <!-- Vendor JS Files -->
     <script src="~/forevendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/forevendor/glightbox/js/glightbox.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    @*   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>*@
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
     <script src="~/forevendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/forevendor/swiper/swiper-bundle.min.js"></script>
     <script src="~/forevendor/php-email-form/validate.js"></script>
+    @*datatable區*@
+    <script src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    @*datatable區*@
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
-  
+
+    <!-- opanai -->
+    <script src="https://cdn.jsdelivr.net/npm/openai@4.24.0/index.min.js"></script>
+
+    <!-- signalR -->
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         async function getcartList() {
@@ -143,11 +209,54 @@
             const response = await fetch(url);
             const count = await response.text();
             document.querySelector("#cartlistcount").innerHTML = count;
-
+            console.log(count);
         }
         document.addEventListener('DOMContentLoaded', () => {
             getcartList()
+            document.querySelector("#footer").style.margin = "";
+            document.querySelector("#CartListImg").addEventListener("click", () => {
+
+                window.location.href = "@Url.Content("~/Shopping/CartList")";
+            })
         })
+
+        function showChatroomWindow() {
+            if (document.querySelector("#chatroom-window").hidden == true) {
+                document.querySelector("#chatroom-window").hidden = false;
+                document.querySelector("#showchatnofitation").hidden = true;
+            }
+            else {
+                document.querySelector("#chatroom-window").hidden = true;
+            }
+        }
+
+        // // singalR
+        // var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+
+        // connection.on("ReceiveMessage", function (userId, user, message) {
+        //     var datetime = new Date();
+        //     datetime = Date.now();
+        //     document.querySelector('#chat-message-body').innerHTML += `
+        //                                                                                                                                                 <div class="chatroom-window-body-message">
+        //                                                                                                                                                     <div class="chatroom-window-body-message-time">
+        //                                                                                                                                                            <span>${datetime} (員工)James</span>
+        //                                                                                                                                                     </div>
+        //                                                                                                                                                     <div class="chatroom-window-body-message-content">
+        //                                                                                                                                                        <span style="color:red;">${message}</span>
+        //                                                                                                                                                       </span>
+        //                                                                                                                                                     </div>
+        //                                                                                                                                                 </div>`
+        // });
+
+        // connection.start().then(function () {
+        //     connection.invoke("SendMessage", "1", "James", "Hello").catch(function (err) {
+        //         return console.error(err.toString());
+        //     });
+        //     console.log("connection start");
+        // }).catch(function (err) {
+        //     return console.error(err.toString());
+        // });
+
     </script>
 </body>
 

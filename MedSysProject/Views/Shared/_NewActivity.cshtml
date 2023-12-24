@@ -1,0 +1,163 @@
+﻿@model List<MedSysProject.Models.Blog>
+<section class="category-section">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header d-flex justify-content-between align-items-center mb-5">
+            <h2>活動快訊</h2>
+            <div><a href="category.html" class="more">查看所有活動</a></div>
+        </div>
+
+        <div class="row">
+            @* var formattedDate = blog.CreatedAt.ToString("yyyy/MM/dd");*@
+            <div class="col-md-9">
+                <!--第一大格-->
+                <div class="d-lg-flex post-entry-2 need2" data-hide-id="@Model[0].BlogId">
+                    <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId"
+                       class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                        @if (Model[0].BlogImage != null)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[7].BlogImage)"
+                                 alt=""
+                                 class="img-fluid" />
+                        }
+                        else
+                        {
+                            <img src="~/assets/img/empty.png"
+                                 alt=""
+                                 class="img-fluid" />
+                        }
+
+                    </a>
+                    <div>
+                        <div class="post-meta">
+                            <span class="date">@Model[0].ArticleClass.BlogCategory1</span>
+                            <span class="mx-1">&bullet;</span> <span>@Model[0].CreatedAt.ToString("yyyy/MM/dd")</span>
+                        </div>
+                        <h3>
+                            <a href="" @Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[0].BlogId">
+
+                                @Model[0].Title
+                            </a>
+                        </h3>
+                        <p>
+                           
+                            <!--記得放文章-->
+                            <!--Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Distinctio placeat exercitationem magni voluptates dolore.
+                            Tenetur fugiat voluptates quas, nobis error deserunt aliquam
+                            temporibus sapiente, laudantium dolorum itaque libero eos
+                            deleniti?文章內文，如果是圖片怎辦?-->
+                        </p>
+                        <div class="d-flex align-items-center author">
+                            <div class="photo">
+                                @if (Model[0].Employee.EmployeePhoto != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].Employee.EmployeePhoto)"
+                                         alt=""
+                                         class="img-fluid" />
+
+                                }
+
+                            </div>
+                            <div class="name">
+                                <h3 class="m-0 p-0">@Model[0].Employee.EmployeeName</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--左側帶圖小格-->
+                    <div class="col-lg-4 need3" data-hide-id="@Model[1].BlogId">
+                        <div class="post-entry-1 border-bottom need3" data-hide-id="@Model[1].BlogId">
+                            <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[1].BlogId">
+                                @if (Model[1].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[1].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+
+                                }
+
+                            </a>
+                            <div class="post-meta">
+                                <span class="date">@Model[1].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>@Model[1].CreatedAt.ToString("yyyy/MM/dd")</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=@Model[1].BlogId">@Model[1].Title</a>
+                            </h2>
+                            <span class="author mb-3 d-block">@Model[1].Employee.EmployeeName</span>
+                            <p class="mb-4 d-block">
+                                <!-- 記得放文章-->
+                                <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                Vero temporibus repudiandae, inventore pariatur numquam
+                                cumque possimus 如果第一個p標籤式圖片怎辦?-->
+                            </p>
+                        </div>
+                        <!--左側不帶圖小格-->
+
+                        <div class="post-entry-1">
+                            <div class="post-meta">
+                                <span class="date">@Model[3].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>@Model[3].CreatedAt.ToString("yyyy/MM/dd")</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[3].BlogId">@Model[3].Title</a>
+                            </h2>
+                            <span class="author mb-3 d-block">@Model[3].Employee.EmployeeName</span>
+                        </div>
+                    </div>
+                    <!--帶圖大格2-->
+                    <div class="col-lg-8">
+                        <div class="post-entry-1 need4" data-hide-id="@Model[2].BlogId">
+                            <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogID=@Model[2].BlogId">
+                                @if (Model[2].BlogImage != null)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[2].BlogImage)"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img src="~/assets/img/empty.png"
+                                         alt=""
+                                         class="img-fluid" />
+                                }
+
+                            </a>
+                            <div class="post-meta">
+                                <span class="date">@Model[2].ArticleClass.BlogCategory1</span>
+                                <span class="mx-1">&bullet;</span>
+                                <span>@Model[2].CreatedAt.ToString("yyyy/MM/dd")</span>
+                            </div>
+                            <h2 class="mb-2">
+                                <a href="@Url.Content("~/Blogs/SinglePost")?SingleBlogId=@Model[2].BlogId">
+                                    @Model[2].Title
+                                </a>
+                            </h2>
+                            <span class="author mb-3 d-block">@Model[2].Employee.EmployeeName</span>
+                            <p class="mb-4 d-block">
+                                <!--記得放文章-->
+                                <!--Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                                                        Vero temporibus repudiandae, inventore pariatur numquam
+                                                                        cumque possimus待處理-->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 sideActivity" >
+               
+            </div>
+        </div>
+    </div>
+</section>

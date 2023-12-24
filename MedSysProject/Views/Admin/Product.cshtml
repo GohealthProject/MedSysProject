@@ -1,5 +1,6 @@
-﻿@model IEnumerable<MedSysProject.Models.CProductsWrap>
-@using MedSysProject.Models
+﻿@using MedSysProject.Models
+@model IEnumerable<MedSysProject.Models.CProductsWrap>
+
 @using MedSysProject.Controllers
 @using static MedSysProject.Models.Product
 
@@ -8,12 +9,46 @@
     Layout = "_Layout_Admin2";
 }
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
 <style>
     .custom-modal-dialog {
         max-width: 100%;
     }
+
+    .half-width {
+        width: 50%; 
+    }
+
+    <style >
+    .custom-btn {
+        min-width: 80px; /* 確保所有按鈕具有相同的最小寬度 */
+        height: 40px; /* 確保所有按鈕具有相同的高度 */
+        padding: 5px 10px; /* 設置內邊距 */
+        font-size: 16px; /* 統一字體大小 */
+        line-height: 1.5; /* 行高，影響按鈕的垂直間距 */
+        border-radius: 5px; /* 邊框圓角 */
+        text-align: center; /* 文字居中 */
+    }
+
+    .custom-btn {
+        width: 30px;
+        height: 30px;
+        padding: 0; /* 移除內邊距以確保按鈕不會變得太大 */
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .custom-icon {
+        font-size: 15px; /* 或其他適當的大小，以確保圖標看起來和諧 */
+    }
 </style>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const Product = document.getElementById("li-Product");
     const Index = document.getElementById("li-index");
@@ -27,22 +62,41 @@
     </div>
     <div class="card-body">
         <div>
-            <div class="row g-3">
-                @using (Html.BeginForm())
-                {
-
-                    @: 價格區間
-                    @: <div class="col-auto">最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
-                    @: <div class="col-auto">最大價格：@Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control pr-1" })</div>
-                    <div class="col-auto"><input type="submit" class="btn btn-primary" value="查詢" style="margin-top:.5em;" /></div>
-                }
+    <div class="row g-3">
+        @using (Html.BeginForm())
+        {
+            <div class="row align-items-end" style="margin-left: 1px;">
+                        <div class="row align-items-end" style="margin-left: 8px;">
+                            <div class="col-auto">
+                                最小價格：@Html.TextBox("txtMinPrice", null, new { type = "number", @class = "form-control" })
+                            </div>
+                            <div class="col-auto">
+                                最大價格：@Html.TextBox("txtMaxPrice", null, new { type = "number", @class = "form-control" })
+                            </div>
+                            <div class="col-auto">
+                                <input type="submit" class="btn btn-primary" value="查詢" />
+                            </div>
+                            <div class="col-auto">
+                                排序方式：
+                                <a href="@Url.Action("Product", new { sortOrder = "asc"})">價格從低到高</a> |
+                                <a href="@Url.Action("Product", new { sortOrder = "price_desc"})">價格從高到低</a>
+                            </div>
+                        </div>
             </div>
-            <p class="mt-3">
-                <a class="btn btn-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </p>
-        </div>
+                    <div class="row align-items-center">
+                        <div class="col-md-5" style="margin-left: 20px; margin-bottom: 20px; margin-top:10px">
+                            @Html.Label("選擇產品類別：")
+                            @Html.DropDownList("categoryId", new SelectList(ViewBag.Categories, "CategoriesId", "CategoriesName"), "全部類別", new { @class = "form-control", id = "categorySelect" })
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a style=" margin-top: 30px; margin-right:-75px" class="btn btn-outline-success" data-toggle="modal" data-target="#modalCreate" onclick="loadCreateProductModal()">
+                                <i class="fas fa-plus"></i> 新增產品
+                            </a>
+                        </div>
+                    </div>
+        }
+    </div>
+</div>
 
         <table class="table table-hover">
             <!-- 表格頭部 -->
@@ -50,13 +104,13 @@
                 <tr>
                     <!-- 列項目 -->
                     <th>序</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedProductName)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedUnitPrice)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedLicense)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedIngredient)</th>
-                    <th>@Html.DisplayNameFor(model => model.FimagePath)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedUnitsInStock)</th>
-                    <th>@Html.DisplayNameFor(model => model.WrappedDiscontinued)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedUnitPrice)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedLicense)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedIngredient)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().FimagePath)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedUnitsInStock)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().WrappedDiscontinued)</th>
                     <th>執行動作</th>
                 </tr>
             </thead>
@@ -97,11 +151,15 @@
                                 }
                             </td>
                             <td>
-                                <a onclick="getProductDetails(@item.WrappedProductId)" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit">
-                                    <i class="fas fa-edit"></i>
+                                <a class="btn btn-info custom-btn" onclick="loadProductDetails(@Html.Raw(item.WrappedProductId))">
+                                    <i class="fas fa-info-circle custom-icon"></i>
                                 </a>
-                                <a class="btn btn-danger" onclick="deleteProduct(@item.WrappedProductId)">
-                                    <i class="fas fa-trash-alt"></i>
+                                <a onclick="getProductDetails(@item.WrappedProductId)" class="btn btn-primary custom-btn" data-toggle="modal" data-target="#modalEdit">
+                                    <i class="fas fa-edit custom-icon"></i>
+                                </a>
+                                
+                                <a class="btn btn-danger custom-btn" onclick="deleteProduct(@item.WrappedProductId)">
+                                    <i class="fas fa-trash-alt custom-icon"></i>
                                 </a>
                             </td>
                         </tr>
@@ -126,119 +184,41 @@
                         <!-- 使用AJAX載入_CreateProductModal.cshtml的內容 -->
                         <div id="createProductModalContent"></div>
                     </div>
-                    @*                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-                    </div> *@
+                  
                 </div>
             </div>
         </div>
         <!-- ---新增彈窗結束--- -->
-        <!-- ---新增彈窗開始--- -->
-        @*  <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content"> *@
-        @*         <!--標頭-->
-        <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">新增產品</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">×</span>
-        </button>
-        </div>
-        <!--主體-->
-        <div class="modal-body">
-        <td>
-        @foreach (var imagePath in Model.FirstOrDefault()?.FimagePaths ?? Enumerable.Empty<string>())
-        {
-        <img src="@Url.Content(imagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
-        }
-        </td>
-        </div>
-        <button id="buttonSubmit" type="submit" class="btn btn-primary">確認並新增</button>
-        </div>
-        </div> *@
+      
     </div>
 </div>
 
-<!-- ---新增彈窗結束--- -->
 @* ---修改彈窗開始--- *@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" id="category_div">
-            <!--Header-->
-            @*              <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">修改產品</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-            </button>
-            </div> *@
-            <!--Body-->
-            @*            <div class="modal-body">
-            <form id="editProductForm" method="post" enctype="multipart/form-data" action="@Url.Action("Edit", "Admin")">
-            <div class="mb-3">
-            <label for="editProductName" class="form-label">產品名稱</label>
-            <input type="text" class="form-control" id="editProductName" name="WrappedProductName">
-            </div>
-            <div class="mb-3">
-            <label for="inputPrice" class="form-label">單價</label>
-            <input type="text" class="form-control" id="inputPrice" name="UnitPrice">
-            </div>
-            <div class="mb-3">
-            <label for="inputLicense" class="form-label">認證字號</label>
-            <input type="text" class="form-control" id="inputLicense" name="License">
-            </div>
-            <div class="mb-3">
-            <label for="inputIngredient" class="form-label">有效成分</label>
-            <input type="text" class="form-control" id="inputIngredient" name="Ingredient">
-            </div>
-            <div class="mb-3">
-            <label for="inputDescription" class="form-label">產品描述</label>
-            <textarea class="form-control" id="inputDescription" name="Description" rows="4"></textarea>
-            </div>
-            <div class="mb-3">
-            <label for="inputDiscontinued" class="form-label">上架狀態</label>
-            <select class="form-control" id="inputDiscontinued" name="Discontinued">
-            <option value="true" selected="">上架中</option>
-            <option value="false" selected="">已下架</option>
-            </select>
-            </div>
-            <div class="mb-3">
-            <label for="categories" class="form-label">產品分類</label>
-            @foreach (var category in ViewBag.Categories)
-            {
-            <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="category@(category.CategoriesId)" name="CategoriesIds" value="@category.CategoriesId">
-            <label class="form-check-label" for="category@(category.CategoriesId)">
-            @category.CategoriesName
-            </label>
-            </div>
-            }
-            </div>
-            <div class="mb-3">
-            <label for="formFile" class="form-label">產品圖片上傳</label>
-            <input class="form-control" type="file" id="formFile" name="FormFile">
-            </div>
-            <div id="imagePreviewContainer" class="mb-3">
-            <label for="inputDescription" class="form-label">圖片預覽</label>
-            <img id="previewImage" src="#" style="max-width: 100%; max-height: 150px;">
-            </div>
-            </form>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="updateProduct()">確認修改</button>
-            </div>
-            </div> *@
         </div>
     </div>
 </div>
 @* ---修改彈窗結束--- *@
 
+<!-- 產品詳細資訊彈窗 -->
+<div class="modal fade" id="modalProductDetail" tabindex="-1" role="dialog" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="productDetailDiv">
+            <!-- 彈窗內容將通過 AJAX 動態加載 -->
+        </div>
+    </div>
+</div>
+
 <!-- 載入 Bootstrap 的 JavaScript -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
 <script>
+
     function submitForm() {
         $.ajax({
             url: '@Url.Action("Create", "Admin")',
@@ -247,12 +227,27 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                // 提交成功後，關閉 Modal
-                $('#modalCreate').modal('hide');
-                // 在這裡可以添加其他你需要的處理邏輯
+                // 使用 SweetAlert2 顯示成功提示
+                Swal.fire({
+                    title: '成功!',
+                    text: '新增產品成功',
+                    icon: 'success',
+                    confirmButtonText: '確定'
+                }).then((result) => {
+                    // 在用戶點擊確定後的操作
+                    $('#modalCreate').modal('hide');
+                    $('.modal-backdrop').remove();
+                    location.reload(); // 重新加載頁面
+                });
             },
             error: function (error) {
-                alert('提交失敗：' + error.statusText);
+                // 使用 SweetAlert2 顯示錯誤提示
+                Swal.fire({
+                    title: '提交失敗',
+                    text: '錯誤：' + error.statusText,
+                    icon: 'error',
+                    confirmButtonText: '關閉'
+                });
             }
         });
     }
@@ -386,7 +381,6 @@
         });
     }
 
-
     async function deleteProduct(productId) {
         // 確認是否真的要刪除
         const result = await Swal.fire({
@@ -409,7 +403,7 @@
                 success: function (data) {
                     Swal.fire({
                         title: "刪除成功!",
-                        text: data,
+                        text: "產品已被成功刪除。", // 只顯示簡單的文本消息
                         icon: "success",
                         showConfirmButton: false,
                         timer: 1500
@@ -424,12 +418,98 @@
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
-                        text: "有錯誤發生!" + error.statusText
+                        text: "操作失敗: " + error.statusText // 顯示錯誤的狀態文字
                     });
                 }
             });
         }
     }
+
+    $(document).ready(function () {
+        $(document).on('click', '#submitEdit', function (e) {
+            e.preventDefault();
+
+            // 發送 AJAX 請求
+            $.ajax({
+                url: '@Url.Action("Edit", "Admin")', // 確保 URL 正確
+                type: 'POST',
+                data: new FormData($('#editProductForm')[0]),
+                processData: false,
+                contentType: false,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // 處理成功回應
+                        Swal.fire({
+                            title: '修改成功!',
+                            text: '產品資料已更新',
+                            icon: 'success',
+                            confirmButtonText: '確定'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        // 處理失敗回應
+                        Swal.fire({
+                            title: '修改失敗',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                },
+                error: function (error) {
+                    // 處理請求錯誤
+                    Swal.fire({
+                        title: '錯誤',
+                        text: '發生錯誤：' + error.statusText,
+                        icon: 'error',
+                        confirmButtonText: '關閉'
+                    });
+                }
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var categorySelect = document.getElementById("categorySelect");
+        if (categorySelect) {
+            categorySelect.addEventListener("change", function () {
+            
+                if (this.form) {
+                    this.form.submit();
+                } else {
+                    console.error("下拉列表不在表单内");
+                }
+            });
+        } else {
+            console.error("未找到下拉列表元素");
+        }
+    });
+
+
+    function loadProductDetails(productId) {
+        console.log("ProductId:", productId); 
+        $.ajax({
+            url: '@Url.Action("ProductDetail", "Admin")?productId=' + productId,
+            type: 'GET',
+            success: function (data) {
+                $('#productDetailDiv').html(data);
+                $('#modalProductDetail').modal('show');
+            },
+            error: function (error) {
+                console.error('加载产品详细信息失败：' + error.statusText);
+            }
+        });
+    }
+
+
+
+    
 </script>
 
 

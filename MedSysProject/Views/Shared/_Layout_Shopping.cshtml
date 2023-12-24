@@ -17,7 +17,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Lato:400,300,700,900" rel="stylesheet">
-    
+
     <!-- Vendor CSS Files -->
     <link href="~/forevendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/forevendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -54,15 +54,15 @@
                 <ul>
                     <li>
                         <form action="@Url.Content("~/Shopping/KeySearch")">
-                        <div class="input-group mb-3 mt-3">
-                            <input type="text" class="form-control" placeholder="輸入關鍵字" aria-label="輸入關鍵字" value="" name="Key">
-                            <input type="submit" class="btn btn-outline-secondary text-info"  id="button-addon2" onclick="search()" value="搜尋"/>
-                        </div>
+                            <div class="input-group mb-3 mt-3">
+                                <input type="text" class="form-control" placeholder="輸入關鍵字" aria-label="輸入關鍵字" value="" name="Key">
+                                <input type="submit" class="btn btn-outline-secondary text-info" id="button-addon2" onclick="search()" value="搜尋" />
+                            </div>
                         </form>
                     </li>
 
                     <li class="dropdown">
-                        <a href="~/Home/planComeparison"><span>檢查專案</span> <i class="bi bi-chevron-down"></i></a>
+                        <a href="~/Home/planComeparison"><span class="fs-4">檢查專案</span> <i class="bi bi-chevron-down"></i></a>
                         <ul>
                             <li><a href="~/Home/planComeparison">方案比較</a></li>
                             <li class="dropdown">
@@ -79,17 +79,23 @@
                         </ul>
                     </li>
                     <li>
-                        <a asp-action="Index" asp-controller="Shopping">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
+                        <a asp-action="Index" asp-controller="Shopping" class="fs-4">購健康商城 @* <i class="bi bi-chevron-down"></i> *@</a>
                     </li>
-                    <li><a class="nav-link scrollto" asp-action="index"asp-controller="blogs">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
+                    <li><a class="nav-link scrollto fs-4" asp-action="index" asp-controller="blogs">健康部落格</a>@* <a class="nav-link scrollto" href="#portfolio">健康部落格</a> *@</li>
                     <li style="margin-left:20px">
-                        <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
-                        <a class="nav-link scrollto p-1 text-info fs-5" id="cartlistcount" asp-action="CartList" asp-controller="Shopping"></a>
-                        
+                        @* <img src="@Url.Content("~/img/shopping-cart.png")" style="width:32px ; height:32px;float:left;" />
+                        *@
+                        <button type="button" class="btn  position-relative" asp-action="CartList" asp-controller="Shopping">
+                            <img src="@Url.Content("~/img/shopping-cart.png")" alt="Inbox Image" class="img-fluid" id="CartListImg" />
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span class=" p-1" id="cartlistcount"></span>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
                     </li>
                     @if (!Context.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
                     {
-                        <li>@Html.ActionLink("登入","Login","Accout",null,new{Class="nav-link scrollto"})</li>
+                        <li class="fs-4">@Html.ActionLink("登入", "Login", "Accout", null, new { Class = "nav-link scrollto" })</li>
                     }
                     else
                     {
@@ -97,7 +103,7 @@
                         Member m = new Member();
                         m = JsonSerializer.Deserialize<Member>(json);
                         <li class="dropdown">
-                            <a href="#"><span>@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
+                            <a href="#"><span class="fs-4">@m.MemberName</span><i class="bi bi-chevron-down"></i></a>
                             <ul>
                                 <li><a asp-action="MemberCenter" asp-controller="Accout">會員中心</a></li>
                                 <li><a asp-action="Report" asp-controller="Home">健檢報告</a></li>
@@ -115,7 +121,7 @@
     <main id="main" style="background-color:#F2F9F8;">
         @RenderBody()
         <!-- ======= Footer ======= -->
-        
+
     </main>
     <footer id="footer">
         <div class="container">
@@ -143,6 +149,8 @@
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+    <!-- Sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         async function getcartList() {
@@ -150,10 +158,14 @@
             const response = await fetch(url);
             const count = await response.text();
             document.querySelector("#cartlistcount").innerHTML = count;
-            
+
         }
         document.addEventListener('DOMContentLoaded', () => {
             getcartList()
+            document.querySelector("#CartListImg").addEventListener("click", () => {
+
+                window.location.href = "@Url.Content("~/Shopping/CartList")";
+            })
         })
     </script>
 </body>

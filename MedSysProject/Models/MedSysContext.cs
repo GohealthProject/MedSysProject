@@ -35,6 +35,10 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<Member> Members { get; set; }
 
+    public virtual DbSet<MembersStatus> MembersStatuses { get; set; }
+
+    public virtual DbSet<Message> Messages { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -65,9 +69,17 @@ public partial class MedSysContext : DbContext
 
     public virtual DbSet<ReservedSub> ReservedSubs { get; set; }
 
+    public virtual DbSet<ReturnProduct> ReturnProducts { get; set; }
+
+    public virtual DbSet<Room> Rooms { get; set; }
+
+    public virtual DbSet<RoomRef> RoomRefs { get; set; }
+
     public virtual DbSet<SubProjectBridge> SubProjectBridges { get; set; }
 
     public virtual DbSet<TrackingList> TrackingLists { get; set; }
+
+    public virtual DbSet<Twaddress> Twaddresses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -309,6 +321,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.MemberBirthdate)
                 .HasColumnType("date")
                 .HasColumnName("memberBirthdate");
+            entity.Property(e => e.MemberCityDistrictRoadId).HasColumnName("memberCityDistrictRoadId");
             entity.Property(e => e.MemberContactNumber)
                 .HasMaxLength(10)
                 .IsFixedLength()
@@ -336,16 +349,58 @@ public partial class MedSysContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("memberPassword");
             entity.Property(e => e.MemberPhone)
-                .IsRequired()
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .IsFixedLength()
                 .HasColumnName("memberPhone");
+            entity.Property(e => e.StatusId).HasColumnName("statusID");
             entity.Property(e => e.TaxId).HasColumnName("taxID");
             entity.Property(e => e.VieifiedId).HasColumnName("VieifiedID");
+
+            entity.HasOne(d => d.MemberCityDistrictRoad).WithMany(p => p.Members)
+                .HasForeignKey(d => d.MemberCityDistrictRoadId)
+                .HasConstraintName("FK_Members_TWAddress");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Members)
+                .HasForeignKey(d => d.StatusId)
+                .HasConstraintName("FK_Members_MembersStatus");
 
             entity.HasOne(d => d.Tax).WithMany(p => p.Members)
                 .HasForeignKey(d => d.TaxId)
                 .HasConstraintName("FK_Member_Corporation");
+        });
+
+        modelBuilder.Entity<MembersStatus>(entity =>
+        {
+            entity.HasKey(e => e.StatusId);
+
+            entity.ToTable("MembersStatus");
+
+            entity.Property(e => e.StatusId).HasColumnName("statusID");
+            entity.Property(e => e.StatusName)
+                .HasMaxLength(50)
+                .HasColumnName("statusName");
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.ToTable("Message");
+
+            entity.Property(e => e.MessageId).HasColumnName("MessageID");
+            entity.Property(e => e.EmployeeId).HasColumnName("employeeID");
+            entity.Property(e => e.MemberId).HasColumnName("memberID");
+            entity.Property(e => e.RoomId).HasColumnName("roomId");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.EmployeeId)
+                .HasConstraintName("FK_Message_Employees");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_Message_Members");
+
+            entity.HasOne(d => d.Room).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.RoomId)
+                .HasConstraintName("FK_Message_Room");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -359,6 +414,7 @@ public partial class MedSysContext : DbContext
                 .HasColumnType("date")
                 .HasColumnName("deliveryDate");
             entity.Property(e => e.MemberId).HasColumnName("memberId");
+            entity.Property(e => e.MerchantTradeNo).IsUnicode(false);
             entity.Property(e => e.OrderDate)
                 .HasColumnType("date")
                 .HasColumnName("orderDate");
@@ -368,6 +424,7 @@ public partial class MedSysContext : DbContext
                 .HasColumnName("shipDate");
             entity.Property(e => e.ShipId).HasColumnName("shipID");
             entity.Property(e => e.StateId).HasColumnName("stateID");
+            entity.Property(e => e.TradeNo).IsUnicode(false);
 
             entity.HasOne(d => d.Member).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.MemberId)
@@ -434,6 +491,7 @@ public partial class MedSysContext : DbContext
             entity.ToTable("OrderState");
 
             entity.Property(e => e.StateId).HasColumnName("stateID");
+            entity.Property(e => e.OrderStatus).HasColumnName("orderStatus");
             entity.Property(e => e.StateDetailed)
                 .HasMaxLength(50)
                 .HasColumnName("stateDetailed");
@@ -448,6 +506,7 @@ public partial class MedSysContext : DbContext
 
             entity.Property(e => e.PlanId).HasColumnName("planId");
             entity.Property(e => e.PlanDescription).HasColumnName("planDescription");
+            entity.Property(e => e.PlanImg).HasColumnName("planImg");
             entity.Property(e => e.PlanName)
                 .IsRequired()
                 .HasColumnName("planName");
@@ -492,6 +551,14 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.Timestamp)
                 .HasColumnType("date")
                 .HasColumnName("timestamp");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.ProductReviews)
+                .HasForeignKey(d => d.MemberId)
+                .HasConstraintName("FK_ProductReview_Members");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductReviews)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_ProductReview_Products");
         });
 
         modelBuilder.Entity<ProductsCategory>(entity =>
@@ -599,6 +666,54 @@ public partial class MedSysContext : DbContext
                 .HasConstraintName("FK_ReservedSub_Reserve");
         });
 
+        modelBuilder.Entity<ReturnProduct>(entity =>
+        {
+            entity.HasKey(e => e.ReturnId);
+
+            entity.ToTable("ReturnProduct");
+
+            entity.Property(e => e.ReturnId).HasColumnName("ReturnID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.ProcessedDate).HasColumnType("date");
+            entity.Property(e => e.RefundAmount).HasColumnType("money");
+            entity.Property(e => e.ReturnDate).HasColumnType("date");
+            entity.Property(e => e.ReturnState).HasMaxLength(50);
+
+            entity.HasOne(d => d.Order).WithMany(p => p.ReturnProducts)
+                .HasForeignKey(d => d.OrderId)
+                .HasConstraintName("FK_ReturnProduct_Order");
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.ToTable("Room");
+        });
+
+        modelBuilder.Entity<RoomRef>(entity =>
+        {
+            entity.HasKey(e => e.RoombridgeId);
+
+            entity.ToTable("RoomRef");
+
+            entity.Property(e => e.RoombridgeId).HasColumnName("roombridgeId");
+            entity.Property(e => e.Employeeid).HasColumnName("employeeid");
+            entity.Property(e => e.Memberid).HasColumnName("memberid");
+            entity.Property(e => e.Roomid).HasColumnName("roomid");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Employeeid)
+                .HasConstraintName("FK_RoomRef_Employees");
+
+            entity.HasOne(d => d.Member).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Memberid)
+                .HasConstraintName("FK_RoomRef_Members");
+
+            entity.HasOne(d => d.Room).WithMany(p => p.RoomRefs)
+                .HasForeignKey(d => d.Roomid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RoomRef_Room");
+        });
+
         modelBuilder.Entity<SubProjectBridge>(entity =>
         {
             entity.ToTable("subProjectBridges");
@@ -631,6 +746,22 @@ public partial class MedSysContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.TrackingLists)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_TrackingList_Products");
+        });
+
+        modelBuilder.Entity<Twaddress>(entity =>
+        {
+            entity.ToTable("TWAddress");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.City)
+                .HasMaxLength(10)
+                .HasColumnName("city");
+            entity.Property(e => e.Road)
+                .HasMaxLength(200)
+                .HasColumnName("road");
+            entity.Property(e => e.SiteId)
+                .HasMaxLength(50)
+                .HasColumnName("site_id");
         });
 
         OnModelCreatingPartial(modelBuilder);

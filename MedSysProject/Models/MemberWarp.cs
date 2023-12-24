@@ -30,5 +30,11 @@ namespace MedSysProject.Models
         [DisplayName("會員公司統編")]
         public int? TaxId { get { return this._member.TaxId; } set { this.member.TaxId = value; } }
         public string MemberImage { get { return this._member.MemberImage; } set { this.member.MemberImage = value; } }
+        public int StatusId { get { return (int)this._member.StatusId; } set { this.member.StatusId = value; } }
+        public string? VieifiedId { get { return this._member.VieifiedId; } set { this.member.VieifiedId = value; } }
+        public int? MemberCityDistrictRoadId { get { return this._member.MemberCityDistrictRoadId; } set { this.member.MemberCityDistrictRoadId = value; } }
+        public bool? GoogleLogin { get { return this._member.GoogleLogin; } set { this.member.GoogleLogin = value; } }
+        public bool? FacebookLogin { get { return this._member.FacebookLogin; } set { this.member.FacebookLogin = value; } }
+        public bool? LineLogin { get { return this._member.LineLogin; } set { this.member.LineLogin = value; } }
     }
 }
