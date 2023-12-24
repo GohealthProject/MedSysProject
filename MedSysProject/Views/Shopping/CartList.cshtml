@@ -7,7 +7,7 @@
 }
 
 <div class="container" style="margin-top:30px">
-    <img src="~/img/Login2.png" style="margin:auto"/>
+    <img src="~/img/ShoppingIndex.jpg" class="img-fluid" alt="..." style="height:200px; width:100%;object-fit:cover">
     <div style="margin-top:20px"><span class="fs-1">購物車</span></div>
         
 <table class="table">
@@ -105,8 +105,16 @@
                      <input type="hidden" name="@Key" value="@order[Key]" />
             }       
         }
-        <input type="submit" value="送出" />
-        <input type="submit" value="綠界測試" />
+        <p>運送方式</p>
+        <hr />
+        <span class="fs-3"><input type="radio" value="中華郵政" name="ship" />中華郵政</span>
+        <span class="fs-3"><input type="radio" value="黑貓宅急便" name="ship" />黑貓宅急便</span>
+        <span class="fs-3"><input type="radio" value="全球快遞" name="ship" />全球快遞</span>
+        <span class="fs-3"><input type="radio" value="新竹物流" name="ship" />新竹物流</span>
+        <span class="fs-3"><input type="radio" value="嘉里大榮" name="ship" />嘉里大榮</span>
+        <span class="fs-3"><input type="radio" value="蝦皮店到店" name="ship" />蝦皮店到店</span>
+        <br />
+        <input class="btn btn-info mt-3"type="submit" value="結帳" />
     </form>
 </div>
 

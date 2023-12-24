@@ -303,7 +303,7 @@ namespace MedSysProject.Controllers
             o.DeliveryDate = DateTime.Now.AddDays(3);
             o.MemberId = m.MemberId;
             o.PayId = 1;
-            o.ShipId = 1;
+            o.ShipId = 2;
             o.StateId = 13;
             o.MerchantTradeNo = orderId;
             _db.Orders.Add(o);
