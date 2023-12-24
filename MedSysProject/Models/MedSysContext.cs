@@ -214,6 +214,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.EmployeeBirthDate).HasColumnType("date");
             entity.Property(e => e.EmployeeClassId).HasColumnName("EmployeeClassID");
+            entity.Property(e => e.EmployeeConnectionId).HasColumnName("EmployeeConnectionID");
             entity.Property(e => e.EmployeeEmail)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -311,6 +312,7 @@ public partial class MedSysContext : DbContext
             entity.HasKey(e => e.MemberId).HasName("PK_Member");
 
             entity.Property(e => e.MemberId).HasColumnName("memberId");
+            entity.Property(e => e.ConnectionId).HasColumnName("ConnectionID");
             entity.Property(e => e.IsVerified).HasColumnName("isVerified");
             entity.Property(e => e.MemberAccount)
                 .HasMaxLength(50)

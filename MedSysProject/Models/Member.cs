@@ -47,6 +47,8 @@ public partial class Member
 
     public bool? LineLogin { get; set; }
 
+    public string ConnectionId { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new List<HealthReport>();

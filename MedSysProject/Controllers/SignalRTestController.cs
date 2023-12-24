@@ -30,6 +30,9 @@ namespace MedSysProject.Controllers
             var member = _db.Members.Find(MemberId);
             var employee = _db.Employees.Find(EmployeeId);
 
+            COnlineUser.onlinememberid = 0;
+            COnlineUser.onlineemployeeid = 0;
+
             if (member == null && employee == null)
             {
                 return NotFound();
@@ -40,11 +43,13 @@ namespace MedSysProject.Controllers
             }
             else if (member != null)
             {
+                COnlineUser.onlinememberid = (int)MemberId;
                 ViewBag.MemberId = MemberId;
                 return PartialView(member);
             }
             else if (employee != null)
             {
+                COnlineUser.onlineemployeeid = (int)EmployeeId;
                 ViewBag.EmployeeId = EmployeeId;
                 return PartialView(employee);
             }

@@ -23,6 +23,8 @@ public partial class Employee
 
     public byte[] EmployeePhoto { get; set; }
 
+    public string EmployeeConnectionId { get; set; }
+
     public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

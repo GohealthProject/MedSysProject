@@ -16,60 +16,139 @@ namespace MedSysProject.Hubs
             _hubContext = hubContext;
         }
 
+        public static List<int> MemberIDList = new List<int>();
         public static List<int> EmployeeIDList = new List<int>();
+        public static List<string> ConnectionIDList = new List<string>();
+        int memberID;
+        int employeeID;
 
-        /// <summary>
-        /// 連線事件
-        /// </summary>
-        /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
 
-
-            //看Session，SK_EMPLOYEE_LOGIN有哪些員工在線上
-            var employee = JsonConvert.DeserializeObject<Employee>(Context.GetHttpContext().Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN));
-            if (employee != null)
+            var userisMember = _db.Members.FirstOrDefault(u => u.MemberId == COnlineUser.onlinememberid);
+            var userisEmployee = _db.Employees.FirstOrDefault(u => u.EmployeeId == COnlineUser.onlineemployeeid);
+            if (userisMember != null || userisEmployee != null)
             {
-                //如果有，就加入EmployeeIDList
-                EmployeeIDList.Add(employee.EmployeeId);
-                //並且將員工的連線ID，加入到Groups中
-                await Groups.AddToGroupAsync(Context.ConnectionId, employee.EmployeeId.ToString());
+                if (userisMember != null && userisEmployee == null)
+                {
+                    if (!MemberIDList.Contains(userisMember.MemberId))
+                        MemberIDList.Add(userisMember.MemberId);
 
-                //將Groups導入到前端
-                await _hubContext.Clients.All.SendAsync("RefreshEmployeeOnlineList", EmployeeIDList);
+                    ConnectionIDList.Add(Context.ConnectionId);
+                    memberID = userisMember.MemberId;
 
+                    //更新連線ID列表
+                    userisMember.ConnectionId = Context.ConnectionId;
+                    _db.SaveChanges();
+
+                    //string json = JsonConvert.SerializeObject(member);
+                    //await _hubContext.Clients.All.SendAsync("UpdateMemberList", member.MemberId, member.MemberName, json);
+
+                    string json = "";
+                    foreach (var item in EmployeeIDList)
+                    {
+                        var id = _db.Employees.Find(item);
+                        var employeeidandname = new { id.EmployeeId, id.EmployeeName,id.EmployeeConnectionId };
+                        json += JsonConvert.SerializeObject(employeeidandname);
+                        if (item != EmployeeIDList.Last())
+                            json += ",";
+                    }
+                    json = "[" + json + "]";
+
+                    //string json = JsonConvert.SerializeObject(employeeidandname);
+                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+
+
+                }
+                else if (userisMember == null && userisEmployee != null)
+                {
+                    if (!EmployeeIDList.Contains(userisEmployee.EmployeeId))
+                    {
+                        EmployeeIDList.Add(userisEmployee.EmployeeId);
+                    }
+
+                    ConnectionIDList.Add(Context.ConnectionId);
+                    employeeID = userisEmployee.EmployeeId;
+
+                    //更新連線ID列表
+                    userisEmployee.EmployeeConnectionId = Context.ConnectionId;
+                    _db.SaveChanges();
+
+                    string json = "";
+                    foreach (var item in EmployeeIDList)
+                    {
+                        var id = _db.Employees.Find(item);
+                        var employeeidandname = new { id.EmployeeId, id.EmployeeName };
+                        json += JsonConvert.SerializeObject(employeeidandname);
+                        if (item != EmployeeIDList.Last())
+                            json += ",";
+                    }
+                    json = "[" + json + "]";
+
+                    //string json = JsonConvert.SerializeObject(employeeidandname);
+                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+
+                }
             }
-
-            //如果中途有員工上線，就將該員工的名字和ID，加入到聊天列表中
-            await _hubContext.Clients.All.SendAsync("AddEmployee", employee.EmployeeId, employee.EmployeeName);
 
             await base.OnConnectedAsync();
         }
 
-        /// <summary>
-        /// 離線事件
-        /// </summary>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        public override async Task OnDisconnectedAsync(Exception ex)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //看Session，SK_EMPLOYEE_LOGIN有哪些員工在線上
-            var employee = JsonConvert.DeserializeObject<Employee>(Context.GetHttpContext().Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN));
-            if (employee != null)
+            var userisMember = _db.Members.FirstOrDefault(u => u.MemberId == COnlineUser.onlinememberid);
+            var userisEmployee = _db.Employees.FirstOrDefault(u => u.EmployeeId == COnlineUser.onlineemployeeid);
+            if (userisMember != null || userisEmployee != null)
             {
-                //如果有，就將該員工的連線ID，從Groups中移除
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, employee.EmployeeId.ToString());
-                //並且將員工從EmployeeIDList中移除
-                EmployeeIDList.Remove(employee.EmployeeId);
+                if (userisMember != null && userisEmployee == null)
+                {
+                    MemberIDList.Remove(userisMember.MemberId);
+                    ConnectionIDList.Remove(Context.ConnectionId);
+                    memberID = userisMember.MemberId;
+
+                    //更新連線ID列表
+                    userisMember.ConnectionId = null;
+                    _db.SaveChanges();
+
+                    //string json = JsonConvert.SerializeObject(member);
+                    //await _hubContext.Clients.All.SendAsync("UpdateMemberList", member.MemberId, member.MemberName, json);
+
+
+                }
+                else if (userisMember == null && userisEmployee != null)
+                {
+                    var empconnection = _db.Employees.FirstOrDefault(e => e.EmployeeConnectionId == Context.ConnectionId);
+
+                    EmployeeIDList.Remove(empconnection.EmployeeId);
+                    ConnectionIDList.Remove(Context.ConnectionId);
+                    employeeID = empconnection.EmployeeId;
+
+
+
+                    //更新連線ID列表
+                    userisEmployee.EmployeeConnectionId = null;
+                    _db.SaveChanges();
+
+                    string json = "";
+                    foreach (var item in EmployeeIDList)
+                    {
+                        var id = _db.Employees.Find(item);
+                        var employeeidandname = new { id.EmployeeId, id.EmployeeName,id.EmployeeConnectionId };
+                        json += JsonConvert.SerializeObject(employeeidandname);
+                        if (item != EmployeeIDList.Last())
+                            json += ",";
+                    }
+                    json = "[" + json + "]";
+
+                    //string json = JsonConvert.SerializeObject(employeeidandname);
+                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+                }
             }
 
-            //如果中途有員工離線，就將該員工的名字和ID，從聊天列表中移除
-            await _hubContext.Clients.All.SendAsync("RemoveEmployee", employee.EmployeeId, employee.EmployeeName);
-
-            await base.OnDisconnectedAsync(ex);
+            await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string userId,string user, string message)
+        public async Task SendMessage(string userId, string user, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", userId, user, message);
         }
