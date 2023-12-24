@@ -32,7 +32,25 @@ namespace MedSysProject.Controllers
            
             return View();
         }
+            public IActionResult editAll()
+        {
+            var form = Request.Form;
+            var did = form["detailid"];
+            string id = form["detailid"];
+            string result = form["result"];
+            var temp = id.Split(',');
+            var temp2 = result.Split(",");
+            for (int i = 0;i<= id.Split(',').Length-1;i++)
+            {
+                
+                int t = int.Parse(temp[i]);
+                ReportDetail rd = _context.ReportDetails.Where(p => p.ReportDetailId.Equals(t)).FirstOrDefault();
+                rd.Result = temp2[i];
+            }
+            _context.SaveChanges();
 
+            return View();
+        }
             public IActionResult editreport()
         {
             var form = Request.Form;
@@ -60,9 +78,7 @@ namespace MedSysProject.Controllers
 
         public IActionResult members(int id)
         {
-            //IEnumerable<ReportDetail> datas = null;
-            //List<CReportWrap> datas2 = null;
-            //datas2 = new CReportWrap().Report();
+          
             IQueryable<Member> datas = null;
             
             if (id == 0)
@@ -75,10 +91,7 @@ namespace MedSysProject.Controllers
                         where s.MemberId == id
                            select s;
                     }
-          
-            //_context.Members.Load();
-            //var datass = _context.Members.Include(q => q.HealthReports).SelectMany(p => new {p,p.HealthReports});
-
+        
 
             return Json(datas);
 
@@ -309,51 +322,11 @@ namespace MedSysProject.Controllers
             ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
             _context.EcpayOrders.Add(ecpayOrder);
             _context.SaveChanges();
-
-
-            //var data = new Dictionary<string, string>();
-            //foreach (string key in id.Keys)
-            //{
-            //    data.Add(key, id[key]);
-            //}
-
-            //string temp = id["MerchantTradeNo"]; //寫在LINQ(下一行)會出錯，
-            //var ecpayOrder = _context.EcpayOrders.Where(m => m.MerchantTradeNo == temp).FirstOrDefault();
-            //if (ecpayOrder != null)
-            //{
-            //    ecpayOrder.RtnCode = int.Parse(id["RtnCode"]);
-            //    if (id["RtnMsg"] == "Succeeded") 
-            //        ecpayOrder.RtnMsg = "已付款";
-            //    //ecpayOrder.PaymentDate = Convert.ToDateTime(id["PaymentDate"]);
-            //    //ecpayOrder.SimulatePaid = int.Parse(id["SimulatePaid"]);
-            //    _context.SaveChanges();
-            //}
             return RedirectToAction("Accout/Index");//MemberCenter
-            //return View("EcpayView", data);
+           
         }
 
-        //public IActionResult aaa()
-        //{
-        //    using (var httpclient = _httpClientFactory.CreateClient())
-        //    {
-        //        string url = "https://localhost:7078/api/Email";
-
-        //        EmailData email = new EmailData();
-        //        email.Address = Memberemail;
-
-        //        email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount, total);
-        //        email.Subject = "訂單成立";
-        //        string emailjson = JsonSerializer.Serialize(email);
-        //        HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
-        //        HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
-        //    }
-        //    var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
-
-
-        //    return RedirectToAction("OrderList", new { page = 999 });
-        //    return View();
-
-        //}
+      
 
         public static string EmailText(string TradeNo, string proname, string proCount, string total)
         {
@@ -403,75 +376,7 @@ namespace MedSysProject.Controllers
         //    return View("EcpayView", data);
         //}
 
-        //public IActionResult paySussess(IFormCollection id)
-        //{
-        //    var data = new Dictionary<string, string>();
-        //    foreach (string key in id.Keys)
-        //    {
-        //        data.Add(key, id[key]);
-        //    }
-        //    var order = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
-        //    order.TradeNo = data["TradeNo"];
-        //    order.StateId = 14;
-        //    _db.SaveChanges();
-        //    string Memberemail = data["CustomField1"];
-        //    string ProName = data["CustomField2"];
-        //    string ProCount = data["CustomField3"];
-        //    string total = data["CustomField4"];
-        //    string proID = "";
-        //    List<int> proList = new List<int>();
-        //    var Pid = ProName.Split("#").ToList();
-        //    foreach (var item in Pid)
-        //    {
-        //        proList.Add(Int32.Parse(item));
-        //    }
-        //    var Ps = _db.Products.Where(n => proList.Contains(n.ProductId)).ToList();
-        //    foreach (var item in Ps)
-        //    {
-        //        proID += item.ProductName + "#";
-        //    }
-        //    using (var httpclient = _httpClientFactory.CreateClient())
-        //    {
-        //        string url = "https://localhost:7078/api/Email";
-
-        //        EmailData email = new EmailData();
-        //        email.Address = Memberemail;
-
-        //        email.Body = CUtilityClass.EmailText(data["MerchantTradeNo"], proID, ProCount, total);
-        //        email.Subject = "訂單成立";
-        //        string emailjson = JsonSerializer.Serialize(email);
-        //        HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
-        //        HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
-        //    }
-        //    var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
-
-
-        //    return RedirectToAction("OrderList", new { page = 999 });
-        //}
-
-        //public static string EmailText(string TradeNo, string proname, string proCount, string total)
-        //{
-        //    string html = "";
-        //    List<string> proList = new List<string>();
-        //    List<string> proCountList = new List<string>();
-        //    proCountList = proCount.Split('#').ToList();
-        //    total = Int32.Parse(total).ToString("N0");
-        //    proList = proname.Split('#').ToList();
-        //    List<Product> products = new List<Product>();
-
-        //    html = "<h2>你好！很高興您能來我們網站消費。</h2>";
-        //    html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
-        //    html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
-        //    for (int i = 0; i < proList.Count - 1; i++)
-        //    {
-        //        html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + proList[i] + "</td><td style='padding:8px;'>" + proCountList[i] + "</td></tr>";
-        //    }
-        //    html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>總價格:<td style='padding:8px;'> " + total + "元<td></tr>";
-        //    html += "</tbody></table>";
-        //    html += "期待你能回到我們網站再次消費，謝謝！<br />";
-        //    html += "MedSys團隊敬上";
-        //    return html;
-        //}
+ 
 
     }
 }

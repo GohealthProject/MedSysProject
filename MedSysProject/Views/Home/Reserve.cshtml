@@ -119,11 +119,11 @@
 
 </style>
 
-<h1 class="container">Reserve</h1>
+<h1 class="container">預約</h1>
 <!doctype html>
 
-<h1 class="container">Reserve @ViewBag.member @ViewBag.mid</h1>
-
+@*<h1 class="container">Reserve @ViewBag.member @ViewBag.mid</h1>
+*@
 <html lang="zh-hant">
 
 <body>
@@ -198,7 +198,7 @@
             
 
     </div>
-    <button id="tttt">123</button>
+        <button hidden id="tttt">123</button>
         @*預約詳細*@
         <div class="modal" tabindex="-1" id="detail">
             <div class="modal-dialog">
@@ -208,9 +208,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id="rsdiv" class="container-fluid"></div>
-                        <form class="form">
-                            
+@*                        <div id="rsdiv" class="container-fluid"></div>*@ 
+                       <button id="demo" class="btn btn-success">Demo</button>
+                       <form class="form">
                             <label class="mb-2 mt-2">
                                 預約日期:
                                 <input type="date"
@@ -227,10 +227,10 @@
                             <p class="d-none" id="ok">
                                 <img src="~/img/icon/check.png"/>"
                             </p>
-                            <select class="form-select col-12 mb-2" aria-label="Default select example">
+                            <select id="payment" class="form-select col-12 mb-2" aria-label="Default select example">
                                 <option selected>付款方式</option>
                                 <option value="1">付現</option>
-                                <option value="2">刷卡</option>
+                                <option value="2">信用卡</option>
 
                             </select>
 
@@ -264,8 +264,8 @@
                     <h5 class="modal-title" id="reservelbl">確定要預約嗎?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" >
-                    預約日期:2023/12/01 付費方式:現場付款
+                <div class="modal-body" id="d2024">
+                    預約日期:2024/01/02 付費方式:信用卡
                 </div>
                 <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal" id="reservesubmit">確定</button>
@@ -368,7 +368,7 @@
         <input type="text" value="@jsonreportdetail" id="reportdetail" name="reportdetail">
     </form>
    @* <button id="ttb">123</button>*@
-    <form  id="tform" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+    <form hidden id="tform" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
         <!--step2 : 收到後端的值印出來-->
         @foreach (var key in @Model.Keys.ToList())
         {
@@ -384,7 +384,7 @@
        @* TradeDesc.value = `健檢套餐:${@pp.PlanName}`
         ItemName.value = @pp.PlanName*@
 
-        <button type="submit" id="checkoutBtn">送出</button>
+        <button hidden type="submit" id="checkoutBtn">送出</button>
     </form>
 
     <form hidden id="formpay" name="form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
@@ -406,7 +406,7 @@
 
         
         
-        <button type="submit" id="checkoutBtn">送出</button>
+        <button  type="submit" id="checkoutBtn">送出</button>
     </form>
 
 </body>
@@ -446,19 +446,25 @@
         var formData = new FormData();
         var date = new Date()
         formData.append("date", bday.value);
-        fetch('@Url.Content("~/Home/DateCheck")', {
-            method: "POST",
-            body: formData,
+        //Url.Content("~/Home/DateCheck")
+        fetch((`https://localhost:7203/Home/DateCheck/${bday.value}`), {
+            method: "GET",
+            //body: formData,
         })
             .then((response) => {
-                if (response.ok) {
-                    alert("新增成功");
-                    //location.href = '@Url.Content("~/home/members")';
-                }
-                else
-                {
-                    alert("0");
-                }
+                console.log(response)
+                return response.json()
+              
+            }).then((response) => {
+                console.log(response)
+  
+               //var datee = JSON.stringify(response)
+                //console.log(datee)
+                   if (response == "YES")
+              alert("YES")
+                if (response == "NO")
+              alert("NO")
+                console.log(response)
             })
             .catch((error) => console.error("Error:", error))
             .then((response) => console.log("Success:", response));
@@ -482,7 +488,7 @@
 
     
 
-    alert("0")
+    alert("bdaychange")
     })
     //bday.selectionEnd = datetime.toUTCString()
 
@@ -536,7 +542,24 @@
 
     
    }
+    ////////////1ST確定///////
+    var rsdiv = document.querySelector("#rsdiv")
+    var demo = document.querySelector("#demo")
+    demo.addEventListener("click", () => {
+        var payment = document.querySelector("#payment")
+        var floatingInput = document.querySelector("#floatingInput")
+        var floatingPassword = document.querySelector("#floatingPassword")
+        var d2024 = document.querySelector("#d2024")
+        floatingInput.value = "night90810@gmail.com"
+        floatingPassword.value = "Test"
+        payment.selectedIndex = 2;
+        
+        bday.value ="2024-01-02"
+        d2024.innerHTML = `預約日期:${bday.value} 付費方式:${payment[payment.value].text}`
+        console.log(payment)
 
+        
+    })
 
   ////reservesubmit////
     var rsvsbm = document.querySelector("#reservesubmit")
@@ -623,7 +646,7 @@
             body: formData,
         })
             .then((response) => {
-                if (response.ok) {
+                if (response.json == 0) {
                     alert("新增成功");
                     //location.href = '@Url.Content("~/home/members")';
                 }
@@ -785,7 +808,7 @@
     }
 
 
-        alert("00")
+        //alert("00")
         res(temp,dd,@totalprice)
         
     })

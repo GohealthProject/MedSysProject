@@ -242,9 +242,44 @@
    
    alledit.addEventListener("click",()=>{
         var allvalue = tableD.querySelectorAll("tr")
-        //console.log(allvalue[i].childNodes[1].innerText)
+        var txt = tableD.querySelectorAll("#text")
+        var ttd = tableD.querySelectorAll(".reportdetailID")
+        console.log(allvalue[1].childNodes[1].innerText)
+        console.log(txt[0].value)
+        var detailid = new Array();
+        var result = new Array()
+        
+        for(var i = 0; i<=txt.length-1;i++)
+        {
+        
+            result.push(txt[i].value)
+        }
+
+        for (var i = 1; i <= ttd.length-1; i++) {
+
+            detailid.push(ttd[i].innerText)
+        }
+
+        editAll(detailid, result)
+        ttt.ajax.reload();
 
    })
+    async function editAll(detailid, result) {
+        let urlall = `/Transaction/editAll`
+
+        let form = new FormData();
+        form.append("detailid", detailid);
+        form.append("result", result)
+
+        const response = await fetch(urlall, {
+            method: "POST",
+            body: form,
+        }).then(alert("已修改"));
+
+        console.log(response.status);
+        console.log(response.statusText);
+    }
+
 
    ///////送出/////////
     async function send(event) {
@@ -301,10 +336,10 @@
         "language": {
             "processing": "處理中...",
             "loadingRecords": "載入中...",
-            "lengthMenu": "每頁 _MENU_ 位會員",
-            "zeroRecords": "沒有符合的會員",
-            "info": "顯示第 _START_ 至 _END_ 位會員，共 _TOTAL_ 位",
-            "infoEmpty": "顯示第 0 至 0 位會員，共 0 位",
+            "lengthMenu": "每頁 _MENU_ 筆資料",
+            "zeroRecords": "沒有符合的資料",
+            "info": "顯示第 _START_ 至 _END_ 筆資料，共 _TOTAL_ 筆",
+            "infoEmpty": "顯示第 0 至 0 筆資料，共 0 位",
             "infoFiltered": "(從 _MAX_ 項結果中過濾)",
             "infoPostFix": "",
             "search": "搜尋:",
