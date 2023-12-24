@@ -420,7 +420,17 @@
 
             // count++
         }
+        async function loadItem() {
+            let url = `/Home/loadItem`
+            const response = await fetch(url, {
+                method: "GET",
+                body: "ok",
+            });
 
+            console.log(response.status);
+            console.log(response.statusText);
+        }
+        
         async function addItem(id,price){
             let url = `/Home/addItem`
 
@@ -453,6 +463,7 @@
             Pid.value = 6;
             console.log(form.value)
             console.log(total.innerHTML)
+            loadItem();
             form.submit();
 
         }

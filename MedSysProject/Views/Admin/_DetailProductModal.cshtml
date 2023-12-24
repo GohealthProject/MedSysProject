@@ -1,0 +1,79 @@
+﻿@model MedSysProject.Models.CProductsWrap
+
+<div class="container mt-5">
+    <!-- 添加一個關閉按鈕 -->
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <h1>產品詳細資訊</h1>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>產品名稱</th>
+                        <td>@Model.WrappedProductName</td>
+                    </tr>
+                    <tr>
+                        <th>單價</th>
+                        <td>@Model.WrappedUnitPrice</td>
+                    </tr>
+                    <tr>
+                        <th>核准證號</th>
+                        <td>@Model.WrappedLicense</td>
+                    </tr>
+                    <tr>
+                        <th>有效成分</th>
+                        <td>@Model.WrappedIngredient</td>
+                    </tr>
+                    <tr>
+                        <th>產品描述</th>
+                        <td>@Model.WrappedDescription</td>
+                    </tr>
+                    <tr>
+                        <th>庫存量</th>
+                        <td>@Model.WrappedUnitsInStock</td>
+                    </tr>
+                    <tr>
+                        <th>上架狀態</th>
+                        <td>@(Model.WrappedDiscontinued == true ? "上架中" : "已下架")</td>
+                    </tr>
+                    <tr>
+                        <th>產品圖片</th>
+                        <td>
+                            @foreach (var imagePath in Model.FimagePaths)
+                            {
+                                <img src="@Url.Content("~/img-product/" + imagePath)" alt="Product Image" style="max-width: 100px; max-height: 100px;">
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>產品分類</th>
+                        <td>
+                            <div class="form-group">
+                                <label>產品分類</label>
+                                <ul>
+                                    @foreach (var category in ViewBag.Categories ?? Enumerable.Empty<ProductsCategory>())
+                                    {
+                                        if (Model.SelectedCategories.Contains(category.CategoriesId))
+                                        {
+                                            <li>@category.CategoriesName</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <a href="@Url.Action("Product", "Admin")" class="btn btn-secondary">返回產品一覽表</a>
+        </div>
+    </div>
+</div>
+
+</div>

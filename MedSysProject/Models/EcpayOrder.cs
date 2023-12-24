@@ -22,12 +22,18 @@ public partial class EcpayOrder
     public int? TradeAmt { get; set; }
 
     public DateTime? PaymentDate { get; set; }
+    
+    public string TradeDesc { get; set; }
+    public string ReturnURL { get; set; }
+    public string OrderResultURL { get; set; }
+
 
     public string PaymentType { get; set; }
 
     public string PaymentTypeChargeFee { get; set; }
 
     public string TradeDate { get; set; }
+    public string ItemName { get; set; }
 
     public int? SimulatePaid { get; set; }
 }

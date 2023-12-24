@@ -35,10 +35,12 @@ namespace MedSysProject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly MedSysContext _context;
-        public HomeController(ILogger<HomeController> logger, MedSysContext medSysContext)
+        System.Net.Http.IHttpClientFactory _httpClientFactory;
+        public HomeController(ILogger<HomeController> logger, MedSysContext medSysContext, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _context = medSysContext;
+            _httpClientFactory = httpClientFactory;
         }
 
         public IActionResult Index()
@@ -530,15 +532,98 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
         ///// ====end這裡是partialview區=====
-
-
-        //[HttpPost]
-        public IActionResult Reserve(IFormCollection item)
+        public IActionResult DateCheck()
         {
-              ///////////////////todo controll處理 綠界所需/////////
-       //TradeDesc.value = `健檢套餐:${ @pp.PlanName}`
-       // ItemName.value = @pp.PlanName *@
+            var form = Request.Form;
+            string date =  form["date"];
+            var taget =_context.Reserves.Where(p => p.ReserveDate == date).Count();
+            if (taget >5) 
+            {
+                return Ok("OK");
+            }
+            else
+            {
+                return Json("NO");
+            }
+
+
+        }
+
+        public static string EmailText2(string TradeNo, string proname, string proCount, string total)
+        {
+            string html = "";
+            List<string> proList = new List<string>();
+            List<string> proCountList = new List<string>();
+            proCountList = proCount.Split('#').ToList();
+            total = Int32.Parse(total).ToString("N0");
+            proList = proname.Split('#').ToList();
+            List<Product> products = new List<Product>();
+
+            html = "<h2>你好！很高興您能來我們網站消費。</h2>";
+            html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
+            html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
+            for (int i = 0; i < proList.Count - 1; i++)
+            {
+                html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + proList[i] + "</td><td style='padding:8px;'>" + proCountList[i] + "</td></tr>";
+            }
+            html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>總價格:<td style='padding:8px;'> " + total + "元<td></tr>";
+            html += "</tbody></table>";
+            html += "期待你能回到我們網站再次消費，謝謝！<br />";
+            html += "MedSys團隊敬上";
+            return html;
+        }
+        public IActionResult send()
+        {
+            MemberWarp m = new MemberWarp();
+            string? temp = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+            if (!string.IsNullOrEmpty(temp))
+            {
+                m = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(temp);
+            }
+            var temp1 = HttpContext.Session.GetString(CDictionary.SK_ECPAY);
+            var ecpay = System.Text.Json.JsonSerializer.Deserialize<EcpayOrder>(temp1);
+
+            using (var httpclient = _httpClientFactory.CreateClient())
+            {
+                string url = "https://localhost:7078/api/Email";
+
+                EmailData email = new EmailData();
+                email.Address = "waynewang1990@hotmail.com";          //m.MemberEmail;
+
+                email.Body = EmailText2(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
+                email.Subject = "訂單成立";
+                string emailjson = System.Text.Json.JsonSerializer.Serialize(email);
+                HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpclient.PostAsync(url, content).Result;
+            }
+
+
+            return Ok();
+            //return RedirectToAction("MemberCenter", "Accout");
             
+        }
+            //[HttpPost]
+            public IActionResult Reserve(IFormCollection item)
+        {
+           
+            ///////////////////todo OrderURL轉跳 MAIL 後台一鑑 Modal內容修改 日曆效果////////
+            string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
+            List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
+            int? totalprice = 0;
+            foreach (var items in list)
+            {
+                totalprice += items.ItemPrice;
+
+            }
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_TOTALPRICE, totalprice.ToString());
+
+            var p = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
+            var plan = System.Text.Json.JsonSerializer.Deserialize<Plan>(p);
+            
+            ViewBag.planname = plan.PlanName;
+            ViewBag.planid = plan.PlanId;
+           
+
             var temp = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             var ss = System.Text.Json.JsonSerializer.Deserialize<MemberWarp>(temp);
             ViewBag.member = ss.MemberId;
@@ -551,29 +636,31 @@ namespace MedSysProject.Controllers
             var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
                 //需填入你的網址
                 var website = $"https://localhost:7203/";
-                var order = new Dictionary<string, string>
+            var date = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            var order = new Dictionary<string, string>
+               
     {
         //綠界需要的參數
 
         //必填
         { "MerchantID",  "3002599"},//特店編號
         { "MerchantTradeNo",  orderId},//特店訂單編號
-        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},//特店交易時間
+        { "MerchantTradeDate", date },//特店交易時間
         { "PaymentType",  "aio"},//交易類型(固定aio)
-        { "TotalAmount",  "1450"},//交易金額
-        { "TradeDesc",  "Test"},//交易描述
-        { "ItemName",  "測試商品"},//商品名稱
-        { "ReturnURL",  $"{website}/api/Ecpay/AddPayInfo"},//付款完成通知回傳網址
+        { "TotalAmount",  totalprice.ToString()},//交易金額
+        { "TradeDesc",  "健檢套餐"+plan.PlanName},//交易描述
+        { "ItemName",  plan.PlanName},//商品名稱
+        { "ReturnURL",  $"{website}api/Ecpay/AddPayInfo"},//付款完成通知回傳網址
         { "ChoosePayment",  "ALL"},//選擇預設付款方式
         { "EncryptType",  "1"},//CheckMacValue加密類型
 
         //選填
-        { "ExpireDate",  "3"},//分期
+        //{ "ExpireDate",  "3"},//分期
         { "CustomField1",  ""},//自訂名稱欄位1
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},
-        { "OrderResultURL", $"{website}Home/Index"},
+        { "OrderResultURL", $"{website}Transaction/payInfo"},
         //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},//Client端回傳付款結果網址
         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
         //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
@@ -591,8 +678,16 @@ namespace MedSysProject.Controllers
             ViewBag.mid = item["Mid"];
             ViewBag.pid = item["Pid"];
             
-            //ViewBag.test = "test123";
-            //ViewBag.item = item;
+         EcpayOrder eo = new EcpayOrder();
+            eo.MerchantTradeNo = orderId;
+            eo.TradeAmt = totalprice;
+            eo.ItemName = plan.PlanName;
+            eo.TradeDate = date;
+            eo.ReturnURL = $"{website}api/Ecpay/AddPayInfo";
+            eo.OrderResultURL = $"{website}Home/Index";
+            eo.TradeDesc = "健檢套餐" + plan.PlanName;
+            string jeo = System.Text.Json.JsonSerializer.Serialize<EcpayOrder>(eo);
+            HttpContext.Session.SetString(CDictionary.SK_ECPAY, jeo);
 
             return View(order);
         }
@@ -895,8 +990,7 @@ namespace MedSysProject.Controllers
             string json =HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
 
-
-
+            
             return Ok();
         }
 
@@ -917,7 +1011,14 @@ namespace MedSysProject.Controllers
             string json2 = System.Text.Json.JsonSerializer.Serialize(list);
             HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_ITEMLIST, json2);
 
-          
+            int? totalprice = 0;
+            foreach(var items in list)
+            {
+                totalprice += items.ItemPrice;
+
+            }
+            HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_TOTALPRICE, totalprice.ToString());
+
             return Ok();
         }
         public IActionResult removeItem(int id)
@@ -942,8 +1043,10 @@ namespace MedSysProject.Controllers
         public IActionResult rsv(/*int id*/)
         {
             var form = Request.Form;
-            var id = int.Parse(form["mid"]);
-            var date = form["date"];
+            int id = int.Parse(form["mid"]);
+            string date = form["date"];
+            string price = form["price"];
+            //HttpContext.Session.SetString(CDictionary.SK_CUSTOMER_TOTALPRICE,price);
 
             var temp = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
             var p = System.Text.Json.JsonSerializer.Deserialize<Plan>(temp);
@@ -956,7 +1059,7 @@ namespace MedSysProject.Controllers
             rs.PaymentStatus = 0;
 
             _context.Reserves.Add(rs);
-            _context.SaveChanges();
+            //_context.SaveChanges();
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
             int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n => n.ReserveId).LastOrDefault().ReserveId;
@@ -969,16 +1072,16 @@ namespace MedSysProject.Controllers
                 _context.ReservedSubs.Add(rss);
             }
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
             HealthReport hr = new HealthReport();
             hr.MemberId = id;
             hr.PlanId = pid;
-            hr.ReportDate = null;
+            hr.ReportDate = null;//預設
             hr.ReserveId = rid;
             hr.Paymentstatus = 0;
 
             _context.HealthReports.Add(hr);
-            _context.SaveChanges();
+            //_context.SaveChanges();
             int hrid = _context.HealthReports.Where(p => p.MemberId == id).OrderBy(n => n.ReportId).Last().ReportId;
             foreach (var item in list)
             {
@@ -987,7 +1090,7 @@ namespace MedSysProject.Controllers
                 rdt.ItemId = item.ItemId;
                 _context.ReportDetails.Add(rdt);
             }
-            _context.SaveChanges();
+            //_context.SaveChanges();
             return Ok();
         }
 
@@ -1040,6 +1143,9 @@ namespace MedSysProject.Controllers
 
             return Ok();
         }
+
+
+      
 
     }
 }

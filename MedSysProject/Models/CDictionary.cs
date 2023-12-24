@@ -21,5 +21,9 @@
 
         public static readonly string SK_CUSTOMER_PLAN = "SK_CUSTOMER_PLAN";
 
+        public static readonly string SK_CUSTOMER_TOTALPRICE = "SK_CUSTOMER_TOTALPRICE";
+
+        public static readonly string SK_ECPAY = "SK_ECPAY";
+
     }
 }
