@@ -262,11 +262,13 @@ namespace MedSysProject.Controllers
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
                                    .Include(blog => blog.ArticleClass)
+                                   .Include(blog=>blog.Employee.EmployeeClass)
                             select blog;
                 }
                 else
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee).Include(blog => blog.ArticleClass)
+                            .Include (blog => blog.Employee.EmployeeClass)
                             where blog.Title.Contains(input.txtKeyword) ||
                                   blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
                                   blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword)
@@ -279,6 +281,7 @@ namespace MedSysProject.Controllers
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
                           .Include(blog => blog.ArticleClass)
+                          .Include(blog=>blog.Employee.EmployeeClass)
                             where blog.EmployeeId == id
                             select blog;
                 }
@@ -286,6 +289,7 @@ namespace MedSysProject.Controllers
                 {
                     blogs = from blog in _db.Blogs.Include(blog => blog.Employee)
                                   .Include(blog => blog.ArticleClass)
+                                  .Include(blog=>blog.Employee.EmployeeClass)
                             where (blog.EmployeeId == id) && (blog.Title.Contains(input.txtKeyword) ||
                                                           blog.Employee.EmployeeName.Contains(input.txtKeyword) ||
                                                           blog.ArticleClass.BlogCategory1.Contains(input.txtKeyword))

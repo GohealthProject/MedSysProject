@@ -42,7 +42,15 @@
                         @{
                             if (reply.EmployeeId == null)
                             {
-                                <img class="avatar-img" src="~/img/MemberImg/@reply.Member.MemberImage" alt="" class="img-fluid" />
+                                if (reply.Member.MemberImage != null)
+                                {
+                                    <img class="avatar-img" src="~/img/MemberImg/@reply.Member.MemberImage" alt="" class="img-fluid" />
+                                }
+                                else
+                                {
+                                    <img class="avatar-img" src="~/assets/img/images (1).jpg" alt="" class="img-fluid" />
+                                }
+
                             }
                             else
                             {

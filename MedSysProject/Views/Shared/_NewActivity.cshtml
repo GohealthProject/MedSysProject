@@ -15,7 +15,7 @@
                        class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
                         @if (Model[0].BlogImage != null)
                         {
-                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[7].BlogImage)"
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model[0].BlogImage)"
                                  alt=""
                                  class="img-fluid" />
                         }
@@ -39,13 +39,6 @@
                             </a>
                         </h3>
                         <p>
-                           
-                            <!--記得放文章-->
-                            <!--Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Distinctio placeat exercitationem magni voluptates dolore.
-                            Tenetur fugiat voluptates quas, nobis error deserunt aliquam
-                            temporibus sapiente, laudantium dolorum itaque libero eos
-                            deleniti?文章內文，如果是圖片怎辦?-->
                         </p>
                         <div class="d-flex align-items-center author">
                             <div class="photo">
@@ -56,7 +49,6 @@
                                          class="img-fluid" />
 
                                 }
-
                             </div>
                             <div class="name">
                                 <h3 class="m-0 p-0">@Model[0].Employee.EmployeeName</h3>
