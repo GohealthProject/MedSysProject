@@ -537,6 +537,7 @@ namespace MedSysProject.Controllers
             //var form = Request.Form;
             //string date =  form["date"];
             var taget =_context.Reserves.Where(p => p.ReserveDate == ss).Count();
+            HttpContext.Session.SetString("DATE",ss);
             string s = "";
             if (taget >5) 
             {
@@ -1047,7 +1048,7 @@ namespace MedSysProject.Controllers
         }
         public IActionResult rsv(/*int id*/)
         {
-
+            string sd =HttpContext.Session.GetString("DATE");
             /////////////SaveChange()////////
             var form = Request.Form;
             int id = int.Parse(form["mid"]);
@@ -1061,12 +1062,13 @@ namespace MedSysProject.Controllers
             Reserve rs = new Reserve();
             rs.MemberId = id;
             rs.PlanId = pid;////
-            rs.ReserveDate = DateTime.Now.ToShortDateString();
+            rs.ReserveDate = date;
+                //DateTime.Now.ToString("yyyyy-MM-dd");
             rs.ReserveState = "預約中";
             rs.PaymentStatus = 0;
 
             _context.Reserves.Add(rs);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
             int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n => n.ReserveId).LastOrDefault().ReserveId;
@@ -1079,7 +1081,7 @@ namespace MedSysProject.Controllers
                 _context.ReservedSubs.Add(rss);
             }
 
-            //_context.SaveChanges();
+            _context.SaveChanges();
             HealthReport hr = new HealthReport();
             hr.MemberId = id;
             hr.PlanId = pid;
@@ -1088,7 +1090,7 @@ namespace MedSysProject.Controllers
             hr.Paymentstatus = 0;
 
             _context.HealthReports.Add(hr);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             int hrid = _context.HealthReports.Where(p => p.MemberId == id).OrderBy(n => n.ReportId).Last().ReportId;
             foreach (var item in list)
             {
@@ -1097,7 +1099,7 @@ namespace MedSysProject.Controllers
                 rdt.ItemId = item.ItemId;
                 _context.ReportDetails.Add(rdt);
             }
-            //_context.SaveChanges();
+            _context.SaveChanges();
             return Ok();
         }
 

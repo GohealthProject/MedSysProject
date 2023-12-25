@@ -235,8 +235,8 @@ namespace MedSysProject.Hubs
                 _db.Messages.Add(newmessage);
                 _db.SaveChanges();
 
-                //將訊息傳送給該房間的所有人
-                await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", member.MemberName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                //將訊息傳送給對方
+                await Clients.All.SendAsync("ReceiveMemberMessage", member.MemberId, message);
 
             }
 
@@ -294,10 +294,15 @@ namespace MedSysProject.Hubs
                 _db.Messages.Add(newmessage);
                 _db.SaveChanges();
 
-                //將訊息傳送給該房間的所有人
-                await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", employee.EmployeeName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                //將訊息傳送給對方
+                await Clients.All.SendAsync("ReceiveEmployeeMessage", employee.EmployeeId, message);
 
             }
+        }
+
+        public async Task testtt()
+        {
+            await Clients.All.SendAsync("testtt");
         }
     }
 }

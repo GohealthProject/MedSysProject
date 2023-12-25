@@ -441,14 +441,15 @@
     var full = document.querySelector("#full")
     var ok = document.querySelector("#ok")
     bday.min = convertToISO(currentdate)
-   
+    //Url.Content("~/Home/DateCheck")
     bday.addEventListener("change",()=>{
             console.log(bday.value)
         var formData = new FormData();
         var date = new Date()
         formData.append("date", bday.value);
-        //Url.Content("~/Home/DateCheck")
-        fetch((`https://localhost:7203/Home/DateCheck/${bday.value}`), {
+        
+        var link = `https://localhost:7203/Home/DateCheck/?ss=${bday.value}`
+        fetch(link, {
             method: "GET",
             //body: formData,
         })
@@ -821,8 +822,10 @@
         }
         string fplan = Context.Session.GetString(CDictionary.SK_CUSTOMER_PLAN);
         var pp = System.Text.Json.JsonSerializer.Deserialize<Plan>(fplan);
+        
     }
-
+        var bday = document.querySelector("#bday")
+        var dd = bday.value;
 
         //alert("00")
         res(temp,dd,@totalprice)
