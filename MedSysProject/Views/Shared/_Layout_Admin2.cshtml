@@ -514,7 +514,7 @@
             {
                 string json = Context.Session.GetString(CDictionary.SK_EMPLOYEE_LOGIN);
                 Employee emp = JsonSerializer.Deserialize<Employee>(json);
-                <iframe src="~/signalrtest/chatlist?employeeid=@emp.EmployeeId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+                <iframe src="~/signalrtest/memberchatlist?employeeid=@emp.EmployeeId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
             }
         }
         <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
