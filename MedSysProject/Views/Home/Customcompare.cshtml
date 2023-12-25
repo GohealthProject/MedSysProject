@@ -307,43 +307,43 @@
 @section Scripts{
     <script>
         ///////////////getPlan();
-        //取得
-        function getPlan(){
-        //$("#tbt").click(function () {
-            var url = "https://localhost:7078/api/CPlan"
-            $.get(url+`/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`, function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                var datarr = JSON.parse(data)
-                var tbody = document.querySelector("#ilist")
-                alert(url + `/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`)
+        ////取得
+        //function getPlan(){
+        ////$("#tbt").click(function () {
+        //    var url = "https://localhost:7078/api/CPlan"
+        //    $.get(url+`/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`, function (data, status) {
+        //        //alert("Data: " + data + "\nStatus: " + status);
+        //        var datarr = JSON.parse(data)
+        //        var tbody = document.querySelector("#ilist")
+        //        alert(url + `/${@ViewBag.Planid}?planid=${@ViewBag.Planid}`)
 
 
-                console.log(datarr)
-                for(var i =0;i<=datarr.length;i++)
-                {
-                    var td1 = document.createElement("td");
-                    var td2 = document.createElement("td");
-                    var td3 = document.createElement("td");
-                    var td4 = document.createElement("td");
+        //        console.log(datarr)
+        //        for(var i =0;i<=datarr.length;i++)
+        //        {
+        //            var td1 = document.createElement("td");
+        //            var td2 = document.createElement("td");
+        //            var td3 = document.createElement("td");
+        //            var td4 = document.createElement("td");
 
-                    var tr = document.createElement("tr");
+        //            var tr = document.createElement("tr");
 
-                    td1.innerHTML = datarr[i].itemId;
-                    tr.appendChild(td1);
-                    td2.innerHTML = datarr[i].ItemName
-                    tr.appendChild(td2);
-                    td3.innerHTML = datarr[i].ItemPrice
-                    tr.appendChild(td3);
-                    td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p hidden id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
-                    tr.appendChild(td4);
-                    tbody.appendChild(tr);
-                }
+        //            td1.innerHTML = datarr[i].itemId;
+        //            tr.appendChild(td1);
+        //            td2.innerHTML = datarr[i].ItemName
+        //            tr.appendChild(td2);
+        //            td3.innerHTML = datarr[i].ItemPrice
+        //            tr.appendChild(td3);
+        //            td4.innerHTML = `<img src='/img/icon/x.png' onclick='imgdelete()'/><p hidden id ='${datarr[i].itemId}'> ${datarr[i].ItemPrice}</p>`
+        //            tr.appendChild(td4);
+        //            tbody.appendChild(tr);
+        //        }
 
 
 
-            });
-        //});
-        }
+        //    });
+        ////});
+        //}
         var count = 0;///不能點太快
         const items = [];
         //todo 選後enable
