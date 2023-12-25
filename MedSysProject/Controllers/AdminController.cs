@@ -561,7 +561,7 @@ namespace MedSysProject.Controllers
             return View();
         }
 
-        public IActionResult Report(CKeywordViewModel vm, int page = 1)
+        public IActionResult test/*Report*/(CKeywordViewModel vm, int page = 1)
         {
             //尚未完成 :報告寄出提示功能(次要)
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_EMPLOYEE_LOGIN))
@@ -1107,7 +1107,7 @@ namespace MedSysProject.Controllers
             return "";
         }
 
-        public IActionResult test(CKeywordViewModel vm)
+        public IActionResult Report(CKeywordViewModel vm)
         {
             IEnumerable<ReportDetail> datas = null;
             //List<CReportWrap> datas2 = null;
