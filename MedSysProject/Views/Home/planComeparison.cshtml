@@ -243,6 +243,9 @@
                 }
                 if(event.target.checked==false){
                     count--;
+                    if(count<0){
+                    count=0;
+                    }
                     //let temporary = ""; let emp = "";
                     temporary = planidList;
                     planidList = temporary.replace(event.target.id);
