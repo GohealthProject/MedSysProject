@@ -1,6 +1,267 @@
 ﻿@model IEnumerable<MedSysProject.Models.Message>
 
-<div class="top"><span>傳送訊息給: <span class="name">@ViewBag.EmployeeName</span></span></div>
+<link rel="stylesheet" href="~/forevendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/reset.min.css">
+<link rel="stylesheet" href="~/vendor/fontawesome-free/css/all.css" />
+
+
+<style id="INLINE_PEN_STYLESHEET_ID">
+    @@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600);
+
+
+    .chat-container {
+        background-color: #fff;
+    }
+
+        .chat-container .right {
+            flex: 1 1px;
+            position: relative;
+            float: left;
+            width: calc(100% - 220px);
+            height: 100%;
+        }
+
+            .chat-container .right .top {
+                width: 100%;
+                height: 47px;
+                padding: 15px 29px;
+                background-color: #eceff1;
+            }
+
+                .chat-container .right .top span {
+                    font-size: 15px;
+                    color: #999;
+                }
+
+                    .chat-container .right .top span .name {
+                        color: #1a1a1a;
+                        font-family: 'Source Sans Pro', sans-serif;
+                        font-weight: 600;
+                    }
+
+            .chat-container .right .chat {
+                position: relative;
+                display: none;
+                overflow-x: hidden;
+                padding: 20px 35px 20px;
+                border-width: 1px 1px 1px 0;
+                border-style: solid;
+                border-color: #e6e6e6;
+                height: calc(100% - 148px);
+                flex-direction: column;
+            }
+
+                .chat-container .right .chat.active-chat {
+                    display: flex;
+                }
+
+            .chat-container .right .write {
+                position: absolute;
+                bottom: 29px;
+                left: 30px;
+                height: 42px;
+                padding-left: 8px;
+                border: 1px solid #e6e6e6;
+                background-color: #eceff1;
+                width: calc(100% - 58px);
+                border-radius: 5px;
+            }
+
+                .chat-container .right .write input {
+                    font-size: 16px;
+                    float: left;
+                    width: calc(100% - 90px);
+                    height: 40px;
+                    padding: 0 10px;
+                    color: #1a1a1a;
+                    border: 0;
+                    outline: none;
+                    background-color: #eceff1;
+                    font-family: 'Source Sans Pro', sans-serif;
+                    font-weight: 400;
+                }
+
+            /*                     .chat-container .right .write .write-link.attach:before {
+                                                                                                                                                                                                                                                                                                            display: inline-block;
+                                                                                                                                                                                                                                                                                                            float: left;
+                                                                                                                                                                                                                                                                                                            width: 20px;
+                                                                                                                                                                                                                                                                                                            height: 42px;
+                                                                                                                                                                                                                                                                                                            content: '';
+                                                                                                                                                                                                                                                                                                            background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
+                                                                                                                                                                                                                                                                                                            background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                            background-position: center;
+                                                                                                                                                                                                                                                                                                        } */
+
+            /*                     .chat-container .right .write .write-link.smiley:before {
+                                                                                                                                                                                                                                                                                                            display: inline-block;
+                                                                                                                                                                                                                                                                                                            float: right;
+                                                                                                                                                                                                                                                                                                            width: 20px;
+                                                                                                                                                                                                                                                                                                            height: 42px;
+                                                                                                                                                                                                                                                                                                            margin-right: 11px;
+                                                                                                                                                                                                                                                                                                            content: '';
+                                                                                                                                                                                                                                                                                                            background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
+                                                                                                                                                                                                                                                                                                            background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                            background-position: center;
+                                                                                                                                                                                                                                                                                                        } */
+
+            /*                     .chat-container .right .write .write-link.send:before {
+                                                                                                                                                                                                                                                                                                            display: inline-block;
+                                                                                                                                                                                                                                                                                                            float: right;
+                                                                                                                                                                                                                                                                                                            width: 20px;
+                                                                                                                                                                                                                                                                                                            height: 42px;
+                                                                                                                                                                                                                                                                                                            margin-right: 11px;
+                                                                                                                                                                                                                                                                                                            content: '';
+                                                                                                                                                                                                                                                                                                            background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
+                                                                                                                                                                                                                                                                                                            background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                            background-position: center;
+                                                                                                                                                                                                                                                                                                        } */
+
+            .chat-container .right .bubble {
+                font-size: 16px;
+                position: relative;
+                display: inline-block;
+                clear: both;
+                margin-bottom: 8px;
+                padding: 13px 14px;
+                vertical-align: top;
+                border-radius: 5px;
+            }
+
+                .chat-container .right .bubble:before {
+                    position: absolute;
+                    top: 19px;
+                    display: block;
+                    width: 8px;
+                    height: 6px;
+                    content: '\00a0';
+                    transform: rotate(29deg) skew(-35deg);
+                }
+
+                .chat-container .right .bubble.you {
+                    float: left;
+                    color: #fff;
+                    background-color: #026500;
+                    align-self: flex-start;
+                    -webkit-animation-name: slideFromLeft;
+                    animation-name: slideFromLeft;
+                }
+
+                    .chat-container .right .bubble.you:before {
+                        left: -3px;
+                        background-color: #026500;
+                    }
+
+                .chat-container .right .bubble.me {
+                    float: right;
+                    color: #1a1a1a;
+                    background-color: #eceff1;
+                    align-self: flex-end;
+                    -webkit-animation-name: slideFromRight;
+                    animation-name: slideFromRight;
+                }
+
+                    .chat-container .right .bubble.me:before {
+                        right: -3px;
+                        background-color: #eceff1;
+                    }
+
+            .chat-container .right .conversation-start {
+                position: relative;
+                width: 100%;
+                margin-bottom: 27px;
+                text-align: center;
+            }
+
+                .chat-container .right .conversation-start span {
+                    font-size: 14px;
+                    display: inline-block;
+                    color: #999;
+                }
+
+                    .chat-container .right .conversation-start span:before, .chat-container .right .conversation-start span:after {
+                        position: absolute;
+                        top: 10px;
+                        display: inline-block;
+                        width: 30%;
+                        height: 1px;
+                        content: '';
+                        background-color: #e6e6e6;
+                    }
+
+                    .chat-container .right .conversation-start span:before {
+                        left: 0;
+                    }
+
+                    .chat-container .right .conversation-start span:after {
+                        right: 0;
+                    }
+
+    @@keyframes slideFromLeft {
+        0% {
+            margin-left: -200px;
+            opacity: 0;
+        }
+
+        100% {
+            margin-left: 0;
+            opacity: 1;
+        }
+    }
+
+    @@-webkit-keyframes slideFromLeft {
+        0% {
+            margin-left: -200px;
+            opacity: 0;
+        }
+
+        100% {
+            margin-left: 0;
+            opacity: 1;
+        }
+    }
+
+    @@keyframes slideFromRight {
+        0% {
+            margin-right: -200px;
+            opacity: 0;
+        }
+
+        100% {
+            margin-right: 0;
+            opacity: 1;
+        }
+    }
+
+    @@-webkit-keyframes slideFromRight {
+        0% {
+            margin-right: -200px;
+            opacity: 0;
+        }
+
+        100% {
+            margin-right: 0;
+            opacity: 1;
+        }
+    }
+</style>
+
+
+<div class="top">
+    <span>
+        傳送訊息給:
+        @{
+            if (ViewBag.direction == 2)
+            {
+                <span class="name">@ViewBag.MemberName</span>
+            }
+            else
+            {
+                <span class="name">@ViewBag.EmployeeName</span>
+            }
+
+        }
+    </span>
+</div>
 <input type="hidden" value="@ViewBag.EmployeeId" />
 
 <input type="hidden" value="@ViewBag.MemberId" id="hiddenMemberid" />
@@ -72,14 +333,69 @@
         console.log("tessssttttt" + c);
     });
 
-    connection.on("ReceiveMessage", function (memberId, employeeId, message) {
-        if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
-            document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
-            document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
-        }
+    connection.on("ReceiveMemberMessage", function (memberId, message) {
+        // alert("ReceiveMemberMessage:" + " " + memberId + " " + message);
+        // if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+        document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
+        document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+        // }
     });
 
+    connection.on("ReceiveEmployeeMessage", function (employeeId, message) {
+        // alert("ReceiveEmployeeMessage:" + " " + employeeId + " " + message);
+        // if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+        document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
+        document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+        // }
+    });
+
+    connection.on("testtt", function () {
+        alert("testtt");
+    });
+
+    //
+    function sendmsg() {
+        var direction = document.getElementById("hiddendirectionid").value;
+
+        if (document.getElementById("chat-messagebox").value == "") {
+            return;
+        }
+
+        let text = document.getElementById("chat-messagebox").value;
+        document.getElementById("chat-messagebox").value = "";
+
+        // document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
+
+        // document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+
+        hiddenRoomid = parseInt(document.getElementById("hiddenRoomid").value);
+        hiddenMemberid = parseInt(document.getElementById("hiddenMemberid").value);
+        hiddenEmployeeid = parseInt(document.getElementById("hiddenEmployeeid").value);
 
 
+        console.log(hiddenRoomid)
+        console.log(hiddenMemberid)
+        console.log(hiddenEmployeeid)
+        console.log(text)
+
+        //傳送訊息給Server
+        if (direction == 1)
+            connection.invoke("SendMessage", hiddenRoomid, hiddenMemberid, null, text).catch(function (err) {
+                return console.error(err.toString());
+            });
+        else
+            connection.invoke("SendMessage", hiddenRoomid, null, hiddenEmployeeid, text).catch(function (err) {
+                return console.error(err.toString());
+            });
+
+        event.preventDefault();
+    };
+
+    //enter鍵送出
+    document.getElementById("chat-messagebox").addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            sendmsg();
+        }
+    });
 
 </script>

@@ -235,10 +235,74 @@ namespace MedSysProject.Hubs
                 _db.Messages.Add(newmessage);
                 _db.SaveChanges();
 
-                //將訊息傳送給該房間的所有人
-                await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", member.MemberName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                //將訊息傳送給對方
+                await Clients.All.SendAsync("ReceiveMemberMessage", member.MemberId, message);
 
             }
+
+            else if (member == null && employee != null) //員工
+            {
+                //找出該員工的連線ID
+                var employeeconnection = _db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Select(c => c.EmployeeConnectionId).FirstOrDefault();
+
+                //找出該會員的房間ID
+                //var roomidlist = _db.RoomRefs.Where(r => r.Memberid == member.MemberId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist2 = _db.RoomRefs.Where(r => r.Employeeid == employee.EmployeeId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist3 = roomidlist.Intersect(roomidlist2).ToList();
+
+                //如果有包含，就把該房間ID指定給room
+                //if (roomidlist3.Count() > 0)
+                //{
+                //    room = roomidlist3[0];
+                //}
+                //else
+                //{
+                //    //如果沒有包含，就新增一筆房間資料
+                //    var newroom = new Room();
+                //    newroom.RoomName = member.MemberName + "和" + employee.EmployeeName + "的聊天室";
+                //    _db.Rooms.Add(newroom);
+                //    _db.SaveChanges();
+
+                //    //新增房間參考資料
+                //    var newroomref = new RoomRef();
+                //    newroomref.Roomid = newroom.RoomId;
+                //    newroomref.Memberid = member.MemberId;
+                //    newroomref.Employeeid = employee.EmployeeId;
+                //    _db.RoomRefs.Add(newroomref);
+                //    _db.SaveChanges();
+
+                //    room = newroom.RoomId;
+                //}
+
+                //找出該房間的所有訊息
+                //var messagelist = _db.Messages.Where(m => m.RoomId == room).ToList();
+
+                //新增訊息
+                var newmessage = new Message();
+                
+                newmessage.RoomId = room;
+                if (member != null)
+                    newmessage.MemberId = member.MemberId;
+                if (employee != null)
+                    newmessage.EmployeeId = employee.EmployeeId;
+                newmessage.MessageContent = message;
+                newmessage.SendTime = DateTime.Now;
+                _db.Messages.Add(newmessage);
+                _db.SaveChanges();
+
+                //將訊息傳送給對方
+                await Clients.All.SendAsync("ReceiveEmployeeMessage", employee.EmployeeId, message);
+
+            }
+        }
+
+        public async Task testtt()
+        {
+            await Clients.All.SendAsync("testtt");
         }
     }
 }
