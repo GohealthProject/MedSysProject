@@ -92,7 +92,7 @@
 <meta charset="UTF-8">
 
 <div class="col-2 title">
-    <select class="form-select" aria-label="Default select example" id="import" >
+    <select hidden class="form-select" aria-label="Default select example" id="import" >
         <option selected>選擇健檢報告0</option>
 
         @{
@@ -121,7 +121,7 @@
 </div>
 
        
-<h1>會員中心  @ViewData["id"]</h1>
+<h1>會員中心 </h1>
 
 
 <div class="container-fluid ">
@@ -823,8 +823,8 @@
             })
         }).trigger('change')
     })
-    ch1.selectedIndex = 3;
-    ch1id.selectedIndex = 3;
+    ch1.selectedIndex = 9;
+    ch1id.selectedIndex = 9;
     index = ch1.selectedIndex
     //index2 = ch1.selectedIndex
     rp1Display();

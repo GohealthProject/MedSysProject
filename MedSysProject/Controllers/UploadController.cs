@@ -57,6 +57,20 @@ namespace MedSysProject.Controllers
 
             IFormFile file = Request.Form.Files[0];
 
+            ////daaaa
+            //string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fileN.FileName);
+
+            //string webPath = Path.Combine(_host.WebRootPath, "img\\MemberImg", uniqueFileName);
+
+            //using (var fileStream = new FileStream(webPath, FileMode.Create))
+            //{
+            //    fileN.CopyTo(fileStream);
+            //}
+
+            //// 更新Member中的MemberImage为新的文件名
+            //Upm.MemberImage = uniqueFileName;
+
+
             string webPath = Path.Combine(_host.WebRootPath, "img\\PersonalPlan", file.FileName);
             using (var fileStream = new FileStream(webPath, FileMode.Create))
             {
