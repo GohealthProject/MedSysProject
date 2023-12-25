@@ -427,6 +427,16 @@
             <input type="hidden" value="@ViewBag.EmployeeId" id="hiddenEmployeeid" />
             <div class="left">
                 <ul class="people" id="employee-online-list">
+                    
+                    <li class="person" data-chat="employee124" id="li-124" onclick="leftclick(this)">
+                        <img src="@Url.Content("~/Admin/EmployeeImage/124")" alt="">
+                        <input type="hidden" value="124" id="hiddenid" />
+                        <span class="name">健康AI</span>
+                        <span class="time"></span>
+                        <span class="preview"></span>
+                    </li>
+
+
                 </ul>
             </div>
             <div class="right" id="chatroom">
