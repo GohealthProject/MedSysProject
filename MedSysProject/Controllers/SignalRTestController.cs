@@ -57,7 +57,33 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
 
-        public IActionResult ChatRoom(int? roomid,int? MemberId, int? EmployeeId)
+        public IActionResult MemberChatList(int? MemberId,int? EmployeeId)
+        {
+            var member = _db.Members.Find(MemberId);
+            var employee = _db.Employees.Find(EmployeeId);
+
+            COnlineUser.onlinememberid = 0;
+            COnlineUser.onlineemployeeid = 0;
+
+            if (member == null && employee == null)
+            {
+                return NotFound();
+            }
+            else if (member != null && employee != null)
+            {
+                return NotFound();
+            }
+            else if (employee != null)
+            {
+                COnlineUser.onlineemployeeid = (int)EmployeeId;
+                ViewBag.EmployeeId = EmployeeId;
+                return PartialView(employee);
+            }
+
+            return PartialView();
+        }
+
+        public IActionResult ChatRoom(int? roomid,int? MemberId, int? EmployeeId,int? direction)
         {
             var member = _db.Members.Find(MemberId);
             var employee = _db.Employees.Find(EmployeeId);
@@ -91,6 +117,16 @@ namespace MedSysProject.Controllers
                 ViewBag.MemberId = MemberId;
                 ViewBag.EmployeeId = EmployeeId;
                 ViewBag.RoomId = room;
+
+                if (direction == 1)
+                {
+                    ViewBag.direction = 1;
+                }
+                else
+                {
+                    ViewBag.direction = 2;
+                }
+                
 
                 //灌聊天紀錄
                 var chat = _db.Messages.Where(r => r.RoomId == room).OrderBy(d => d.SendTime).ToList();

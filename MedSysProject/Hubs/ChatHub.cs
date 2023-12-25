@@ -44,19 +44,32 @@ namespace MedSysProject.Hubs
                     //string json = JsonConvert.SerializeObject(member);
                     //await _hubContext.Clients.All.SendAsync("UpdateMemberList", member.MemberId, member.MemberName, json);
 
-                    string json = "";
-                    foreach (var item in EmployeeIDList)
+                    string Empjson = "";
+                    foreach (var item in EmployeeIDList) //將員工列表轉成json格式
                     {
                         var id = _db.Employees.Find(item);
                         var employeeidandname = new { id.EmployeeId, id.EmployeeName,id.EmployeeConnectionId };
-                        json += JsonConvert.SerializeObject(employeeidandname);
+                        Empjson += JsonConvert.SerializeObject(employeeidandname);
                         if (item != EmployeeIDList.Last())
-                            json += ",";
+                            Empjson += ",";
                     }
-                    json = "[" + json + "]";
+                    Empjson = "[" + Empjson + "]";
+
+                    string Memberjson = "";
+                    foreach (var item in MemberIDList) //將會員列表轉成json格式
+                    {
+                        var id = _db.Members.Find(item);
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        Memberjson += JsonConvert.SerializeObject(memberidandname);
+                        if (item != MemberIDList.Last())
+                            Memberjson += ",";
+                    }
+                    Memberjson = "[" + Memberjson + "]";
 
                     //string json = JsonConvert.SerializeObject(employeeidandname);
-                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", Empjson);
+
+                    //await _hubContext.Clients.All.SendAsync("UpdateMemberList", Memberjson);
 
 
                 }
@@ -74,19 +87,32 @@ namespace MedSysProject.Hubs
                     userisEmployee.EmployeeConnectionId = Context.ConnectionId;
                     _db.SaveChanges();
 
-                    string json = "";
+                    string Empjson = "";
                     foreach (var item in EmployeeIDList)
                     {
                         var id = _db.Employees.Find(item);
                         var employeeidandname = new { id.EmployeeId, id.EmployeeName };
-                        json += JsonConvert.SerializeObject(employeeidandname);
+                        Empjson += JsonConvert.SerializeObject(employeeidandname);
                         if (item != EmployeeIDList.Last())
-                            json += ",";
+                            Empjson += ",";
                     }
-                    json = "[" + json + "]";
+                    Empjson = "[" + Empjson + "]";
+
+                    string Memberjson = "";
+                    foreach (var item in MemberIDList)
+                    {
+                        var id = _db.Members.Find(item);
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        Memberjson += JsonConvert.SerializeObject(memberidandname);
+                        if (item != MemberIDList.Last())
+                            Memberjson += ",";
+                    }
+                    Memberjson = "[" + Memberjson + "]";
 
                     //string json = JsonConvert.SerializeObject(employeeidandname);
-                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+                    //await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", Empjson);
+
+                    await _hubContext.Clients.All.SendAsync("UpdateMemberList", Memberjson);
 
                 }
             }
@@ -119,9 +145,9 @@ namespace MedSysProject.Hubs
                 {
                     var empconnection = _db.Employees.FirstOrDefault(e => e.EmployeeConnectionId == Context.ConnectionId);
 
-                    EmployeeIDList.Remove(empconnection.EmployeeId);
-                    ConnectionIDList.Remove(Context.ConnectionId);
-                    employeeID = empconnection.EmployeeId;
+                    //EmployeeIDList.Remove(empconnection.EmployeeId);
+                    //ConnectionIDList.Remove(Context.ConnectionId);
+                    //employeeID = empconnection.EmployeeId;
 
 
 
@@ -211,6 +237,65 @@ namespace MedSysProject.Hubs
 
                 //將訊息傳送給該房間的所有人
                 await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", member.MemberName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            }
+
+            else if (member == null && employee != null) //員工
+            {
+                //找出該員工的連線ID
+                var employeeconnection = _db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Select(c => c.EmployeeConnectionId).FirstOrDefault();
+
+                //找出該會員的房間ID
+                //var roomidlist = _db.RoomRefs.Where(r => r.Memberid == member.MemberId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist2 = _db.RoomRefs.Where(r => r.Employeeid == employee.EmployeeId).Select(r => r.Roomid).ToList();
+
+                //找出該會員的房間ID中，有沒有包含該員工的房間ID
+                //var roomidlist3 = roomidlist.Intersect(roomidlist2).ToList();
+
+                //如果有包含，就把該房間ID指定給room
+                //if (roomidlist3.Count() > 0)
+                //{
+                //    room = roomidlist3[0];
+                //}
+                //else
+                //{
+                //    //如果沒有包含，就新增一筆房間資料
+                //    var newroom = new Room();
+                //    newroom.RoomName = member.MemberName + "和" + employee.EmployeeName + "的聊天室";
+                //    _db.Rooms.Add(newroom);
+                //    _db.SaveChanges();
+
+                //    //新增房間參考資料
+                //    var newroomref = new RoomRef();
+                //    newroomref.Roomid = newroom.RoomId;
+                //    newroomref.Memberid = member.MemberId;
+                //    newroomref.Employeeid = employee.EmployeeId;
+                //    _db.RoomRefs.Add(newroomref);
+                //    _db.SaveChanges();
+
+                //    room = newroom.RoomId;
+                //}
+
+                //找出該房間的所有訊息
+                //var messagelist = _db.Messages.Where(m => m.RoomId == room).ToList();
+
+                //新增訊息
+                var newmessage = new Message();
+                
+                newmessage.RoomId = room;
+                if (member != null)
+                    newmessage.MemberId = member.MemberId;
+                if (employee != null)
+                    newmessage.EmployeeId = employee.EmployeeId;
+                newmessage.MessageContent = message;
+                newmessage.SendTime = DateTime.Now;
+                _db.Messages.Add(newmessage);
+                _db.SaveChanges();
+
+                //將訊息傳送給該房間的所有人
+                await _hubContext.Clients.Group(room.ToString()).SendAsync("ReceiveMessage", employee.EmployeeName, message, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             }
         }
