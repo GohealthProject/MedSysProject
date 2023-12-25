@@ -282,9 +282,9 @@
                     <h5 class="modal-title" id="exampleModalToggleLabel3">預約已完成</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    @*TODO動態更新*@
-                    預約日期:2023/12/01 付費方式:現場付款
+                    <div class="modal-body" id="dd2024">
+                   @* TODO動態更新
+                    預約日期:2023/12/01 付費方式:現場付款*@
                 </div>
                 <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal" id="finalconfirm">確定</button>
@@ -300,8 +300,11 @@
                     <h5 class="modal-title" id="exampleModalToggleLabel2">預約未完成</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
-                <div class="moda2-body">
+                <div class="moda2-body align-self-lg-center">
+                    <br />
                     預約未完成
+                    <br />
+                    <div class="col-12"><br /></div>
                 </div>
                 <div class="modal-footer">
                         <button class="btn btn-danger" data-bs-target="#exampleModalToggle" data-bs-dismiss="modal">返回</button>
@@ -360,7 +363,7 @@
         string jsonreportdetail = System.Text.Json.JsonSerializer.Serialize(listrpd);
        
     }
-    <form id="form" method="post">
+    <form hidden id="form" method="post">
             <input type="text" value="@ViewBag.item" id="forminput" name="item">
         <input type="text" value="@jsonreserve" id="reserve" name="reserve">
         <input type="text" value="@jsonreservedsub" id="reservesub" name="reservesub">
@@ -427,10 +430,8 @@
     
      mid = @m.MemberId;
     console.log(mid);
-    $("reservesubmit").click(()=>{
-        $('#detail').modal('hide');
-        $('#reserve').modal('hide');
-    })
+    
+    
 
     
   
@@ -518,12 +519,15 @@
     
         var price = 0;
         var tbody = document.querySelector("#show")
+        var alltr = document.querySelectorAll("tr")
         //var tfoot = document.querySelector("tfoot")
-        for (var i = 0; i <= tbody.childElementCount - 1; i++) {
-            
-            price = price+parseInt(tbody.childNodes[i].children[2].innerText)
+//        console.log(tbody.children[0].children[2].children[0].innerHTML)
+        console.log(alltr[1].children[2].innerText)
+
+        for (var i = 1; i <= tbody.childElementCount - 1; i++) {
+            console.log(parseInt(alltr[i].children[2].innerText))
+            price = price + parseInt(alltr[i].children[2].innerText)
         }
-        console.log(tfoot.children[0].children[2].children[0].innerHTML)
         //價格
         //tfoot.children[0].children[2].children[0].innerHTML = price;
         //數量
@@ -531,7 +535,7 @@
 
 
         var totalprice = document.querySelector("#price")
-        totalprice.innerHTML = price
+        totalprice.innerHTML = `總計 ${price} 元`
 
         //console.log(Int16Array(tbody.childNodes[i].children[2].innerText))
         //console.log(price)
@@ -550,15 +554,24 @@
         var floatingInput = document.querySelector("#floatingInput")
         var floatingPassword = document.querySelector("#floatingPassword")
         var d2024 = document.querySelector("#d2024")
+        var dd2024 = document.querySelector("#dd2024")
+
         floatingInput.value = "night90810@gmail.com"
         floatingPassword.value = "Test"
         payment.selectedIndex = 2;
         
         bday.value ="2024-01-02"
         d2024.innerHTML = `預約日期:${bday.value} 付費方式:${payment[payment.value].text}`
+        dd2024.innerHTML = `預約日期:${bday.value} 付費方式:${payment[payment.value].text}`
         console.log(payment)
-
         
+        
+    })
+
+    $("#reserve").click(() => {
+        $('#detail').modal('hide');
+        $('#reserve').modal('hide');
+       
     })
 
   ////reservesubmit////
@@ -751,6 +764,8 @@
     
 
   }
+
+    pricecount()
     ////////////
 
     //Print//
@@ -776,7 +791,7 @@
         //priceFormatter(1000);
         //console.log(t.innerHTML)
         delItem(id)
-        //pricecount()
+        pricecount()
     }
     async function delItem(id){
         let url = `/Home/removeItem?id=${id}`;
@@ -787,12 +802,13 @@
     var temp = @m.MemberId
     var dd = bday.value;
     var finalconfirm = document.querySelector("#finalconfirm")////////最終確認鈕
-    finalconfirm.addEventListener("click", () => {
+    var tttt = document.querySelector("#tttt")//////////////////todo 修改按鈕
+    tttt.addEventListener("click", () => {
 
 
     })
-    var tttt = document.querySelector("#tttt")//////////////////todo 修改按鈕
-    tttt.addEventListener("click", () => {
+    
+    finalconfirm.addEventListener("click", () => {
         var tform = document.querySelector("#tform")
     @{
         string fjson = Context.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);

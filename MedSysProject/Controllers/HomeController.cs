@@ -553,7 +553,7 @@ namespace MedSysProject.Controllers
 
         }
 
-        public static string EmailText2(string TradeNo, string proname, string proCount, string total)
+        public static string ReserveEmail(string TradeNo, string proname, string proCount, string total)
         {
             string html = "";
             List<string> proList = new List<string>();
@@ -566,7 +566,7 @@ namespace MedSysProject.Controllers
             html = "<h2>你好！很高興您能來我們網站消費。</h2>";
             html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
             html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
-            for (int i = 0; i < proList.Count - 1; i++)
+            for (int i = 0; i <= proList.Count - 1; i++)
             {
                 html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + proList[i] + "</td><td style='padding:8px;'>" + proCountList[i] + "</td></tr>";
             }
@@ -594,7 +594,7 @@ namespace MedSysProject.Controllers
                 EmailData email = new EmailData();
                 email.Address = m.MemberEmail;
 
-                email.Body = EmailText2(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
+                email.Body = ReserveEmail(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
                 email.Subject = "訂單成立";
                 string emailjson = System.Text.Json.JsonSerializer.Serialize(email);
                 HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
@@ -664,7 +664,8 @@ namespace MedSysProject.Controllers
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},
-        { "OrderResultURL", $"{website}Transaction/payInfo"},
+        { "OrderResultURL", $"{website}Home/Index"},
+        //{ "OrderResultURL", $"{website}Transaction/payInfo"},
         //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},//Client端回傳付款結果網址
         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
         //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
