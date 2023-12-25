@@ -80,18 +80,26 @@ namespace MedSysProject.Controllers
         {
           
             IQueryable<Member> datas = null;
-            
             if (id == 0)
             {
-                 datas = from s in _context.Members.Include(p => p.HealthReports)
-                            select s;
+                datas = from s in _context.Members.Include(p => p.HealthReports)
+                        select s;
+
             }
-            else {
-                 datas =from s in _context.Members.Include(p => p.HealthReports).ThenInclude(p=>p.Reserve)
+            else
+            {
+                datas = from s in _context.Members.Include(p => p.HealthReports).ThenInclude(p => p.Reserve)
                         where s.MemberId == id
-                           select s;
-                    }
-        
+                        select s;
+
+                // datas = _context.Members.Where(p => p.MemberId == id).SelectMany(p => p.HealthReports, (p, q) => new { q.Reserve.ReserveDate, p.MemberId });
+
+
+                //datas = from s in _context.Members.Include(p => p.HealthReports).ThenInclude(p => p.Reserve)
+                //        where s.MemberId == id
+                //        select new { s.MemberId };
+            }
+
 
             return Json(datas);
 
