@@ -24,7 +24,17 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddHttpClient();
-builder.Services.AddSession();
+
+
+builder.Services.AddSession(options =>
+{
+    // 設定會話逾時時間
+    options.IdleTimeout = TimeSpan.FromMinutes(60); // 設定為你期望的逾時時間
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("MedSysConnection")));

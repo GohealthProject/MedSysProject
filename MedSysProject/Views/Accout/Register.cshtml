@@ -5,8 +5,8 @@
     Layout = "~/Views/Shared/_Layout_Fore.cshtml";
 }
 
-@section LinkStyle{
-    <link href="~/css/AccoutRegister.css" rel="stylesheet"/>
+@section LinkStyle {
+    <link href="~/css/AccoutRegister.css" rel="stylesheet" />
 }
 
 <div class="RegisterDiv">
@@ -17,11 +17,11 @@
 
     @Html.Raw(NotRegister)
 
-<div class="row from" >
-    <div class="col-md-4">
-        <form asp-action="Register" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="IsVerified" class="form-control" id="inputVerified" value="False"/>
+    <div class="row from">
+        <div class="col-md-4">
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IsVerified" class="form-control" id="inputVerified" value="False" />
                 <input type="hidden" asp-for="StatusId" class="form-control" id="inputStatusId" value="1" />
                 <div class="form-group">
                     <label asp-for="MemberName" class="control-label"></label>
@@ -30,59 +30,60 @@
                     <input asp-for="MemberName" class="form-control" id="inputName" value="@ViewBag.GAccountName" />
                     <span asp-validation-for="MemberName" class="text-danger"></span>
                 </div>
-            <div class="form-group">
-                <label asp-for="MemberEmail" class="control-label"></label>
-                <div style="display:inline" id="alertEmail"></div>
+                <div class="form-group">
+                    <label asp-for="MemberEmail" class="control-label"></label>
+                    <div style="display:inline" id="alertEmail"></div>
                     <hr class="border border-danger border-2 opacity-50">
                     <input asp-for="MemberEmail" class="form-control" id="inputEmail" value="@ViewBag.GAccountEmail" />
-                <span asp-validation-for="MemberEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MemberPassword" class="control-label"></label>
+                    <span asp-validation-for="MemberEmail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MemberPassword" class="control-label"></label>
                     <hr class="border border-danger border-2 opacity-50">
-                <input type="password" asp-for="MemberPassword" class="form-control" />
-                <span asp-validation-for="MemberPassword" class="text-danger"></span>
-            </div>
+                    <input type="password" asp-for="MemberPassword" class="form-control" id="inputPassword" />
+                    <span asp-validation-for="MemberPassword" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="MemberPhone" class="control-label"></label>
                     <div style="display:inline" id="alertPhone"></div>
                     <hr class="border border-danger border-2 opacity-50">
-                    <input asp-for="MemberPhone" class="form-control" id="inputPhone"/>
+                    <input asp-for="MemberPhone" class="form-control" id="inputPhone" />
                     <span asp-validation-for="MemberPhone" class="text-danger"></span>
                 </div>
-            <div class="form-group">
-                <input type="submit" value="註冊會員" class="btn btn-success" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <input type="submit" value="註冊會員" class="btn btn-success" />
+                    <a class="btn btn-dark" onclick="regdemo()">DEMO</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-</div>
 
- @section Scripts{
-     <script>
+@section Scripts {
+    <script>
         const alertName = document.querySelector('#alertName');
-         const alertEmail = document.querySelector('#alertEmail');
-         const alertPhone = document.querySelector('#alertPhone');
-         const inputName = document.querySelector('#inputName');
-         const inputEmail = document.querySelector('#inputEmail');
-         const inputPhone = document.querySelector('#inputPhone');
-        inputName.addEventListener('blur',()=>{
+        const alertEmail = document.querySelector('#alertEmail');
+        const alertPhone = document.querySelector('#alertPhone');
+        const inputName = document.querySelector('#inputName');
+        const inputEmail = document.querySelector('#inputEmail');
+        const inputPhone = document.querySelector('#inputPhone');
+        inputName.addEventListener('blur', () => {
             checkName();
         })
-         inputEmail.addEventListener('blur', () => {
-             checkEmail();
-         })
-         inputPhone.addEventListener('blur', () => {
-             checkPhone();
-         })
+        inputEmail.addEventListener('blur', () => {
+            checkEmail();
+        })
+        inputPhone.addEventListener('blur', () => {
+            checkPhone();
+        })
         async function checkName() {
             const response = await fetch(`https://localhost:7078/api/Members/name/${inputName.value}`)
-             if (response.status ==200) {
+            if (response.status == 200) {
                 alertName.innerHTML = "<label class='control-HTMLLabelElement text-danger'>此帳號已經有人使用</label><img src='@Url.Content("~/img/icon/X.png")'/>";
-             }else{
+            } else {
                 alertName.innerHTML = "<label  class='control-HTMLLabelElement text-success' >此帳號目前無人使用 </label> <img src='@Url.Content("~/img/icon/check.png")' / >";
-             }
-        } 
+            }
+        }
         async function checkEmail() {
             const response = await fetch(`https://localhost:7078/api/Members/name/${inputEmail.value}`)
             if (response.status == 200) {
@@ -91,7 +92,7 @@
                 alertEmail.innerHTML = "<label  class='control-HTMLLabelElement text-success' >此信箱目前無人使用 </label> <img src='@Url.Content("~/img/icon/check.png")' / >";
             }
         }
-        async function checkPhone(){
+        async function checkPhone() {
             const response = await fetch(`https://localhost:7078/api/Members/name/${inputPhone.value}`)
             if (response.status == 200) {
                 alertPhone.innerHTML = "<label class='control-HTMLLabelElement text-danger'>此手機已經有人使用</label><img src='@Url.Content("~/img/icon/X.png")'/>";
@@ -99,5 +100,14 @@
                 alertPhone.innerHTML = "<label  class='control-HTMLLabelElement text-success' >此手機目前無人使用 </label> <img src='@Url.Content("~/img/icon/check.png")' / >";
             }
         }
-     </script>
- }
+
+
+        function regdemo() {
+            inputName.value = "安安";
+            inputEmail.value = "tpcu40702140@gmail.com";
+            inputPhone.value = "0912345678";
+            inputPassword.value = "Test";
+        }
+
+    </script>
+}

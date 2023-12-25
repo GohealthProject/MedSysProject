@@ -71,6 +71,7 @@
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary" id="btn_submit">儲存並修改</button>
+            <a class="btn btn-dark" id="demo">DEMO</a>
         </div>
     </form>
     @*     <div class="col-12">
@@ -117,32 +118,32 @@
 
 
 
-                // fileN.addEventListener('change', function () {
-                //     const file = this.files[0];
-                //     if (file) {
-                //         const reader = new FileReader();
-                //         reader.addEventListener('load', function () {
-                //             btnImg.setAttribute('src', this.result);
+        // fileN.addEventListener('change', function () {
+        //     const file = this.files[0];
+        //     if (file) {
+        //         const reader = new FileReader();
+        //         reader.addEventListener('load', function () {
+        //             btnImg.setAttribute('src', this.result);
 
-                            // Destroy the existing Croppie instance (if any)
-                            // if (upload) {
-                            //     upload.croppie('destroy');
-                            // }
+        // Destroy the existing Croppie instance (if any)
+        // if (upload) {
+        //     upload.croppie('destroy');
+        // }
 
-                            // // Initialize Croppie with the new image
-                            // upload = $('#btnImg').croppie({
-                            //     viewport: {
-                            //         width: 200,
-                            //         height: 200
-                            //     },
-                            //     boundary: {
-                            //         width: 500,
-                            //         height: 500
+        // // Initialize Croppie with the new image
+        // upload = $('#btnImg').croppie({
+        //     viewport: {
+        //         width: 200,
+        //         height: 200
+        //     },
+        //     boundary: {
+        //         width: 500,
+        //         height: 500
 
-                            //     },
-                            //     showZoomer: true
-                            // });
-                        // });
+        //     },
+        //     showZoomer: true
+        // });
+        // });
         // reader.readAsDataURL(file);
         //         $('#btn_submit').attr('disabled', true);
         //         $('#btn_crop').removeAttr('hidden');
@@ -224,6 +225,14 @@
 
             return file;
         }
+
+        //DEMO
+        document.querySelector(#demo).addEventListener('click', () => {
+            document.querySelector(#inputAddress).value = '台北市大安區復興南路一段390號2樓';
+            document.querySelector(#MemberNickname).value = '安安';
+            document.querySelector(#MemberName).value = '安安';
+            document.querySelector(#MemberBirthdate).value = '2000-07-29';
+        })
 
     </script>
 }
