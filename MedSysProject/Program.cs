@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MedSysProject.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,12 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddHttpClient();
-builder.Services.AddSession();
+builder.Services.AddSession(option =>
+{
+    option.IOTimeout = TimeSpan.FromHours(1);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+});
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("MedSysConnection")));
