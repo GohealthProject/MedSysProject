@@ -65,6 +65,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">我是內容</h1>
+                        <button type="button" class="btn btn-success" id="demo">Demo</button>
                         <button type="button" class="btn btn-danger" id="alledit">一鍵XX</button>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" @*aria-label="Close"*@>×</button>
@@ -236,7 +237,26 @@
         send();
         ttt.ajax.reload();
    }
-   
+   ////////Demo///////
+    var demo = document.querySelector("#demo")
+    demo.addEventListener("click", () => {
+        var allvalue = tableD.querySelectorAll("tr")
+        var txt = tableD.querySelectorAll("#text")
+        
+        txt[0].value = "180";
+        txt[1].value = "77";
+        txt[2].value = "37";
+        txt[3].value = "80";
+        txt[4].value = "110";
+        txt[5].value = "87";
+        txt[6].value = "77";
+        txt[7].value = "無異常";
+        txt[8].value = "無色";
+        txt[9].value = "5";
+
+        
+    
+    })
    ///////一鍵///////
    var alledit = document.querySelector("#alledit")
    
@@ -324,6 +344,7 @@
     //內表////////////dd
     var count2 = 0
     var ttt = $('#tableD').DataTable({
+        destroy:true,
         //設定語言
          dom: 'Bfrtip',
         //scrollY: true,
@@ -444,6 +465,7 @@
     //外表//
     var count =0
     var table = $('#tableM').DataTable({
+        destroy:true,
         "autoWidth": false,
         dom: 'Bfrtip',
         buttons: [
