@@ -255,39 +255,39 @@
                     }
 
                 /*                     .chat-container .right .write .write-link.attach:before {
-                                                                                                                                                                                                                                                                                                display: inline-block;
-                                                                                                                                                                                                                                                                                                float: left;
-                                                                                                                                                                                                                                                                                                width: 20px;
-                                                                                                                                                                                                                                                                                                height: 42px;
-                                                                                                                                                                                                                                                                                                content: '';
-                                                                                                                                                                                                                                                                                                background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
-                                                                                                                                                                                                                                                                                                background-repeat: no-repeat;
-                                                                                                                                                                                                                                                                                                background-position: center;
-                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                        display: inline-block;
+                                                                                                                                                                                                                                                                                                        float: left;
+                                                                                                                                                                                                                                                                                                        width: 20px;
+                                                                                                                                                                                                                                                                                                        height: 42px;
+                                                                                                                                                                                                                                                                                                        content: '';
+                                                                                                                                                                                                                                                                                                        background-image: url("https://s1.postimg.org/s5gfy283f/attachemnt.png");
+                                                                                                                                                                                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                        background-position: center;
+                                                                                                                                                                                                                                                                                                    } */
 
                 /*                     .chat-container .right .write .write-link.smiley:before {
-                                                                                                                                                                                                                                                                                                display: inline-block;
-                                                                                                                                                                                                                                                                                                float: right;
-                                                                                                                                                                                                                                                                                                width: 20px;
-                                                                                                                                                                                                                                                                                                height: 42px;
-                                                                                                                                                                                                                                                                                                margin-right: 11px;
-                                                                                                                                                                                                                                                                                                content: '';
-                                                                                                                                                                                                                                                                                                background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
-                                                                                                                                                                                                                                                                                                background-repeat: no-repeat;
-                                                                                                                                                                                                                                                                                                background-position: center;
-                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                        display: inline-block;
+                                                                                                                                                                                                                                                                                                        float: right;
+                                                                                                                                                                                                                                                                                                        width: 20px;
+                                                                                                                                                                                                                                                                                                        height: 42px;
+                                                                                                                                                                                                                                                                                                        margin-right: 11px;
+                                                                                                                                                                                                                                                                                                        content: '';
+                                                                                                                                                                                                                                                                                                        background-image: url("https://s14.postimg.org/q2ug83h7h/smiley.png");
+                                                                                                                                                                                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                        background-position: center;
+                                                                                                                                                                                                                                                                                                    } */
 
                 /*                     .chat-container .right .write .write-link.send:before {
-                                                                                                                                                                                                                                                                                                display: inline-block;
-                                                                                                                                                                                                                                                                                                float: right;
-                                                                                                                                                                                                                                                                                                width: 20px;
-                                                                                                                                                                                                                                                                                                height: 42px;
-                                                                                                                                                                                                                                                                                                margin-right: 11px;
-                                                                                                                                                                                                                                                                                                content: '';
-                                                                                                                                                                                                                                                                                                background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
-                                                                                                                                                                                                                                                                                                background-repeat: no-repeat;
-                                                                                                                                                                                                                                                                                                background-position: center;
-                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                        display: inline-block;
+                                                                                                                                                                                                                                                                                                        float: right;
+                                                                                                                                                                                                                                                                                                        width: 20px;
+                                                                                                                                                                                                                                                                                                        height: 42px;
+                                                                                                                                                                                                                                                                                                        margin-right: 11px;
+                                                                                                                                                                                                                                                                                                        content: '';
+                                                                                                                                                                                                                                                                                                        background-image: url("https://s30.postimg.org/nz9dho0pp/send.png");
+                                                                                                                                                                                                                                                                                                        background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                        background-position: center;
+                                                                                                                                                                                                                                                                                                    } */
 
                 .chat-container .right .bubble {
                     font-size: 16px;
@@ -479,12 +479,12 @@
                 var employeeid = jsonArray[i].EmployeeId;
                 var employeename = jsonArray[i].EmployeeName;
                 document.getElementById("employee-online-list").innerHTML += `                  <li class="person" data-chat="employee${employeeid}" id="li-${employeeid}" onclick="leftclick(this)">
-                                                                                                                                                                                                            <img src="@Url.Content("~/Admin/EmployeeImage/${employeeid}")" alt="">
-                                                                                                                                                                                                            <input type="hidden" value="${employeeid}" id="hiddenid"/>
-                                                                                                                                                                                                            <span class="name">${employeename}</span>
-                                                                                                                                                                                                    <span class="time"></span>
-                                                                                                                                                                                                    <span class="preview"></span>
-                                                                                                                                                                                                    </li>`;
+                                                                                                                                                                                                                    <img src="@Url.Content("~/Admin/EmployeeImage/${employeeid}")" alt="">
+                                                                                                                                                                                                                    <input type="hidden" value="${employeeid}" id="hiddenid"/>
+                                                                                                                                                                                                                    <span class="name">${employeename}</span>
+                                                                                                                                                                                                            <span class="time"></span>
+                                                                                                                                                                                                            <span class="preview"></span>
+                                                                                                                                                                                                            </li>`;
             }
 
         });
@@ -538,50 +538,120 @@
                 .then(res => res.text())
                 .then(data => {
                     room.innerHTML = data;
+
+                    // ----------------- 以下為聊天室的js -----------------
+                    //卷軸置底
+                    document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+
+                    connection.on("ReceiveMemberMessage", function (memberId, message) {
+                        // alert("ReceiveMemberMessage:" + " " + memberId + " " + message);
+                        // if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+                        document.getElementById("aaatest").innerHTML += `<div class="bubble me">${message}</div>`;
+                        document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+                        // }
+                    });
+
+                    connection.on("ReceiveEmployeeMessage", function (employeeId, message) {
+                        // alert("ReceiveEmployeeMessage:" + " " + employeeId + " " + message);
+                        // if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+                        document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
+                        document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+                        // }
+                    });
+
+                    connection.on("testtt", function () {
+                        alert("testtt");
+                    });
+
+                    //
+                    function sendmsg() {
+                        var direction = document.getElementById("hiddendirectionid").value;
+
+                        if (document.getElementById("chat-messagebox").value == "") {
+                            return;
+                        }
+
+                        let text = document.getElementById("chat-messagebox").value;
+                        document.getElementById("chat-messagebox").value = "";
+
+                        // document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
+
+                        // document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+
+                        hiddenRoomid = parseInt(document.getElementById("hiddenRoomid").value);
+                        hiddenMemberid = parseInt(document.getElementById("hiddenMemberid").value);
+                        hiddenEmployeeid = parseInt(document.getElementById("hiddenEmployeeid").value);
+
+
+                        console.log(hiddenRoomid)
+                        console.log(hiddenMemberid)
+                        console.log(hiddenEmployeeid)
+                        console.log(text)
+
+                        //傳送訊息給Server
+                        if (direction == 1)
+                            connection.invoke("SendMessage", hiddenRoomid, hiddenMemberid, null, text).catch(function (err) {
+                                return console.error(err.toString());
+                            });
+                        else
+                            connection.invoke("SendMessage", hiddenRoomid, null, hiddenEmployeeid, text).catch(function (err) {
+                                return console.error(err.toString());
+                            });
+
+                        event.preventDefault();
+                    };
+
+                    //enter鍵送出
+                    document.getElementById("chat-messagebox").addEventListener("keyup", function (event) {
+                        if (event.keyCode === 13) {
+                            sendmsg();
+                        }
+                    });
+
+                    //----------------- 以上為聊天室的js -----------------
                 })
 
-            entersend();
         }
 
-        //傳送訊息前端
-        function sendmsg() {
-            if (document.getElementById("chat-messagebox").value == "") {
-                return;
-            }
+        // //傳送訊息前端
+        // function sendmsg() {
+        //     if (document.getElementById("chat-messagebox").value == "") {
+        //         return;
+        //     }
 
-            let text = document.getElementById("chat-messagebox").value;
-            document.getElementById("chat-messagebox").value = "";
+        //     let text = document.getElementById("chat-messagebox").value;
+        //     document.getElementById("chat-messagebox").value = "";
 
-            document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
+        //     document.getElementById("aaatest").innerHTML += `<div class="bubble me">${text}</div>`;
 
-            document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+        //     document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
 
-            hiddenRoomid = parseInt(document.getElementById("hiddenRoomid").value);
+        //     hiddenRoomid = parseInt(document.getElementById("hiddenRoomid").value);
 
-            console.log(hiddenRoomid)
-            console.log(hiddenMemberid)
-            console.log(hiddenEmployeeid)
-            console.log(text)
+        //     console.log(hiddenRoomid)
+        //     console.log(hiddenMemberid)
+        //     console.log(hiddenEmployeeid)
+        //     console.log(text)
 
-            //傳送訊息給Server
-            connection.invoke("SendMessage", hiddenRoomid, hiddenMemberid, hiddenEmployeeid, text).catch(function (err) {
-                return console.error(err.toString());
-            });
+        //     //傳送訊息給Server
+        //     connection.invoke("SendMessage", hiddenRoomid, hiddenMemberid, hiddenEmployeeid, text).catch(function (err) {
+        //         return console.error(err.toString());
+        //     });
 
-            event.preventDefault();
-        };
+        //     event.preventDefault();
+        // };
 
-        //enter傳送訊息
-        function entersend() {
-            var target = event.target;
+        // //enter傳送訊息
+        // function entersend() {
+        //     var target = event.target;
 
-            if (target.classList.contains("chat-messagebox")) {
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    document.getElementById("chat-btnsend").click();
-                }
-            }
-        };
+        //     if (target.classList.contains("chat-messagebox")) {
+        //         if (event.keyCode === 13) {
+        //             event.preventDefault();
+        //             document.getElementById("chat-btnsend").click();
+        //         }
+        //     }
+        // };
     </script>
 
 
