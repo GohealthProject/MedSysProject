@@ -126,8 +126,8 @@
                     imageUrl = URL.createObjectURL(blob);
                 }
                 return `
-                    <li>
-                                <a href="@Url.Content(~/Blogs/SinglePost)?SingleBlogId=${blogId}" class="d-flex align-items-center">
+                            <li>
+                                <a href="https://localhost:7203/Blogs/SinglePost?SingleBlogId=${blogId}" class="d-flex align-items-center">
                                     <img src="${imageUrl}" alt="" class="img-fluid me-3">
                                     <div>
                                         <div class="post-meta d-block"><span class="date">${articleClass}</span> <span class="mx-1">&bullet;</span> <span>${formattedDate}</span></div>
@@ -136,6 +136,7 @@
                                 </a>
                             </li>
                 `
+               
             });
         footerContainer.innerHTML = recent4.join('');
         });

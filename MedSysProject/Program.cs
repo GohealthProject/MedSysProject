@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MedSysProject.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,17 +25,12 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddHttpClient();
-
-
-builder.Services.AddSession(options =>
+builder.Services.AddSession(option =>
 {
-    // 設定會話逾時時間
-    options.IdleTimeout = TimeSpan.FromMinutes(60); // 設定為你期望的逾時時間
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    option.IOTimeout = TimeSpan.FromHours(1);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
 });
-
-
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("MedSysConnection")));
