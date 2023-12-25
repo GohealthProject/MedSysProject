@@ -667,13 +667,13 @@
                 //const td2 = tr.querySelectorAll("td")[2];
                 for(var i =0;i<=rp1.length-1;i++)
                 {
-                var rp1val = parseInt(rp1[i].innerHTML)
-                var rp2val = parseInt(rp2[i].innerHTML)
+                var rp1val = parseFloat(rp1[i].innerHTML)
+                var rp2val = parseFloat(rp2[i].innerHTML)
                 console.log(rp1val)
                 //console.log(rp1va2.innerHTML)
-                if (Number.isInteger(rp1val)) 
+                if (Number.isFinite(rp1val)) 
                 {
-                    if (rp1val < rp2val) 
+                    if (rp1val <= rp2val) 
                     {
                         rp1[i].style.color = "#0080FF"
                         rp1[i].setAttribute("Class", "fs-4")
@@ -909,8 +909,8 @@
             })
         }).trigger('change')
     })
-    ch1.selectedIndex = 1;//4
-    ch1id.selectedIndex = 1;//4
+    ch1.selectedIndex = 4;//4
+    ch1id.selectedIndex = 4;//4
     index = ch1.selectedIndex
     //index2 = ch1.selectedIndex
     rp1Display();
