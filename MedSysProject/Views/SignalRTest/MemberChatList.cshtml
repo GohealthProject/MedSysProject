@@ -478,8 +478,9 @@
             for (var i = 0; i < jsonArray.length; i++) {
                 var memberid = jsonArray[i].MemberId;
                 var membername = jsonArray[i].MemberName;
+                var memberimgfilename = jsonArray[i].MemberImage;
                 document.getElementById("employee-online-list").innerHTML += `                  <li class="person" data-chat="member${memberid}" id="li-${memberid}" onclick="leftclick(this)">
-                                                                                                                                                                                                                    <img src="@Url.Content("~/Member/MemberImage/${memberid}")" alt="">
+                                                                                                                                                                                                                            <img src="@Url.Content("~/img/MemberImg/${memberimgfilename}")" alt="">
                                                                                                                                                                                                                     <input type="hidden" value="${memberid}" id="hiddenid"/>
                                                                                                                                                                                                                     <span class="name">${membername}</span>
                                                                                                                                                                                                             <span class="time"></span>

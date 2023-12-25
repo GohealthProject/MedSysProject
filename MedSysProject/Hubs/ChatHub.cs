@@ -59,7 +59,7 @@ namespace MedSysProject.Hubs
                     foreach (var item in MemberIDList) //將會員列表轉成json格式
                     {
                         var id = _db.Members.Find(item);
-                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId,id.MemberImage };
                         Memberjson += JsonConvert.SerializeObject(memberidandname);
                         if (item != MemberIDList.Last())
                             Memberjson += ",";
@@ -91,7 +91,7 @@ namespace MedSysProject.Hubs
                     foreach (var item in EmployeeIDList)
                     {
                         var id = _db.Employees.Find(item);
-                        var employeeidandname = new { id.EmployeeId, id.EmployeeName };
+                        var employeeidandname = new { id.EmployeeId, id.EmployeeName,id.EmployeeConnectionId };
                         Empjson += JsonConvert.SerializeObject(employeeidandname);
                         if (item != EmployeeIDList.Last())
                             Empjson += ",";
@@ -102,7 +102,7 @@ namespace MedSysProject.Hubs
                     foreach (var item in MemberIDList)
                     {
                         var id = _db.Members.Find(item);
-                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId, id.MemberImage };
                         Memberjson += JsonConvert.SerializeObject(memberidandname);
                         if (item != MemberIDList.Last())
                             Memberjson += ",";
