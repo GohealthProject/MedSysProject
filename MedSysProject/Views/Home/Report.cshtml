@@ -671,12 +671,23 @@
                 var rp2val = parseInt(rp2[i].innerHTML)
                 console.log(rp1val)
                 //console.log(rp1va2.innerHTML)
-                if (Number.isInteger(rp1val)) {
-                    if (rp1val < rp2val) {
+                if (Number.isInteger(rp1val)) 
+                {
+                    if (rp1val < rp2val) 
+                    {
                         rp1[i].style.color = "#0080FF"
+                        rp1[i].setAttribute("Class", "fs-4")
+                    }
+
+                    if (rp1val > rp2val) 
+                    {
+                        rp1[i].style.color = "#D26900"
+                        rp1[i].setAttribute("Class", "fs-4")
+                    }
+                        //rp1[i].style.backgroundcolor ="#0080FF"
                         //"#D26900"
                         //.setAttribute("Class", "red")
-                    }
+                    
                     console.log("hi")
                 }
                 else (rp1val == "無異常")
