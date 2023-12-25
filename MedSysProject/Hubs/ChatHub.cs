@@ -44,19 +44,32 @@ namespace MedSysProject.Hubs
                     //string json = JsonConvert.SerializeObject(member);
                     //await _hubContext.Clients.All.SendAsync("UpdateMemberList", member.MemberId, member.MemberName, json);
 
-                    string json = "";
-                    foreach (var item in EmployeeIDList)
+                    string Empjson = "";
+                    foreach (var item in EmployeeIDList) //將員工列表轉成json格式
                     {
                         var id = _db.Employees.Find(item);
                         var employeeidandname = new { id.EmployeeId, id.EmployeeName,id.EmployeeConnectionId };
-                        json += JsonConvert.SerializeObject(employeeidandname);
+                        Empjson += JsonConvert.SerializeObject(employeeidandname);
                         if (item != EmployeeIDList.Last())
-                            json += ",";
+                            Empjson += ",";
                     }
-                    json = "[" + json + "]";
+                    Empjson = "[" + Empjson + "]";
+
+                    string Memberjson = "";
+                    foreach (var item in MemberIDList) //將會員列表轉成json格式
+                    {
+                        var id = _db.Members.Find(item);
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        Memberjson += JsonConvert.SerializeObject(memberidandname);
+                        if (item != MemberIDList.Last())
+                            Memberjson += ",";
+                    }
+                    Memberjson = "[" + Memberjson + "]";
 
                     //string json = JsonConvert.SerializeObject(employeeidandname);
-                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", Empjson);
+
+                    //await _hubContext.Clients.All.SendAsync("UpdateMemberList", Memberjson);
 
 
                 }
@@ -74,19 +87,32 @@ namespace MedSysProject.Hubs
                     userisEmployee.EmployeeConnectionId = Context.ConnectionId;
                     _db.SaveChanges();
 
-                    string json = "";
+                    string Empjson = "";
                     foreach (var item in EmployeeIDList)
                     {
                         var id = _db.Employees.Find(item);
                         var employeeidandname = new { id.EmployeeId, id.EmployeeName };
-                        json += JsonConvert.SerializeObject(employeeidandname);
+                        Empjson += JsonConvert.SerializeObject(employeeidandname);
                         if (item != EmployeeIDList.Last())
-                            json += ",";
+                            Empjson += ",";
                     }
-                    json = "[" + json + "]";
+                    Empjson = "[" + Empjson + "]";
+
+                    string Memberjson = "";
+                    foreach (var item in MemberIDList)
+                    {
+                        var id = _db.Members.Find(item);
+                        var memberidandname = new { id.MemberId, id.MemberName,id.ConnectionId };
+                        Memberjson += JsonConvert.SerializeObject(memberidandname);
+                        if (item != MemberIDList.Last())
+                            Memberjson += ",";
+                    }
+                    Memberjson = "[" + Memberjson + "]";
 
                     //string json = JsonConvert.SerializeObject(employeeidandname);
-                    await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", json);
+                    //await _hubContext.Clients.All.SendAsync("UpdateEmployeeList", Empjson);
+
+                    await _hubContext.Clients.All.SendAsync("UpdateMemberList", Memberjson);
 
                 }
             }
@@ -119,9 +145,9 @@ namespace MedSysProject.Hubs
                 {
                     var empconnection = _db.Employees.FirstOrDefault(e => e.EmployeeConnectionId == Context.ConnectionId);
 
-                    EmployeeIDList.Remove(empconnection.EmployeeId);
-                    ConnectionIDList.Remove(Context.ConnectionId);
-                    employeeID = empconnection.EmployeeId;
+                    //EmployeeIDList.Remove(empconnection.EmployeeId);
+                    //ConnectionIDList.Remove(Context.ConnectionId);
+                    //employeeID = empconnection.EmployeeId;
 
 
 

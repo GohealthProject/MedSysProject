@@ -6,6 +6,7 @@
 <input type="hidden" value="@ViewBag.MemberId" id="hiddenMemberid" />
 <input type="hidden" value="@ViewBag.EmployeeId" id="hiddenEmployeeid" />
 <input type="hidden" value="@ViewBag.RoomId" id="hiddenRoomid" />
+<input type="hidden" value="@ViewBag.direction" id="hiddendirectionid" />
 
 <!-- 訊息內容 -->
 
@@ -19,13 +20,27 @@
 
     @foreach (var mgs in Model)
     {
-        if (mgs.MemberId == ViewBag.MemberId)
+        if (ViewBag.direction == 1)
         {
-            <div class="bubble me">@mgs.MessageContent</div>
+            if (mgs.MemberId == ViewBag.MemberId)
+            {
+                <div class="bubble me">@mgs.MessageContent</div>
+            }
+            else
+            {
+                <div class="bubble you">@mgs.MessageContent</div>
+            }
         }
         else
         {
-            <div class="bubble you">@mgs.MessageContent</div>
+            if (mgs.EmployeeId == ViewBag.EmployeeId)
+            {
+                <div class="bubble me">@mgs.MessageContent</div>
+            }
+            else
+            {
+                <div class="bubble you">@mgs.MessageContent</div>
+            }
         }
     }
 </div>
@@ -64,7 +79,7 @@
         }
     });
 
-    
+
 
 
 </script>
