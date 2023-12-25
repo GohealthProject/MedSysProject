@@ -604,15 +604,15 @@
         // }
 
         var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-        var hiddenMemberid = document.getElementById("hiddenMemberid").value;
+        // var hiddenMemberid = document.getElementById("hiddenMemberid").value;
         var hiddenEmployeeid = document.getElementById("hiddenEmpId").value;
 
-        connection.on("ReceiveMessage", function (memberId, employeeId, message) {
-            if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
-                document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
-                document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
-            }
-        });
+        // connection.on("ReceiveMessage", function (memberId, employeeId, message) {
+        //     if (memberId == hiddenMemberid && employeeId == hiddenEmployeeid) {
+        //         document.getElementById("aaatest").innerHTML += `<div class="bubble you">${message}</div>`;
+        //         document.getElementById("aaatest").scrollTop = document.getElementById("aaatest").scrollHeight;
+        //     }
+        // });
 
 
 
