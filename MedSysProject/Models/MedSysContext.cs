@@ -391,6 +391,7 @@ public partial class MedSysContext : DbContext
             entity.Property(e => e.EmployeeId).HasColumnName("employeeID");
             entity.Property(e => e.MemberId).HasColumnName("memberID");
             entity.Property(e => e.RoomId).HasColumnName("roomId");
+            entity.Property(e => e.SendTime).HasColumnType("datetime");
 
             entity.HasOne(d => d.Employee).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.EmployeeId)

@@ -134,12 +134,9 @@
                     <div class="col-6 col-lg-2">
                         <h3 class="footer-heading">網站導覽</h3>
                         <ul class="footer-links list-unstyled">
-                            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
-                            <li><a href="index.html"><i class="bi bi-chevron-right"></i> Blog</a></li>
-                            <li><a href="category.html"><i class="bi bi-chevron-right"></i> Categories</a></li>
-                            <li><a href="single-post.html"><i class="bi bi-chevron-right"></i> Single Post</a></li>
-                            <li><a href="about.html"><i class="bi bi-chevron-right"></i> About us</a></li>
-                            <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+                            <li><a href="@Url.Content("~/Blogs/Indexnew")"><i class="bi bi-chevron-right"></i> 部落格首頁</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SinglePost")"><i class="bi bi-chevron-right"></i> 精選貼文</a></li>
+                            <li><a href="@Url.Content("~/Blogs/SelectBlogCategory")"><i class="bi bi-chevron-right"></i> 文章類別</a></li>
                         </ul>
                     </div>
                     <div class="col-6 col-lg-2">
@@ -156,7 +153,7 @@
                     <div class="col-lg-4">
                         <h3 class="footer-heading">近期貼文</h3>
 
-                        <ul class="footer-links footer-blog-entry list-unstyled">
+                        <ul class="footer-links footer-blog-entry list-unstyled footerRecent">
                             <li>
                                 <a href="single-post.html" class="d-flex align-items-center">
                                     <img src="~/assets/img/post-sq-1.jpg" alt="" class="img-fluid me-3">
@@ -210,7 +207,7 @@
                 <div class="row justify-content-between">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                         <div class="copyright">
-                            © Copyright <strong><span>ZenBlog</span></strong>. All Rights Reserved
+                            © Copyright <strong><span>GO健康健檢中心</span></strong>. All Rights Reserved
                         </div>
 
                         <div class="credits">
@@ -248,8 +245,7 @@
     <script src="~/assets/vendor/glightbox/js/glightbox.min.js"></script>
     <script src="~/assets/vendor/aos/aos.js"></script>
     <script src="~/assets/vendor/php-email-form/validate.js"></script>
-    
-
+  
     <!-- JavaScripts放這 -->
     <script src="~/assets/js/mine.js"></script>
 </body>

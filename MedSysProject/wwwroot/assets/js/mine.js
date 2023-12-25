@@ -100,4 +100,44 @@
     window.addEventListener('load', () => {
         aos_init();
     });
+
+    fetch(`https://localhost:7078/api/Blogs/latest6`)
+        .then(response => response.json())
+        .then(data => {
+            const take4 = data.$values.slice(0, 4);
+            const footerContainer = document.querySelector('.footerRecent');
+            const recent4 = take4.map(blog => {
+                const { blogId, title, author, articleClass, createdAt, views,blogImage} = blog;
+                const date = new Date(createdAt);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+                let imageUrl = '';
+                if (blog.blogImage != null)
+                {
+                    var binary = atob(blog.blogImage);
+                    var byteArray = new Uint8Array(binary.length);
+                    for (var i = 0; i < binary.length; i++)
+                    {
+                        byteArray[i]= binary.charCodeAt(i);
+                    }
+                    var blob = new Blob([byteArray], { type: 'image/jpeg' });
+                    imageUrl = URL.createObjectURL(blob);
+                }
+                return `
+                            <li>
+                                <a href="https://localhost:7203/Blogs/SinglePost?SingleBlogId=${blogId}" class="d-flex align-items-center">
+                                    <img src="${imageUrl}" alt="" class="img-fluid me-3">
+                                    <div>
+                                        <div class="post-meta d-block"><span class="date">${articleClass}</span> <span class="mx-1">&bullet;</span> <span>${formattedDate}</span></div>
+                                        <span>${title}</span>
+                                    </div>
+                                </a>
+                            </li>
+                `
+               
+            });
+        footerContainer.innerHTML = recent4.join('');
+        });
 });

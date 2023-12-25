@@ -532,24 +532,29 @@ namespace MedSysProject.Controllers
             return PartialView();
         }
         ///// ====end這裡是partialview區=====
-        public IActionResult DateCheck()
+        public IActionResult DateCheck(string ss)
         {
-            var form = Request.Form;
-            string date =  form["date"];
-            var taget =_context.Reserves.Where(p => p.ReserveDate == date).Count();
+            //var form = Request.Form;
+            //string date =  form["date"];
+            var taget =_context.Reserves.Where(p => p.ReserveDate == ss).Count();
+            HttpContext.Session.SetString("DATE",ss);
+            string s = "";
             if (taget >5) 
             {
-                return Ok("OK");
+                s = "NO";
+                
+                return Json(s);
             }
             else
             {
-                return Json("NO");
+                s = "YES";
+                return Json(s);
             }
 
 
         }
 
-        public static string EmailText2(string TradeNo, string proname, string proCount, string total)
+        public static string ReserveEmail(string TradeNo, string proname, string proCount, string total)
         {
             string html = "";
             List<string> proList = new List<string>();
@@ -562,7 +567,7 @@ namespace MedSysProject.Controllers
             html = "<h2>你好！很高興您能來我們網站消費。</h2>";
             html += "<h3>您的EcPay交易編號為：" + TradeNo + "</h3>";
             html += "<table style='border-collapse:collapse;border:1px solid #ddd'><thead><tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>產品名稱</td><td style='padding:8px;'>數量</td></tr><thead><tbody>";
-            for (int i = 0; i < proList.Count - 1; i++)
+            for (int i = 0; i <= proList.Count - 1; i++)
             {
                 html += "<tr style='border:1px solid #ddd;padding:8px;'><td style='border:1px solid #ddd;padding:8px;'>" + proList[i] + "</td><td style='padding:8px;'>" + proCountList[i] + "</td></tr>";
             }
@@ -588,9 +593,9 @@ namespace MedSysProject.Controllers
                 string url = "https://localhost:7078/api/Email";
 
                 EmailData email = new EmailData();
-                email.Address = "waynewang1990@hotmail.com";          //m.MemberEmail;
+                email.Address = m.MemberEmail;
 
-                email.Body = EmailText2(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
+                email.Body = ReserveEmail(ecpay.MerchantTradeNo, ecpay.ItemName, "1", ecpay.TradeAmt.ToString());
                 email.Subject = "訂單成立";
                 string emailjson = System.Text.Json.JsonSerializer.Serialize(email);
                 HttpContent content = new StringContent(emailjson, Encoding.UTF8, "application/json");
@@ -605,8 +610,8 @@ namespace MedSysProject.Controllers
             //[HttpPost]
             public IActionResult Reserve(IFormCollection item)
         {
-           
-            ///////////////////todo OrderURL轉跳 MAIL 後台一鑑 Modal內容修改 日曆效果////////
+            HttpContext.Session.SetString("rdate", "");
+            ///////////////////todo OrderURL轉跳 MAIL 後台一鑑 Modal內容修改 日曆效果  總價////////
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
             int? totalprice = 0;
@@ -660,7 +665,8 @@ namespace MedSysProject.Controllers
         { "CustomField2",  ""},
         { "CustomField3",  ""},
         { "CustomField4",  ""},
-        { "OrderResultURL", $"{website}Transaction/payInfo"},
+        { "OrderResultURL", $"{website}Home/Index"},
+        //{ "OrderResultURL", $"{website}Transaction/payInfo"},
         //{ "OrderResultURL", $"{website}/Home/PayInfo/{orderId}"},//Client端回傳付款結果網址
         //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
         //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
@@ -1042,6 +1048,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult rsv(/*int id*/)
         {
+            string sd =HttpContext.Session.GetString("DATE");
+            /////////////SaveChange()////////
             var form = Request.Form;
             int id = int.Parse(form["mid"]);
             string date = form["date"];
@@ -1054,12 +1062,13 @@ namespace MedSysProject.Controllers
             Reserve rs = new Reserve();
             rs.MemberId = id;
             rs.PlanId = pid;////
-            rs.ReserveDate = DateTime.Now.ToShortDateString();
+            rs.ReserveDate = date;
+                //DateTime.Now.ToString("yyyyy-MM-dd");
             rs.ReserveState = "預約中";
             rs.PaymentStatus = 0;
 
             _context.Reserves.Add(rs);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             string json = HttpContext.Session.GetString(CDictionary.SK_CUSTOMER_ITEMLIST);
             List<Item> list = System.Text.Json.JsonSerializer.Deserialize<List<Item>>(json);
             int rid = _context.Reserves.Where(p => p.MemberId == id).OrderBy(n => n.ReserveId).LastOrDefault().ReserveId;
@@ -1072,7 +1081,7 @@ namespace MedSysProject.Controllers
                 _context.ReservedSubs.Add(rss);
             }
 
-            //_context.SaveChanges();
+            _context.SaveChanges();
             HealthReport hr = new HealthReport();
             hr.MemberId = id;
             hr.PlanId = pid;
@@ -1081,7 +1090,7 @@ namespace MedSysProject.Controllers
             hr.Paymentstatus = 0;
 
             _context.HealthReports.Add(hr);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             int hrid = _context.HealthReports.Where(p => p.MemberId == id).OrderBy(n => n.ReportId).Last().ReportId;
             foreach (var item in list)
             {
@@ -1090,59 +1099,11 @@ namespace MedSysProject.Controllers
                 rdt.ItemId = item.ItemId;
                 _context.ReportDetails.Add(rdt);
             }
-            //_context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpPost]
-        public IActionResult enterResult()
-        {
-            var form = Request.Form;
-
-            // const form  = new formdata();
-            //from.append("formReportId","2255,2256,2257,2258,2259,";
-            //form.append("formResult","100,200,300,400,500");
-
-            //let url = `/Home/enterResult`;
-            //const response = await fetch(url,{
-            //  method:"POST",
-            //  body:form,
-            //})
-            string formReportId = form["reportids"];
-            string formResult = form["result"];
-
-            
-            string reportid = "2255,2256,2257,2258,2259,";
-            
-            List<string> relist = formReportId.Split(",").ToList();
-            List<int> ids = new List<int>();
-
-            for(int i =0; i < relist.Count() - 1; i++)
-            {
-                ids.Add(int.Parse(relist[i]));
-            }
-
-            List<string> results = formResult.Split(",").ToList();
-            List<string> resultss = new List<string>();
-            for(int j = 0; j < results.Count() - 1; j++)
-            {
-                resultss.Add(results[j]);
-            }
-            int count = 0;
-            foreach(var item in ids)
-            {
-                var red = _context.ReportDetails.Find(item);
-                red.Result = resultss[count];
-                count++;
-            }
-
             _context.SaveChanges();
-
-
-            string str = "100,200,300,400,500,";
-
             return Ok();
         }
+
+      
 
 
       

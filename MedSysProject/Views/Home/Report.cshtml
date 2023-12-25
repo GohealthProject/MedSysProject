@@ -15,8 +15,8 @@
 <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF/jspdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
-<script type="text/javascript" src="libs/jsPDF/jspdf.umd.min.js"></script>
-
+@*<script type="text/javascript" src="libs/jsPDF/jspdf.umd.min.js"></script>
+*@
 
 <style>
     .left {
@@ -92,7 +92,7 @@
 <meta charset="UTF-8">
 
 <div class="col-2 title">
-    <select class="form-select" aria-label="Default select example" id="import" >
+    <select hidden class="form-select" aria-label="Default select example" id="import" >
         <option selected>選擇健檢報告0</option>
 
         @{
@@ -119,15 +119,10 @@
 
     </select>
 </div>
-@*@foreach (var item in Model)
-    {
-     
 
-
-        }*@
        
-<h1>會員中心  @ViewData["id"]</h1>
-@*@Html.DisplayNameFor(model => model)*@
+<h1>會員中心 </h1>
+
 
 <div class="container-fluid ">
     <div class="row">
@@ -532,41 +527,59 @@
         ///ajax///
         const endpoint = 'https://localhost:7203/transaction/rp2';
         const reportdid = ch1id.value
-        $.ajax({
-            type: "GET",
-            url: `${endpoint}/${reportdid}`,
-            dataType: "json",
-            success: function (response) {
-                //alert(response)
-                //response[0].reportDetailId
-                //response[0].reportId
-                //response[0].itemId
-                //response[0].result
-                //const charge = [];
-                //charge.push(...response);
-                //createDomElement(charge);
-                console.log(ch2.value)
-                for (var i = 0; i <= response.length; i++) {
+
+        fetch(`${endpoint}/${reportdid}`)
+            .then((respond) => {
+                return respond.json()
+
+            }).then(data => {
+                //var dataaaa = JSON.stringify(data)
+                for (var i = 0; i <= data.length - 1; i++) {
                     let j = document.createElement("td");
-                    j.setAttribute("id","rp1");
-                    
-                    if (response[i]?.result != undefined) 
-                    {
-                        j.innerHTML = response[i].result
+                    j.setAttribute("id", "rp1");
+
+                    if (data[i]?.result != undefined) {
+                        j.innerHTML = data[i].result
                     }
-                    else
-                    {
+                    else {
                         j.innerHTML = "null"
-                        
+
                     }
+
                     rp1[i].parentNode.replaceChild(j, rp1[i]);
 
+
                 }
-            },
-            error: function (thrownError) {
-                console.log(thrownError);
-            }
-        });
+                match();
+            })
+        
+        //$.ajax({
+        //    type: "GET",
+        //    url: `${endpoint}/${reportdid}`,
+        //    dataType: "json",
+        //    success: function (response) {
+             
+        //        for (var i = 0; i <= response.length; i++) {
+        //            let j = document.createElement("td");
+        //            j.setAttribute("id","rp1");
+                    
+        //            if (response[i]?.result != undefined) 
+        //            {
+        //                j.innerHTML = response[i].result
+        //            }
+        //            else
+        //            {
+        //                j.innerHTML = "null"
+                        
+        //            }
+        //            rp1[i].parentNode.replaceChild(j, rp1[i]);
+
+        //        }
+        //    },
+        //    error: function (thrownError) {
+        //        console.log(thrownError);
+        //    }
+        //});
 
 
     }
@@ -586,39 +599,107 @@
             ///ajax///
         const endpoint = 'https://localhost:7203/transaction/rp2';
         const reportdid = ch2id.value
-        $.ajax({
-            type: "GET",
-            url: `${endpoint}/${reportdid}`,
-            dataType: "json",
-            success: function (response) {
-                //alert(response)
-               
-                console.log(ch2id.value)
-                for (var i = 0; i <= response.length; i++) {
-                    let j = document.createElement("td");
-                    j.setAttribute("id", "rp2");
+        fetch(`${endpoint}/${reportdid}`)
+        .then((respond)=>{
+          return respond.json()
+        
+        }).then(data=>{
+            //var dataaaa = JSON.stringify(data)
+                for (var i = 0; i <= data.length - 2; i++) {
+                                let j = document.createElement("td");
+                                j.setAttribute("id", "rp2");
 
-                    if (response[i]?.result != undefined) {
-                        j.innerHTML = response[i].result
-                    }
-                    else {
-                        j.innerHTML = "null"
+                                if (data[i]?.result != undefined) {
+                                    j.innerHTML = data[i].result
+                                }
+                                else {
+                                    j.innerHTML = "null"
 
-                    }
-                    
-                    rp3[i].parentNode.replaceChild(j, rp3[i]);
+                                }
 
-                }
-            },
-            error: function (thrownError) {
-                console.log(thrownError);
-            }
-        });
+                                rp3[i].parentNode.replaceChild(j, rp3[i]);
 
-       
+
         }
+                match();
+        })
+        
+        //$.ajax({
+        //    type: "GET",
+        //    url: `${endpoint}/${reportdid}`,
+        //    dataType: "json",
+        //    success:  function (response) {
+                ////alert(response)
+               
+                ////console.log(ch2id.value)
+        //        for (var i = 0; i <= response.length-1; i++) {
+        //            let j = document.createElement("td");
+        //            j.setAttribute("id", "rp2");
+
+        //            if (response[i]?.result != undefined) {
+        //                j.innerHTML = response[i].result
+        //            }
+        //            else {
+        //                j.innerHTML = "null"
+
+        //            }
+                    
+        //            rp3[i].parentNode.replaceChild(j, rp3[i]);
+
+        //        }
+        //    },
+        //    error: function (thrownError) {
+        //        console.log(thrownError);
+        //    }
+        //});
+       
+      
+
+        async function match()
+        {
+            var alltr2 = document.querySelectorAll("tr")
 
 
+           
+                var rp1 = document.querySelectorAll("#rp1")
+                var rp2 = document.querySelectorAll("#rp2")
+                //const td1 = tr.querySelectorAll("td")[1];
+                //const td2 = tr.querySelectorAll("td")[2];
+                for(var i =0;i<=rp1.length-1;i++)
+                {
+                var rp1val = parseFloat(rp1[i].innerHTML)
+                var rp2val = parseFloat(rp2[i].innerHTML)
+                console.log(rp1val)
+                //console.log(rp1va2.innerHTML)
+                if (Number.isFinite(rp1val)) 
+                {
+                    if (rp1val <= rp2val) 
+                    {
+                        rp1[i].style.color = "#0080FF"
+                        rp1[i].setAttribute("Class", "fs-4")
+                    }
+
+                    if (rp1val > rp2val) 
+                    {
+                        rp1[i].style.color = "#D26900"
+                        rp1[i].setAttribute("Class", "fs-4")
+                    }
+                        //rp1[i].style.backgroundcolor ="#0080FF"
+                        //"#D26900"
+                        //.setAttribute("Class", "red")
+                    
+                    console.log("hi")
+                }
+                else (rp1val == "無異常")
+                {
+                    //rp1.setAttribute("Color", "red")
+                }
+                }
+                console.log("a")
+                
+            
+        }
+        }
    
 
         function createDomElement(charge) {
@@ -828,8 +909,8 @@
             })
         }).trigger('change')
     })
-    ch1.selectedIndex = 3;
-    ch1id.selectedIndex = 3;
+    ch1.selectedIndex = 4;//4
+    ch1id.selectedIndex = 4;//4
     index = ch1.selectedIndex
     //index2 = ch1.selectedIndex
     rp1Display();
