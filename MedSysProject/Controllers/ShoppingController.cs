@@ -436,7 +436,8 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult OrderList(string key,int page=1)
         {
-            if(key == "keyword")
+            
+            if (key == "keyword")
             {
                 List<COrderWarp> list = new List<COrderWarp>();
                 string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
@@ -544,7 +545,9 @@ namespace MedSysProject.Controllers
             }
             else if(key == "monthKey")
             {
-                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year);
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year&&n.MemberId==m.MemberId);
                 List<COrderWarp> list = new List<COrderWarp>();
                 foreach (var o in q)
                 {

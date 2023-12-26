@@ -30,7 +30,7 @@
                 foreach(var item in Model)
                 {
                     RegularPrice = (int)item.UnitPrice;
-                    SpecialPrice = (int)item.UnitPrice-200;
+                    SpecialPrice = (int)((int)item.UnitPrice*0.8);
                     count++;
                                                         <tr style="vertical-align: middle">
                                                             
