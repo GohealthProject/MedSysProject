@@ -33,6 +33,7 @@
     <Folder Include="Html檔案放這邊\後端介面\js\" />
     <Folder Include="Html檔案放這邊\後端介面\styles\" />
     <Folder Include="wwwroot\lib\microsoft\" />
+    <Folder Include="wwwroot\1229發表用資料\" />
   </ItemGroup>
 
   <ItemGroup>
