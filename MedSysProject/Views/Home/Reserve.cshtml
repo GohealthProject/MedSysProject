@@ -221,12 +221,13 @@
                                        required id="bday"/>
                                 <span class="validity"></span>
                             </label>
-
+                            
                             <p class="d-none" style="color:red" id="full">
+                                <img src="~/img/icon/X.png" />
                                 預約已滿
                             </p>
                             <p class="d-none" id="ok">
-                                <img src="~/img/icon/check.png"/>"
+                                <img src="~/img/icon/check.png"/>
                             </p>
                             <select id="payment" class="form-select col-12 mb-2" aria-label="Default select example">
                                 <option selected>付款方式</option>
@@ -265,8 +266,10 @@
                     <h5 class="modal-title" id="reservelbl">確定要預約嗎?</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="d2024">
-                    預約日期:2024/01/02 付費方式:信用卡
+                    <div class="modal-body align-self-lg-center" id="d2024">
+                    預約日期:2024/01/02
+                    <br/>
+                    付費方式:信用卡
                 </div>
                 <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#confirm" data-bs-toggle="modal" id="reservesubmit">確定</button>
