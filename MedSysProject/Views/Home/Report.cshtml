@@ -771,7 +771,7 @@
         @{
             var report = (from s in Model
                          where /*s.Report.Reserve.ReserveDate == "2023-10-26" &&*/
-                               s.Report.ReportId.Equals(1041)
+                               s.Report.ReportId.Equals(31/*1041*/)
                          select s);
         }
 
@@ -790,12 +790,35 @@
             @Html.Raw("<td id='rp2'>")
             @Html.Raw("none")
             @Html.Raw("</td>")
-            @Html.Raw("<td>")
+        @Html.Raw("<td>")
 
-            if (@items.Item.ItemRange != null)
+        if (@items.Item.ItemRange != null)
+        {
+            if (@items.Item.ItemRange == "No Significant abnormalities")
             {
-                @items.Item.ItemRange
+                @Html.Raw("無異常")
+                
             }
+            else if (@items.Item.ItemRange == "Negative")
+            {
+                @Html.Raw("陰性")
+
+            }
+            else if (@items.Item.ItemRange == "Normal")
+            {
+                @Html.Raw("正常")
+
+            }
+            else if (@items.Item.ItemRange == "yellow")
+            {
+                @Html.Raw("黃")
+
+            }
+            else
+            {
+            @items.Item.ItemRange
+            }
+        }
             else
             {
                 if (@items.Item.ItemRangeMin != null)

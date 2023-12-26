@@ -40,13 +40,15 @@ namespace MedSysProject.Controllers
             string result = form["result"];
             var temp = id.Split(',');
             var temp2 = result.Split(",");
-            for (int i = 0;i<= id.Split(',').Length-1;i++)
+            for (int i = 0; i <= id.Split(',').Length - 1; i++)
             {
-                
+
                 int t = int.Parse(temp[i]);
                 ReportDetail rd = _context.ReportDetails.Where(p => p.ReportDetailId.Equals(t)).FirstOrDefault();
                 rd.Result = temp2[i];
             }
+           
+
             _context.SaveChanges();
 
             return View();
