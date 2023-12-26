@@ -1,0 +1,24 @@
+﻿@using System.Text.Json
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout_Shopping.cshtml";
+}
+
+
+<div class="card mainVerify container">
+    <div class="card-header">
+        恭喜你購買成功
+    </div>
+    <div class="card-body">
+       
+
+        <p class="card-text">系統已同時寄送一封郵件至您的信箱，請點擊信箱中的連結繼續。</p>
+
+        <p class="card-text">信中包含你購買的產品資訊</p>
+        <a asp-action="OrderList" asp-controller="Shopping" class="btn btn-primary" >回到會員訂單</a>
+
+        @* @Html.ActionLink("點擊這裡到電子郵件取信", "UpdataMember", "Accout", new { id = m.MemberId }, new { Class = "btn btn-primary" }) *@
+    </div>
+</div>

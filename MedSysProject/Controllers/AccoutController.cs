@@ -158,12 +158,15 @@ namespace MedSysProject.Controllers
                 Upm.MemberImage = uniqueFileName;
             }
 
+            m.StatusId = 1;
+
             // 其他更新操作...
             Upm.MemberEmail = m.MemberEmail;
             Upm.MemberName = m.MemberName;
             Upm.MemberBirthdate = m.MemberBirthdate;
             Upm.MemberAddress = m.MemberAddress;
             Upm.MemberNickname = m.MemberNickname;
+            Upm.StatusId = m.StatusId;
             _db.SaveChanges();
 
             HttpContext.Session.Remove(CDictionary.SK_MEMBER_LOGIN);

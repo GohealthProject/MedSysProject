@@ -95,16 +95,7 @@
                                                                                             </tr>
             }
         </table>
-    <form id="payform" method="post" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
-        
     
-      
-        @{
-            foreach (var Key in order.Keys.ToList())
-            {
-                     <input type="hidden" name="@Key" value="@order[Key]" />
-            }       
-        }
         <p>運送方式</p>
         <hr />
         <span class="fs-3"><input type="radio" value="中華郵政" name="ship" />中華郵政</span>
@@ -114,6 +105,16 @@
         <span class="fs-3"><input type="radio" value="嘉里大榮" name="ship" />嘉里大榮</span>
         <span class="fs-3"><input type="radio" value="蝦皮店到店" name="ship" />蝦皮店到店</span>
         <br />
+    <form id="payform" method="post" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
+
+
+
+        @{
+            foreach (var Key in order.Keys.ToList())
+            {
+                <input type="hidden" name="@Key" value="@order[Key]" />
+            }
+        }
         <input class="btn btn-info mt-3"type="submit" value="結帳" />
     </form>
 </div>

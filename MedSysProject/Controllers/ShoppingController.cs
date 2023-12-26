@@ -230,8 +230,9 @@ namespace MedSysProject.Controllers
             }
             var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
 
-            
-            return RedirectToAction("OrderList",new {page =999});
+            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+            return View();
         }
        
         public IActionResult CartList() 
@@ -359,6 +360,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult OrderList(int page=1)
         {
+
+
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
 
@@ -369,7 +372,7 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (page == 999)
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_CARTLISTCOUNT))
             {
                 HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
                 HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
@@ -433,7 +436,8 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult OrderList(string key,int page=1)
         {
-            if(key == "keyword")
+            
+            if (key == "keyword")
             {
                 List<COrderWarp> list = new List<COrderWarp>();
                 string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
@@ -541,7 +545,9 @@ namespace MedSysProject.Controllers
             }
             else if(key == "monthKey")
             {
-                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year);
+                string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
+                MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+                var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n=>n.OrderDate.Month == System.DateTime.Now.Month&&n.OrderDate.Year == System.DateTime.Now.Year&&n.MemberId==m.MemberId);
                 List<COrderWarp> list = new List<COrderWarp>();
                 foreach (var o in q)
                 {

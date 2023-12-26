@@ -12,6 +12,7 @@
 <div class="UPdiv" style="width:70%">
     <form class="row g-3 fromP" method="post" id="formAAA" enctype="multipart/form-data">
         <input type="hidden" name="MemberId" value=@Model.MemberId />
+        <input type="hidden" name="StatusId" value="1" />
         <div class="col-12">
             <label for="inputEmail4" class="form-label" name="MemberEmail">電子郵件</label>
             <input type="email" class="form-control" id="inputEmail4" name="MemberEmail" value="@Model.MemberEmail">
@@ -44,7 +45,7 @@
         <div class="col-12">
             <div class="form-group">
                 <label asp-for="MemberBirthdate" class="control-label"></label>
-                <input asp-for="MemberBirthdate" class="form-control" name="MemberBirthdate" />
+                <input asp-for="MemberBirthdate" class="form-control" name="MemberBirthdate" id="inputDate" />
                 <span asp-validation-for="MemberBirthdate" class="text-danger"></span>
             </div>
         </div>
@@ -227,11 +228,11 @@
         }
 
         //DEMO
-        document.querySelector(#demo).addEventListener('click', () => {
-            document.querySelector(#inputAddress).value = '台北市大安區復興南路一段390號2樓';
-            document.querySelector(#MemberNickname).value = '安安';
-            document.querySelector(#MemberName).value = '安安';
-            document.querySelector(#MemberBirthdate).value = '2000-07-29';
+        document.querySelector('#demo').addEventListener('click', () => {
+            document.querySelector('#inputAddress').value = '台北市大安區復興南路一段390號2樓';
+            document.querySelector('#MemberNickname').value = '安安';
+            document.querySelector('#MemberName').value = '安安';
+            document.querySelector('#inputDate').value = '2000-07-29T00:00';
         })
 
     </script>
