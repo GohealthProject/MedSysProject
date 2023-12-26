@@ -51,6 +51,19 @@
             console.log(blob);
             reader.readAsDataURL(blob);
         }
+        // tinymce.init({
+        //     selector: '#mytextarea',
+        //     height: 1000, // 调整高度（1000 可能太高）
+        //     width: 1107, // 调整宽度（1107 可能太宽）
+        //     plugins: 'advlist link image lists',
+        //     toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | link image', // 添加更多功能按钮到工具栏
+        //     image_caption: true,
+        //     images_upload_handler: function (blobInfo, success, failure) {
+        //         return new Promise(function (resolve, reject) {
+        //             handleImageUpload(blobInfo.blob(), resolve, reject); // 请确保 handleImageUpload 函数能正确处理图像上传
+        //         });
+        //     }
+        // });
         tinymce.init({
             selector: '#mytextarea',
             height: 1000,

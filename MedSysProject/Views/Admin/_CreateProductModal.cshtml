@@ -100,6 +100,7 @@
                         <div id="imagePreviewForCreate" class="d-flex flex-wrap">
                     </div>
                     </div>
+                    <button type="button" class="btn btn-info" id="demoButton">Demo</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                     <button id="buttonSubmit" type="button" class="btn btn-primary" onclick="submitForm()">確認並新增</button>
                 </form>
@@ -113,25 +114,21 @@
         }
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                debugger; // 斷點1：檢查文檔是否已載入
+                // 頁面加載完畢後的初始化
+
+                // 添加圖片上傳變化事件的監聽器
                 var fileInput = document.getElementById('formFileForCreate');
-                console.log(fileInput);
                 if (fileInput) {
                     fileInput.addEventListener('change', function (e) {
-                        debugger; // 斷點2：檢查是否正確觸發了更改事件
-                        console.log('change');
                         var files = e.target.files;
-
                         var imagePreviewContainer = document.getElementById('imagePreviewForCreate');
                         imagePreviewContainer.innerHTML = ''; // 清空預覽區域
 
                         for (let i = 0; i < files.length; i++) {
-                            debugger; // 斷點3：檢查文件列表
                             var file = files[i];
                             var reader = new FileReader();
 
                             reader.onload = function (e) {
-                                debugger; // 斷點4：檢查文件讀取是否完成
                                 var imgElement = document.createElement('img');
                                 imgElement.src = e.target.result;
                                 imgElement.style.maxWidth = '100px';
@@ -146,7 +143,17 @@
                 } else {
                     console.error('找不到ID為 formFileForCreate 的文件輸入元素。');
                 }
-            });
+
+                // 添加演示按鈕的事件監聽器
+                var demoButton = document.getElementById('demoButton');
+                if (demoButton) {
+                    demoButton.addEventListener('click', fillDemoData);
+                } else {
+                    console.error('找不到ID為 demoButton 的按鈕。');
+                }
+
+
+
         </script>
 
     }
