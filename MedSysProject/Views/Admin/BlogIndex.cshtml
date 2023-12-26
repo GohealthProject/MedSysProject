@@ -323,6 +323,7 @@
         let selectBlogId = 0;
         let employeeLogIn = @empLogIn;
         document.addEventListener('DOMContentLoaded', () => {
+           
             fetch(`https://localhost:7078/api/Employees/${employeeLogIn}`)
                 .then(response => response.json())
                 .then(data => { 

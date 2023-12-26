@@ -20,7 +20,7 @@
 <div id="g_id_onload"
      data-client_id="641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com"
      data-login_uri="/Accout/ValidGoogleLogin"
-     data-auto_prompt="false"> 
+     data-auto_prompt="false">
 </div> *@
 
 <div id="fb-root"></div>
@@ -37,7 +37,7 @@
                 <div class="my-3 h3 mb-3 fw-normal">GO健康登入</div>
 
                 @* <div class="g_id_signin py-1" data-type="standard"></div> *@
-                
+
 
                 @* <div class="fb-login-button py-1" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" data-scope="public_profile,email" data-onlogin="checkLoginState();"></div> *@
 
@@ -84,6 +84,7 @@
                 <div class="btn-group d-flex justify-content-center mt-3">
                     <button id="testButtonA" type="button" class="btn btn-secondary w-100 py-2">DEMO1(順順)</button>
                     <button id="testButtonB" type="button" class="btn btn-secondary w-100 py-2">DEMO2(安安)</button>
+                    <button id="testButtonC" type="button" class="btn btn-secondary w-100 py-2">DEMO3(老王(停權))</button>
                 </div>
                 <div class="row">
                     <div class="mb-1 mt-1 col-12"><a href="@Url.Content("~/admin")" id="adminButton" type="button" class="btn btn-dark w-100 py-2">系統後台</a></div>
@@ -115,9 +116,9 @@
             $('#txtPassWord').val('Test');
         });
 
-        // $('#testButtonC').on('click', () => {
-        //     $('#txtAccout').val('night90810@gmail.com');
-        //     $('#txtPassWord').val('Test');
-        // });
+        $('#testButtonC').on('click', () => {
+            $('#txtAccout').val('night100810@gmail.com');
+            $('#txtPassWord').val('12345');
+        });
     </script>
 }
