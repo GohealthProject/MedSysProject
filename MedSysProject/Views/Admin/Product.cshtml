@@ -227,21 +227,18 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                // 使用 SweetAlert2 顯示成功提示
                 Swal.fire({
                     title: '成功!',
                     text: '新增產品成功',
                     icon: 'success',
                     confirmButtonText: '確定'
                 }).then((result) => {
-                    // 在用戶點擊確定後的操作
-                    $('#modalCreate').modal('hide');
-                    $('.modal-backdrop').remove();
-                    location.reload(); // 重新加載頁面
+                    if (result.isConfirmed) {
+                        location.reload(); // 重新加載頁面以顯示最新的產品列表
+                    }
                 });
             },
             error: function (error) {
-                // 使用 SweetAlert2 顯示錯誤提示
                 Swal.fire({
                     title: '提交失敗',
                     text: '錯誤：' + error.statusText,
@@ -261,6 +258,14 @@
                 $('#createProductModalContent').html(data);
                 $('#modalCreate').modal('show');
                 bindImageUploadEvent(); // 呼叫綁定事件的函數
+
+                // 在模態視窗的內容被加載後，綁定 fillDemoData 函數
+                var demoButton = document.getElementById('demoButton');
+                if (demoButton) {
+                    demoButton.addEventListener('click', fillDemoData);
+                } else {
+                    console.error('找不到ID為 demoButton 的按鈕。');
+                }
             },
             error: function (error) {
                 alert('載入_CreateProductModal 失敗：' + error.statusText);
@@ -507,7 +512,36 @@
         });
     }
 
+     
 
+    // 定義填充演示數據的函數
+    function fillDemoData() {
+        // 為每個輸入字段填充示例數據
+        document.getElementById('inputName').value = '桂格 雙效活靈芝';
+        document.getElementById('inputPrice').value = '850';
+        document.getElementById('inputLicense').value = '衛署健食字第A00162號';
+        document.getElementById('inputIngredient').value = '靈芝粗多醣';
+        document.getElementById('inputDescription').value = '嚴選珍貴赤芝靈芝子實體，並用液態深層發酵技術培養出優良品質的赤芝靈芝菌絲體，萃取並保有多種類的靈芝多醣體，經動物實驗證明每天一瓶，有助於免疫調解與延緩衰老，適合長期飲用';
+        document.getElementById('inputUnitsInStock').value = '250';
+        document.getElementById('inputDiscontinued').value = 'true'; // 或 'false'，根據需要
+
+        // 為產品分類設置選中狀態
+        var categoryCheckboxes = document.getElementsByName('CategoriesIds');
+        if (categoryCheckboxes.length > 0) {
+            // 重置所有分類的選中狀態
+            categoryCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+
+            // 選擇第5和第11類
+            if (categoryCheckboxes[4]) {
+                categoryCheckboxes[4].checked = true; // 第5類的索引是4
+            }
+            if (categoryCheckboxes[10]) {
+                categoryCheckboxes[10].checked = true; // 第11類的索引是10
+            }
+        }
+    }
 
     
 </script>
