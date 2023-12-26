@@ -42,41 +42,41 @@
                     @{
                         for(int i = 0; i < Model.Count; i++)
                         {
-                                                                        @if (Model[i].Path[0] == null)
+                                                                            @if (Model[i].Path[0] == null)
                             {
                                 
                             }
-                                                                        @if (i % 3 == 0)
+                                                                            @if (i % 3 == 0)
                         {
                             if (i != 0)
                             {
-                                                                            @:</div>
+                                                                                @:</div>
                             }
-                                                                        @:<div class='row'>
+                                                                            @:<div class='row'>
                             }
                             int maxPrice = ((int)Model[i].UnitPrice);
                             string? max =maxPrice.ToString("N0");
                             int price = (int)((int)(Model[i].UnitPrice)*0.8);
                             string s = price.ToString("N0");
-                                                                        <div class=" col " >
-                                                                        <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:300px; width:300px;object-fit: cover;"  />
-                                                                        <div class="mt-3 mb-3">
-                    @{
+                                                                            <div class=" col " >
+                                                                            <img src="@Url.Content("~/img-product/")@Model[i].Path[0]" style="height:300px; width:300px;object-fit: cover;"  />
+                                                                            <div class="mt-3 mb-3">
+                        @{
                         if (Model[i].UnitsInStock < 10)
                         {
-                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="fs-5 text-danger">限量不到10個</span><br />
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="fs-5 text-danger">限量不到10個</span><br />
                         }
                         else
                         {
-                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
                         }
-                        }
-                                                                            
-                                                                            <span class="fs-3 text-danger" style="text-decoration:line-through">$@max</span><span class="fs-3 text-danger ms-5">$@s</span>
+                            }
+                                                                                
+                                                                                <span class="fs-3 text-danger" style="text-decoration:line-through">$@max</span><span class="fs-3 text-danger ms-5">$@s</span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    @if(i!=0&&i+i%3==0||i==Model.Count-1){
-                                                                        @:</div>
+                                                                        @if(i!=0&&i+i%3==0||i==Model.Count-1){
+                                                                            @:</div>
                         }
                     }
                 }
@@ -102,22 +102,55 @@
                         for(int i = 0; i<4; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                                                                        <div class="col ">
-                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
-                            @{
+                                                                            <div class="col ">
+                                                                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
+                                @{
                                 if (Model[i].UnitsInStock < 10)
                                 {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
                                 }
 
                                 
-                                                              }              
-                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                                                        </div>
+                                                                  }              
+                                                                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                            </div>
+                        }
+                    }     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height:600px;width:100%;margin-top:50px" class="border p-1" id="TrackList">
+                <div style="height:600px" class="">
+                    <div style="height:100px"  class=" d-flex align-items-center border-bottom">
+                        <span class="fs-1 ps-4" >最新產品 TOP5</span>
+                    </div>
+                    <div style="height:450px" class="mt-3">
+                        <div class="row ">
+                    @{
+                        for(int i = 0; i<4; i++)
+                        {
+                            string? s = Model[i].UnitPrice.ToString();
+                                                                            <div class="col ">
+                                                                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
+                                @{
+                                if (Model[i].UnitsInStock < 10)
+                                {
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
+                                }
+                                else
+                                {
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                }
+
+                                
+                                                                  }              
+                                                                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                            </div>
                         }
                     }     
                         </div>
@@ -135,55 +168,22 @@
                         for(int i = 0; i<4; i++)
                         {
                             string? s = Model[i].UnitPrice.ToString();
-                                                                        <div class="col ">
-                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
-                            @{
+                                                                            <div class="col ">
+                                                                                <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
+                                @{
                                 if (Model[i].UnitsInStock < 10)
                                 {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
+                                            <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
                                 }
 
                                 
-                                                              }              
-                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                                                        </div>
-                        }
-                    }     
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="height:600px;width:100%;margin-top:50px" class="border p-1">
-                <div style="height:600px" class="">
-                    <div style="height:100px"  class=" d-flex align-items-center border-bottom">
-                        <span class="fs-1 ps-4" >最新產品 TOP5</span>
-                    </div>
-                    <div style="height:450px" class="mt-3">
-                        <div class="row ">
-                    @{
-                        for(int i = 0; i<4; i++)
-                        {
-                            string? s = Model[i].UnitPrice.ToString();
-                                                                        <div class="col ">
-                                                                            <img src="@Url.Content(System.IO.Path.Combine("~/img-product/",Model[i].Path[0]))" style="height:300px; width:300px;object-fit: cover;"><hr>
-                            @{
-                                if (Model[i].UnitsInStock < 10)
-                                {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3 "> @Model[i].ProductName </a><br /><span class="text-danger fs-2">限量不到10個</span><br />
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("selectProduct", new { id = Model[i].ProductId })" class="fs-3"> @Model[i].ProductName </a><br />
-                                }
-
-                                
-                                                              }              
-                                                                            <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
-                                                                        </div>
+                                                                  }              
+                                                                                <span class="fs-3 text-danger">$@s.TrimEnd('0').TrimEnd('.')</span>
+                                                                            </div>
                         }
                     }     
                         </div>
@@ -263,34 +263,40 @@
                 const response = await fetch(url);
                 const data = await response.json();
                 console.log(data);
+                let count = 0;
                 const value = data.$values.map(product => {
+                    if (count == 4) {
+                        return;
+                    }
                     const Name = product.productName.substring(0, 8);
-                    const maxPrice = (product.unitPrice + 200).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
-                    const Price = product.unitPrice.toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
+                    const maxPrice = ((product.unitPrice)*0.8).toLocaleString('en-US', { minimumFractionDigits: 0 }, { maximumFractionDigits: 0 });
                     const Path = product.fimagePath;
                     const imgIndex = Path.indexOf(",");
                     const img = Path.substring(0, imgIndex);
                     const id = product.productId;
-                    console.log(`產品名稱${Name},產品價格${Price},產品圖片${img},產品ID${id},照片${img},${id}`)
+                    
                     const html =
                         `
                         <div class="col mb-3 ">
                                <img src="/img-product/${img}" style="height:300px; width:300px;object-fit:cover"><hr>
                                <a href="/Shopping/selectProduct/${id}" class="fs-3"> ${Name} </a><br />
-                               <div class=""><span class="fs-3 text-danger">$${Price}</span><span class="fs-3 text-danger" style="text-decoration:line-through">$${maxPrice}</span></div>
+                               <div class=""><span class="fs-3 text-danger" >$${maxPrice}</span></div>
                         </div>
                     `
+
+                    count++;
                     return html;
                 });
                 console.log(value.join(""));
                 htmls +=
                     `
-                    <div style="height:400px" class="">
+                    <div style="height:600px;width:100%;" class="p-1" id="TrackList">
+                    <div style="height:600px" class="">
                         <div style="height:100px"  class=" d-flex align-items-center border-bottom">
                         <span class="fs-1 ps-4" >你追蹤的產品</span>
                     </div>
-                    <div style="height:350px">
-                        <div class="row ps-3">
+                    <div style="height:450px" class="mt-3">
+                        <div class="row">
                 `;
                 htmls += value.join("");
                 htmls+=
