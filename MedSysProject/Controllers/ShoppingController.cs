@@ -230,8 +230,9 @@ namespace MedSysProject.Controllers
             }
             var q = _db.Orders.Where(n => n.MerchantTradeNo == data["MerchantTradeNo"]).FirstOrDefault();
 
-            
-            return RedirectToAction("OrderList",new {page =999});
+            HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+            HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
+            return View();
         }
        
         public IActionResult CartList() 
@@ -359,6 +360,8 @@ namespace MedSysProject.Controllers
         }
         public IActionResult OrderList(int page=1)
         {
+
+
             string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
             MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
 
@@ -369,7 +372,7 @@ namespace MedSysProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (page == 999)
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_CARTLISTCOUNT))
             {
                 HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
                 HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
