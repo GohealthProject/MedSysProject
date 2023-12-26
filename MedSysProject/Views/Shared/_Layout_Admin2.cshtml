@@ -39,6 +39,7 @@
 
     <!--文字編輯器-->
     <script src="https://cdn.tiny.cloud/1/b28bwm26rz9ry64nn5n351uce6944auxt8eorcif07y5uxa9/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     <script>
         function handleImageUpload(blob, success, failure) {//blob是圖片檔案，success是成功的回呼函式，failure是失敗的回呼函式
             var reader = new FileReader();//FileReader是一個物件，可以讓我們讀取檔案的內容
@@ -50,7 +51,6 @@
             console.log(blob);
             reader.readAsDataURL(blob);
         }
-
         tinymce.init({
             selector: '#mytextarea',
             height: 1000,
@@ -58,13 +58,14 @@
             plugins: 'advlist link image lists',
             toolbar: 'undo redo| image',
             image_caption: true,
-            images_upload_handler: function (blobInfo, success, failure) { //todo需要理解一下在幹嘛
-                return new Promise(function (resolve, reject) {
-                    handleImageUpload(blobInfo.blob(), resolve, reject);
+            images_upload_handler: function (blobInfo, success, failure) { //blobInfo是圖片檔案的資訊
+                return new Promise(function (resolve, reject) {//Promise是一個物件，可以讓我們在非同步的情況下，將程式碼寫得像是同步的一樣
+                    handleImageUpload(blobInfo.blob(), resolve, reject);//blobInfo.blob()是圖片檔案
                 });
             }
 
         });
+       
         //修改文章modal的文字編輯器
         tinymce.init({
             selector: '#mytextareaEdit',
