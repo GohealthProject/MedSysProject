@@ -136,9 +136,11 @@
 @{
     var ResetPasswordSuccess = TempData["alertResetPwdSuccess"] as string;
     var LoginSuccess = TempData["LoginSuccess"] as string;
+    var alertUpdataSuccess = TempData["alertUpdataSuccess"] as string;
 }
 
 <script>
     @Html.Raw(ResetPasswordSuccess)
     @Html.Raw(LoginSuccess)
+    @Html.Raw(alertUpdataSuccess)
 </script>

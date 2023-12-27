@@ -175,6 +175,7 @@ namespace MedSysProject.Controllers
 
             // 其他代码...
 
+            TempData["alertUpdataSuccess"] = "Swal.fire({title: \"修改成功!\",text: \"你已成功修改會員資料!\",icon: \"success\",showConfirmButton: false,timer: 1500});";
             return RedirectToAction("MemberCenter", "Accout");
         }
 
