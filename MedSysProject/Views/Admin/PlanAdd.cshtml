@@ -378,6 +378,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="CancelProjectEdit" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-success" id="btnprj" onclick="putdataprj2()">確定修改</button>
+                    <button type="button" class="btn btn-dark" id="prjdemo" onclick="prjdemoprice()">DEMO</button>
                 </div>
             </div>
         </div>
@@ -407,11 +408,12 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                                        <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
-                                                                        <label class="form-check-label" for="${newId}">
-                                                                            <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
-                                                                        </label>
-                                                                    `;
+                                                                            <input class="form-check-input pjlist" type="checkbox" name="Cprjchk" value="${newId}" id="${newId}">
+                                                                            <label class="form-check-label" for="${newId}">
+                                                                                <input type="text" class="form-control" name="Cprjtxt" placeholder="自定義項目...">
+                                                                                    <a class="btn btn-dark" id="demowww" onclick="demoprjs()">DEMO</a>
+                                                                            </label>
+                                                                        `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -442,11 +444,12 @@
         newCheckbox.className = 'form-check-inline';
         newCheckbox.style.marginLeft = '1em';
         newCheckbox.innerHTML = `
-                                                                            <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
-                                                                            <label class="form-check-label" for="${newId}">
-                                                                                <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
-                                                                            </label>
-                                                                        `;
+                                                                                <input class="form-check-input pjlist" type="checkbox" name="prjchk" value="${newId}" id="${newId}">
+                                                                                <label class="form-check-label" for="${newId}">
+                                                                                    <input type="text" class="form-control" name="prjtxt" placeholder="自定義項目...">
+                                                                                    <a class="btn btn-dark" id="demowww" onclick="demoprjs()">DEMO</a>
+                                                                                </label>
+                                                                            `;
 
         // Create a new line break element
         var lineBreak = document.createElement('br');
@@ -908,7 +911,12 @@
     $("#demoPlanCreate").click(function () {
         $("#CinputId").val("");
         $("#CinputName").val("超級快樂方案");
-        $("#CinputDescription").val("方案的描述");
+        $("#CinputDescription").val("快樂其實也沒有什麼道理，告訴你，道理，道理，你到底在那裡，快樂就是這麼容易的東西！");
+        $("#1").prop("checked", true);
+        $("#5").prop("checked", true);
+        $("#6").prop("checked", true);
+        $("#11").prop("checked", true);
+        $("#18").prop("checked", true);
 
     });
 
@@ -920,7 +928,7 @@
 
     $("#demoProjectCreate").click(function () {
         $("#CinputIdprj").val("");
-        $("#CinputNameprj").val("超級快樂項目");
+        $("#CinputNameprj").val("身心壓力檢測");
         $("#CinputPriceprj").val("1000");
     });
 
@@ -929,4 +937,12 @@
         $("#CinputNameprj").val("");
         $("#CinputPriceprj").val("");
     });
+
+    function demoprjs() {
+        $(".form-check-label").find("input").val("身心壓力檢測");
+    }
+
+    function prjdemoprice() {
+        $("#inputPriceprj").val("1000");
+    }
 </script>
