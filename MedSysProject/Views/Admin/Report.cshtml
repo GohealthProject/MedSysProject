@@ -51,7 +51,7 @@
 <meta charset="UTF-8">
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">會員管理</h6>
+        <h6 class="m-0 font-weight-bold text-primary">健檢報告管理</h6>
     </div>
     <div class="card-body">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" hidden>
@@ -66,7 +66,7 @@
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">我是內容</h1>
                         <button type="button" class="btn btn-success" id="demo">Demo</button>
-                        <button type="button" class="btn btn-danger" id="alledit">一鍵XX</button>
+                        <button type="button" class="btn btn-danger" id="alledit">一鍵修改</button>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" @*aria-label="Close"*@>×</button>
             </div>
@@ -243,16 +243,88 @@
         var allvalue = tableD.querySelectorAll("tr")
         var txt = tableD.querySelectorAll("#text")
         
-        txt[0].value = "180";
-        txt[1].value = "77";
-        txt[2].value = "37";
-        txt[3].value = "80";
-        txt[4].value = "110";
-        txt[5].value = "87";
-        txt[6].value = "77";
-        txt[7].value = "無異常";
-        txt[8].value = "無色";
-        txt[9].value = "5";
+        txt[0].value = "180";//身高
+        txt[1].value = "77";//體重
+        txt[2].value = "37";//體溫
+        txt[3].value = "80";//脈搏
+        txt[4].value = "110";//血壓-收縮壓
+        txt[5].value = "87";//血壓-舒張壓
+        txt[6].value = "77";//腰圍
+        txt[7].value = "無異常";//理學檢查
+        txt[8].value = "黃";//尿液外觀
+        txt[9].value = "1.034";//尿比重
+        txt[10].value = "7.2";//尿液酸鹼度
+        txt[11].value = "1.2";//尿膽素原
+        txt[12].value = "陰性";//尿蛋白
+        txt[13].value = "陰性";//尿糖
+        txt[14].value = "陰性";//酮尿
+        txt[15].value = "陰性";//膽紅素
+        txt[16].value = "陰性";//尿潛血
+        txt[17].value = "陰性";//尿液白血球
+        txt[18].value = "陰性";//亞硝酸鹽
+        txt[19].value = "正常";//尿沉渣
+        txt[20].value = "7.6";//白血球總數
+        txt[21].value = "67";//白血球分類-嗜中性球
+        txt[22].value = "26";//白血球分類-淋巴球
+        txt[23].value = "3.7";//白血球分類-單核球
+        txt[24].value = "5";//白血球分類-嗜酸性球
+        txt[25].value = "1.2";//白血球分類-嗜鹼性球
+        txt[26].value = "4.6";//紅血球總數
+        txt[27].value = "13.6";//血紅素
+        txt[28].value = "43";//血球容積
+        txt[29].value = "236";//血小板總數
+        txt[30].value = "81"; //平均紅血球容積
+        txt[31].value = "28"; //平均血球血紅素
+        txt[32].value = "32";//平均血球血紅素濃度
+        txt[33].value = "11";//血中尿素氮
+        txt[34].value = "0.8";//肌酸酐
+        txt[35].value = "0.9";//腎絲球過濾率 eGFR
+        txt[36].value = "5.6";//尿酸
+        txt[37].value = "7.2";//血清總蛋白
+        txt[38].value = "3.8";//血清白蛋白
+        txt[39].value = "3.2";//血清球蛋白
+        txt[40].value = "1.6";//白蛋白/球蛋白比率
+        txt[41].value = "0.17";//直接膽紅素
+        txt[42].value = "0.7";//總膽紅素
+        txt[43].value = "46";//ALP
+        txt[44].value = "16";//AST
+        txt[45].value = "25";//ALT
+        txt[46].value = "60";//r-GT
+        txt[47].value = "14";//AFP
+        txt[48].value = "79";//飯前血糖
+        txt[49].value = "25";//飯前胰島素
+        txt[50].value = "4.5";//糖化血色素
+        txt[51].value = "0.95";//游離甲狀腺素
+        txt[52].value = "2.8";//甲狀腺促進素
+        txt[53].value = "380";//三酸甘油脂/////////////
+        txt[54].value = "395";//總膽固醇
+        txt[55].value = "88";//高密度脂蛋白膽固醇
+        txt[56].value = "274";//低密度脂蛋白膽固醇
+        txt[57].value = "9";//心臟血管疾病危險因子
+        txt[58].value = "0.1";//高敏度C反應蛋白
+        txt[59].value = "18";//同半胱胺酸
+        txt[60].value = "無異常";//動脈硬化儀
+        txt[61].value = "正常";//全身肌肉量
+        txt[62].value = "正常";//體脂肪量
+        txt[63].value = "正常";//體含水量
+        txt[64].value = "正常";//體年齡
+        txt[65].value = "正常";//體代謝率
+        txt[66].value = "正常";//內臟脂肪量
+        txt[67].value = "正常";//腹部超音波
+        txt[68].value = "正常";//甲狀腺超音波
+        txt[69].value = "正常";//乳房超音波
+        txt[70].value = "正常";//婦科超音波
+        txt[71].value = "正常";//攝護腺超音波
+        txt[72].value = "13";//眼壓檢查
+        txt[73].value = "正常";//眼底攝影
+        txt[74].value = "0.1";//視力檢查
+        txt[75].value = "無異常";//胸部x光
+        txt[76].value = "無異常";//心電圖檢查
+        txt[77].value = "無異常";//胃鏡檢查
+        txt[78].value = "陰性";//胃幽門桿菌呼氣碳13檢查
+        txt[79].value = "22";//胰臟癌標記檢查CA-199
+        txt[80].value = "1.6";//自律神經儀檢查
+       
 
         
     
@@ -279,6 +351,10 @@
 
             detailid.push(ttd[i].innerText)
         }
+   
+
+        
+        
 
         editAll(detailid, result)
         ttt.ajax.reload();
@@ -344,23 +420,25 @@
     //內表////////////dd
     var count2 = 0
     var ttt = $('#tableD').DataTable({
-        destroy:true,
+        "destroy":true,
+        "paging":false,
         //設定語言
-         dom: 'Bfrtip',
+        //"dom": '<"top"lpB>rt<"bottom"ip>',
+         //dom: 'Bfrtip',
         //scrollY: true,
         //scroller: {
         //    rowHeight: 100
         //},
-        buttons: [
-            'copy', 'excel', 'pdf'
-        ],
+        //buttons: [
+        //    'copy', 'excel', 'pdf'
+        //],
         "language": {
             "processing": "處理中...",
             "loadingRecords": "載入中...",
             "lengthMenu": "每頁 _MENU_ 筆資料",
             "zeroRecords": "沒有符合的資料",
             "info": "顯示第 _START_ 至 _END_ 筆資料，共 _TOTAL_ 筆",
-            "infoEmpty": "顯示第 0 至 0 筆資料，共 0 位",
+            "infoEmpty": "顯示第 0 至 0 筆資料，共 0 筆",
             "infoFiltered": "(從 _MAX_ 項結果中過濾)",
             "infoPostFix": "",
             "search": "搜尋:",
@@ -467,17 +545,17 @@
     var table = $('#tableM').DataTable({
         destroy:true,
         "autoWidth": false,
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 'pdf'
-        ],
+        //dom: 'Bfrtip',
+        //buttons: [
+        //    'copy', 'excel', 'pdf'
+        //],
         "language": {
             "processing": "處理中...",
             "loadingRecords": "載入中...",
-            "lengthMenu": "每頁 _MENU_ 位會員",
-            "zeroRecords": "沒有符合的會員",
-            "info": "顯示第 _START_ 至 _END_ 位會員，共 _TOTAL_ 位",
-            "infoEmpty": "顯示第 0 至 0 位會員，共 0 位",
+            "lengthMenu": "每頁 _MENU_ 筆資料",
+            "zeroRecords": "沒有符合的資料",
+            "info": "顯示第 _START_ 至 _END_ 位資料，共 _TOTAL_ 位",
+            "infoEmpty": "顯示第 0 至 0 筆資料，共 0 位",
             "infoFiltered": "(從 _MAX_ 項結果中過濾)",
             "infoPostFix": "",
             "search": "搜尋:",

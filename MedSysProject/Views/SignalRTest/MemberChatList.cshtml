@@ -475,6 +475,14 @@
             // document.querySelector("#employee-online-list").innerHTML = "aaaaaaaaaaaaaaa";
             document.getElementById("employee-online-list").innerHTML = "";
 
+            document.getElementById("employee-online-list").innerHTML += `                  <li class="person" data-chat="member40" id="li-40" onclick="leftclick(this)">
+                                                                                                                                                                                                                                            <img src="@Url.Content("~/img/MemberImg/main.png")" alt="">
+                                                                                                                                                                                                                            <input type="hidden" value="40" id="hiddenid"/>
+                                                                                                                                                                                                                            <span class="name">順順</span>
+                                                                                                                                                                                                                    <span class="time"></span>
+                                                                                                                                                                                                                    <span class="preview"></span>
+                                                                                                                                                                                                                    </li>`;
+
             for (var i = 0; i < jsonArray.length; i++) {
                 var memberid = jsonArray[i].MemberId;
                 var membername = jsonArray[i].MemberName;
@@ -486,6 +494,15 @@
                                                                                                                                                                                                             <span class="time"></span>
                                                                                                                                                                                                             <span class="preview"></span>
                                                                                                                                                                                                             </li>`;
+            }
+            if (document.getElementById("employee-online-list") == "") {
+                document.getElementById("employee-online-list").innerHTML += `                  <li class="person" data-chat="member40" id="li-40" onclick="leftclick(this)">
+                                                                                                                                                                                                                                                    <img src="@Url.Content("~/img/MemberImg/main.png")" alt="">
+                                                                                                                                                                                                                                    <input type="hidden" value="40" id="hiddenid"/>
+                                                                                                                                                                                                                                    <span class="name">順順</span>
+                                                                                                                                                                                                                            <span class="time"></span>
+                                                                                                                                                                                                                            <span class="preview"></span>
+                                                                                                                                                                                                                            </li>`;
             }
 
         });

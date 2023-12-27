@@ -51,6 +51,19 @@
             console.log(blob);
             reader.readAsDataURL(blob);
         }
+        // tinymce.init({
+        //     selector: '#mytextarea',
+        //     height: 1000, // 调整高度（1000 可能太高）
+        //     width: 1107, // 调整宽度（1107 可能太宽）
+        //     plugins: 'advlist link image lists',
+        //     toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | link image', // 添加更多功能按钮到工具栏
+        //     image_caption: true,
+        //     images_upload_handler: function (blobInfo, success, failure) {
+        //         return new Promise(function (resolve, reject) {
+        //             handleImageUpload(blobInfo.blob(), resolve, reject); // 请确保 handleImageUpload 函数能正确处理图像上传
+        //         });
+        //     }
+        // });
         tinymce.init({
             selector: '#mytextarea',
             height: 1000,
@@ -290,7 +303,7 @@
                             </div>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
+@*                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -339,7 +352,7 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
-                        </li>
+                        </li> *@
 
                         <!-- Nav Item - Messages -->
                         @*                         <li class="nav-item dropdown no-arrow mx-1">
@@ -518,7 +531,7 @@
                 <iframe src="~/signalrtest/memberchatlist?employeeid=@emp.EmployeeId" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
             }
         }
-        <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
+        @* <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe> *@
         @*         <div class="chat-window-body" id="chat-window-body" style="display:flex; justify-content:center; align-content:center;">
         <iframe src="~/signalrtest/chat" style="width:100%; height:100%; border:none; border-radius:15px;"></iframe>
         </div> *@
