@@ -9,7 +9,16 @@
     <div class="row g-5">
         <div class="col-md-5 col-lg-4 order-md-last">
             <div class="mb-3">
-                <img class="rounded rounded-3" src="~/img/MemberImg/@Model.member.MemberImage" width=400 />
+                @{
+                    if (Model.member.MemberImage == null)
+                    {
+                        <img class="rounded rounded-3" src="@Url.Content("~/img/no_member_image.jpg")" width=400 />
+                    }
+                    else
+                    {
+                        <img class="rounded rounded-3" src="@Url.Content("~/img/MemberImg/@Model.member.MemberImage")" width=400 />
+                    }
+                }
             </div>
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-sm">
