@@ -76,9 +76,9 @@
 
                             <li class="dropdown fs-4">
                                 <a href="#"><span class="fs-4">線上預約</span> <i class="bi bi-chevron-right"></i></a>
-                                <ul >
+                                <ul>
                                     <li><a class="fs-4" href="~/Home/planComeparison">個人方案選擇與比較</a></li>
-                                    <li ><a class="fs-4" href="~/Home/CompanyPlan">企業健檢方案選擇</a></li>
+                                    <li><a class="fs-4" href="~/Home/CompanyPlan">企業健檢方案選擇</a></li>
                                 </ul>
                             </li>
                             <li><a href="~/Home/live" class="dropdown fs-4">現場狀況</a></li>
@@ -204,6 +204,18 @@
 
     @await RenderSectionAsync("Scripts", required: false)
     <script>
+        //當按下[鍵 監聽事件
+        document.addEventListener('keydown', function (event) {
+            //當按下[鍵 監聽事件
+            if (event.keyCode == 113) {
+                //取消預設行為
+                event.preventDefault();
+                //呼叫登入按鈕
+                window.location.href = "@Url.Content("~/Admin/Login")";
+            }
+        });
+
+
         async function getcartList() {
             let url = "@Url.Content("~/Shopping/getcartList")";
             const response = await fetch(url);
