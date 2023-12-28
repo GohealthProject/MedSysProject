@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="col-1 border fs-3">
                                     @{
-                                        if (Model[i].StateId >= 15)
+                                        if (Model[i].StateId >= 15 || Model[i].StateId==3)
                                         {
                                             <button type="button" class="btn btn-outline-danger reProduct" data-bs-toggle="modal" data-bs-target="#exampleModal" disabled>
                                                 退貨
