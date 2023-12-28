@@ -204,14 +204,14 @@
 
     @await RenderSectionAsync("Scripts", required: false)
     <script>
-        //當按下[鍵 監聽事件
+        //當按下F2鍵 監聽事件
         document.addEventListener('keydown', function (event) {
             //當按下[鍵 監聽事件
             if (event.keyCode == 113) {
                 //取消預設行為
                 event.preventDefault();
                 //呼叫登入按鈕
-                window.location.href = "@Url.Content("~/Admin/Login")";
+                window.location.href = "@Url.Content("~/Admin")";
             }
         });
 

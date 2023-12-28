@@ -145,10 +145,27 @@ namespace MedSysProject.Controllers
         {
             if (id != null)
             {
-                return Json(_db.Members.Find(id));
+                //MemberPhone欄位隱藏後5碼
+                var data = _db.Members.Find(id);
+                data.MemberPhone = data.MemberPhone.Substring(0, 4) + "****";
+
+                return Json(data);
+
+
+                //return Json(_db.Members.Find(id));
             }
             else
             {
+                //MemberPhone欄位隱藏後5碼
+                var data = _db.Members.ToList();
+                foreach (var item in data)
+                {
+                    item.MemberPhone = item.MemberPhone.Substring(0, 4) + "****";
+                }
+
+                return Json(data);
+
+
                 return Json(_db.Members);
             }
         }

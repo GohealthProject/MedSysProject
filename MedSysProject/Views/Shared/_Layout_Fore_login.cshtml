@@ -35,31 +35,31 @@
     <!-- google -->
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-@*     <script src="https://apis.google.com/js/api:client.js"></script>
+    @*     <script src="https://apis.google.com/js/api:client.js"></script>
     <script>
-        var googleUser = {};
-        var startApp = function () {
-            gapi.load('auth2', function () {
-                // Retrieve the singleton for the GoogleAuth library and set up the client.
-                auth2 = gapi.auth2.init({
-                    client_id: '641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com',
-                    cookiepolicy: 'single_host_origin',
-                    // Request scopes in addition to 'profile' and 'email'
-                    //scope: 'additional_scope'
-                });
-                attachSignin(document.getElementById('btnGoogleLogin'));
-            });
-        };
+    var googleUser = {};
+    var startApp = function () {
+    gapi.load('auth2', function () {
+    // Retrieve the singleton for the GoogleAuth library and set up the client.
+    auth2 = gapi.auth2.init({
+    client_id: '641130316919-j10tul625dc2mnj0598a81a9btetk9l7.apps.googleusercontent.com',
+    cookiepolicy: 'single_host_origin',
+    // Request scopes in addition to 'profile' and 'email'
+    //scope: 'additional_scope'
+    });
+    attachSignin(document.getElementById('btnGoogleLogin'));
+    });
+    };
 
-        function attachSignin(element) {
-            console.log(element.id);
-            auth2.attachClickHandler(element, {},
-                function (googleUser) {
+    function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+    function (googleUser) {
 
-                }, function (error) {
-                    console.error(JSON.stringify(error, undefined, 2));
-                });
-        }
+    }, function (error) {
+    console.error(JSON.stringify(error, undefined, 2));
+    });
+    }
     </script> *@
 
     <!-- end Google -->
@@ -142,20 +142,20 @@
     </header><!-- End #header -->
     @* <main id="main"> *@
     @RenderBody()
-@*     <!-- ======= Footer ======= -->
+    @*     <!-- ======= Footer ======= -->
     <footer class="fixed-bottom" id="footer">
-        <div class="container">
-            <div class="copyright">
-                <strong><span>GO健康 版權所有</span></strong>
-            </div>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
-                <a href="~/">GO健康</a>
-            </div>
-        </div>
+    <div class="container">
+    <div class="copyright">
+    <strong><span>GO健康 版權所有</span></strong>
+    </div>
+    <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/ -->
+    <a href="~/">GO健康</a>
+    </div>
+    </div>
     </footer><!-- End #footer --> *@
     @* </main> *@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -168,6 +168,19 @@
     <script src="~/forevendor/php-email-form/validate.js"></script>
     <!-- Template Main JS File -->
     <script src="~/js/foremain.js"></script>
+
+    <script>
+        //當按下F2鍵 監聽事件
+        document.addEventListener('keydown', function (event) {
+            //當按下[鍵 監聽事件
+            if (event.keyCode == 113) {
+                //取消預設行為
+                event.preventDefault();
+                //呼叫登入按鈕
+                window.location.href = "@Url.Content("~/Admin")";
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
