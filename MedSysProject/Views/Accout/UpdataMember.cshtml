@@ -65,6 +65,13 @@
                     @*<img class="rounded rounded-3" src="@Url.Content("~/img/MemberImg/" + imgFN)" id="btnImgPreview" style="width: 200px; height: 200px;" hidden />*@
                 </div>
             }
+            else
+            {
+                <div class="col-12">
+                    <img class="rounded rounded-3" src="@Url.Content("~/img/no_member_image.jpg")" id="btnImg" style="width: 200px; height: 200px;" />
+                    @*<img class="rounded rounded-3" src="@Url.Content("~/img/MemberImg/MemberDefault.png")" id="btnImgPreview" style="width: 200px; height: 200px;" hidden />*@
+                </div>
+            }
         }
 
         @* <button id="crop_img" class="btn btn-info"><i class="fa fa-scissors"></i> 裁剪圖片</button> *@

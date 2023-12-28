@@ -31,6 +31,16 @@
                     <span asp-validation-for="MemberName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label asp-for="MemberGender" class="control-label"></label>
+                    <hr class="border border-danger border-2 opacity-50">
+                    <select asp-for="MemberGender" class="form-control">
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                        <option value="跨性別">跨性別</option>
+                    </select>
+                    <span asp-validation-for="MemberGender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="MemberEmail" class="control-label"></label>
                     <div style="display:inline" id="alertEmail"></div>
                     <hr class="border border-danger border-2 opacity-50">

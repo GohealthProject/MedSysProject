@@ -31,6 +31,14 @@ builder.Services.AddSession(option =>
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 });
+
+builder.Services.ConfigureApplicationCookie(option =>
+{
+    option.Cookie.Name = "AspNetCore.Session";
+    option.ExpireTimeSpan = TimeSpan.FromHours(1);
+    option.SlidingExpiration = true;
+});
+
 builder.Services.AddDbContext<MedSysContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("MedSysConnection")));
