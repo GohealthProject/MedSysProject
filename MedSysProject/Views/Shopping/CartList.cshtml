@@ -50,16 +50,20 @@
                                                                                                     <td>
                                                                                                         
                                                             <select name="ProductQta" class="qta">
-                                                                @{
-                                    for(int i =0; i < item.Product.UnitsInStock; i++)
+                            @{
+                                for(int i =0; i < item.Product.UnitsInStock; i++)
+                                {
+                                    
+                                    if(item.count == i)
                                     {
-                                        
-                                        if(item.count == i)
+                                        <option value="@i" selected>@i</option>
+                                    }
+                                    else{
+                                        if (i == 0)
                                         {
-                                                                                                            <option value="@i" selected>@i</option>
+                                            i = 1;
                                         }
-                                        else{
-                                                                                                            <option value="@i">@i</option>
+                                        <option value="@i">@i</option>
                                         }
                                         if (i == 50)
                                         {
