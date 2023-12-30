@@ -23,11 +23,15 @@ namespace MedSysProject.Controllers
         MedSysContext? _db = null;
         IHttpClientFactory _httpClientFactory;
         private readonly ShoppingCartManager _cartManager;
-        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory , ShoppingCartManager cartManager)
+        private readonly SessionHelper _sessionHelper;
+        private readonly OrderManager _orderManager;
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory , ShoppingCartManager cartManager, SessionHelper sessionHelper, OrderManager orderManager)
         {
             _db = db;
             _httpClientFactory = httpClientFactory;
             _cartManager = cartManager;
+            _sessionHelper = sessionHelper;
+            _orderManager = orderManager;
         }
         public IActionResult Index()
         {
@@ -121,21 +125,7 @@ namespace MedSysProject.Controllers
         }
         public IActionResult changeQta(int id,int nqta)
         {
-            string json = "";
-            List<CCartItem>? cart = null;
-            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-
-            foreach(var item in cart)
-            {
-                if(item.Product.ProductId == id)
-                {
-                    item.count= nqta;
-                    item.小計 = item.count * item.UnitPrice;
-                    break;
-                }
-            }
-            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
+            _cartManager.changeQta(id, nqta);
             return RedirectToAction("CartList");
         }
         public IActionResult getcartList()
@@ -194,108 +184,18 @@ namespace MedSysProject.Controllers
        
         public IActionResult CartList() 
         {
-            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_MEMBER_LOGIN))
+            if (_sessionHelper.getSessionMember() == null)
                 return RedirectToAction("Index");
-            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
-            List<CCartItem> cartList = new List<CCartItem>();
-            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
+             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_ADDTOCART))
                 return RedirectToAction("Index");
-           
-            string? json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-            cartList = JsonSerializer.Deserialize<List<CCartItem>>(json);
-            string mjson = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp m = JsonSerializer.Deserialize<MemberWarp>(mjson);
 
-            int total = 0;
-            string proName = "";
-            string proCount = "";
-            string proProductName = "";
-            
-            foreach (var pro in cartList)
-            {
-                proName += pro.Product.ProductId + "#";
-                proProductName +=pro.Product.ProductName + "#";
-                 total += pro.UnitPrice * pro.count;
-                proCount += pro.count.ToString() + "#";
-            }
-            if (proName.Length == 0)
-            {
-                return RedirectToAction("Index");
-            }
-            proName = proName.Substring(0, proName.Length - 1);
-            string memberEmail = m.MemberEmail;
-            total = total + (int)(total * 0.05);
-            //需填入你的網址
-            var website = $"https://localhost:7203/";
-
-            var orderGreen = new Dictionary<string, string>
-    {
-        //綠界需要的參數
-        { "MerchantTradeNo",  orderId},
-        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
-        { "TotalAmount",  total.ToString()},
-        { "TradeDesc",  "無"},
-        { "ItemName", proProductName},
-        { "ExpireDate",  "3"},
-        { "CustomField1",  memberEmail},
-        { "CustomField2",  proName},
-        { "CustomField3",  proCount},
-        { "CustomField4",  total.ToString()},
-        { "ReturnURL",  $"{website}Shopping/paymethodinfo"},
-        { "OrderResultURL", $"{website}Shopping/paySussess/{orderId}"},
-        //{ "PaymentInfoURL",  $"{website}/api/Ecpay/AddAccountInfo"},
-        //{ "ClientRedirectURL",  $"{website}/Home/AccountInfo/{orderId}"},
-        { "MerchantID",  "2000132"},
-        { "IgnorePayment",  "GooglePay#WebATM#CVS#BARCODE"},
-        { "PaymentType",  "aio"},
-        { "ChoosePayment",  "ALL"},
-        { "EncryptType",  "1"},
-    };
-            //檢查碼
+            EcPayModel ec = new EcPayModel(_sessionHelper);
+            ec.EcPayLoadData();
+            Dictionary<string, string> orderGreen = ec.valueEcPay();
             orderGreen["CheckMacValue"] = PayMethod.GetCheckMacValue(orderGreen);
             ViewBag.order = orderGreen;
-
-            Order o = new Order();
-            o.OrderDate = DateTime.Now;
-            o.ShipDate = DateTime.Now.AddDays(2);
-            o.DeliveryDate = DateTime.Now.AddDays(3);
-            o.MemberId = m.MemberId;
-            o.PayId = 1;
-            o.ShipId = 2;
-            o.StateId = 13;
-            o.MerchantTradeNo = orderId;
-            _db.Orders.Add(o);
-
-            _db.SaveChanges();
-
-            var q = _db.Orders.Where(n => n.MerchantTradeNo == orderId).FirstOrDefault();
-
-            foreach (var product in cartList)
-            {
-                OrderDetail od = new OrderDetail();
-                od.OrderId = q.OrderId;
-                od.ProductId = product.Product.ProductId;
-                var op = _db.Products.Find(product.Product.ProductId);
-                op.UnitsInStock -= product.count;
-                od.Quantity = product.count;
-                od.UnitPrice = product.UnitPrice;
-                _db.OrderDetails.Add(od);
-            }
-            _db.SaveChanges();
-            if (HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN) == null)
-            {
-                return RedirectToAction("Login", "Accout");
-            }
-            if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) == null)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                string? json2 = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                List<CCartItem>? carts = JsonSerializer.Deserialize<List<CCartItem>>(json2);
-                return View(carts);
-            }
+            _orderManager.CreateOrder(ec.MerchantTradeNo);
+            return View(_sessionHelper.getCartList());
         }
        
         public IActionResult KeySearch(string Key)

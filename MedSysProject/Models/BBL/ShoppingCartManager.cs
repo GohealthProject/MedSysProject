@@ -11,7 +11,10 @@
             _db = db;
             _sessionHelper = sessionHelper;
         }
-
+        public MemberWarp getMember()
+        {
+            return _sessionHelper.getSessionMember();
+        }
         public void AddToCart()
         {
             var context = _IHttpContextAccessor.HttpContext;
@@ -43,7 +46,6 @@
                 _sessionHelper.setCartList(cart);
             }
         }
-
         public void RemoveCart(int id)
         {
             List<CCartItem> cart = _sessionHelper.getCartList();
@@ -64,10 +66,25 @@
             _sessionHelper.setCartList(cart);
             _sessionHelper.setCartCount(count);
         }
-
         public string getCartCount()
         {
             return _sessionHelper.getCartCount();
         }
+        public void changeQta(int pid , int qta)
+        {
+            List<CCartItem> cart = _sessionHelper.getCartList();
+
+            foreach(CCartItem item in cart)
+            {
+                if(item.Product.ProductId == pid)
+                {
+                    item.count= qta;
+                    item.小計 = (int)item.Product.UnitPrice * item.count;
+                    break;
+                }
+            }
+            _sessionHelper.setCartList(cart);
+        }
+        
     }
 }
