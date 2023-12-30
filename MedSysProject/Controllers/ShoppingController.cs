@@ -112,51 +112,11 @@ namespace MedSysProject.Controllers
         public IActionResult AddToCart()
         {
             _cartManager.AddToCart();
-            var data = Request.Form;
-            List<CCartItem>? cart = null;
-            var q = _db.Products.Find(Int32.Parse(data["id"]));
-            string? json = "";
-            string? count = "";
-            if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) != null)
-            {
-                json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-                count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
-                cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-            }
-            else
-                cart = new List<CCartItem>();
-            
-            CCartItem item = new CCartItem();
-            item.Product = q;
-            item.ProductName = q.ProductName;
-            item.UnitPrice = (int)((int)q.UnitPrice*0.8);
-            item.小計 = Int32.Parse(data["count"]) * (int)((int)q.UnitPrice * 0.8);
-            item.count = Int32.Parse(data["count"]);
-            cart.Add(item);
-            count = cart.Count().ToString();
-            json = JsonSerializer.Serialize(cart);
-            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, json);
-            HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
             return Ok();
         }
         public IActionResult removeCart(int id)
         {
-            string json = "";
-            List<CCartItem>? cart = null;
-            json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-            cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-            foreach (var item in cart)
-            {
-                if(item.Product.ProductId== id)
-                {
-                    cart.Remove(item);
-                    break;
-                }
-            }
-            HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, JsonSerializer.Serialize(cart));
-            string count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
-            count = (Int32.Parse(count) - 1).ToString();
-            HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
+            _cartManager.RemoveCart(id);
             return RedirectToAction("CartList");
         }
         public IActionResult changeQta(int id,int nqta)
@@ -180,16 +140,10 @@ namespace MedSysProject.Controllers
         }
         public IActionResult getcartList()
         {
-            if (HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT)!=null)
-            {
-                string? count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
-                return Content(count);
-            }
-            else
-            {
+            if (_cartManager.getCartCount() == "")
                 return Content("0");
-            }
-            
+            else
+                return Content(_cartManager.getCartCount());
         }
         public IActionResult paySussess(IFormCollection id)
         {

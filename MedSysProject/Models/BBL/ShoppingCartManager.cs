@@ -4,45 +4,70 @@
     {
         private readonly IHttpContextAccessor _IHttpContextAccessor;
         private readonly MedSysContext _db;
-        public ShoppingCartManager(IHttpContextAccessor httpContextAccessor, MedSysContext db)
+        private readonly SessionHelper _sessionHelper;
+        public ShoppingCartManager(IHttpContextAccessor httpContextAccessor, MedSysContext db, SessionHelper sessionHelper)
         {
             _IHttpContextAccessor = httpContextAccessor;
             _db = db;
+            _sessionHelper = sessionHelper;
         }
 
         public void AddToCart()
         {
             var context = _IHttpContextAccessor.HttpContext;
+
             if(context != null)
             {
                 var data = context.Request.Form;
+
+                if (!int.TryParse(data["id"],out int MemberID))
+                {
+                    return;
+                }
+
+                var q = _db.Products.Find(MemberID);
+                List<CCartItem> cart = _sessionHelper.getCartList();
+                string? count = _sessionHelper.getCartCount();
+
+                CCartItem item = new CCartItem();
+                item.Product = q;
+                item.ProductName = q.ProductName;
+                item.UnitPrice = (int)((int)q.UnitPrice * 0.8);
+                item.小計 = Int32.Parse(data["count"]) * (int)((int)q.UnitPrice * 0.8);
+                item.count = Int32.Parse(data["count"]);
+                cart.Add(item);
+
+                count = cart.Count().ToString();
+
+                _sessionHelper.setCartCount(count);
+                _sessionHelper.setCartList(cart);
             }
+        }
 
-            //List<CCartItem>? cart = null;
-            //var q = _db.Products.Find(Int32.Parse(data["id"]));
-            //string? json = "";
-            //string? count = "";
-            //if (HttpContext.Session.GetString(CDictionary.SK_ADDTOCART) != null)
-            //{
-            //    json = HttpContext.Session.GetString(CDictionary.SK_ADDTOCART);
-            //    count = HttpContext.Session.GetString(CDictionary.SK_CARTLISTCOUNT);
-            //    cart = JsonSerializer.Deserialize<List<CCartItem>>(json);
-            //}
-            //else
-            //    cart = new List<CCartItem>();
+        public void RemoveCart(int id)
+        {
+            List<CCartItem> cart = _sessionHelper.getCartList();
+            string count = _sessionHelper.getCartCount();
+            if (cart.Count() == 0)
+            {
+                return;
+            }
+            foreach(CCartItem item in cart)
+            {
+                if(item.Product.ProductId == id)
+                {
+                    cart.Remove(item);
+                    break;
+                }
+            }
+            count = cart.Count().ToString();
+            _sessionHelper.setCartList(cart);
+            _sessionHelper.setCartCount(count);
+        }
 
-            //CCartItem item = new CCartItem();
-            //item.Product = q;
-            //item.ProductName = q.ProductName;
-            //item.UnitPrice = (int)((int)q.UnitPrice * 0.8);
-            //item.小計 = Int32.Parse(data["count"]) * (int)((int)q.UnitPrice * 0.8);
-            //item.count = Int32.Parse(data["count"]);
-            //cart.Add(item);
-            //count = cart.Count().ToString();
-            //json = JsonSerializer.Serialize(cart);
-            //HttpContext.Session.SetString(CDictionary.SK_ADDTOCART, json);
-            //HttpContext.Session.SetString(CDictionary.SK_CARTLISTCOUNT, count);
-            //return Ok();
+        public string getCartCount()
+        {
+            return _sessionHelper.getCartCount();
         }
     }
 }

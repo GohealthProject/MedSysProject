@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedSysProject", "MedSysProject\MedSysProject.csproj", "{D398BE73-01CC-4C1E-ADEF-4446FC8C2707}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedSysApi", "..\MedSysApi\MedSysApi\MedSysApi.csproj", "{E2CE6BE7-BEFD-4118-982B-9CB18CF04E12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D398BE73-01CC-4C1E-ADEF-4446FC8C2707}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D398BE73-01CC-4C1E-ADEF-4446FC8C2707}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D398BE73-01CC-4C1E-ADEF-4446FC8C2707}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2CE6BE7-BEFD-4118-982B-9CB18CF04E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2CE6BE7-BEFD-4118-982B-9CB18CF04E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2CE6BE7-BEFD-4118-982B-9CB18CF04E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2CE6BE7-BEFD-4118-982B-9CB18CF04E12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
