@@ -6,12 +6,15 @@ using MedSysProject.Hubs;
 using OxyPlot.Series;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+using MedSysProject.Models.BBL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ShoppingCartManager>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

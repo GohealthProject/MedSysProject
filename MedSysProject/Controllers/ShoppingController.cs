@@ -1,5 +1,6 @@
 ﻿using Azure;
 using MedSysProject.Models;
+using MedSysProject.Models.BBL;
 using MedSysProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,11 +22,12 @@ namespace MedSysProject.Controllers
     {
         MedSysContext? _db = null;
         IHttpClientFactory _httpClientFactory;
-
-        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory)
+        private readonly ShoppingCartManager _cartManager;
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory , ShoppingCartManager cartManager)
         {
             _db = db;
             _httpClientFactory = httpClientFactory;
+            _cartManager = cartManager;
         }
         public IActionResult Index()
         {
@@ -109,6 +111,7 @@ namespace MedSysProject.Controllers
         [HttpPost]
         public IActionResult AddToCart()
         {
+            _cartManager.AddToCart();
             var data = Request.Form;
             List<CCartItem>? cart = null;
             var q = _db.Products.Find(Int32.Parse(data["id"]));
