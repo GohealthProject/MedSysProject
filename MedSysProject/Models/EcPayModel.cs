@@ -13,7 +13,7 @@ namespace MedSysProject.Models
         public string ProductName { get; set; }
         public string MemberEmail { get; set; }
         public string WebSite { get; set; }
-
+        public Dictionary<string, string> valueGreen { get; set; }
 
         public EcPayModel(SessionHelper sessionHelper)
         {
@@ -39,10 +39,11 @@ namespace MedSysProject.Models
             MemberEmail = _sessionHelper.getSessionMember().MemberEmail;
             WebSite = $"https://localhost:7203/";
             total = total + (int)(total * 0.05);
+
         }
-        public Dictionary<string, string> valueEcPay()
+        public void valueEcPay(string MerchantTradeNo)
         {
-            var orderGreen = new Dictionary<string, string>
+            valueGreen = new Dictionary<string, string>
                 {
                     { "MerchantTradeNo",  MerchantTradeNo},
                     { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
@@ -62,7 +63,6 @@ namespace MedSysProject.Models
                     { "ChoosePayment",  "ALL"},
                     { "EncryptType",  "1"},
                 };
-            return orderGreen;
         }
     }
 }

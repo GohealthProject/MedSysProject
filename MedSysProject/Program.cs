@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ShoppingCartManager>();
 builder.Services.AddScoped<SessionHelper>();
 builder.Services.AddScoped<OrderManager>();
+builder.Services.AddScoped<ProductManager>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

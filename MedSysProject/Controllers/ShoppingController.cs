@@ -25,13 +25,15 @@ namespace MedSysProject.Controllers
         private readonly ShoppingCartManager _cartManager;
         private readonly SessionHelper _sessionHelper;
         private readonly OrderManager _orderManager;
-        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory , ShoppingCartManager cartManager, SessionHelper sessionHelper, OrderManager orderManager)
+        private readonly ProductManager _productManager;
+        public ShoppingController(MedSysContext db, IHttpClientFactory httpClientFactory , ShoppingCartManager cartManager, SessionHelper sessionHelper, OrderManager orderManager, ProductManager productManager)
         {
             _db = db;
             _httpClientFactory = httpClientFactory;
             _cartManager = cartManager;
             _sessionHelper = sessionHelper;
             _orderManager = orderManager;
+            _productManager = productManager;
         }
         public IActionResult Index()
         {
@@ -93,24 +95,16 @@ namespace MedSysProject.Controllers
             ViewBag.hot = hot6;
             return View(ps);
         }
+        [HttpGet]
         public IActionResult selectProduct(int id)
         {
-            
-            var product = _db.Products.Include(n=>n.TrackingLists).Include(n => n.ProductsClassifications).ThenInclude(n => n.Categories).FirstOrDefault(n => n.ProductId == id);
-            
+            var product = _productManager.SingleProduct(id);
+
             if (product == null)
                 return RedirectToAction("index");
-            if((bool)product.Discontinued&& product != null)
-            {
-                CProductWarp cp =  new CProductWarp();
-                cp.Product = product;
-                cp.Path = product.FimagePath.Split(",");
-                return View(cp);
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            
+            return View(product);
+
         }
         [HttpPost]
         public IActionResult AddToCart()
@@ -191,7 +185,8 @@ namespace MedSysProject.Controllers
 
             EcPayModel ec = new EcPayModel(_sessionHelper);
             ec.EcPayLoadData();
-            Dictionary<string, string> orderGreen = ec.valueEcPay();
+            ec.valueEcPay(ec.MerchantTradeNo);
+            Dictionary<string, string> orderGreen = ec.valueGreen;
             orderGreen["CheckMacValue"] = PayMethod.GetCheckMacValue(orderGreen);
             ViewBag.order = orderGreen;
             _orderManager.CreateOrder(ec.MerchantTradeNo);
@@ -202,28 +197,21 @@ namespace MedSysProject.Controllers
         {
             if (Key == null)
                 return RedirectToAction("index");
-            List<CProductWarp> list =new List<CProductWarp>();
 
-            var q = _db.Products.Where(n=>n.ProductName.Contains(Key));
-            foreach(var item in q)
-            {
-                CProductWarp cp = new CProductWarp();
-                cp.Product = item;
-                cp.Path = item.FimagePath.Split(",");
-                list.Add(cp);
-            }
+            List<CProductWarp> ProductList = _productManager.KeySearch(Key);
+
             ViewBag.KeySearch = Key;
-            return View(list);
+            return View(ProductList);
         }
         public IActionResult OrderList(int page=1)
         {
 
 
-            string? json = HttpContext.Session.GetString(CDictionary.SK_MEMBER_LOGIN);
-            MemberWarp? m = JsonSerializer.Deserialize<MemberWarp>(json);
+            MemberWarp m = _sessionHelper.getSessionMember();
 
-            var odo = _db.Orders.Where(n => n.MemberId == m.MemberId);
-            if (!odo.Any())
+            var odo = _db.Orders.Any(n => n.MemberId == m.MemberId);
+
+            if (!odo)
             {
                 TempData["OrderList"] = "<div class=\"rounded rounded-3 bg-info text-dark p-3 mb-2\"><i class=\"fas fa-info\"></i> 您尚未擁有訂單，開始購物吧！</div>";
                 return RedirectToAction("Index");
@@ -231,13 +219,13 @@ namespace MedSysProject.Controllers
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_CARTLISTCOUNT))
             {
-                HttpContext.Session.Remove(CDictionary.SK_ADDTOCART);
-                HttpContext.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+                _sessionHelper.clearCartSession();
                 page = 1;
             }
 
-            
             List<COrderWarp>list = new List<COrderWarp>();
+
+
 
             //分頁
             int pageSize = 5;
@@ -257,9 +245,7 @@ namespace MedSysProject.Controllers
 
             var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
 
-            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.Ship).Include(n => n.State).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderId).Skip((page - 1) * pageSize).Take(pageSize);
-
-            //var q = _db.Orders.Include(n => n.Pay).Include(n => n.State).Include(n => n.Ship).Include(n => n.OrderDetails).ThenInclude(n => n.Product).Where(n => n.MemberId == m.MemberId).OrderByDescending(n => n.OrderDate);
+           
             foreach (var item in q)
             {
                 COrderWarp od = new COrderWarp();

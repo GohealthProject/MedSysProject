@@ -11,6 +11,16 @@ namespace MedSysProject.Models.BBL
             _sessionHelper = sessionHelper;
             _context = context;
         }
+        public bool MidFindOrder(int Mid)
+        {
+            var order = _context.Orders.Where(n => n.MemberId == Mid);
+
+            if(!order.Any())
+            {
+                return false;
+            }
+            return true;
+        }
 
         public void CreateOrder(string MerchantTradeNo)
         {

@@ -10,7 +10,16 @@ namespace MedSysProject.Models.BBL
         {
             _IHttpContextAccessor = httpContextAccessor;
         }
-
+        public void clearCartSession()
+        {
+            var context = _IHttpContextAccessor.HttpContext;
+            
+            if(context != null)
+            {
+                context.Session.Remove(CDictionary.SK_CARTLISTCOUNT);
+                context.Session.Remove(CDictionary.SK_ADDTOCART);
+            }
+        }
         public MemberWarp getSessionMember()
         {
             var context = _IHttpContextAccessor.HttpContext;
